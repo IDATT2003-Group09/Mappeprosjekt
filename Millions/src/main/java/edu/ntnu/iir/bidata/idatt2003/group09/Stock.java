@@ -14,7 +14,7 @@ public class Stock {
       if (symbol == null || company == null || salesPrice == null){
           throw new IllegalArgumentException("Arguments must not be null");
       }
-      if (salesPrice.compareTo(BigDecimal.ZERO) < 0){
+      if (salesPrice.compareTo(BigDecimal.ZERO) <= 0){
           throw new IllegalArgumentException("Price must be greater than zero");
       }
     this.symbol = symbol;
@@ -50,7 +50,7 @@ public class Stock {
       if (price == null) {
           throw new IllegalArgumentException("price cannot be null");
       }
-      if (price.compareTo(BigDecimal.ZERO) < 0){
+      if (price.compareTo(BigDecimal.ZERO) <= 0){
           throw new IllegalArgumentException("Price must be greater than zero");
       }
     prices.add(price);
