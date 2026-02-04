@@ -8,10 +8,13 @@ public class Share {
   private BigDecimal quantity;
   private BigDecimal purchasePrice;
 
+  /***
+   * uses set methods to set the argumets
+   */
   public Share(Stock stock, BigDecimal quantity, BigDecimal purchasePrice) {
-    this.stock = stock;
-    this.quantity = quantity;
-    this.purchasePrice = purchasePrice;
+    setStock(stock);
+    setQuantity(quantity);
+    setPurchasePrice(purchasePrice);
   }
 
   /***
@@ -27,5 +30,33 @@ public class Share {
 
   public BigDecimal getPurchasePrice() {
     return purchasePrice;
+  }
+
+  /***
+   * Setters validates if values are empty or invalid
+   */
+  public void setStock(Stock stock) {
+    if (stock == null) {
+      throw new IllegalArgumentException("stock can not be null");
+    } else {
+      this.stock = stock;
+    }
+  }
+
+  public void setQuantity(BigDecimal quantity) {
+    if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
+      throw new IllegalArgumentException("quantity can not be or be less than zero");
+    } else {
+      this.quantity = quantity;
+    }
+  }
+
+  public void setPurchasePrice(BigDecimal purchasePrice){
+    if (purchasePrice.compareTo(BigDecimal.ZERO)<=0){
+      throw new IllegalArgumentException("purchasePrice can not be or be less than zero")
+    }
+    else{
+      this.purchasePrice = purchasePrice;
+    }
   }
 }
