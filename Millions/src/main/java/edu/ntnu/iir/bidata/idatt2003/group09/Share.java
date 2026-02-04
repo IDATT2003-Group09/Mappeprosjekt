@@ -51,11 +51,10 @@ public class Share {
     }
   }
 
-  public void setPurchasePrice(BigDecimal purchasePrice){
-    if (purchasePrice.compareTo(BigDecimal.ZERO)<=0){
-      throw new IllegalArgumentException("purchasePrice can not be or be less than zero")
-    }
-    else{
+  public void setPurchasePrice(BigDecimal purchasePrice) {
+    if (purchasePrice.compareTo(BigDecimal.ZERO) <= 0) {
+      throw new IllegalArgumentException("purchasePrice can not be or be less than zero");
+    } else {
       this.purchasePrice = purchasePrice;
     }
   }
