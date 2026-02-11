@@ -11,12 +11,6 @@ public class Stock {
   private List<BigDecimal> prices;
 
   public Stock(String symbol, String company, BigDecimal salesPrice) {
-      if (symbol == null || company == null || salesPrice == null){
-          throw new IllegalArgumentException("Arguments must not be null");
-      }
-      if (salesPrice.compareTo(BigDecimal.ZERO) <= 0){
-          throw new IllegalArgumentException("Price must be greater than zero");
-      }
     this.symbol = symbol;
     this.company = company;
     prices = new ArrayList<>();
@@ -47,12 +41,7 @@ public class Stock {
    * in the prices list
    */
   public void addNewSalesPrice(BigDecimal price) {
-      if (price == null) {
-          throw new IllegalArgumentException("price cannot be null");
-      }
-      if (price.compareTo(BigDecimal.ZERO) <= 0){
-          throw new IllegalArgumentException("Price must be greater than zero");
-      }
     prices.add(price);
   }
+
 }
