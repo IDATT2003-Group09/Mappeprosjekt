@@ -8,36 +8,36 @@ public class Portfolio {
 
   private List<Share> shares;
 
-  /***
-   * intitalizes the shares list
+  /**
+   * Intitalizes the shares list
    */
   public Portfolio() {
     shares = new ArrayList<>();
   }
 
-  /***
-   * returns true if adding share was successfull
+  /**
+   * Returns true if adding share was successful
    */
   public boolean addShare(Share share) {
     return shares.add(share);
   }
 
-  /***
-   * returns true if removing share was successfull
+  /**
+   * Returns true if removing share was successful
    */
   public boolean removeShare(Share share) {
     return shares.remove(share);
   }
 
-  /***
-   * returns a unmodifiable verison of the shares list
+  /**
+   * Returns a unmodifiable version of the shares list
    */
   public List<Share> getShares() {
     return Collections.unmodifiableList(shares);
   }
 
-  /***
-   * returns a list containing all shares of a specific symbol
+  /**
+   * Returns a list containing all shares of a specific symbol
    */
   public List<Share> getShares(String symbol) {
     List<Share> matchingShares = new ArrayList<>();
