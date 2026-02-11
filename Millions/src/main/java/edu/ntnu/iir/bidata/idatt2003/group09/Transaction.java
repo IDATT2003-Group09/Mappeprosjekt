@@ -7,7 +7,7 @@ public abstract class Transaction {
     private final Share share;
     private final int week;
     private final TransactionCalculator calculator;
-    private boolean commited;
+    private boolean committed;
 
     protected Transaction(Share share, int week, TransactionCalculator calculator) {
     this.share = Objects.requireNonNull(share, "Share cannot be null");
@@ -16,7 +16,7 @@ public abstract class Transaction {
     }
     this.week = week;
     this.calculator = Objects.requireNonNull(calculator, "Calculator cannot be null");
-    this.commited = false;
+    this.committed = false;
     }
 
     public Share getShare() {
@@ -32,18 +32,19 @@ public abstract class Transaction {
     }
 
     public boolean isCommited() {
-        return commited;
+        return committed;
     }
 
-    public void commit(Player player) {
+    protected void markCommited() {
+        this.committed = true;
+    }
+
+    public abstract void commit(Player player);
+
+    protected void validateCommit(Player player) {
         Objects.requireNonNull(player, "player cannot be null");
-        if (commited) {
-            throw new IllegalStateException("Transaction has already been commited");
+        if (committed) {
+            throw new IllegalStateException("Transaction has already been committed");
         }
-
-        doCommit(player);
-        commited = true;
     }
-
-    protected abstract void doCommit(Player player);
 }
