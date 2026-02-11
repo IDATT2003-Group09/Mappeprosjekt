@@ -2,6 +2,9 @@ package edu.ntnu.iir.bidata.idatt2003.group09;
 
 import java.math.BigDecimal;
 import java.util.List;
+
+import com.sun.nio.sctp.IllegalUnbindException;
+
 import java.util.ArrayList;
 
 public class Stock {
@@ -41,7 +44,15 @@ public class Stock {
    * in the prices list
    */
   public void addNewSalesPrice(BigDecimal price) {
-    prices.add(price);
+    if (price == null ||
+        price.compareTo(BigDecimal.ZERO) <= 0) {
+      throw new IllegalUnbindException("""
+          price cant be
+          empty and must be more than zero
+          """);
+    } else {
+      prices.add(price);
+    }
   }
 
 }

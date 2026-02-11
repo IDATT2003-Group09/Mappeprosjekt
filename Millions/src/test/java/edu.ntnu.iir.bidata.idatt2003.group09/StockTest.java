@@ -9,108 +9,103 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class StockTest {
 
-    private Stock stock;
+  private Stock stock;
 
-    @BeforeEach
-    void setUp() {
-        stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
-    }
+  @BeforeEach
+  void setUp() {
+    stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+  }
 
-    /**
-     * Verifies that the constructor correctly sets the stock symbol
-     */
-    @Test
-    void constructorShouldSetSymbolCorrectly() {
-        String expectedSymbol = "AAPL";
-        String actualSymbol = stock.getSymbol();
-        assertEquals(expectedSymbol, actualSymbol);
-    }
+  /**
+   * Verifies that the constructor correctly sets the stock symbol
+   */
+  @Test
+  void constructorShouldSetSymbolCorrectly() {
+    String expectedSymbol = "AAPL";
+    String actualSymbol = stock.getSymbol();
+    assertEquals(expectedSymbol, actualSymbol);
+  }
 
-    /**
-     * Verifies that the constructor correctly sets the company name.
-     */
-    @Test
-    void constructorShouldSetCompanyCorrectly() {
-        String expectedCompany = "Apple";
-        String actualCompany = stock.getCompany();
-        assertEquals(expectedCompany, actualCompany);
-    }
+  /**
+   * Verifies that the constructor correctly sets the company name.
+   */
+  @Test
+  void constructorShouldSetCompanyCorrectly() {
+    String expectedCompany = "Apple";
+    String actualCompany = stock.getCompany();
+    assertEquals(expectedCompany, actualCompany);
+  }
 
-    /**
-     * Verifies that the initial sales price is returned correctly.
-     */
-    @Test
-    void getSalesPriceShouldReturnInitialPrice() {
-        BigDecimal expectedPrice = new BigDecimal("150.00");
-        BigDecimal actualPrice = stock.getSalesPrice();
-        assertEquals(expectedPrice, actualPrice);
-    }
+  /**
+   * Verifies that the initial sales price is returned correctly.
+   */
+  @Test
+  void getSalesPriceShouldReturnInitialPrice() {
+    BigDecimal expectedPrice = new BigDecimal("150.00");
+    BigDecimal actualPrice = stock.getSalesPrice();
+    assertEquals(expectedPrice, actualPrice);
+  }
 
-    /**
-     * Verifies that adding a new sales price updates the latest price.
-     */
-    @Test
-    void addNewSalesPriceShouldUpdateLatestPrice() {
-        BigDecimal newPrice = new BigDecimal("155.50");
-        stock.addNewSalesPrice(newPrice);
-        assertEquals(newPrice, stock.getSalesPrice());
-    }
+  /**
+   * Verifies that adding a new sales price updates the latest price.
+   */
+  @Test
+  void addNewSalesPriceShouldUpdateLatestPrice() {
+    BigDecimal newPrice = new BigDecimal("155.50");
+    stock.addNewSalesPrice(newPrice);
+    assertEquals(newPrice, stock.getSalesPrice());
+  }
 
-    /**
-     * Verifies that the constructor throws an exception when the symbol is null.
-     */
-    @Test
-    void constructorShouldThrowExceptionWhenSymbolIsNull() {
-        BigDecimal price = new BigDecimal("100.00");
-        assertThrows(IllegalArgumentException.class, () ->
-                new Stock(null, "Apple", price));
-    }
+  /**
+   * Verifies that the constructor throws an exception when the symbol is null.
+   */
+  @Test
+  void constructorShouldThrowExceptionWhenSymbolIsNull() {
+    BigDecimal price = new BigDecimal("100.00");
+    assertThrows(IllegalArgumentException.class, () -> new Stock(null, "Apple", price));
+  }
 
-    /**
-     * Verifies that the constructor throws an exception when the company name is null.
-     */
-    @Test
-    void constructorShouldThrowExceptionWhenCompanyIsNull() {
-        BigDecimal price = new BigDecimal("100.00");
-        assertThrows(IllegalArgumentException.class, () ->
-                new Stock("AAPL", null, price));
-    }
+  /**
+   * Verifies that the constructor throws an exception when the company name is
+   * null.
+   */
+  @Test
+  void constructorShouldThrowExceptionWhenCompanyIsNull() {
+    BigDecimal price = new BigDecimal("100.00");
+    assertThrows(IllegalArgumentException.class, () -> new Stock("AAPL", null, price));
+  }
 
-    /**
-     * Verifies that the constructor throws an exception when the price is null.
-     */
-    @Test
-    void constructorShouldThrowExceptionWhenPriceIsNull() {
-        assertThrows(IllegalArgumentException.class, () ->
-                new Stock("AAPL", "Apple", null));
-    }
+  /**
+   * Verifies that the constructor throws an exception when the price is null.
+   */
+  @Test
+  void constructorShouldThrowExceptionWhenPriceIsNull() {
+    assertThrows(IllegalArgumentException.class, () -> new Stock("AAPL", "Apple", null));
+  }
 
-    /**
-     * Verifies that the constructor throws an exception when the price is negative.
-     */
-    @Test
-    void constructorShouldThrowExceptionWhenPriceIsNegative() {
-        BigDecimal negativePrice = new BigDecimal("-10.00");
-        assertThrows(IllegalArgumentException.class, () ->
-                new Stock("AAPL", "Apple", negativePrice));
-    }
+  /**
+   * Verifies that the constructor throws an exception when the price is negative.
+   */
+  @Test
+  void constructorShouldThrowExceptionWhenPriceIsNegative() {
+    BigDecimal negativePrice = new BigDecimal("-10.00");
+    assertThrows(IllegalArgumentException.class, () -> new Stock("AAPL", "Apple", negativePrice));
+  }
 
-    /**
-     * Verifies that adding a null price results in an exception.
-     */
-    @Test
-    void addNewSalesPriceShouldThrowExceptionWhenPriceIsNull() {
-        assertThrows(IllegalArgumentException.class, () ->
-                stock.addNewSalesPrice(null));
-    }
+  /**
+   * Verifies that adding a null price results in an exception.
+   */
+  @Test
+  void addNewSalesPriceShouldThrowExceptionWhenPriceIsNull() {
+    assertThrows(IllegalArgumentException.class, () -> stock.addNewSalesPrice(null));
+  }
 
-    /**
-     * Verifies that adding a negative price results in an exception.
-     */
-    @Test
-    void addNewSalesPriceShouldThrowExceptionWhenPriceIsNegative() {
-        BigDecimal negativePrice = new BigDecimal("-5.00");
-        assertThrows(IllegalArgumentException.class, () ->
-                stock.addNewSalesPrice(negativePrice));
-    }
+  /**
+   * Verifies that adding a negative price results in an exception.
+   */
+  @Test
+  void addNewSalesPriceShouldThrowExceptionWhenPriceIsNegative() {
+    BigDecimal negativePrice = new BigDecimal("-5.00");
+    assertThrows(IllegalArgumentException.class, () -> stock.addNewSalesPrice(negativePrice));
+  }
 }
