@@ -6,7 +6,7 @@ public interface TransactionCalculator {
 
   public BigDecimal calculateGross();
 
-  public BigDecimal calculateCommision();
+  public BigDecimal calculateCommission();
 
   public BigDecimal calculateTax();
 
