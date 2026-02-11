@@ -14,10 +14,10 @@ public class Stock {
   private List<BigDecimal> prices;
 
   public Stock(String symbol, String company, BigDecimal salesPrice) {
-    this.symbol = symbol;
-    this.company = company;
+    setSymbol(symbol);
+    setCompany(company);
     prices = new ArrayList<>();
-    prices.add(salesPrice);
+    addNewSalesPrice(salesPrice);
   }
 
   /***
@@ -29,6 +29,31 @@ public class Stock {
 
   public String getCompany() {
     return company;
+  }
+
+  /***
+   * settters
+   * @return
+   */
+  public void setSymbol(String symbol) {
+    if (symbol == null || symbol.isEmpty()) {
+      throw new IllegalArgumentException("""
+          symbol cant be
+          empty or null
+          """);
+    } else {
+      this.symbol = symbol;
+    }
+  }
+  public void setCompany(String company) {
+    if (company == null || company.isEmpty()) {
+      throw new IllegalArgumentException("""
+          company cant be
+          empty or null
+          """);
+    } else {
+      this.company = company;
+    }
   }
 
   /***
@@ -46,7 +71,7 @@ public class Stock {
   public void addNewSalesPrice(BigDecimal price) {
     if (price == null ||
         price.compareTo(BigDecimal.ZERO) <= 0) {
-      throw new IllegalUnbindException("""
+      throw new IllegalArgumentException("""
           price cant be
           empty and must be more than zero
           """);
