@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Portfolio {
 
-  private List<Share> shares;
+  private final List<Share> shares;
 
   /**
    * Intitalizes the shares list
