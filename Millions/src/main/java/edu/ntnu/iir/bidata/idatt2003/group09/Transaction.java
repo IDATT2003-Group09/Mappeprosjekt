@@ -35,7 +35,7 @@ public abstract class Transaction {
         return commited;
     }
 
-    public final void commit(Player player) {
+    public void commit(Player player) {
         Objects.requireNonNull(player, "player cannot be null");
         if (commited) {
             throw new IllegalStateException("Transaction has already been commited");
