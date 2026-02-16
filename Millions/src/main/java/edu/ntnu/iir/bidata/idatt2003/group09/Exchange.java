@@ -1,6 +1,7 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -13,8 +14,10 @@ public class Exchange {
   private Random random;
 
   public Exchange(String name, List<Stock> stocks) {
+    random = new Random();
     setName(name);
-    stockMap = new Map<>();
+    stockMap = new HashMap<>();
+    setStockMap(stocks);
   }
 
   public String getName() {
@@ -40,25 +43,36 @@ public class Exchange {
       throw new IllegalArgumentException("arg cant be empty");
     } else {
       for (Stock stock : stocks) {
-
+        stockMap.put(stock.getSymbol(), stock);
       }
     }
   }
 
   public boolean hasStock(String symbol) {
-
+    return stockMap.containsKey(symbol);
   }
 
   public Stock getStock(String symbol) {
-
+    if (hasStock(symbol)) {
+      return stockMap.get(symbol);
+    } else {
+      throw new IllegalArgumentException("stock not found");
+    }
   }
 
   public Stock findStocks(String searchTerm) {
-
+    for (Stock stock : stockMap.values()) {
+      if (stock.getSymbol().equalsIgnoreCase(searchTerm) ||
+          stock.getCompany().equalsIgnoreCase(searchTerm)) {
+        return stock;
+      }
+    }
+    throw new IllegalArgumentException("stock not found");
   }
 
   public Transaction buy(String symbol,
       Player player, BigDecimal quantity) {
+
 
   }
 
