@@ -75,11 +75,15 @@ public class Exchange {
     Stock stock = getStock(symbol);
     BigDecimal salesPrice = stock.getSalesPrice();
     Share share = new Share(stock, quantity, salesPrice);
-    return new Purchase(share, week);
+    Purchase purchase = new Purchase(share, week);
+    purchase.commit(player);
+    return purchase;
   }
 
   public Transaction sell(Share share, Player player) {
-    return new Sale(share, week);
+    Sale sale = new Sale(share, week);
+    sale.commit(player);
+    return sale;
   }
 
   public void Advance() {
