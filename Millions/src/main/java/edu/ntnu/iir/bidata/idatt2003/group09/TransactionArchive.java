@@ -22,6 +22,8 @@ public class TransactionArchive {
     }
 
     public List<Transaction> getTransactions(int week) {
+        validateWeek(week);
+
         List<Transaction> result = new ArrayList<>();
         for (Transaction t : transactions) {
             if (t.getWeek() == week) {
@@ -31,12 +33,46 @@ public class TransactionArchive {
         return Collections.unmodifiableList(result);
     }
 
-    //public List<Purchase> getPurchases(int week) {
-        //fix
-    //}
+    public List<Purchase> getPurchases(int week) {
+        validateWeek(week);
 
-    //public List<Sale> getSales(int week) {
-        //fix
-    //}
+        List<Purchase> result = new ArrayList<>();
+        for (Transaction t : transactions) {
+            if (t.getWeek() == week && t instanceof Purchase) {
+                result.add((Purchase) t);
+            }
+        }
+    return Collections.unmodifiableList(result);
+    }
 
+    public List<Sale> getSales(int week) {
+        validateWeek(week);
+
+        List<Sale> result = new ArrayList<>();
+        for (Transaction t : transactions) {
+            if (t.getWeek() == week && t instanceof Sale) {
+                result.add((Sale) t);
+            }
+        }
+        return Collections.unmodifiableList(result);
+    }
+
+    public int countDistinctWeeks() {
+        List<Integer> weeks = new ArrayList<>();
+
+        for (Transaction t : transactions) {
+            int week = t.getWeek();
+            if (!weeks.contains(week)) {
+                weeks.add(week);
+            }
+        }
+        return weeks.size();
+    }
+
+    private static void validateWeek(int week) {
+        if (week < 1) {
+            throw new IllegalArgumentException("Week must be greater than 0," +
+                    " the week was: " + week);
+        }
+    }
 }
