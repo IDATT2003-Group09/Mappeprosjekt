@@ -13,6 +13,11 @@ public class Exchange {
   private Map<String, Stock> stockMap;
   private Random random;
 
+  /**
+   * uses setters to validate input
+   * @param name
+   * @param stocks
+   */
   public Exchange(String name, List<Stock> stocks) {
     random = new Random();
     setName(name);
@@ -20,14 +25,26 @@ public class Exchange {
     setStockMap(stocks);
   }
 
+  /**
+   * getname
+   * @return
+   */
   public String getName() {
     return name;
   }
 
+  /**
+   * get week
+   * @return
+   */
   public int getWeek() {
     return week;
   }
 
+  /**
+   * set name, validates input
+   * @param name
+   */
   public void setName(String name) {
     if (name.trim().isEmpty() || name == null) {
       throw new IllegalArgumentException("""
@@ -38,6 +55,10 @@ public class Exchange {
     }
   }
 
+  /**
+   * set stockmap, validates input
+   * @param stocks
+   */
   public void setStockMap(List<Stock> stocks) {
     if (stocks.isEmpty()) {
       throw new IllegalArgumentException("arg cant be empty");
@@ -48,10 +69,20 @@ public class Exchange {
     }
   }
 
+  /**
+   * checks if stockmap contains stock with symbol
+   * @param symbol
+   * @return
+   */
   public boolean hasStock(String symbol) {
     return stockMap.containsKey(symbol);
   }
 
+  /**
+   * 
+   * @param symbol
+   * @return
+   */
   public Stock getStock(String symbol) {
     if (hasStock(symbol)) {
       return stockMap.get(symbol);
@@ -60,6 +91,11 @@ public class Exchange {
     }
   }
 
+  /**
+   * searches for stock with symbol or company name matching searchterm
+   * @param searchTerm
+   * @return
+   */
   public Stock findStocks(String searchTerm) {
     for (Stock stock : stockMap.values()) {
       if (stock.getSymbol().equalsIgnoreCase(searchTerm) ||
@@ -70,6 +106,13 @@ public class Exchange {
     throw new IllegalArgumentException("stock not found");
   }
 
+  /**
+   * creates a purchase transaction
+   * @param symbol
+   * @param player
+   * @param quantity
+   * @return
+   */
   public Transaction buy(String symbol,
       Player player, BigDecimal quantity) {
     Stock stock = getStock(symbol);
@@ -80,12 +123,21 @@ public class Exchange {
     return purchase;
   }
 
+  /**
+   * creates a sale transaction
+   * @param share
+   * @param player
+   * @return
+   */
   public Transaction sell(Share share, Player player) {
     Sale sale = new Sale(share, week);
     sale.commit(player);
     return sale;
   }
 
+  /**
+   * Increasing the week counter
+   */
   public void Advance() {
     week++;
   }
