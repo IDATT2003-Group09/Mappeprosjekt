@@ -79,10 +79,10 @@ public class Exchange {
   }
 
   public Transaction sell(Share share, Player player) {
-
+    return new Sale(share, week);
   }
 
   public void Advance() {
-
+    week++;
   }
 }
