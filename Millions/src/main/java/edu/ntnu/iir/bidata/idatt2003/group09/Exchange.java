@@ -72,8 +72,10 @@ public class Exchange {
 
   public Transaction buy(String symbol,
       Player player, BigDecimal quantity) {
-
-
+    Stock stock = getStock(symbol);
+    BigDecimal salesPrice = stock.getSalesPrice();
+    Share share = new Share(stock, quantity, salesPrice);
+    return new Purchase(share, week);
   }
 
   public Transaction sell(Share share, Player player) {
