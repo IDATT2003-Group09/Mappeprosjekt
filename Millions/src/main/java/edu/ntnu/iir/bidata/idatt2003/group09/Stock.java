@@ -2,9 +2,6 @@ package edu.ntnu.iir.bidata.idatt2003.group09;
 
 import java.math.BigDecimal;
 import java.util.List;
-
-import com.sun.nio.sctp.IllegalUnbindException;
-
 import java.util.ArrayList;
 
 public class Stock {

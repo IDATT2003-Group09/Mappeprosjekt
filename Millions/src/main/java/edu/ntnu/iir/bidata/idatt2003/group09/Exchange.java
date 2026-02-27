@@ -1,5 +1,8 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.transaction.Purchase;
+import edu.ntnu.iir.bidata.idatt2003.group09.transaction.Sale;
+import edu.ntnu.iir.bidata.idatt2003.group09.transaction.Transaction;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;

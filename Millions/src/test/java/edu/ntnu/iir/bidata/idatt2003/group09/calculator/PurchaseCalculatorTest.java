@@ -1,5 +1,8 @@
-package edu.ntnu.iir.bidata.idatt2003.group09;
+package edu.ntnu.iir.bidata.idatt2003.group09.calculator;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.calculator.PurchaseCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

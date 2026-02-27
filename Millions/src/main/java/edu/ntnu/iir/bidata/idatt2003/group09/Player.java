@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.transaction.TransactionArchive;
 import java.math.BigDecimal;
 import java.util.Objects;
 
