@@ -30,6 +30,12 @@ public class tradeScreen extends BorderPane {
 	private final TextField quantityField;
 	private final NumberFormat currencyFormat;
 
+  /**
+   * Constructor for the trade screen. requires a player an exchange and a list of stock.
+   * @param exchange
+   * @param player
+   * @param stocks
+   */
 	public tradeScreen(Exchange exchange, Player player, List<Stock> stocks) {
 		this.exchange = exchange;
 		this.player = player;
@@ -53,6 +59,9 @@ public class tradeScreen extends BorderPane {
 		refreshInfo();
 	}
 
+  /**
+   * build the layout. Makes labels and buttons, and create the stocktable.
+   */
 	private void buildLayout() {
 		Label titleLabel = new Label("Trade Stocks");
 		titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
@@ -76,6 +85,9 @@ public class tradeScreen extends BorderPane {
 		setPadding(new Insets(10));
 	}
 
+  /**
+   * method to buy stock intuitivly connected to the ui.
+   */
 	private void buySelectedStock() {
 		Stock selectedStock = stockTable.getSelectionModel().getSelectedItem();
 		if (selectedStock == null) {
@@ -101,6 +113,9 @@ public class tradeScreen extends BorderPane {
 		}
 	}
 
+  /**
+   * method to sell stock intuitivly connected to the ui.
+   */
 	private void sellSelectedStock() {
 		Stock selectedStock = stockTable.getSelectionModel().getSelectedItem();
 		if (selectedStock == null) {
@@ -126,6 +141,10 @@ public class tradeScreen extends BorderPane {
 		}
 	}
 
+  /**
+   * parses the quantity from the text field, and validates it. throws an exception if invalid.
+   * @return the quantity as a BigDecimal
+   */
 	private BigDecimal parseQuantity() {
 		try {
 			BigDecimal quantity = new BigDecimal(quantityField.getText().trim());
@@ -138,6 +157,9 @@ public class tradeScreen extends BorderPane {
 		}
 	}
 
+  /**
+   * refreshes the cash and holdings labels to show the current state of the player.
+   */
 	private void refreshInfo() {
 		cashLabel.setText("Cash: " + currencyFormat.format(player.getMoney()));
 		holdingsLabel.setText("Open positions: " + player.getPortfolio().getShares().size());

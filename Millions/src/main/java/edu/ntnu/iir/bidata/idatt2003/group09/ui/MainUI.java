@@ -17,6 +17,9 @@ import javafx.stage.Stage;
 
 public class MainUI extends Application {
 
+  /**
+   * Starts the JavaFX application. Initializes the exchange, player, and trade screen, and sets up the main stage.
+   */
 	@Override
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("Stock Trading");
@@ -40,6 +43,10 @@ public class MainUI extends Application {
 		}
 	}
 
+  /**
+   * write mvn javafx:run to run this method that starts the application
+   * @param args
+   */
 	public static void main(String[] args) {
 		launch(args);
 	}

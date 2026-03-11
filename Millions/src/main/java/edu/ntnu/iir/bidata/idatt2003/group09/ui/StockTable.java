@@ -11,14 +11,27 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 public class StockTable {
+
+  /**
+   * empty constructor
+   */
   public StockTable() {
 
   }
 
+  /**
+   * creates the stock table and returns it as a tableview that can be displayed
+   * @return a TableView of Stock with columns for symbol, company, price and owned quantity
+   */
   public TableView<Stock> createStockTable() {
 		return createStockTable(null);
 	}
 
+  /**
+   * create the tableview
+   * @param player
+   * @return returns a visual
+   */
 	public TableView<Stock> createStockTable(Player player) {
 		NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
