@@ -1,19 +1,16 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.Exchange;
+import edu.ntnu.iir.bidata.idatt2003.group09.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.tradeScreen;
 import java.io.IOException;
-import java.text.NumberFormat;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Locale;
 import javafx.application.Application;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -22,22 +19,15 @@ public class MainUI extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("Stock Overview");
+		primaryStage.setTitle("Stock Trading");
 
 		try {
 			List<Stock> stocks = StockCsvReader.readDefaultResource();
+			Player player = new Player("Trader", new BigDecimal("100000"));
+			Exchange exchange = new Exchange("Main Exchange", stocks);
+			tradeScreen screen = new tradeScreen(exchange, player, stocks);
 
-			Label header = new Label("Stocks loaded from sp500.csv: " + stocks.size());
-			header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10;");
-
-			TableView<Stock> stockTable = new StockTable().createStockTable();
-			stockTable.setItems(FXCollections.observableArrayList(stocks));
-
-			BorderPane root = new BorderPane();
-			root.setTop(header);
-			root.setCenter(stockTable);
-
-			Scene scene = new Scene(root, 900, 650);
+			Scene scene = new Scene(screen, 900, 650);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
