@@ -1,8 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
-
 import java.math.BigDecimal;
-import java.util.Objects;
 
 public class Purchase extends Transaction {
     public Purchase(Share share, int week) {
