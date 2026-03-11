@@ -108,4 +108,55 @@ public class StockTest {
     BigDecimal negativePrice = new BigDecimal("-5.00");
     assertThrows(IllegalArgumentException.class, () -> stock.addNewSalesPrice(negativePrice));
   }
+
+    @Test
+    void getHistoricalPricesShouldReturnAllPrices() {
+        stock.addNewSalesPrice(new BigDecimal("160.00"));
+        stock.addNewSalesPrice(new BigDecimal("170.00"));
+
+        assertEquals(3, stock.getHistoricalPrices().size());
+    }
+
+    @Test
+    void getHistoricalPricesShouldReturnUnmodifiableList() {
+        var prices = stock.getHistoricalPrices();
+
+        assertThrows(UnsupportedOperationException.class,
+                () -> prices.add(new BigDecimal("200.00")));
+    }
+
+    @Test
+    void getHighestPriceShouldReturnHighestPrice() {
+        stock.addNewSalesPrice(new BigDecimal("180.00"));
+        stock.addNewSalesPrice(new BigDecimal("170.00"));
+
+        assertEquals(new BigDecimal("180.00"), stock.getHighestPrice());
+    }
+
+    @Test
+    void getLowestPriceShouldReturnLowestPrice() {
+        stock.addNewSalesPrice(new BigDecimal("120.00"));
+        stock.addNewSalesPrice(new BigDecimal("170.00"));
+
+        assertEquals(new BigDecimal("120.00"), stock.getLowestPrice());
+    }
+
+    @Test
+    void getLatestPriceChangeShouldReturnPositiveDifference() {
+        stock.addNewSalesPrice(new BigDecimal("170.00"));
+
+        assertEquals(new BigDecimal("20.00"), stock.getLatestPriceChange());
+    }
+
+    @Test
+    void getLatestPriceChangeShouldReturnNegativeDifference() {
+        stock.addNewSalesPrice(new BigDecimal("140.00"));
+
+        assertEquals(new BigDecimal("-10.00"), stock.getLatestPriceChange());
+    }
+
+    @Test
+    void getLatestPriceChangeShouldReturnZeroWhenOnlyOnePriceExists() {
+        assertEquals(BigDecimal.ZERO, stock.getLatestPriceChange());
+    }
 }
