@@ -17,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+
 public class MainUI extends Application {
 
 	@Override
@@ -29,7 +30,7 @@ public class MainUI extends Application {
 			Label header = new Label("Stocks loaded from sp500.csv: " + stocks.size());
 			header.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10;");
 
-			TableView<Stock> stockTable = createStockTable();
+			TableView<Stock> stockTable = new StockTable().createStockTable();
 			stockTable.setItems(FXCollections.observableArrayList(stocks));
 
 			BorderPane root = new BorderPane();
@@ -53,31 +54,5 @@ public class MainUI extends Application {
 		launch(args);
 	}
 
-	private TableView<Stock> createStockTable() {
-		NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
-		TableColumn<Stock, String> symbolColumn = new TableColumn<>("Symbol");
-		symbolColumn.setCellValueFactory(data ->
-				new SimpleStringProperty(data.getValue().getSymbol()));
-
-		TableColumn<Stock, String> companyColumn = new TableColumn<>("Company");
-		companyColumn.setCellValueFactory(data ->
-				new SimpleStringProperty(data.getValue().getCompany()));
-
-		TableColumn<Stock, String> priceColumn = new TableColumn<>("Price");
-		priceColumn.setCellValueFactory(data ->
-				new SimpleStringProperty(currencyFormat.format(data.getValue().getSalesPrice())));
-
-		symbolColumn.setPrefWidth(120);
-		companyColumn.setPrefWidth(540);
-		priceColumn.setPrefWidth(160);
-
-		TableView<Stock> stockTable = new TableView<>();
-		stockTable.getColumns().add(symbolColumn);
-		stockTable.getColumns().add(companyColumn);
-		stockTable.getColumns().add(priceColumn);
-		stockTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-
-		return stockTable;
-	}
 }
