@@ -1,4 +1,4 @@
-package edu.ntnu.iir.bidata.idatt2003.group09;
+package edu.ntnu.iir.bidata.idatt2003.group09.transaction;
 
 import java.util.ArrayList;
 import java.util.Collections;

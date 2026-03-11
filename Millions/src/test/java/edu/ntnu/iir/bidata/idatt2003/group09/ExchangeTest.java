@@ -28,6 +28,11 @@ public class ExchangeTest {
   }
 
   @Test
+  void nullNameShouldThrow() {
+    assertThrows(IllegalArgumentException.class, () -> new Exchange("", List.of(apple, microsoft)));
+  }
+
+  @Test
   void constructorShouldInitializeWeekToZero() {
     assertEquals(0, exchange.getWeek());
   }

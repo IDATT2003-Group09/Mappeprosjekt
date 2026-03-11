@@ -1,5 +1,6 @@
-package edu.ntnu.iir.bidata.idatt2003.group09;
+package edu.ntnu.iir.bidata.idatt2003.group09.calculator;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.Share;
 import java.math.BigDecimal;
 
 public class SaleCalculator implements TransactionCalculator {
