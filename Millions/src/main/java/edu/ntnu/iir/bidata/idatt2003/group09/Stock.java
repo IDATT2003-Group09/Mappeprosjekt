@@ -1,6 +1,7 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 import com.sun.nio.sctp.IllegalUnbindException;
@@ -80,4 +81,47 @@ public class Stock {
     }
   }
 
+    /**
+     * Returns all the historical prices
+     *
+     * @return an unmodifable list of historical prices
+     */
+  public List<BigDecimal> getHistoricalPrices() {
+      return Collections.unmodifiableList(prices);
+  }
+
+    /**
+     * Returns the highest price registered
+     *
+     * @return the highest price
+     */
+  public BigDecimal getHighestPrice() {
+      return Collections.max(prices);
+  }
+
+    /**
+     * Returns the lowest price registered
+     *
+     * @return the lowst price
+     */
+  public BigDecimal getLowestPrice() {
+      return Collections.min(prices);
+  }
+
+    /**
+     * Returns the diffrence between the latest price and the previous one.
+     * If there is only one price, the change is zero
+     *
+     * @return the latest price change
+     */
+  public BigDecimal getLatestPrice() {
+      if (prices.size() < 2) {
+          return BigDecimal.ZERO;
+      }
+
+      BigDecimal latestPrice = prices.get(prices.size() -1 );
+      BigDecimal previousPrice = prices.get(prices.size() -2);
+
+      return latestPrice.subtract(previousPrice);
+  }
 }
