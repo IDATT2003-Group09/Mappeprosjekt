@@ -39,7 +39,7 @@ public class tradeScreen extends BorderPane {
 			this.exchange.Advance();
 		}
 
-		stockTable = new StockTable().createStockTable();
+		stockTable = new StockTable().createStockTable(this.player);
 		stockTable.setItems(FXCollections.observableArrayList(stocks));
 
 		quantityField = new TextField("1");
@@ -94,6 +94,7 @@ public class tradeScreen extends BorderPane {
 		try {
 			exchange.buy(selectedStock.getSymbol(), player, quantity);
 			statusLabel.setText("Bought " + quantity.toPlainString() + " of " + selectedStock.getSymbol());
+			stockTable.refresh();
 			refreshInfo();
 		} catch (Exception exception) {
 			statusLabel.setText("Buy failed: " + exception.getMessage());
@@ -118,6 +119,7 @@ public class tradeScreen extends BorderPane {
 			exchange.sell(shareToSell, player);
 			statusLabel.setText("Sold " + shareToSell.getQuantity().toPlainString()
 					+ " of " + selectedStock.getSymbol());
+			stockTable.refresh();
 			refreshInfo();
 		} catch (Exception exception) {
 			statusLabel.setText("Sell failed: " + exception.getMessage());
