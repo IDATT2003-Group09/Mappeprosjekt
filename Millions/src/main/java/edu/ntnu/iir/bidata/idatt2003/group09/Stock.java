@@ -111,7 +111,7 @@ public class Stock {
      *
      * @return the latest price change
      */
-  public BigDecimal getLatestPrice() {
+  public BigDecimal getLatestPriceChange() {
       if (prices.size() < 2) {
           return BigDecimal.ZERO;
       }
