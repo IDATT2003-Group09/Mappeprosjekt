@@ -102,7 +102,7 @@ public class ExchangeTest {
   @Test
   void getLosersShouldReturnStocksWithPriceDecrease() {
     apple.addNewSalesPrice(new BigDecimal("140.00"));
-    microsoft.addNewSalesPrice(new BigDecimal("290.00"));
+    microsoft.addNewSalesPrice(new BigDecimal("300.00"));
 
     List<Stock> losers = exchange.getLosers();
     assertTrue(losers.contains(apple));
