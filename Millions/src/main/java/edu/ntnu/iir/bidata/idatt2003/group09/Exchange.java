@@ -100,7 +100,7 @@ public class Exchange {
    */
   public List<Stock> getGainers() {
     return stockMap.values().stream()
-        .filter(stock -> stock.getPriceChange().compareTo(BigDecimal.ZERO) > 0)
+        .filter(stock -> stock.getLatestPriceChange().compareTo(BigDecimal.ZERO) > 0)
         .toList();
   }
 
@@ -110,7 +110,7 @@ public class Exchange {
    */
   public List<Stock> getLosers() {
     return stockMap.values().stream()
-        .filter(stock -> stock.getPriceChange().compareTo(BigDecimal.ZERO) < 0)
+        .filter(stock -> stock.getLatestPriceChange().compareTo(BigDecimal.ZERO) < 0)
         .toList();
   }
 
