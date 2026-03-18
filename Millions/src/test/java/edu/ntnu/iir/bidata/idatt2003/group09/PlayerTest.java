@@ -1,11 +1,15 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.calculator.SaleCalculator;
 
 class PlayerTest {
 
@@ -98,6 +102,22 @@ class PlayerTest {
     void withdrawMoney_throwsException_whenInsufficientFunds() {
         assertThrows(IllegalStateException.class,
                 () -> player.withdrawMoney(BigDecimal.valueOf(2000)));
+    }
+
+
+     @Test
+    void getNetWorth_returnsMoneyPlusPortfolioValue() {
+        Player player = new Player("Ola", new BigDecimal("1000"));
+
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("100"));
+        Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("80"));
+
+        player.getPortfolio().addShare(share);
+
+        BigDecimal netWorth = player.getNetWorth();
+        BigDecimal expected = player.getMoney()
+                .add(new SaleCalculator(share).calculateTotal());
+        assertEquals(0, expected.compareTo(netWorth));
     }
 
     @Test
