@@ -160,4 +160,14 @@ public class StockTest {
         assertEquals(BigDecimal.ZERO, stock.getLatestPriceChange());
     }
 
+<<<<<<< HEAD
+=======
+    @Test
+    void getPriceChangeShouldReturnDifference() {
+        stock.addNewSalesPrice(new BigDecimal("170.00"));
+        stock.addNewSalesPrice(new BigDecimal("180.00"));
+        assertEquals(new BigDecimal("10.00"), stock.getLatestPriceChange());
+    }
+
+>>>>>>> 5b3ef891f469460b278c27c69eadca52f126724b
 }
