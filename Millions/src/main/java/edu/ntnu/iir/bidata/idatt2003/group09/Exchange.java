@@ -95,6 +95,26 @@ public class Exchange {
   }
 
   /**
+   * gets all stocks with positive price change
+   * @return a list of gaining stocks
+   */
+  public List<Stock> getGainers() {
+    return stockMap.values().stream()
+        .filter(stock -> stock.getLatestPriceChange().compareTo(BigDecimal.ZERO) > 0)
+        .toList();
+  }
+
+  /**
+   * gets all stocks with negative price change
+   * @return a list of losing stocks
+   */
+  public List<Stock> getLosers() {
+    return stockMap.values().stream()
+        .filter(stock -> stock.getLatestPriceChange().compareTo(BigDecimal.ZERO) < 0)
+        .toList();
+  }
+
+  /**
    * searches for stock with symbol or company name matching searchterm
    * @param searchTerm
    * @return
