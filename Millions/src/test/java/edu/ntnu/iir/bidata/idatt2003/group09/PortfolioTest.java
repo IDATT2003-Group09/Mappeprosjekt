@@ -158,4 +158,13 @@ public class PortfolioTest {
 
         assertEquals(expected, netWorth);
     }
+
+    @Test
+    void getNetworth_emptyPortfolio_returnsZero() {
+        Portfolio portfolio = new Portfolio();
+
+        BigDecimal networth = portfolio.getNetWorth();
+
+        assertEquals(BigDecimal.ZERO, networth);
+    }
 }
