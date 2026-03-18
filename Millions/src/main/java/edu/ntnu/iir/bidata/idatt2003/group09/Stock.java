@@ -78,6 +78,19 @@ public class Stock {
     }
   }
 
+
+  /**
+   * returns the change between the latest price and the previous one
+   * @return the price change, or zero if there is only one price
+   */
+  public BigDecimal getPriceChange() {
+    if (prices.size() < 2) {
+      return BigDecimal.ZERO;
+    } else {
+      return prices.getLast().subtract(prices.get(prices.size() - 2));
+    }
+  }
+
     /**
      * Returns all the historical prices
      *
