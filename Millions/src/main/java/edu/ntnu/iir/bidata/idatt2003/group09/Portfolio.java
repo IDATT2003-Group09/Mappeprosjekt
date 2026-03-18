@@ -54,6 +54,11 @@ public class Portfolio {
     return matchingShares;
   }
 
+    /**
+     * Calculates the total networth of the portfolio
+     *
+     * @return the total value of all shares after tax and commisions
+     */
   public BigDecimal getNetWorth() {
       BigDecimal total = BigDecimal.ZERO;
 
