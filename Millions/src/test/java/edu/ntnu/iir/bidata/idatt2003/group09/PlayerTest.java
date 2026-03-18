@@ -1,6 +1,5 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.calculator.SaleCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -102,19 +101,22 @@ class PlayerTest {
     }
 
     @Test
-    void getNetWorth_returnsMoneyPlusPortfolioValue() {
-        Player player = new Player("Ola", new BigDecimal("1000"));
+    void updateStatus_setsZeroAtStartingMoney() {
+        player.updateStatus();
+        assertEquals(0, player.getStatus());
+    }
 
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("100"));
-        Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("80"));
+    @Test
+    void updateStatus_setsPositivePercentageWhenMoneyIncreases() {
+        player.addMoney(BigDecimal.valueOf(500));
+        player.updateStatus();
+        assertEquals(50, player.getStatus());
+    }
 
-        player.getPortfolio().addShare(share);
-
-        BigDecimal netWorth = player.getNetWorth();
-
-        BigDecimal expected = player.getMoney()
-                .add(new SaleCalculator(share).calculateTotal());
-
-        assertEquals(expected, netWorth);
+    @Test
+    void updateStatus_setsNegativePercentageWhenMoneyDecreases() {
+        player.withdrawMoney(BigDecimal.valueOf(250));
+        player.updateStatus();
+        assertEquals(-25, player.getStatus());
     }
 }
