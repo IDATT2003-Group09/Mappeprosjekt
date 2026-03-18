@@ -1,5 +1,8 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.calculator.SaleCalculator;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -49,6 +52,21 @@ public class Portfolio {
     }
 
     return matchingShares;
+  }
+
+    /**
+     * Calculates the total networth of the portfolio
+     *
+     * @return the total value of all shares after tax and commisions
+     */
+  public BigDecimal getNetWorth() {
+      BigDecimal total = BigDecimal.ZERO;
+
+      for (Share share : shares) {
+          SaleCalculator calculator = new SaleCalculator(share);
+          total = total.add(calculator.calculateTotal());
+      }
+      return total;
   }
 
 }

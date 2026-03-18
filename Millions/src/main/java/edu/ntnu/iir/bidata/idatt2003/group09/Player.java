@@ -111,4 +111,14 @@ public class Player {
     public TransactionArchive getTransactionArchive() {
         return transactionArchive;
     }
+
+    /**
+     * Calculates the players total networth including the current money
+     *
+     * @return the total networth of the player
+     */
+    public BigDecimal getNetWorth() {
+        return money.add(portfolio.getNetWorth());
+    }
+
 }
