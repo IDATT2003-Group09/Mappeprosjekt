@@ -88,4 +88,24 @@ public class ExchangeTest {
     Exchange newExchange = new Exchange("Test", List.of(apple));
     assertThrows(IllegalArgumentException.class, () -> newExchange.setStockMap(new ArrayList<>()));
   }
+
+  @Test
+  void getGainersShouldReturnStocksWithPriceIncrease() {
+    apple.addNewSalesPrice(new BigDecimal("160.00"));
+    microsoft.addNewSalesPrice(new BigDecimal("290.00"));
+
+    List<Stock> gainers = exchange.getGainers();
+    assertTrue(gainers.contains(apple));
+    assertFalse(gainers.contains(microsoft));
+  }
+
+  @Test
+  void getLosersShouldReturnStocksWithPriceDecrease() {
+    apple.addNewSalesPrice(new BigDecimal("140.00"));
+    microsoft.addNewSalesPrice(new BigDecimal("290.00"));
+
+    List<Stock> losers = exchange.getLosers();
+    assertTrue(losers.contains(apple));
+    assertFalse(losers.contains(microsoft));
+  }
 }

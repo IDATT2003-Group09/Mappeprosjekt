@@ -159,4 +159,12 @@ public class StockTest {
     void getLatestPriceChangeShouldReturnZeroWhenOnlyOnePriceExists() {
         assertEquals(BigDecimal.ZERO, stock.getLatestPriceChange());
     }
+
+    @Test
+    void getPriceChangeShouldReturnDifference() {
+        stock.addNewSalesPrice(new BigDecimal("170.00"));
+        stock.addNewSalesPrice(new BigDecimal("180.00"));
+        assertEquals(new BigDecimal("10.00"), stock.getPriceChange());
+    }
+
 }
