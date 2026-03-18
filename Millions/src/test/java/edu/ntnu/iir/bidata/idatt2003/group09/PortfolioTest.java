@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.calculator.SaleCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -119,5 +120,42 @@ public class PortfolioTest {
 
         assertThrows(UnsupportedOperationException.class,
                 () -> shares.add(appleShare2));
+    }
+
+    @Test
+    void getNetWorth_singleShare_returnsCorrectValue() {
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("100"));
+        Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("80"));
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.addShare(share);
+
+        BigDecimal netWorth = portfolio.getNetWorth();
+
+        SaleCalculator calculator = new SaleCalculator(share);
+        BigDecimal expected = calculator.calculateTotal();
+
+        assertEquals(expected, netWorth);
+    }
+
+    @Test
+    void getNetWorth_multipleShares_sumsCorrectly() {
+        Stock stock1 = new Stock("AAPL", "Apple", new BigDecimal("100"));
+        Stock stock2 = new Stock("MSFT", "Microsoft", new BigDecimal("200"));
+
+        Share share1 = new Share(stock1, new BigDecimal("2"), new BigDecimal("80"));
+        Share share2 = new Share(stock2, new BigDecimal("1"), new BigDecimal("150"));
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.addShare(share1);
+        portfolio.addShare(share2);
+
+        BigDecimal netWorth = portfolio.getNetWorth();
+
+        BigDecimal expected =
+                new SaleCalculator(share1).calculateTotal()
+                        .add(new SaleCalculator(share2).calculateTotal());
+
+        assertEquals(expected, netWorth);
     }
 }
