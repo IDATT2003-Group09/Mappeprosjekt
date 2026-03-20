@@ -32,12 +32,36 @@ public class Title {
     return title;
   }
 
+  /**
+   * Assigns a title using the player's current status and the current week from the exchange.
+   *
+   * <p>The returned title follows the same rules as {@link #assignTitle(int, int)}.</p>
+   *
+   * @param player the player to evaluate
+   * @return the assigned title
+   * @throws NullPointerException if player is {@code null}
+   */
   public String assignTitle(Player player) {
     Objects.requireNonNull(player, "Player cannot be null");
     int weeksPlayed = exchange.getWeek();
     return assignTitle(player.getStatus(), weeksPlayed);
   }
 
+  /**
+   * Assigns a title based on status and weeks played.
+   *
+   * <p>Both requirements must be met for a level:</p>
+   * <ul>
+   *   <li>Novice: default level with no minimum requirements</li>
+   *   <li>Investor: at least 10 weeks played and at least 20% status</li>
+   *   <li>Speculator: at least 20 weeks played and at least 100% status</li>
+   * </ul>
+   *
+   * @param status the player's status in percent relative to starting capital
+   * @param weeksPlayed number of weeks played
+   * @return the assigned title
+   * @throws IllegalArgumentException if weeksPlayed is negative
+   */
   public String assignTitle(int status, int weeksPlayed) {
     if (weeksPlayed < 0) {
       throw new IllegalArgumentException("Weeks played cannot be negative");
