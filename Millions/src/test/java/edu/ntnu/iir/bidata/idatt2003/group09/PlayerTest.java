@@ -1,12 +1,15 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.calculator.SaleCalculator;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.calculator.SaleCalculator;
 
 class PlayerTest {
 
@@ -101,7 +104,8 @@ class PlayerTest {
                 () -> player.withdrawMoney(BigDecimal.valueOf(2000)));
     }
 
-    @Test
+
+     @Test
     void getNetWorth_returnsMoneyPlusPortfolioValue() {
         Player player = new Player("Ola", new BigDecimal("1000"));
 
@@ -111,10 +115,28 @@ class PlayerTest {
         player.getPortfolio().addShare(share);
 
         BigDecimal netWorth = player.getNetWorth();
-
         BigDecimal expected = player.getMoney()
                 .add(new SaleCalculator(share).calculateTotal());
+        assertEquals(0, expected.compareTo(netWorth));
+    }
 
-        assertEquals(expected, netWorth);
+    @Test
+    void updateStatus_setsZeroAtStartingMoney() {
+        player.updateStatus();
+        assertEquals(0, player.getStatus());
+    }
+
+    @Test
+    void updateStatus_setsPositivePercentageWhenMoneyIncreases() {
+        player.addMoney(BigDecimal.valueOf(500));
+        player.updateStatus();
+        assertEquals(50, player.getStatus());
+    }
+
+    @Test
+    void updateStatus_setsNegativePercentageWhenMoneyDecreases() {
+        player.withdrawMoney(BigDecimal.valueOf(250));
+        player.updateStatus();
+        assertEquals(-25, player.getStatus());
     }
 }

@@ -1,7 +1,9 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.transaction.TransactionArchive;
+
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Objects;
 
 /**
@@ -16,6 +18,7 @@ public class Player {
     private BigDecimal money;
     private final Portfolio portfolio;
     private final TransactionArchive transactionArchive;
+    private int status;
 
     /**
      * Creates a new player
@@ -40,8 +43,20 @@ public class Player {
         this.money = this.startingMoney;
         this.portfolio = new Portfolio();
         this.transactionArchive = new TransactionArchive();
+        updateStatus();
     }
 
+    public void updateStatus() {
+        BigDecimal percentageChange = money
+                .subtract(startingMoney)
+                .divide(startingMoney, 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+        status = percentageChange.setScale(0, RoundingMode.HALF_UP).intValue();
+    }
+
+    public int getStatus() {
+        return status;
+    }
     /**
      * Get method for the name of the player
      *
