@@ -47,7 +47,7 @@ public class Player {
     }
 
     public void updateStatus() {
-        BigDecimal percentageChange = money
+        BigDecimal percentageChange = getNetWorth()
                 .subtract(startingMoney)
                 .divide(startingMoney, 4, RoundingMode.HALF_UP)
                 .multiply(BigDecimal.valueOf(100));
@@ -55,6 +55,7 @@ public class Player {
     }
 
     public int getStatus() {
+        updateStatus();
         return status;
     }
     /**
