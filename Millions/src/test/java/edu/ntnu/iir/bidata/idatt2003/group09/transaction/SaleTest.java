@@ -20,7 +20,7 @@ public class SaleTest {
 
 	@BeforeEach
 	void setUp() {
-		stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+		stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "Technology", 4);
 		share = new Share(stock, new BigDecimal("2"), new BigDecimal("10.00"));
 		sale = new Sale(share, 1);
 		player = new Player("Alice", new BigDecimal("1000.00"));

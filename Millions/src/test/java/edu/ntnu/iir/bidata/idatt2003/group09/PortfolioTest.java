@@ -26,8 +26,8 @@ public class PortfolioTest {
     void setUp() {
         portfolio = new Portfolio();
 
-        Stock apple = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
-        Stock microsoft = new Stock("MSFT", "Microsoft", new BigDecimal("300.00"));
+        Stock apple = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
+        Stock microsoft = new Stock("MSFT", "Microsoft", new BigDecimal("300.00"), "tech", 6);
 
         appleShare1 = new Share(apple, new BigDecimal("10"), new BigDecimal("120"));
         appleShare2 = new Share(apple, new BigDecimal("5"), new BigDecimal("130"));
@@ -124,7 +124,7 @@ public class PortfolioTest {
 
     @Test
     void getNetWorth_singleShare_returnsCorrectValue() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("100"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("100"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("80"));
 
         Portfolio portfolio = new Portfolio();
@@ -140,8 +140,8 @@ public class PortfolioTest {
 
     @Test
     void getNetWorth_multipleShares_sumsCorrectly() {
-        Stock stock1 = new Stock("AAPL", "Apple", new BigDecimal("100"));
-        Stock stock2 = new Stock("MSFT", "Microsoft", new BigDecimal("200"));
+        Stock stock1 = new Stock("AAPL", "Apple", new BigDecimal("100"), "tech", 4);
+        Stock stock2 = new Stock("MSFT", "Microsoft", new BigDecimal("200"), "tech", 4);
 
         Share share1 = new Share(stock1, new BigDecimal("2"), new BigDecimal("80"));
         Share share2 = new Share(stock2, new BigDecimal("1"), new BigDecimal("150"));

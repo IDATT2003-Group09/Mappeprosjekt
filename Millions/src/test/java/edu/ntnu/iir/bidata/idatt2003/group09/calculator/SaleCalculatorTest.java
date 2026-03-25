@@ -29,7 +29,7 @@ class SaleCalculatorTest {
 
     @Test
     void calculateGross_returnsSalesPriceTimesQuantity() {
-        Stock stock = new Stock("ACME", "Acme Inc", bd("120"));
+        Stock stock = new Stock("ACME", "Acme Inc", bd("120"), "tech", 3);
         Share share = new Share(stock, bd("10"), bd("100"));
         SaleCalculator calculator = new SaleCalculator(share);
 
@@ -40,7 +40,7 @@ class SaleCalculatorTest {
 
     @Test
     void calculateCommission_isOnePercentOfGross() {
-        Stock stock = new Stock("ACME", "Acme Inc", bd("120"));
+        Stock stock = new Stock("ACME", "Acme Inc", bd("120"), "tech", 3);
         Share share = new Share(stock, bd("10"), bd("100"));
         SaleCalculator calculator = new SaleCalculator(share);
 
@@ -51,7 +51,7 @@ class SaleCalculatorTest {
 
     @Test
     void calculateTax_returnsThirtyPercentOfProfitBase() {
-        Stock stock = new Stock("ACME", "Acme Inc", bd("120"));
+        Stock stock = new Stock("ACME", "Acme Inc", bd("120"), "tech", 3);
         Share share = new Share(stock, bd("10"), bd("100"));
         SaleCalculator calculator = new SaleCalculator(share);
 
@@ -62,7 +62,7 @@ class SaleCalculatorTest {
 
     @Test
     void calculateTotal_returnsNetEarningsAfterCommissionAndTax() {
-        Stock stock = new Stock("ACME", "Acme Inc", bd("120"));
+        Stock stock = new Stock("ACME", "Acme Inc", bd("120"), "tech", 3);
         Share share = new Share(stock, bd("10"), bd("100"));
         SaleCalculator calculator = new SaleCalculator(share);
 
