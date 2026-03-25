@@ -17,7 +17,7 @@ class TitleTest {
     @BeforeEach
     void setUp() {
         player = new Player("Alice", BigDecimal.valueOf(1000));
-        Stock stock = new Stock("AAPL", "Apple", BigDecimal.valueOf(100));
+        Stock stock = new Stock("AAPL", "Apple", BigDecimal.valueOf(100), "tech", 4);
         exchange = new Exchange("Test Exchange", List.of(stock));
         title = new Title(player, exchange);
     }

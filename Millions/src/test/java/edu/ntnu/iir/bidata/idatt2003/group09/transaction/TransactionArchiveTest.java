@@ -29,7 +29,7 @@ public class TransactionArchiveTest {
     @BeforeEach
     void setUp() {
         archive = new TransactionArchive();
-        stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "Technology", 4);
         share1 = new Share(stock, new BigDecimal("2"), new BigDecimal("100.00"));
         share2 = new Share(stock, new BigDecimal("3"), new BigDecimal("120.00"));
         purchase1 = new Purchase(share1, 1);

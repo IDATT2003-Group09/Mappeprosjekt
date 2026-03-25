@@ -82,17 +82,26 @@ public final class StockCsvReader {
         continue;
       }
 
-      String[] parts = trimmedLine.split(",", 3);
-      if (parts.length != 3) {
+      String[] parts = trimmedLine.split(",", 5);
+      if (parts.length != 5) {
         throw new IOException("Invalid CSV format on line " + lineNumber + ": " + line);
       }
 
       String symbol = parts[0].trim();
       String company = parts[1].trim();
       String priceText = parts[2].trim();
+      String sector = parts[3].trim();
+      String riskText = parts[4].trim();
+
+      int risk;
+      try {
+          risk = Integer.parseInt(riskText);
+      } catch (NumberFormatException e) {
+          throw new IOException("Invalid risk value on line " + lineNumber + ": " + line, e);
+      }
 
       try {
-        stocks.add(new Stock(symbol, company, new BigDecimal(priceText)));
+        stocks.add(new Stock(symbol, company, new BigDecimal(priceText), sector, risk));
       } catch (IllegalArgumentException ex) {
         throw new IOException("Invalid stock data on line " + lineNumber + ": " + line, ex);
       }

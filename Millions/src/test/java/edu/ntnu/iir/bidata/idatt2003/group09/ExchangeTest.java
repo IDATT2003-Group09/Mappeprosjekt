@@ -17,8 +17,8 @@ public class ExchangeTest {
 
   @BeforeEach
   void setUp() {
-    apple = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
-    microsoft = new Stock("MSFT", "Microsoft", new BigDecimal("300.00"));
+    apple = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
+    microsoft = new Stock("MSFT", "Microsoft", new BigDecimal("300.00"), "tech", 6);
     exchange = new Exchange("OsloBors", List.of(apple, microsoft));
   }
 

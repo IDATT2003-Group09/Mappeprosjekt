@@ -13,8 +13,7 @@ class ShareTest {
     private Share share;
 
     private static Stock validStock() {
-        // Tilpass denne hvis Stock-konstruktøren din er annerledes
-        return new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        return new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
     }
 
     /**
@@ -40,7 +39,7 @@ class ShareTest {
      */
     @Test
     void setStockShouldAcceptNonNullStock() {
-        Stock other = new Stock("MSFT", "Microsoft", new BigDecimal("300.00"));
+        Stock other = new Stock("MSFT", "Microsoft", new BigDecimal("300.00"), "tech", 6);
         assertDoesNotThrow(() -> share.setStock(other));
     }
 

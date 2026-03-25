@@ -109,7 +109,7 @@ class PlayerTest {
     void getNetWorth_returnsMoneyPlusPortfolioValue() {
         Player player = new Player("Ola", new BigDecimal("1000"));
 
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("100"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("100"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("80"));
 
         player.getPortfolio().addShare(share);

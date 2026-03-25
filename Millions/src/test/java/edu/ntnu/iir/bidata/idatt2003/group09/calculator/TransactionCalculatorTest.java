@@ -20,7 +20,7 @@ public class TransactionCalculatorTest {
      * Provides test instances of TransactionCalculator implementations
      */
     static Stream<TransactionCalculator> provideCalculators() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share purchaseShare = new Share(stock, new BigDecimal("2.5"), new BigDecimal("10.00"));
         Share saleShare = new Share(stock, new BigDecimal("2"), new BigDecimal("100.00"));
         
@@ -78,7 +78,7 @@ public class TransactionCalculatorTest {
     // Specific tests for PurchaseCalculator
     @Test
     void purchaseCalculatorShouldCalculateGrossCorrectly() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("3"), new BigDecimal("50.00"));
         PurchaseCalculator calculator = new PurchaseCalculator(share);
         
@@ -88,7 +88,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void purchaseCalculatorShouldCalculateCommissionAsFivePercent() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("100.00"));
         PurchaseCalculator calculator = new PurchaseCalculator(share);
         
@@ -98,7 +98,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void purchaseCalculatorShouldHaveZeroTax() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("100.00"));
         PurchaseCalculator calculator = new PurchaseCalculator(share);
         
@@ -108,7 +108,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void purchaseCalculatorTotalShouldBeGrossPlusCommission() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("100.00"));
         PurchaseCalculator calculator = new PurchaseCalculator(share);
         
@@ -120,7 +120,7 @@ public class TransactionCalculatorTest {
     // Specific tests for SaleCalculator
     @Test
     void saleCalculatorShouldCalculateGrossBasedOnSalesPrice() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("200.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("200.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("3"), new BigDecimal("100.00"));
         SaleCalculator calculator = new SaleCalculator(share);
         
@@ -130,7 +130,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void saleCalculatorShouldCalculateCommissionAsOnePercent() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("10"), new BigDecimal("100.00"));
         SaleCalculator calculator = new SaleCalculator(share);
         
@@ -142,7 +142,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void saleCalculatorShouldCalculateTaxOnProfit() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("120.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("120.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("10"), new BigDecimal("100.00"));
         SaleCalculator calculator = new SaleCalculator(share);
         
@@ -152,7 +152,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void saleCalculatorTotalShouldBeNetEarnings() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("120.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("120.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("10"), new BigDecimal("100.00"));
         SaleCalculator calculator = new SaleCalculator(share);
         
@@ -163,7 +163,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void saleCalculatorTotalShouldBeLessThanGross() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("10"), new BigDecimal("100.00"));
         SaleCalculator calculator = new SaleCalculator(share);
         
@@ -174,7 +174,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void calculatorsShouldHandleSmallQuantities() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("0.5"), new BigDecimal("100.00"));
         PurchaseCalculator calculator = new PurchaseCalculator(share);
         
@@ -184,7 +184,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void calculatorsShouldHandleLargeQuantities() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("1000"), new BigDecimal("100.00"));
         PurchaseCalculator calculator = new PurchaseCalculator(share);
         
@@ -194,7 +194,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void purchaseCalculatorConstructorShouldNotThrowForValidShare() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("100.00"));
         
         assertDoesNotThrow(() -> new PurchaseCalculator(share));
@@ -202,7 +202,7 @@ public class TransactionCalculatorTest {
 
     @Test
     void saleCalculatorConstructorShouldNotThrowForValidShare() {
-        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"));
+        Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("100.00"));
         
         assertDoesNotThrow(() -> new SaleCalculator(share));
