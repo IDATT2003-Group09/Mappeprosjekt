@@ -10,10 +10,15 @@ public class Stock {
   private String symbol;
   private String company;
   private List<BigDecimal> prices;
+  private String sector;
+  private int risk;
 
-  public Stock(String symbol, String company, BigDecimal salesPrice) {
+  public Stock(String symbol, String company, BigDecimal salesPrice, String sector, int risk) {
     setSymbol(symbol);
     setCompany(company);
+    setSector(sector);
+    setRisk(risk);
+
     prices = new ArrayList<>();
     addNewSalesPrice(salesPrice);
   }
@@ -27,6 +32,14 @@ public class Stock {
 
   public String getCompany() {
     return company;
+  }
+
+  public String getSector() {
+      return sector;
+  }
+
+  public int getRisk() {
+      return risk;
   }
 
   /***
@@ -52,6 +65,20 @@ public class Stock {
     } else {
       this.company = company;
     }
+  }
+
+  public void setSector(String sector) {
+      if (sector == null || sector.isBlank()) {
+          throw new IllegalArgumentException("Sector cannot be null or empty");
+      }
+      this.sector = sector;
+  }
+
+  public void setRisk(int risk) {
+      if (risk < 1 || risk > 7) {
+          throw new IllegalArgumentException("Risk must be between 1 and 7");
+      }
+      this.risk = risk;
   }
 
   /***
