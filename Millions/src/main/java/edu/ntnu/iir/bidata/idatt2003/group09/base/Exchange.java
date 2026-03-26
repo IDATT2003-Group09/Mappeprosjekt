@@ -163,6 +163,12 @@ public class Exchange {
    * Increasing the week counter
    */
   public void Advance() {
+    for (Stock stock : stockMap.values()) {
+      PriceGenerator generator = new PriceGenerator();
+      BigDecimal priceChange = generator.nextWeekPrice(stock);
+      stock.addNewSalesPrice(priceChange);
+    }
+    
     week++;
   }
 }
