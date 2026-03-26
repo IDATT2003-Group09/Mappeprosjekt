@@ -1,10 +1,10 @@
-package edu.ntnu.iir.bidata.idatt2003.group09;
-
-import edu.ntnu.iir.bidata.idatt2003.group09.transaction.TransactionArchive;
+package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.TransactionArchive;
 
 /**
  * Represents a player in the game.

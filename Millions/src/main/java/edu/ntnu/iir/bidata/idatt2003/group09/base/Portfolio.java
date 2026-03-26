@@ -1,11 +1,11 @@
-package edu.ntnu.iir.bidata.idatt2003.group09;
-
-import edu.ntnu.iir.bidata.idatt2003.group09.calculator.SaleCalculator;
+package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.SaleCalculator;
 
 public class Portfolio {
 

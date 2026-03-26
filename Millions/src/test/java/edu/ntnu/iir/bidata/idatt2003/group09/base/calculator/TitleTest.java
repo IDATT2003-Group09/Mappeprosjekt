@@ -1,4 +1,4 @@
-package edu.ntnu.iir.bidata.idatt2003.group09;
+package edu.ntnu.iir.bidata.idatt2003.group09.base.calculator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,6 +7,11 @@ import java.math.BigDecimal;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Title;
 
 class TitleTest {
 

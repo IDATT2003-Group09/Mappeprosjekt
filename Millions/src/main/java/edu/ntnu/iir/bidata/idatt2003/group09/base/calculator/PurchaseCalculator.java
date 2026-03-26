@@ -1,7 +1,8 @@
-package edu.ntnu.iir.bidata.idatt2003.group09.calculator;
+package edu.ntnu.iir.bidata.idatt2003.group09.base.calculator;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.Share;
 import java.math.BigDecimal;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 
 public class PurchaseCalculator implements TransactionCalculator {
   private BigDecimal purchasePrice;

@@ -1,4 +1,4 @@
-package edu.ntnu.iir.bidata.idatt2003.group09.calculator;
+package edu.ntnu.iir.bidata.idatt2003.group09.base.calculator;
 
 import java.math.BigDecimal;
 

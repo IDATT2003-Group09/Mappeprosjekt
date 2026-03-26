@@ -2,7 +2,6 @@ package edu.ntnu.iir.bidata.idatt2003.group09.io;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.Stock;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.file.Files;
@@ -10,6 +9,8 @@ import java.nio.file.Path;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 
 public class StockCsvReaderTest {
 

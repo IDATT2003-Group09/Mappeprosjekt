@@ -1,8 +1,9 @@
-package edu.ntnu.iir.bidata.idatt2003.group09.transaction;
+package edu.ntnu.iir.bidata.idatt2003.group09.base.transaction;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.Player;
-import edu.ntnu.iir.bidata.idatt2003.group09.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.calculator.TransactionCalculator;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.TransactionCalculator;
+
 import java.util.Objects;
 
 public abstract class Transaction {

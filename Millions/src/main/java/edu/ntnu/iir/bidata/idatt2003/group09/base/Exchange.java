@@ -1,13 +1,14 @@
-package edu.ntnu.iir.bidata.idatt2003.group09;
+package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.transaction.Purchase;
-import edu.ntnu.iir.bidata.idatt2003.group09.transaction.Sale;
-import edu.ntnu.iir.bidata.idatt2003.group09.transaction.Transaction;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Purchase;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Sale;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Transaction;
 
 public class Exchange {
 

@@ -1,4 +1,4 @@
-package edu.ntnu.iir.bidata.idatt2003.group09;
+package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
 import java.util.List;
 import java.util.Objects;

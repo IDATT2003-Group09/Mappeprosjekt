@@ -1,9 +1,10 @@
-package edu.ntnu.iir.bidata.idatt2003.group09.transaction;
+package edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.transaction;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.Stock;
-import edu.ntnu.iir.bidata.idatt2003.group09.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.Player;
-import edu.ntnu.iir.bidata.idatt2003.group09.transaction.Purchase;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Purchase;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

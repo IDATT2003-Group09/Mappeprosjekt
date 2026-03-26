@@ -1,6 +1,5 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.io;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.Stock;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,6 +11,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 
 /**
  * Reads stock data from a CSV file and converts each row into a {@link Stock}.
