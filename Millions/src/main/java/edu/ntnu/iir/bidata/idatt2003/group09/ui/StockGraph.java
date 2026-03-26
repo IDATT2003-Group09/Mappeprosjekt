@@ -47,12 +47,12 @@ public class StockGraph extends BorderPane {
 		stockTable.setPrefWidth(280);
 
 		// Chart setup
-		NumberAxis xAxis = new NumberAxis(1, 20, 1);
+		NumberAxis xAxis = new NumberAxis(1, 100, 1);
 		xAxis.setLabel("Week");
 		NumberAxis yAxis = new NumberAxis();
 		yAxis.setLabel("Price");
 		lineChart = new LineChart<>(xAxis, yAxis);
-		lineChart.setTitle("Stock Price (20 Weeks)");
+		lineChart.setTitle("Stock Price (100 Weeks)");
 		lineChart.setAnimated(false);
 		lineChart.setLegendVisible(false);
 
@@ -79,11 +79,11 @@ public class StockGraph extends BorderPane {
 	}
 
 	private void updateChart(Stock stock) {
-		// Simulate 20 weeks of price development (starting from current price)
+		// Simulate 100 weeks of price development (starting from current price)
 		List<BigDecimal> prices = new ArrayList<>();
 		prices.add(stock.getSalesPrice());
 		Stock temp = new Stock(stock.getSymbol(), stock.getCompany(), stock.getSalesPrice(), stock.getSector(), stock.getRisk());
-		for (int i = 1; i < 20; i++) {
+		for (int i = 1; i < 100; i++) {
 			BigDecimal next = PriceGenerator.nextWeekPrice(temp);
 			temp.addNewSalesPrice(next);
 			prices.add(next);
