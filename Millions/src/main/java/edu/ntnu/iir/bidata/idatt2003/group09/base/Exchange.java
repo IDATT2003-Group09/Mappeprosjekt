@@ -164,8 +164,7 @@ public class Exchange {
    */
   public void Advance() {
     for (Stock stock : stockMap.values()) {
-      PriceGenerator generator = new PriceGenerator();
-      BigDecimal priceChange = generator.nextWeekPrice(stock);
+      BigDecimal priceChange = PriceGenerator.nextWeekPrice(stock);
       stock.addNewSalesPrice(priceChange);
     }
     
