@@ -9,7 +9,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 public class PriceGenerator {
 	private static final double BASE_VOLATILITY = 0.05; // baseline weekly stddev for risk=1
 	private static final double VOLATILITY_STEP = 0.05; // extra stddev per risk level
-	private static final double BASE_EXPECTED_GROWTH = 0.001; // baseline weekly expected growth (0.1%)
+	private static final double BASE_EXPECTED_GROWTH = 0.05; // baseline weekly expected growth (0.1%)
 	private static final Random RANDOM = new Random();
 
 	/**
