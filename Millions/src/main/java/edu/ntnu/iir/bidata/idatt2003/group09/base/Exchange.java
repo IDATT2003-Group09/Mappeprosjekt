@@ -162,12 +162,24 @@ public class Exchange {
   /**
    * Increasing the week counter
    */
-  public void Advance() {
+  /**
+   * Advances the week and updates stock prices, applying market news if provided.
+   * @param news MarketNews to affect prices, or null for no news
+   */
+  public void Advance(MarketNews news) {
     for (Stock stock : stockMap.values()) {
-      BigDecimal priceChange = PriceGenerator.nextWeekPrice(stock);
-      stock.addNewSalesPrice(priceChange);
+      BigDecimal nextPrice = (news == null)
+        ? PriceGenerator.nextWeekPrice(stock)
+        : PriceGenerator.nextWeekPriceWithNews(stock, news);
+      stock.addNewSalesPrice(nextPrice);
     }
-    
     week++;
+  }
+
+  /**
+   * Backwards-compatible: advances week with no news.
+   */
+  public void Advance() {
+    Advance(null);
   }
 }
