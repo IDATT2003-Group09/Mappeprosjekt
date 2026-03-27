@@ -41,4 +41,34 @@ public class PriceGenerator {
 
 		return BigDecimal.valueOf(next).setScale(2, RoundingMode.HALF_UP);
 	}
+
+	public static BigDecimal nextWeekPriceWithNews(Stock stock, MarketNews news) {
+		BigDecimal lastPrice = stock.getSalesPrice();
+		int risk = stock.getRisk();
+
+		// Volatility (stddev) increases with risk
+		double volatility = BASE_VOLATILITY + (risk - 1) * VOLATILITY_STEP;
+		// Expected growth, can be tuned per your model
+		double expectedGrowth = BASE_EXPECTED_GROWTH;
+
+		// Adjust expected growth based on news impact
+		if (news != null) {
+			expectedGrowth += news.getImpact();
+		}
+
+		// Volatility drag: geometric Brownian motion drift adjustment
+		double drift = expectedGrowth - 0.5 * volatility * volatility;
+
+		// Generate a standard normal random value
+		double z = RANDOM.nextGaussian();
+
+		// Calculate next price using lognormal model
+		double last = lastPrice.doubleValue();
+		double next = last * exp(drift + volatility * z);
+
+		// Ensure price is at least 0.01
+		next = max(next, 0.01);
+
+		return BigDecimal.valueOf(next).setScale(2, RoundingMode.HALF_UP);
+	}
 }
