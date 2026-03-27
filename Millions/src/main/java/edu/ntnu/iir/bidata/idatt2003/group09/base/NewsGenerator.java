@@ -32,6 +32,17 @@ public class NewsGenerator {
                         "Energy", new BigDecimal("-0.08"),
                         "Consumer", new BigDecimal("-0.10")
                     )
+            ),
+            new MarketNews(
+                "War in the middle east",
+                "War breaks out in the middle east, causing uncertainty in the markets",
+                Map.of(
+                    "Technology", new BigDecimal("-0.15"),
+                    "Finance", new BigDecimal("-0.10"),
+                    "Healthcare", new BigDecimal("-0.05"),
+                    "Energy", new BigDecimal("0.20"),
+                    "Consumer", new BigDecimal("-0.12")
+                )
             )
             // Add more news events as needed
     );
