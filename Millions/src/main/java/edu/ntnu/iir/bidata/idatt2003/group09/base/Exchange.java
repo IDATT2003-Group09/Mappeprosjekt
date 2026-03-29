@@ -187,6 +187,13 @@ public class Exchange {
               }
           }
 
+          if (eventImpact.compareTo(BigDecimal.ZERO) != 0) {
+              BigDecimal riskFactor = BigDecimal.valueOf(stock.getRisk())
+                      .divide(BigDecimal.valueOf(4), 2, RoundingMode.HALF_UP);
+
+              eventImpact = eventImpact.multiply(riskFactor);
+          }
+
           BigDecimal totalChange = randomChange.add(eventImpact);
 
           BigDecimal newPrice = currentPrice.multiply(BigDecimal.ONE.add(totalChange));
