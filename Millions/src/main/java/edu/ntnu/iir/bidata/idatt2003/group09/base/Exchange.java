@@ -1,6 +1,7 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -162,14 +163,44 @@ public class Exchange {
   }
 
   /**
-   * Increasing the week counter
+   * Advances the market by one week
+   * Applies last weeks news to this weeks price
+   * Generates new news for this week, to be used in next weeks price
    */
   public void Advance() {
-    for (Stock stock : stockMap.values()) {
-      BigDecimal priceChange = PriceGenerator.nextWeekPrice(stock);
-      stock.addNewSalesPrice(priceChange);
-    }
-    
-    week++;
+      MarketNews activeNews = pendingNews;
+
+      for (Stock stock : stockMap.values()) {
+          BigDecimal currentPrice = stock.getSalesPrice();
+
+          BigDecimal randomPrice = PriceGenerator.nextWeekPrice(stock);
+
+          BigDecimal randomChange = randomPrice
+                  .subtract(currentPrice)
+                  .divide(currentPrice, 6, RoundingMode.HALF_UP);
+
+          BigDecimal eventImpact = BigDecimal.ZERO;
+          if (activeNews != null) {
+              if (activeNews.getSector().equalsIgnoreCase("ALL") ||
+              stock.getSector().equalsIgnoreCase(activeNews.getSector())) {
+                  eventImpact = activeNews.getImpact();
+              }
+          }
+
+          BigDecimal totalChange = randomChange.add(eventImpact);
+
+          BigDecimal newPrice = currentPrice.multiply(BigDecimal.ONE.add(totalChange));
+
+          stock.addNewSalesPrice(newPrice);
+      }
+
+      MarketNews newNews = newsGenerator.getRandomNews();
+      pendingNews = newNews;
+
+      if (newNews != null) {
+          System.out.println("Week " + week + " NEWS: " + newNews.getHeadline());
+      }
+
+      week++;
   }
 }
