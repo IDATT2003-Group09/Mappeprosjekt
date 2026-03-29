@@ -1,9 +1,9 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.Exchange;
-import edu.ntnu.iir.bidata.idatt2003.group09.Player;
-import edu.ntnu.iir.bidata.idatt2003.group09.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockTable;
 import java.math.BigDecimal;
 import java.text.NumberFormat;

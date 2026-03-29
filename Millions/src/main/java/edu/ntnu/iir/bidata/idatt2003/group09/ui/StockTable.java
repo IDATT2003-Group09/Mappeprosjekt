@@ -1,11 +1,12 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.Player;
-import edu.ntnu.iir.bidata.idatt2003.group09.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.Stock;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;

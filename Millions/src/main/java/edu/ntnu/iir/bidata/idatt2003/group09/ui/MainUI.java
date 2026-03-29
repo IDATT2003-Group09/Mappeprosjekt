@@ -1,8 +1,8 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.Exchange;
-import edu.ntnu.iir.bidata.idatt2003.group09.Player;
-import edu.ntnu.iir.bidata.idatt2003.group09.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.tradeScreen;
 import java.io.IOException;
