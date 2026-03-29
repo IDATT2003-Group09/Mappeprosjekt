@@ -14,13 +14,13 @@ public class NewsGenerator {
                     "Global economy shows strong growth," +
                             " and experts at wall street suggest the market will countinue to rise",
                     "All",
-                    new BigDecimal(0.08)
+                    new BigDecimal("0.08")
             ),
             new MarketNews(
                     "Intrest rate hike",
                     "Central bank raises intrest rates",
                     "All",
-                    new BigDecimal(-0.1)
+                    new BigDecimal("-0.1")
             )
             //write down many more news events as we go on with the project
     );
