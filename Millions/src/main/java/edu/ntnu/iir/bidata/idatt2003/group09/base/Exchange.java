@@ -16,6 +16,8 @@ public class Exchange {
   private int week;
   private Map<String, Stock> stockMap;
   private Random random;
+  private MarketNews pendingNews;
+  private final NewsGenerator newsGenerator = new NewsGenerator();
 
   /**
    * uses setters to validate input
