@@ -53,5 +53,17 @@ public class GameController {
         return exchange.getLosers();
     }
 
+    //portfolio
+    public Portfolio getPortfolio() {
+        return player.getPortfolio();
+    }
 
+    //trading
+    public void buy(String symbol, BigDecimal quantity) {
+        exchange.buy(symbol, player, quantity);
+    }
+
+    public void sell(Share share) {
+        exchange.sell(share, player);
+    }
 }
