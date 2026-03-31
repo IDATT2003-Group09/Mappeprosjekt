@@ -48,6 +48,14 @@ public class Exchange {
     return week;
   }
 
+    /**
+     * Get method for stockmap
+     * @return stockmap
+     */
+    public Map<String, Stock> getStockMap() {
+        return stockMap;
+    }
+
   /**
    * set name, validates input
    * @param name
@@ -118,6 +126,14 @@ public class Exchange {
         .toList();
   }
 
+    /**
+     * Getter for news
+     * @return news
+     */
+    public MarketNews getPendingNews() {
+        return pendingNews;
+    }
+
   /**
    * searches for stock with symbol or company name matching searchterm
    * @param searchTerm
@@ -167,7 +183,7 @@ public class Exchange {
    * Applies last weeks news to this weeks price
    * Generates new news for this week, to be used in next weeks price
    */
-  public void Advance() {
+  public void advance() {
       MarketNews activeNews = pendingNews;
 
       for (Stock stock : stockMap.values()) {
