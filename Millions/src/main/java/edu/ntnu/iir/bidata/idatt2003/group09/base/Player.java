@@ -18,7 +18,6 @@ public class Player {
     private BigDecimal money;
     private final Portfolio portfolio;
     private final TransactionArchive transactionArchive;
-    private int status;
 
     /**
      * Creates a new player
@@ -43,21 +42,9 @@ public class Player {
         this.money = this.startingMoney;
         this.portfolio = new Portfolio();
         this.transactionArchive = new TransactionArchive();
-        updateStatus();
     }
 
-    public void updateStatus() {
-        BigDecimal percentageChange = getNetWorth()
-                .subtract(startingMoney)
-                .divide(startingMoney, 4, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100));
-        status = percentageChange.setScale(0, RoundingMode.HALF_UP).intValue();
-    }
 
-    public int getStatus() {
-        updateStatus();
-        return status;
-    }
     /**
      * Get method for the name of the player
      *

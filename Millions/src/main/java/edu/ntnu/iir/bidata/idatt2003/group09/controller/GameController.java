@@ -20,7 +20,7 @@ public class GameController {
 
     //game flow
     public void nextWeek() {
-        exchange.Advance();
+        exchange.advance();
     }
 
     //player info
