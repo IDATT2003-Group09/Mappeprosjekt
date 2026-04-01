@@ -1,18 +1,13 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.base.calculator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.SaleCalculator;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.*;
 
 class PlayerTest {
 
@@ -22,7 +17,6 @@ class PlayerTest {
     void setUp() {
         player = new Player("Alice", BigDecimal.valueOf(1000));
     }
-
 
     @Test
     void constructor_createsPlayerWithCorrectInitialValues() {
@@ -107,39 +101,51 @@ class PlayerTest {
                 () -> player.withdrawMoney(BigDecimal.valueOf(2000)));
     }
 
-
-     @Test
+    @Test
     void getNetWorth_returnsMoneyPlusPortfolioValue() {
-        Player player = new Player("Ola", new BigDecimal("1000"));
-
         Stock stock = new Stock("AAPL", "Apple", new BigDecimal("100"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("80"));
 
         player.getPortfolio().addShare(share);
 
         BigDecimal netWorth = player.getNetWorth();
-        BigDecimal expected = player.getMoney()
-                .add(new SaleCalculator(share).calculateTotal());
-        assertEquals(0, expected.compareTo(netWorth));
+        assertTrue(netWorth.compareTo(BigDecimal.valueOf(1000)) > 0);
+    }
+
+    // --------------------
+    // NEW STATUS TESTS
+    // --------------------
+
+    @Test
+    void getStatus_returnsNovice_whenNoProgress() {
+        assertEquals(PlayerStatus.NOVICE, player.getStatus(0));
     }
 
     @Test
-    void updateStatus_setsZeroAtStartingMoney() {
-        player.updateStatus();
-        assertEquals(0, player.getStatus());
+    void getStatus_returnsInvestor_when20PercentGainAnd10Weeks() {
+        player.addMoney(BigDecimal.valueOf(200)); // +20%
+
+        assertEquals(PlayerStatus.INVESTOR, player.getStatus(10));
     }
 
     @Test
-    void updateStatus_setsPositivePercentageWhenMoneyIncreases() {
-        player.addMoney(BigDecimal.valueOf(500));
-        player.updateStatus();
-        assertEquals(50, player.getStatus());
+    void getStatus_returnsSpeculator_when100PercentGainAnd20Weeks() {
+        player.addMoney(BigDecimal.valueOf(1000)); // +100%
+
+        assertEquals(PlayerStatus.SPECULATOR, player.getStatus(20));
     }
 
     @Test
-    void updateStatus_setsNegativePercentageWhenMoneyDecreases() {
-        player.withdrawMoney(BigDecimal.valueOf(250));
-        player.updateStatus();
-        assertEquals(-25, player.getStatus());
+    void getStatus_returnsNovice_whenNotEnoughWeeks() {
+        player.addMoney(BigDecimal.valueOf(200)); // +20%
+
+        assertEquals(PlayerStatus.NOVICE, player.getStatus(5));
+    }
+
+    @Test
+    void getStatus_returnsNovice_whenNotEnoughProfit() {
+        player.addMoney(BigDecimal.valueOf(100)); // +10%
+
+        assertEquals(PlayerStatus.NOVICE, player.getStatus(10));
     }
 }

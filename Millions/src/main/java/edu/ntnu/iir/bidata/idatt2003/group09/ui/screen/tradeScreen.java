@@ -42,7 +42,7 @@ public class tradeScreen extends BorderPane {
 		this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
 		if (this.exchange.getWeek() == 0) {
-			this.exchange.Advance();
+			this.exchange.advance();
 		}
 
 		stockTable = new StockTable().createStockTable(this.player);

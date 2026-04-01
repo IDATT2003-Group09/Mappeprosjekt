@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 //Extend this class anywhere if needed for more game logic,
 //maybe split into multiple classes later if needed
@@ -19,7 +20,7 @@ public class GameController {
 
     //game flow
     public void nextWeek() {
-        exchange.Advance();
+        exchange.advance();
     }
 
     //player info
@@ -31,6 +32,38 @@ public class GameController {
         return player.getNetWorth();
     }
 
-    //get title metode
+    public PlayerStatus getStatus() {
+        return player.getStatus(exchange.getWeek());
+    }
 
+    //stock info
+    public List<Stock> getAllStocks() {
+        return exchange.getStockMap().values().stream().toList();
+    }
+
+    public Stock getStock(String symbol) {
+        return exchange.getStock(symbol);
+    }
+
+    public List<Stock> getGainers() {
+        return exchange.getGainers();
+    }
+
+    public List<Stock> getLosers() {
+        return exchange.getLosers();
+    }
+
+    //portfolio
+    public Portfolio getPortfolio() {
+        return player.getPortfolio();
+    }
+
+    //trading
+    public void buy(String symbol, BigDecimal quantity) {
+        exchange.buy(symbol, player, quantity);
+    }
+
+    public void sell(Share share) {
+        exchange.sell(share, player);
+    }
 }

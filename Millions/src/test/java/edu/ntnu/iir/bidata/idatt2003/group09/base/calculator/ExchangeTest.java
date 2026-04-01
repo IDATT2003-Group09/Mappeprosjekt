@@ -112,7 +112,7 @@ public class ExchangeTest {
         BigDecimal oldPrice = apple.getSalesPrice();
         int oldWeek = exchange.getWeek();
 
-        exchange.Advance();
+        exchange.advance();
 
         assertEquals(oldWeek + 1, exchange.getWeek());
         assertNotEquals(oldPrice, apple.getSalesPrice());
@@ -122,7 +122,7 @@ public class ExchangeTest {
     void advance_addsNewPriceToHistory() {
       int oldSize = apple.getHistoricalPrices().size();
 
-      exchange.Advance();
+      exchange.advance();
 
       assertEquals(oldSize + 1, apple.getHistoricalPrices().size());
     }
