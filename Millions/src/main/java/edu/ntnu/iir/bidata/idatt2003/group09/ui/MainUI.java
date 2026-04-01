@@ -1,18 +1,15 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
-import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.tradeScreen;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 
 
 public class MainUI extends Application {
@@ -26,11 +23,12 @@ public class MainUI extends Application {
 
 		try {
 			List<Stock> stocks = StockCsvReader.readDefaultResource();
-			Player player = new Player("Trader", new BigDecimal("100000"));
-			Exchange exchange = new Exchange("Main Exchange", stocks);
-			tradeScreen screen = new tradeScreen(exchange, player, stocks);
+			//Player player = new Player("Trader", new BigDecimal("100000"));
+			//Exchange exchange = new Exchange("Main Exchange", stocks);
+			//tradeScreen screen = new tradeScreen(exchange, player, stocks);
 
-			Scene scene = new Scene(screen, 900, 650);
+			StockGraph stockGraph = new StockGraph(stocks);
+			Scene scene = new Scene(stockGraph, 900, 650);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
