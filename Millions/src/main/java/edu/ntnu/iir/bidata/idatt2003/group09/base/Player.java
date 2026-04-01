@@ -137,4 +137,33 @@ public class Player {
         return money.add(portfolio.getNetWorth());
     }
 
+    /**
+     * Method to get the status of a player
+     * The status is based of how many weeks a player has played, and how much money they have made
+     *
+     * @param weeksPlayed how many weeks this player has played
+     * @return Novice as default,
+     * investor if the player has played for 10 or more weeks and made a 20% gain on his portfolio,
+     * speculator if the player has played for more than 20 weeks and made a 100% gain on his portfolio
+     */
+    public PlayerStatus getStatus(int weeksPlayed) {
+        if (weeksPlayed < 0) {
+            throw new IllegalArgumentException("Weeks played cannot be negative");
+        }
+
+        BigDecimal percentageChange = getNetWorth()
+                .subtract(startingMoney)
+                .divide(startingMoney, 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+
+        if (percentageChange.compareTo(BigDecimal.valueOf(100)) >= 0 && weeksPlayed >= 20) {
+            return PlayerStatus.SPECULATOR;
+        }
+
+        if (percentageChange.compareTo(BigDecimal.valueOf(20)) >= 0 && weeksPlayed >= 10) {
+            return PlayerStatus.INVESTOR;
+        }
+
+        return PlayerStatus.NOVICE;
+    }
 }
