@@ -41,12 +41,6 @@ public class ExchangeTest {
   }
 
   @Test
-  void advanceShouldIncrementWeek() {
-    exchange.Advance();
-    assertEquals(1, exchange.getWeek());
-  }
-
-  @Test
   void hasStockShouldReturnTrueWhenSymbolExists() {
     assertTrue(exchange.hasStock("AAPL"));
   }
@@ -111,4 +105,25 @@ public class ExchangeTest {
     assertTrue(losers.contains(apple));
     assertFalse(losers.contains(microsoft));
   }
+
+    @Test
+    void advance_updatesWeekAndStockPrices() {
+
+        BigDecimal oldPrice = apple.getSalesPrice();
+        int oldWeek = exchange.getWeek();
+
+        exchange.Advance();
+
+        assertEquals(oldWeek + 1, exchange.getWeek());
+        assertNotEquals(oldPrice, apple.getSalesPrice());
+    }
+
+    @Test
+    void advance_addsNewPriceToHistory() {
+      int oldSize = apple.getHistoricalPrices().size();
+
+      exchange.Advance();
+
+      assertEquals(oldSize + 1, apple.getHistoricalPrices().size());
+    }
 }
