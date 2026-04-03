@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockTable;
 
 import java.math.BigDecimal;
@@ -22,11 +23,13 @@ public class tradeScreen extends BorderPane {
     private final GameController controller;
 
     private final TableView<Stock> stockTable;
+
     private final Label statusLabel;
     private final Label cashLabel;
     private final Label holdingsLabel;
     private final Label netWorthLabel;
     private final Label weekLabel;
+    private final Label newsLabel;
 
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
@@ -46,6 +49,7 @@ public class tradeScreen extends BorderPane {
         holdingsLabel = new Label();
         netWorthLabel = new Label();
         weekLabel = new Label();
+        newsLabel = new Label();
 
         buildLayout();
         refreshInfo();
@@ -83,6 +87,9 @@ public class tradeScreen extends BorderPane {
                 controls,
                 statusLabel
         );
+
+        StockGraph graph = new StockGraph(stockTable.getItems());
+        setRight(graph);
 
         headerBox.setPadding(new Insets(10));
 
@@ -162,5 +169,6 @@ public class tradeScreen extends BorderPane {
         netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetworth()));
         holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
         weekLabel.setText("Week: " + controller.getWeek());
+        newsLabel.setText("News: " + controller.getLatestNews());
     }
 }

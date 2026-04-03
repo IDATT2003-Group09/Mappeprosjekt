@@ -74,4 +74,9 @@ public class GameController {
     public void sell(Share share) {
         exchange.sell(share, player);
     }
+
+    public String getLatestNews() {
+        MarketNews news = exchange.getPendingNews();
+        return news != null ? news.getHeadline() : "No news";
+    }
 }
