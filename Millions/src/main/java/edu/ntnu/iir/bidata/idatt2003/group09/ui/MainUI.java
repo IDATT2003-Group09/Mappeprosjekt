@@ -35,8 +35,7 @@ public class MainUI extends Application {
 
 			tradeScreen screen = new tradeScreen(controller, stocks);
 
-			StockGraph stockGraph = new StockGraph(stocks);
-			Scene scene = new Scene(stockGraph, 900, 650);
+			Scene scene = new Scene(screen, 1100, 700);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
