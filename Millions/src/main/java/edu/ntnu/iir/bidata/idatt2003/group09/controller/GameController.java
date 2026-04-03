@@ -23,6 +23,10 @@ public class GameController {
         exchange.advance();
     }
 
+    public int getWeek() {
+        return exchange.getWeek();
+    }
+
     //player info
     public BigDecimal getMoney() {
         return player.getMoney();
@@ -34,6 +38,10 @@ public class GameController {
 
     public PlayerStatus getStatus() {
         return player.getStatus(exchange.getWeek());
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     //stock info
