@@ -84,6 +84,7 @@ public class tradeScreen extends BorderPane {
                 cashLabel,
                 netWorthLabel,
                 holdingsLabel,
+                newsLabel,
                 controls,
                 statusLabel
         );
