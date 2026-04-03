@@ -23,6 +23,7 @@ public class tradeScreen extends BorderPane {
     private final GameController controller;
 
     private final TableView<Stock> stockTable;
+    private final StockGraph graph;
 
     private final Label statusLabel;
     private final Label cashLabel;
@@ -40,6 +41,14 @@ public class tradeScreen extends BorderPane {
 
         stockTable = new StockTable().createStockTable(controller.getPlayer());
         stockTable.setItems(FXCollections.observableArrayList(stocks));
+        graph = new StockGraph(stocks);
+        stockTable.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldStock, newStock) -> {
+                    if (newStock != null) {
+                        graph.updateChart(newStock);
+                    }
+                }
+        );
 
         quantityField = new TextField("1");
         quantityField.setPrefWidth(100);
@@ -72,6 +81,7 @@ public class tradeScreen extends BorderPane {
             controller.nextWeek();
             stockTable.refresh();
             refreshInfo();
+            updateSelectedStockGraph();
         });
 
         HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton);
@@ -89,7 +99,6 @@ public class tradeScreen extends BorderPane {
                 statusLabel
         );
 
-        StockGraph graph = new StockGraph(stockTable.getItems());
         setRight(graph);
 
         headerBox.setPadding(new Insets(10));
@@ -165,9 +174,16 @@ public class tradeScreen extends BorderPane {
         }
     }
 
+    private void updateSelectedStockGraph() {
+        Stock selected = stockTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            graph.updateChart(selected);
+        }
+    }
+
     private void refreshInfo() {
         cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
-        netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetworth()));
+        netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetWorth()));
         holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
         weekLabel.setText("Week: " + controller.getWeek());
         newsLabel.setText("News: " + controller.getLatestNews());

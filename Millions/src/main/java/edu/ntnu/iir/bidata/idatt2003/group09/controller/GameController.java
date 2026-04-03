@@ -32,7 +32,7 @@ public class GameController {
         return player.getMoney();
     }
 
-    public BigDecimal getNetworth() {
+    public BigDecimal getNetWorth() {
         return player.getNetWorth();
     }
 

@@ -78,23 +78,16 @@ public class StockGraph extends BorderPane {
 		}
 	}
 
-	private void updateChart(Stock stock) {
-		// Simulate 100 weeks of price development (starting from current price)
-		List<BigDecimal> prices = new ArrayList<>();
-		prices.add(stock.getSalesPrice());
-		Stock temp = new Stock(stock.getSymbol(), stock.getCompany(), stock.getSalesPrice(), stock.getSector(), stock.getRisk());
-		for (int i = 1; i < 100; i++) {
-			BigDecimal next = PriceGenerator.nextWeekPrice(temp);
-			temp.addNewSalesPrice(next);
-			prices.add(next);
-		}
+    public void updateChart(Stock stock) {
+        List<BigDecimal> prices = stock.getHistoricalPrices();
 
-		XYChart.Series<Number, Number> series = new XYChart.Series<>();
-		for (int i = 0; i < prices.size(); i++) {
-			series.getData().add(new XYChart.Data<>(i + 1, prices.get(i)));
-		}
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
 
-		lineChart.getData().clear();
-		lineChart.getData().add(series);
-	}
+        for (int i = 0; i < prices.size(); i++) {
+            series.getData().add(new XYChart.Data<>(i + 1, prices.get(i)));
+        }
+
+        lineChart.getData().clear();
+        lineChart.getData().add(series);
+    }
 }
