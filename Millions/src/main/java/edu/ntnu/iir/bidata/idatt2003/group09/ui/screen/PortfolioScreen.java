@@ -11,6 +11,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.layout.VBox;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,6 +26,7 @@ public class PortfolioScreen extends BorderPane {
 
     private final Label totalValueLabel;
     private final Label changeLabel;
+    private final Label cashLabel;
 
     private final NumberFormat currencyFormat =
             NumberFormat.getCurrencyInstance(Locale.US);
@@ -35,6 +37,7 @@ public class PortfolioScreen extends BorderPane {
         this.table = new TableView<>();
         this.totalValueLabel = new Label();
         this.changeLabel = new Label();
+        this.cashLabel = new Label();
 
         buildTable();
         buildLayout();
@@ -44,15 +47,14 @@ public class PortfolioScreen extends BorderPane {
     private void buildLayout() {
         totalValueLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
         changeLabel.setStyle("-fx-font-size: 16px;");
+        cashLabel.setStyle("-fx-font-size: 16px;");
 
-        BorderPane top = new BorderPane();
-        top.setLeft(totalValueLabel);
-        top.setRight(changeLabel);
-        top.setPadding(new Insets(10));
+        VBox topBox = new VBox(5, totalValueLabel, changeLabel, cashLabel);
+        topBox.setPadding(new Insets(10));
 
-        setTop(top);
         setCenter(table);
         setPadding(new Insets(10));
+        setTop(topBox);
     }
 
     private void buildTable() {
@@ -113,7 +115,8 @@ public class PortfolioScreen extends BorderPane {
         BigDecimal change = current.subtract(previous);
 
         totalValueLabel.setText("Total: " + format(current));
-        changeLabel.setText(formatWithSign(change));
+        changeLabel.setText("Weekly portfolio change: " + formatWithSign(change));
+        cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
     }
 
 
