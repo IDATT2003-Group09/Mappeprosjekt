@@ -72,7 +72,6 @@ public class StockTable {
 
                 setText(text);
 
-                // farge
                 if (change.compareTo(BigDecimal.ZERO) > 0) {
                     setStyle("-fx-text-fill: green;");
                 } else if (change.compareTo(BigDecimal.ZERO) < 0) {

@@ -2,6 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.PriceGenerator;
+import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -52,7 +53,6 @@ public class StockGraph extends BorderPane {
 		NumberAxis yAxis = new NumberAxis();
 		yAxis.setLabel("Price");
 		lineChart = new LineChart<>(xAxis, yAxis);
-		lineChart.setTitle("Stock Price (100 Weeks)");
 		lineChart.setAnimated(false);
 		lineChart.setLegendVisible(false);
 
@@ -89,5 +89,7 @@ public class StockGraph extends BorderPane {
 
         lineChart.getData().clear();
         lineChart.getData().add(series);
+
+        lineChart.setTitle(stock.getCompany() + " (" + stock.getSymbol() + ")");
     }
 }
