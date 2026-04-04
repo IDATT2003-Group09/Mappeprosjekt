@@ -98,4 +98,35 @@ public class PortfolioScreen extends BorderPane {
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
+    public void refresh() {
+
+        List<PortfolioRow> rows = controller.getPortfolio().getShares().stream()
+                .map(PortfolioRow::new)
+                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
+                .toList();
+
+        table.setItems(FXCollections.observableArrayList(rows));
+
+        BigDecimal current = controller.getNetWorth();
+        BigDecimal previous = controller.getLastWeekNetWorth();
+
+        BigDecimal change = current.subtract(previous);
+
+        totalValueLabel.setText("Total: " + format(current));
+        changeLabel.setText(formatWithSign(change));
+    }
+
+
+    private String format(BigDecimal value) {
+        return currencyFormat.format(value);
+    }
+
+    private String formatWithSign(BigDecimal value) {
+        String sign = value.compareTo(BigDecimal.ZERO) > 0 ? "+" : "";
+        return sign + currencyFormat.format(value);
+    }
+
+    private String formatPercent(BigDecimal value) {
+        return value.setScale(2, RoundingMode.HALF_UP) + "%";
+    }
 }
