@@ -66,6 +66,10 @@ public class GameController {
         return player.getPortfolio();
     }
 
+    public BigDecimal getLastWeekNetWorth() {
+        return player.getLastWeekNetWorth();
+    }
+
     //trading
     public void buy(String symbol, BigDecimal quantity) {
         exchange.buy(symbol, player, quantity);
