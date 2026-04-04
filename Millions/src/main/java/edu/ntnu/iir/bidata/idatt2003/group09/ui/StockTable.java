@@ -7,7 +7,9 @@ import java.util.Locale;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -44,9 +46,42 @@ public class StockTable {
 		companyColumn.setCellValueFactory(data ->
 				new SimpleStringProperty(data.getValue().getCompany()));
 
-		TableColumn<Stock, String> priceColumn = new TableColumn<>("Price");
-		priceColumn.setCellValueFactory(data ->
-				new SimpleStringProperty(currencyFormat.format(data.getValue().getSalesPrice())));
+        TableColumn<Stock, BigDecimal> priceColumn = new TableColumn<>("Price");
+
+        priceColumn.setCellValueFactory(data ->
+                new SimpleObjectProperty<>(data.getValue().getSalesPrice()));
+
+        priceColumn.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(BigDecimal price, boolean empty) {
+                super.updateItem(price, empty);
+
+                if (empty || price == null) {
+                    setText(null);
+                    setStyle("");
+                    return;
+                }
+
+                Stock stock = getTableView().getItems().get(getIndex());
+                BigDecimal change = stock.getLatestPriceChange();
+
+                String sign = change.compareTo(BigDecimal.ZERO) > 0 ? "+" : "";
+
+                String text = currencyFormat.format(price) +
+                        String.format(" (%s%.2f)", sign, change);
+
+                setText(text);
+
+                // farge
+                if (change.compareTo(BigDecimal.ZERO) > 0) {
+                    setStyle("-fx-text-fill: green;");
+                } else if (change.compareTo(BigDecimal.ZERO) < 0) {
+                    setStyle("-fx-text-fill: red;");
+                } else {
+                    setStyle("");
+                }
+            }
+        });
 
 		TableColumn<Stock, String> ownedColumn = new TableColumn<>("Owned");
 		ownedColumn.setCellValueFactory(data -> {
