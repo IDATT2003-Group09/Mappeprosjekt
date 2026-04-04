@@ -99,8 +99,8 @@ public class StockTable {
 		});
 
 		symbolColumn.setPrefWidth(120);
-		companyColumn.setPrefWidth(470);
-		priceColumn.setPrefWidth(160);
+		companyColumn.setPrefWidth(350);
+		priceColumn.setPrefWidth(250);
 		ownedColumn.setPrefWidth(120);
 
 		TableView<Stock> stockTable = new TableView<>();
