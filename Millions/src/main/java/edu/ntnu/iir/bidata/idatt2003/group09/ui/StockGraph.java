@@ -25,30 +25,13 @@ import java.util.List;
 
 public class StockGraph extends BorderPane {
 
-	private final TableView<Stock> stockTable;
 	private final LineChart<Number, Number> lineChart;
 
 	public StockGraph(List<Stock> stocks) {
 		setPadding(new Insets(10));
 
-		// Table setup
-		stockTable = new TableView<>();
-		stockTable.setItems(FXCollections.observableArrayList(stocks));
-		stockTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-		TableColumn<Stock, String> symbolCol = new TableColumn<>("Symbol");
-		symbolCol.setCellValueFactory(new PropertyValueFactory<>("symbol"));
-		symbolCol.setPrefWidth(100);
-
-		TableColumn<Stock, String> companyCol = new TableColumn<>("Company");
-		companyCol.setCellValueFactory(new PropertyValueFactory<>("company"));
-		companyCol.setPrefWidth(180);
-
-		stockTable.getColumns().addAll(symbolCol, companyCol);
-		stockTable.setPrefWidth(280);
-
 		// Chart setup
-		NumberAxis xAxis = new NumberAxis(1, 100, 1);
+		NumberAxis xAxis = new NumberAxis();
 		xAxis.setLabel("Week");
 		NumberAxis yAxis = new NumberAxis();
 		yAxis.setLabel("Price");
@@ -56,30 +39,21 @@ public class StockGraph extends BorderPane {
 		lineChart.setAnimated(false);
 		lineChart.setLegendVisible(false);
 
-		// Layout
-		SplitPane splitPane = new SplitPane();
-		VBox left = new VBox(stockTable);
-		VBox.setVgrow(stockTable, Priority.ALWAYS);
-		splitPane.getItems().addAll(left, lineChart);
-		splitPane.setDividerPositions(0.3);
-		setCenter(splitPane);
+		setCenter(lineChart);
 
-		// Table selection listener
-		stockTable.getSelectionModel().selectedItemProperty().addListener((obs, oldStock, newStock) -> {
-			if (newStock != null) {
-				updateChart(newStock);
-			}
-		});
-
-		// Select first stock by default
-		if (!stocks.isEmpty()) {
-			stockTable.getSelectionModel().selectFirst();
-			updateChart(stocks.get(0));
-		}
+        if (!stocks.isEmpty()) {
+            updateChart(stocks.getFirst());
+        }
 	}
 
     public void updateChart(Stock stock) {
         List<BigDecimal> prices = stock.getHistoricalPrices();
+
+        int totalWeeks = prices.size();
+        int windowSize = 50;
+
+        int start = Math.max(0, totalWeeks - windowSize);
+        int end = totalWeeks;
 
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
 
@@ -91,5 +65,11 @@ public class StockGraph extends BorderPane {
         lineChart.getData().add(series);
 
         lineChart.setTitle(stock.getCompany() + " (" + stock.getSymbol() + ")");
+
+        NumberAxis xAxis = (NumberAxis) lineChart.getXAxis();
+        xAxis.setAutoRanging(false);
+        xAxis.setLowerBound(start + 1);
+        xAxis.setUpperBound(end);
+        xAxis.setTickUnit(5);
     }
 }
