@@ -23,13 +23,13 @@ public class SaleCalculator implements TransactionCalculator {
 
   @Override
   public BigDecimal calculateCommission() {
-    return calculateGross().multiply(new BigDecimal(0.01));
+    return calculateGross().multiply(new BigDecimal("0.01"));
   }
 
   @Override
   public BigDecimal calculateTax() {
     BigDecimal originalPrice = purchasePrice.multiply(quantity);
-    BigDecimal taxRate = new BigDecimal(0.3);
+    BigDecimal taxRate = new BigDecimal("0.3");
     return calculateGross().subtract(originalPrice).subtract(calculateCommission()).multiply(taxRate);
   }
 
