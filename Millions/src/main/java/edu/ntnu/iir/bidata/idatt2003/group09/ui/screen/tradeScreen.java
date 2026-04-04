@@ -1,167 +1,192 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockTable;
+
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class tradeScreen extends BorderPane {
 
-	private final Exchange exchange;
-	private final Player player;
-	private final TableView<Stock> stockTable;
-	private final Label statusLabel;
-	private final Label cashLabel;
-	private final Label holdingsLabel;
-	private final TextField quantityField;
-	private final NumberFormat currencyFormat;
+    private final GameController controller;
 
-  /**
-   * Constructor for the trade screen. requires a player an exchange and a list of stock.
-   * @param exchange
-   * @param player
-   * @param stocks
-   */
-	public tradeScreen(Exchange exchange, Player player, List<Stock> stocks) {
-		this.exchange = exchange;
-		this.player = player;
-		this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+    private final TableView<Stock> stockTable;
+    private final StockGraph graph;
 
-		if (this.exchange.getWeek() == 0) {
-			this.exchange.advance();
-		}
+    private final Label statusLabel;
+    private final Label cashLabel;
+    private final Label holdingsLabel;
+    private final Label netWorthLabel;
+    private final Label weekLabel;
+    private final Label newsLabel;
 
-		stockTable = new StockTable().createStockTable(this.player);
-		stockTable.setItems(FXCollections.observableArrayList(stocks));
+    private final TextField quantityField;
+    private final NumberFormat currencyFormat;
 
-		quantityField = new TextField("1");
-		quantityField.setPrefWidth(100);
+    public tradeScreen(GameController controller, List<Stock> stocks) {
+        this.controller = controller;
+        this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
-		statusLabel = new Label("Select a stock, then buy or sell.");
-		cashLabel = new Label();
-		holdingsLabel = new Label();
+        stockTable = new StockTable().createStockTable(controller.getPlayer());
+        stockTable.setItems(FXCollections.observableArrayList(stocks));
+        graph = new StockGraph(stocks);
+        stockTable.getSelectionModel().selectedItemProperty().addListener(
+                (obs, oldStock, newStock) -> {
+                    if (newStock != null) {
+                        graph.updateChart(newStock);
+                    }
+                }
+        );
 
-		buildLayout();
-		refreshInfo();
-	}
+        quantityField = new TextField("1");
+        quantityField.setPrefWidth(100);
 
-  /**
-   * build the layout. Makes labels and buttons, and create the stocktable.
-   */
-	private void buildLayout() {
-		Label titleLabel = new Label("Trade Stocks");
-		titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        statusLabel = new Label("Select a stock, then buy or sell.");
+        cashLabel = new Label();
+        holdingsLabel = new Label();
+        netWorthLabel = new Label();
+        weekLabel = new Label();
+        newsLabel = new Label();
 
-		Label quantityLabel = new Label("Quantity:");
+        buildLayout();
+        refreshInfo();
+    }
 
-		Button buyButton = new Button("Buy selected stock");
-		Button sellButton = new Button("Sell selected stock");
+    private void buildLayout() {
+        Label titleLabel = new Label("Trade Stocks");
+        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
 
-		buyButton.setOnAction(event -> buySelectedStock());
-		sellButton.setOnAction(event -> sellSelectedStock());
+        Label quantityLabel = new Label("Quantity:");
 
-		HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton);
-		controls.setPadding(new Insets(0, 0, 10, 0));
+        Button buyButton = new Button("Buy");
+        Button sellButton = new Button("Sell");
+        Button nextWeekButton = new Button("Next Week");
 
-		VBox headerBox = new VBox(8, titleLabel, cashLabel, holdingsLabel, controls, statusLabel);
-		headerBox.setPadding(new Insets(10));
+        buyButton.setOnAction(e -> buySelectedStock());
+        sellButton.setOnAction(e -> sellSelectedStock());
 
-		setTop(headerBox);
-		setCenter(stockTable);
-		setPadding(new Insets(10));
-	}
+        nextWeekButton.setOnAction(e -> {
+            controller.nextWeek();
+            stockTable.refresh();
+            refreshInfo();
+            updateSelectedStockGraph();
+        });
 
-  /**
-   * method to buy stock intuitivly connected to the ui.
-   */
-	private void buySelectedStock() {
-		Stock selectedStock = stockTable.getSelectionModel().getSelectedItem();
-		if (selectedStock == null) {
-			statusLabel.setText("Please select a stock first.");
-			return;
-		}
+        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton);
+        controls.setPadding(new Insets(0, 0, 10, 0));
 
-		BigDecimal quantity;
-		try {
-			quantity = parseQuantity();
-		} catch (IllegalArgumentException exception) {
-			statusLabel.setText(exception.getMessage());
-			return;
-		}
+        VBox headerBox = new VBox(
+                8,
+                titleLabel,
+                weekLabel,
+                cashLabel,
+                netWorthLabel,
+                holdingsLabel,
+                newsLabel,
+                controls,
+                statusLabel
+        );
 
-		try {
-			exchange.buy(selectedStock.getSymbol(), player, quantity);
-			statusLabel.setText("Bought " + quantity.toPlainString() + " of " + selectedStock.getSymbol());
-			stockTable.refresh();
-			refreshInfo();
-		} catch (Exception exception) {
-			statusLabel.setText("Buy failed: " + exception.getMessage());
-		}
-	}
+        headerBox.setPadding(new Insets(10));
+        setTop(headerBox);
+        setPadding(new Insets(10));
 
-  /**
-   * method to sell stock intuitivly connected to the ui.
-   */
-	private void sellSelectedStock() {
-		Stock selectedStock = stockTable.getSelectionModel().getSelectedItem();
-		if (selectedStock == null) {
-			statusLabel.setText("Please select a stock first.");
-			return;
-		}
+        SplitPane splitPane = new SplitPane();
+        splitPane.getItems().addAll(stockTable, graph);
+        splitPane.setDividerPositions(0.3);
+        setCenter(splitPane);
+    }
 
-		List<Share> ownedShares = player.getPortfolio().getShares(selectedStock.getSymbol());
-		if (ownedShares.isEmpty()) {
-			statusLabel.setText("You do not own any " + selectedStock.getSymbol() + " shares to sell.");
-			return;
-		}
+    private void buySelectedStock() {
+        Stock selectedStock = stockTable.getSelectionModel().getSelectedItem();
 
-		Share shareToSell = ownedShares.getFirst();
-		try {
-			exchange.sell(shareToSell, player);
-			statusLabel.setText("Sold " + shareToSell.getQuantity().toPlainString()
-					+ " of " + selectedStock.getSymbol());
-			stockTable.refresh();
-			refreshInfo();
-		} catch (Exception exception) {
-			statusLabel.setText("Sell failed: " + exception.getMessage());
-		}
-	}
+        if (selectedStock == null) {
+            statusLabel.setText("Please select a stock first.");
+            return;
+        }
 
-  /**
-   * parses the quantity from the text field, and validates it. throws an exception if invalid.
-   * @return the quantity as a BigDecimal
-   */
-	private BigDecimal parseQuantity() {
-		try {
-			BigDecimal quantity = new BigDecimal(quantityField.getText().trim());
-			if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
-				throw new IllegalArgumentException("Quantity must be greater than 0.");
-			}
-			return quantity;
-		} catch (NumberFormatException exception) {
-			throw new IllegalArgumentException("Quantity must be a valid number.");
-		}
-	}
+        try {
+            BigDecimal quantity = parseQuantity();
 
-  /**
-   * refreshes the cash and holdings labels to show the current state of the player.
-   */
-	private void refreshInfo() {
-		cashLabel.setText("Cash: " + currencyFormat.format(player.getMoney()));
-		holdingsLabel.setText("Open positions: " + player.getPortfolio().getShares().size());
-	}
+            controller.buy(selectedStock.getSymbol(), quantity);
+
+            statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
+
+            stockTable.refresh();
+            refreshInfo();
+
+        } catch (Exception e) {
+            statusLabel.setText("Buy failed: " + e.getMessage());
+        }
+    }
+
+    private void sellSelectedStock() {
+        Stock selectedStock = stockTable.getSelectionModel().getSelectedItem();
+
+        if (selectedStock == null) {
+            statusLabel.setText("Please select a stock first.");
+            return;
+        }
+
+        List<Share> shares = controller.getPortfolio().getShares(selectedStock.getSymbol());
+
+        if (shares.isEmpty()) {
+            statusLabel.setText("You do not own this stock.");
+            return;
+        }
+
+        try {
+            controller.sell(shares.getFirst());
+
+            statusLabel.setText("Sold " + selectedStock.getSymbol());
+
+            stockTable.refresh();
+            refreshInfo();
+
+        } catch (Exception e) {
+            statusLabel.setText("Sell failed: " + e.getMessage());
+        }
+    }
+
+    private BigDecimal parseQuantity() {
+        try {
+            BigDecimal quantity = new BigDecimal(quantityField.getText().trim());
+
+            if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new IllegalArgumentException("Quantity must be > 0");
+            }
+
+            return quantity;
+
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid number");
+        }
+    }
+
+    private void updateSelectedStockGraph() {
+        Stock selected = stockTable.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            graph.updateChart(selected);
+        }
+    }
+
+    private void refreshInfo() {
+        cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
+        netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetWorth()));
+        holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
+        weekLabel.setText("Week: " + controller.getWeek());
+        newsLabel.setText("News: " + controller.getLatestNews());
+    }
 }
