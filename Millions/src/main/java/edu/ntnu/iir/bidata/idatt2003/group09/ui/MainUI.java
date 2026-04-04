@@ -8,6 +8,9 @@ import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.tradeScreen;
 import javafx.application.Application;
@@ -33,9 +36,26 @@ public class MainUI extends Application {
 			Exchange exchange = new Exchange("Main Exchange", stocks);
             GameController controller = new GameController(exchange, player);
 
-			tradeScreen screen = new tradeScreen(controller, stocks);
+			tradeScreen tradeScreen = new tradeScreen(controller, stocks);
+            PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
 
-			Scene scene = new Scene(screen, 1100, 700);
+            TabPane tabPane = new TabPane();
+            Tab tradeTab = new Tab("Trade", tradeScreen);
+            Tab portfolioTab = new Tab("Portfolio", portfolioScreen);
+
+            tradeTab.setClosable(false);
+            portfolioTab.setClosable(false);
+
+            tabPane.getTabs().addAll(tradeTab, portfolioTab);
+
+            tabPane.getSelectionModel().selectedItemProperty()
+                    .addListener((obs, oldTab, newTab) -> {
+                if (newTab == portfolioTab) {
+                    portfolioScreen.refresh();
+                }
+            });
+
+			Scene scene = new Scene(tabPane, 1100, 700);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
