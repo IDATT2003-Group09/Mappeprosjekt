@@ -7,6 +7,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.controller.PortfolioRow;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
@@ -74,18 +75,22 @@ public class PortfolioScreen extends BorderPane {
         TableColumn<PortfolioRow, String> gainCol = new TableColumn<>("Total Gain/Loss");
         gainCol.setCellValueFactory(data ->
                 new SimpleStringProperty(formatWithSign(data.getValue().getGain())));
+        gainCol.setCellFactory(col -> coloredCell());
 
         TableColumn<PortfolioRow, String> percentCol = new TableColumn<>("ROI in %");
         percentCol.setCellValueFactory(data ->
                 new SimpleStringProperty(formatPercent(data.getValue().getPercentGain())));
+        percentCol.setCellFactory(col -> coloredCell());
 
         TableColumn<PortfolioRow, String> priceChangeCol = new TableColumn<>("Price Change");
         priceChangeCol.setCellValueFactory(data ->
                 new SimpleStringProperty(formatWithSign(data.getValue().getWeeklyPriceChange())));
+        priceChangeCol.setCellFactory(col -> coloredCell());
 
         TableColumn<PortfolioRow, String> pricePercentCol = new TableColumn<>("Price Percentage Change");
         pricePercentCol.setCellValueFactory(data ->
                 new SimpleStringProperty(formatPercent(data.getValue().getWeeklyPercentChange())));
+        pricePercentCol.setCellFactory(col -> coloredCell());
 
         table.getColumns().addAll(
                 symbolCol,
@@ -121,6 +126,12 @@ public class PortfolioScreen extends BorderPane {
                     .multiply(BigDecimal.valueOf(100));
         }
 
+        if (change.signum() >= 0) {
+            changeLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: green;");
+        } else {
+            changeLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: red;");
+        }
+
         totalValueLabel.setText("Total: " + format(current));
         changeLabel.setText("Weekly portfolio change: " + formatWithSign(change)
         + " (" + formatPercent(percentChange) + ")");
@@ -138,7 +149,32 @@ public class PortfolioScreen extends BorderPane {
     }
 
     private String formatPercent(BigDecimal value) {
-        return value.setScale(2, RoundingMode.HALF_UP)
-                .stripTrailingZeros().toPlainString() + "%";
+        String sign = value.compareTo(BigDecimal.ZERO) > 0 ? "+" : "";
+        return sign + value.setScale(2, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString() + "%";
+    }
+
+    private TableCell<PortfolioRow, String> coloredCell() {
+        return new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (empty || item == null) {
+                    setText(null);
+                    setStyle("");
+                    return;
+                }
+
+                setText(item);
+
+                if (item.startsWith("-")) {
+                    setStyle("-fx-text-fill: red;");
+                } else {
+                    setStyle("-fx-text-fill: green;");
+                }
+            }
+        };
     }
 }
