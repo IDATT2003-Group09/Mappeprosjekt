@@ -69,7 +69,7 @@ public class PortfolioScreen extends BorderPane {
         valueCol.setCellValueFactory(data ->
                 new SimpleStringProperty(format(data.getValue().getValue())));
 
-        TableColumn<PortfolioRow, String> gainCol = new TableColumn<>("Gain/Loss");
+        TableColumn<PortfolioRow, String> gainCol = new TableColumn<>("Total Gain/Loss");
         gainCol.setCellValueFactory(data ->
                 new SimpleStringProperty(formatWithSign(data.getValue().getGain())));
 
@@ -79,11 +79,11 @@ public class PortfolioScreen extends BorderPane {
 
         TableColumn<PortfolioRow, String> priceChangeCol = new TableColumn<>("Price Change");
         priceChangeCol.setCellValueFactory(data ->
-                new SimpleStringProperty(formatWithSign(data.getValue().getPriceChange())));
+                new SimpleStringProperty(formatWithSign(data.getValue().getWeeklyPriceChange())));
 
         TableColumn<PortfolioRow, String> pricePercentCol = new TableColumn<>("Price Percentage Change");
         pricePercentCol.setCellValueFactory(data ->
-                new SimpleStringProperty(formatPercent(data.getValue().getPricePercentChange())));
+                new SimpleStringProperty(formatPercent(data.getValue().getWeeklyPercentChange())));
 
         table.getColumns().addAll(
                 symbolCol,
