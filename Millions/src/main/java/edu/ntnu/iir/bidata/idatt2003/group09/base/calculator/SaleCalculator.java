@@ -44,8 +44,10 @@ public class SaleCalculator implements TransactionCalculator {
 
   @Override
   public BigDecimal calculateTotal() {
-    BigDecimal originalPrice = purchasePrice.multiply(quantity);
-    BigDecimal earnings = calculateGross().subtract(originalPrice);
-    return earnings.subtract(calculateCommission()).subtract(calculateTax());
+    BigDecimal gross = calculateGross();
+    BigDecimal commission = calculateCommission();
+    BigDecimal tax = calculateTax();
+
+    return gross.subtract(commission).subtract(tax);
   }
 }
