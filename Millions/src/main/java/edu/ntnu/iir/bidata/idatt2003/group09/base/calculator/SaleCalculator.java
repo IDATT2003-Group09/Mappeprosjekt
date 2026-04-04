@@ -30,7 +30,16 @@ public class SaleCalculator implements TransactionCalculator {
   public BigDecimal calculateTax() {
     BigDecimal originalPrice = purchasePrice.multiply(quantity);
     BigDecimal taxRate = new BigDecimal("0.3");
-    return calculateGross().subtract(originalPrice).subtract(calculateCommission()).multiply(taxRate);
+
+    BigDecimal profit = calculateGross()
+            .subtract(originalPrice)
+            .subtract(calculateCommission());
+
+    if (profit.compareTo(BigDecimal.ZERO) <= 0) {
+        return BigDecimal.ZERO;
+    }
+
+    return profit.multiply(new BigDecimal("0.3"));
   }
 
   @Override
