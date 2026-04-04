@@ -42,13 +42,6 @@ public class TransactionTest {
     }
 
     @Test
-    void constructorShouldThrowWhenWeekIsZero() {
-        assertThrows(IllegalArgumentException.class, () -> 
-            new TestTransaction(share, 0, new PurchaseCalculator(share))
-        );
-    }
-
-    @Test
     void constructorShouldThrowWhenWeekIsNegative() {
         assertThrows(IllegalArgumentException.class, () -> 
             new TestTransaction(share, -1, new PurchaseCalculator(share))

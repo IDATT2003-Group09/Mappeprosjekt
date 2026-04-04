@@ -23,17 +23,25 @@ public class GameController {
         exchange.advance();
     }
 
+    public int getWeek() {
+        return exchange.getWeek();
+    }
+
     //player info
     public BigDecimal getMoney() {
         return player.getMoney();
     }
 
-    public BigDecimal getNetworth() {
+    public BigDecimal getNetWorth() {
         return player.getNetWorth();
     }
 
     public PlayerStatus getStatus() {
         return player.getStatus(exchange.getWeek());
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     //stock info
@@ -65,5 +73,10 @@ public class GameController {
 
     public void sell(Share share) {
         exchange.sell(share, player);
+    }
+
+    public String getLatestNews() {
+        MarketNews news = exchange.getPendingNews();
+        return news != null ? news.getHeadline() : "No news";
     }
 }

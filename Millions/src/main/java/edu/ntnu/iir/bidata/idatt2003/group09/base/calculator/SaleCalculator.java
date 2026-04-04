@@ -23,20 +23,31 @@ public class SaleCalculator implements TransactionCalculator {
 
   @Override
   public BigDecimal calculateCommission() {
-    return calculateGross().multiply(new BigDecimal(0.01));
+    return calculateGross().multiply(new BigDecimal("0.01"));
   }
 
   @Override
   public BigDecimal calculateTax() {
     BigDecimal originalPrice = purchasePrice.multiply(quantity);
-    BigDecimal taxRate = new BigDecimal(0.3);
-    return calculateGross().subtract(originalPrice).subtract(calculateCommission()).multiply(taxRate);
+    BigDecimal taxRate = new BigDecimal("0.3");
+
+    BigDecimal profit = calculateGross()
+            .subtract(originalPrice)
+            .subtract(calculateCommission());
+
+    if (profit.compareTo(BigDecimal.ZERO) <= 0) {
+        return BigDecimal.ZERO;
+    }
+
+    return profit.multiply(new BigDecimal("0.3"));
   }
 
   @Override
   public BigDecimal calculateTotal() {
-    BigDecimal originalPrice = purchasePrice.multiply(quantity);
-    BigDecimal earnings = calculateGross().subtract(originalPrice);
-    return earnings.subtract(calculateCommission()).subtract(calculateTax());
+    BigDecimal gross = calculateGross();
+    BigDecimal commission = calculateCommission();
+    BigDecimal tax = calculateTax();
+
+    return gross.subtract(commission).subtract(tax);
   }
 }
