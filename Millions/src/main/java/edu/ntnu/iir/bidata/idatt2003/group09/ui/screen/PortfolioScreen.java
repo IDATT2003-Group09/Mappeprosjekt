@@ -114,8 +114,16 @@ public class PortfolioScreen extends BorderPane {
 
         BigDecimal change = current.subtract(previous);
 
+        BigDecimal percentChange = BigDecimal.ZERO;
+        if (previous.compareTo(BigDecimal.ZERO) != 0) {
+            percentChange = change
+                    .divide(previous, 4, RoundingMode.HALF_UP)
+                    .multiply(BigDecimal.valueOf(100));
+        }
+
         totalValueLabel.setText("Total: " + format(current));
-        changeLabel.setText("Weekly portfolio change: " + formatWithSign(change));
+        changeLabel.setText("Weekly portfolio change: " + formatWithSign(change)
+        + " (" + formatPercent(percentChange) + ")");
         cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
     }
 
@@ -130,6 +138,7 @@ public class PortfolioScreen extends BorderPane {
     }
 
     private String formatPercent(BigDecimal value) {
-        return value.setScale(2, RoundingMode.HALF_UP) + "%";
+        return value.setScale(2, RoundingMode.HALF_UP)
+                .stripTrailingZeros().toPlainString() + "%";
     }
 }
