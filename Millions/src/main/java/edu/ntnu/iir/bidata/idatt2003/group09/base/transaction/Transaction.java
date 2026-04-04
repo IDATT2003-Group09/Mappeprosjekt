@@ -15,7 +15,7 @@ public abstract class Transaction {
 
   protected Transaction(Share share, int week, TransactionCalculator calculator) {
     this.share = Objects.requireNonNull(share, "Share cannot be null");
-    if (week <= 0) {
+    if (week < 0) {
       throw new IllegalArgumentException("Week must be a positive number");
     }
     this.week = week;
