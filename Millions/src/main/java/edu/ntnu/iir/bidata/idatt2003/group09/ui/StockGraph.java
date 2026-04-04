@@ -71,5 +71,36 @@ public class StockGraph extends BorderPane {
         xAxis.setLowerBound(start + 1);
         xAxis.setUpperBound(end);
         xAxis.setTickUnit(5);
+
+        //y axis
+        BigDecimal min = prices.get(start);
+        BigDecimal max = prices.get(start);
+
+        for (int i = start; i < end; i++) {
+            if (prices.get(i).compareTo(min) < 0) {
+                min = prices.get(i);
+            }
+            if (prices.get(i).compareTo(max) > 0) {
+                max = prices.get(i);
+            }
+        }
+
+        double minVal = min.doubleValue();
+        double maxVal = max.doubleValue();
+
+        double padding = (maxVal - minVal) * 0.1;
+
+        if (padding == 0) {
+            padding = maxVal * 0.1;
+        }
+
+        NumberAxis yAxis = (NumberAxis) lineChart.getYAxis();
+        yAxis.setAutoRanging(false);
+        yAxis.setLowerBound(minVal - padding);
+        yAxis.setUpperBound(maxVal + padding);
+        yAxis.setTickUnit((maxVal - minVal) / 5);
+
+        yAxis.setForceZeroInRange(false);
+        yAxis.setLowerBound(Math.max(0, minVal - padding));
     }
 }
