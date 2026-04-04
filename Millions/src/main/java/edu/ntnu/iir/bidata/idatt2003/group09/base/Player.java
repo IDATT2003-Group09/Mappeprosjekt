@@ -16,6 +16,7 @@ public class Player {
     private final String name;
     private final BigDecimal startingMoney;
     private BigDecimal money;
+    private BigDecimal lastWeekNetWorth;
     private final Portfolio portfolio;
     private final TransactionArchive transactionArchive;
 
@@ -42,6 +43,7 @@ public class Player {
         this.money = this.startingMoney;
         this.portfolio = new Portfolio();
         this.transactionArchive = new TransactionArchive();
+        this.lastWeekNetWorth = this.startingMoney;
     }
 
 
@@ -61,6 +63,15 @@ public class Player {
      */
     public BigDecimal getMoney() {
         return money;
+    }
+
+    /**
+     * Get method for last weeks net worth
+     *
+     * @return last weeks net worth
+     */
+    public BigDecimal getLastWeekNetWorth() {
+        return lastWeekNetWorth;
     }
 
     /**
@@ -152,5 +163,9 @@ public class Player {
         }
 
         return PlayerStatus.NOVICE;
+    }
+
+    public void setLastWeekNetWorth(BigDecimal value) {
+        this.lastWeekNetWorth = Objects.requireNonNull(value, "Net worth cannot be null");
     }
 }
