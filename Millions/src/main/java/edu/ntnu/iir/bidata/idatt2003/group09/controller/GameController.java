@@ -20,6 +20,8 @@ public class GameController {
 
     //game flow
     public void nextWeek() {
+        player.setLastWeekNetWorth(player.getNetWorth());
+
         exchange.advance();
     }
 
@@ -34,6 +36,10 @@ public class GameController {
 
     public BigDecimal getNetWorth() {
         return player.getNetWorth();
+    }
+
+    public BigDecimal getLastWeekNetWorth() {
+        return player.getLastWeekNetWorth();
     }
 
     public PlayerStatus getStatus() {

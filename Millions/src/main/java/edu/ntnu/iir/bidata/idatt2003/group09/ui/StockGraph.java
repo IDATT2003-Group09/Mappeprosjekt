@@ -2,6 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.PriceGenerator;
+import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -24,62 +25,35 @@ import java.util.List;
 
 public class StockGraph extends BorderPane {
 
-	private final TableView<Stock> stockTable;
 	private final LineChart<Number, Number> lineChart;
 
 	public StockGraph(List<Stock> stocks) {
 		setPadding(new Insets(10));
 
-		// Table setup
-		stockTable = new TableView<>();
-		stockTable.setItems(FXCollections.observableArrayList(stocks));
-		stockTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-		TableColumn<Stock, String> symbolCol = new TableColumn<>("Symbol");
-		symbolCol.setCellValueFactory(new PropertyValueFactory<>("symbol"));
-		symbolCol.setPrefWidth(100);
-
-		TableColumn<Stock, String> companyCol = new TableColumn<>("Company");
-		companyCol.setCellValueFactory(new PropertyValueFactory<>("company"));
-		companyCol.setPrefWidth(180);
-
-		stockTable.getColumns().addAll(symbolCol, companyCol);
-		stockTable.setPrefWidth(280);
-
 		// Chart setup
-		NumberAxis xAxis = new NumberAxis(1, 100, 1);
+		NumberAxis xAxis = new NumberAxis();
 		xAxis.setLabel("Week");
 		NumberAxis yAxis = new NumberAxis();
 		yAxis.setLabel("Price");
 		lineChart = new LineChart<>(xAxis, yAxis);
-		lineChart.setTitle("Stock Price (100 Weeks)");
 		lineChart.setAnimated(false);
 		lineChart.setLegendVisible(false);
 
-		// Layout
-		SplitPane splitPane = new SplitPane();
-		VBox left = new VBox(stockTable);
-		VBox.setVgrow(stockTable, Priority.ALWAYS);
-		splitPane.getItems().addAll(left, lineChart);
-		splitPane.setDividerPositions(0.3);
-		setCenter(splitPane);
+		setCenter(lineChart);
 
-		// Table selection listener
-		stockTable.getSelectionModel().selectedItemProperty().addListener((obs, oldStock, newStock) -> {
-			if (newStock != null) {
-				updateChart(newStock);
-			}
-		});
-
-		// Select first stock by default
-		if (!stocks.isEmpty()) {
-			stockTable.getSelectionModel().selectFirst();
-			updateChart(stocks.get(0));
-		}
+        if (!stocks.isEmpty()) {
+            updateChart(stocks.getFirst());
+        }
 	}
 
     public void updateChart(Stock stock) {
         List<BigDecimal> prices = stock.getHistoricalPrices();
+
+        int totalWeeks = prices.size();
+        int windowSize = 50;
+
+        int start = Math.max(0, totalWeeks - windowSize);
+        int end = totalWeeks;
 
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
 
@@ -89,5 +63,44 @@ public class StockGraph extends BorderPane {
 
         lineChart.getData().clear();
         lineChart.getData().add(series);
+
+        lineChart.setTitle(stock.getCompany() + " (" + stock.getSymbol() + ")");
+
+        NumberAxis xAxis = (NumberAxis) lineChart.getXAxis();
+        xAxis.setAutoRanging(false);
+        xAxis.setLowerBound(start + 1);
+        xAxis.setUpperBound(end);
+        xAxis.setTickUnit(5);
+
+        //y axis
+        BigDecimal min = prices.get(start);
+        BigDecimal max = prices.get(start);
+
+        for (int i = start; i < end; i++) {
+            if (prices.get(i).compareTo(min) < 0) {
+                min = prices.get(i);
+            }
+            if (prices.get(i).compareTo(max) > 0) {
+                max = prices.get(i);
+            }
+        }
+
+        double minVal = min.doubleValue();
+        double maxVal = max.doubleValue();
+
+        double padding = (maxVal - minVal) * 0.1;
+
+        if (padding == 0) {
+            padding = maxVal * 0.1;
+        }
+
+        NumberAxis yAxis = (NumberAxis) lineChart.getYAxis();
+        yAxis.setAutoRanging(false);
+        yAxis.setLowerBound(minVal - padding);
+        yAxis.setUpperBound(maxVal + padding);
+        yAxis.setTickUnit((maxVal - minVal) / 5);
+
+        yAxis.setForceZeroInRange(false);
+        yAxis.setLowerBound(Math.max(0, minVal - padding));
     }
 }

@@ -99,13 +99,14 @@ public class tradeScreen extends BorderPane {
                 statusLabel
         );
 
-        setRight(graph);
-
         headerBox.setPadding(new Insets(10));
-
         setTop(headerBox);
-        setCenter(stockTable);
         setPadding(new Insets(10));
+
+        SplitPane splitPane = new SplitPane();
+        splitPane.getItems().addAll(stockTable, graph);
+        splitPane.setDividerPositions(0.3);
+        setCenter(splitPane);
     }
 
     private void buySelectedStock() {
