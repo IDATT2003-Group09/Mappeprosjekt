@@ -10,6 +10,7 @@ import java.util.Random;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Purchase;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Sale;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Transaction;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.TransactionFactory;
 
 public class Exchange {
 
@@ -161,7 +162,7 @@ public class Exchange {
     Stock stock = getStock(symbol);
     BigDecimal salesPrice = stock.getSalesPrice();
     Share share = new Share(stock, quantity, salesPrice);
-    Purchase purchase = new Purchase(share, week);
+    Transaction purchase = TransactionFactory.createPurchase(share, week);
     purchase.commit(player);
     return purchase;
   }
@@ -173,7 +174,7 @@ public class Exchange {
    * @return
    */
   public Transaction sell(Share share, Player player) {
-    Sale sale = new Sale(share, week);
+    Transaction sale = TransactionFactory.createSale(share, week);
     sale.commit(player);
     return sale;
   }
