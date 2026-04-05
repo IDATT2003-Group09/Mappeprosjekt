@@ -62,13 +62,24 @@ class SaleCalculatorTest {
     }
 
     @Test
-    void calculateTotal_returnsNetEarningsAfterCommissionAndTax() {
+    void calculateTotal_returnsGrossMinusCommissionAndTax() {
         Stock stock = new Stock("ACME", "Acme Inc", bd("120"), "tech", 3);
         Share share = new Share(stock, bd("10"), bd("100"));
         SaleCalculator calculator = new SaleCalculator(share);
 
         BigDecimal total = calculator.calculateTotal();
 
-        assertBigDecimalEquals(bd("131.6"), total);
+        assertBigDecimalEquals(bd("1131.6"), total);
+    }
+
+    @Test
+    void calculateTotal_returnsNoTaxWhenLoss() {
+        Stock stock = new Stock("ACME", "Acme Inc", bd("80"), "tech", 3);
+        Share share = new Share(stock, bd("10"), bd("100"));
+        SaleCalculator calculator = new SaleCalculator(share);
+
+        BigDecimal total = calculator.calculateTotal();
+
+        assertBigDecimalEquals(bd("792"), total);
     }
 }
