@@ -2,7 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.io;
 
 import java.io.*;
 
-public class SavaManager {
+public class SaveManager {
 
     private static final String FILE = "savegame.dat";
 

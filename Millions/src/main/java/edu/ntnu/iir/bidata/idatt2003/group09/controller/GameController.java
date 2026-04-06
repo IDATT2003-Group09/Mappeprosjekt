@@ -1,6 +1,8 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.*;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,6 +25,10 @@ public class GameController {
         player.setLastWeekNetWorth(player.getNetWorth());
 
         exchange.advance();
+    }
+
+    public void saveGame() {
+        SaveManager.save(new GameState(player, exchange));
     }
 
     public int getWeek() {
