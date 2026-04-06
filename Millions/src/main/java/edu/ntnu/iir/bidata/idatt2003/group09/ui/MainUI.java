@@ -26,6 +26,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 
 public class MainUI extends Application {
 
+    private BorderPane root;
   /**
    * Starts the JavaFX application. Initializes the exchange, player, and trade screen, and sets up the main stage.
    */
@@ -44,22 +45,27 @@ public class MainUI extends Application {
 
     private void showStartScreen() {
         StartScreen startScreen = new StartScreen(new StartScreen.StartHandler() {
+
             @Override
             public void onNewGame() {
-
+                startNewGame();
             }
 
             @Override
             public void onLoadGame() {
-
+                System.out.println("load game");
             }
 
             @Override
             public void onSettings() {
-
+                System.out.println("settings");
             }
-        })
+        });
 
+        root.setCenter(startScreen);
+    }
+
+    private void startNewGame() {
 		try {
 			List<Stock> stocks = StockCsvReader.readDefaultResource();
 			Player player = new Player("Trader", new BigDecimal("100000"));
@@ -85,12 +91,15 @@ public class MainUI extends Application {
                 }
             });
 
+            root.setCenter(tabPane);
 
 		} catch (IOException e) {
+            e.printStackTrace();
+
 			Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
 			errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
 
-			Scene scene = new Scene(new VBox(errorLabel), 700, 200);
+            root.setCenter(new VBox(errorLabel));
 		}
 	}
 
@@ -101,6 +110,4 @@ public class MainUI extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
-
 }
