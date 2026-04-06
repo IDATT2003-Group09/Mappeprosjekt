@@ -1,11 +1,12 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
-public class Stock {
+public class Stock implements Serializable {
 
   private String symbol;
   private String company;
