@@ -25,6 +25,7 @@ public class GameController {
         player.setLastWeekNetWorth(player.getNetWorth());
 
         exchange.advance();
+        saveGame();
     }
 
     public void saveGame() {
