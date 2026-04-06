@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -18,10 +19,9 @@ public class StartScreen extends VBox {
 
     public StartScreen(StartHandler handler) {
 
-
-
-        setSpacing(20);
-        setAlignment(Pos.CENTER);
+        setSpacing(15);
+        setAlignment(Pos.BOTTOM_CENTER);
+        setPadding(new Insets(0, 0, 90, 0));
         setStyle("""
     -fx-background-image: url('/images/Millions_background.png');
     -fx-background-size: cover;
@@ -33,8 +33,11 @@ public class StartScreen extends VBox {
         Button settingsBtn = new Button("Innstillinger");
 
         newGameBtn.setPrefWidth(400);
+        newGameBtn.setPrefHeight(30);
         loadGameBtn.setPrefWidth(400);
+        loadGameBtn.setPrefHeight(30);
         settingsBtn.setPrefWidth(400);
+        settingsBtn.setPrefHeight(30);
 
         newGameBtn.setOnAction(e -> handler.onNewGame());
         loadGameBtn.setOnAction(e -> handler.onLoadGame());
