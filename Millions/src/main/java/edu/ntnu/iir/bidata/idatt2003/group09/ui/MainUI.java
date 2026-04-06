@@ -4,8 +4,13 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
+
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -53,7 +58,7 @@ public class MainUI extends Application {
 
             @Override
             public void onLoadGame() {
-                System.out.println("load game");
+                loadGame();
             }
 
             @Override
@@ -102,6 +107,41 @@ public class MainUI extends Application {
             root.setCenter(new VBox(errorLabel));
 		}
 	}
+
+    private void loadGame() {
+        GameState state = SaveManager.load();
+        if (state == null) {
+            System.out.println("No saved game found");
+            return;
+        }
+
+        GameController controller =
+                new GameController(state.getExchange(), state.getPlayer());
+
+        tradeScreen tradeScreen =
+                new tradeScreen(controller, state.getExchange().getStocks());
+
+        PortfolioScreen portfolioScreen =
+                new PortfolioScreen(controller);
+
+        TabPane tabPane = new TabPane();
+        Tab tradeTab = new Tab("Trade", tradeScreen);
+        Tab portfolioTab = new Tab("Portfolio", portfolioScreen);
+
+        tradeTab.setClosable(false);
+        portfolioTab.setClosable(false);
+
+        tabPane.getTabs().addAll(tradeTab, portfolioTab);
+
+        tabPane.getSelectionModel().selectedItemProperty()
+                .addListener((obs, oldTab, newTab) -> {
+                    if (newTab == portfolioTab) {
+                        portfolioScreen.refresh();
+                    }
+                });
+
+        root.setCenter(tabPane);
+    }
 
   /**
    * write mvn javafx:run to run this method that starts the application
