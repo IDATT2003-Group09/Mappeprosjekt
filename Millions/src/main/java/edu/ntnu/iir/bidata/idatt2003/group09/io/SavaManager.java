@@ -15,4 +15,20 @@ public class SavaManager {
             e.printStackTrace();
         }
     }
+
+    public static GameState load() {
+        try (ObjectInputStream in =
+                     new ObjectInputStream(new FileInputStream(FILE))) {
+
+            return (GameState) in.readObject();
+
+        } catch (Exception e) {
+            System.out.println("Failed to load save: " + e.getMessage());
+            return null;
+        }
+    }
+
+    public static boolean saveExists() {
+        return new File(FILE).exists();
+    }
 }
