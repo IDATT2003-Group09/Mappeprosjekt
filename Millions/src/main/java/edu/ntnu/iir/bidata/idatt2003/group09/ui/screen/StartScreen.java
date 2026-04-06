@@ -2,6 +2,10 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class StartScreen extends VBox {
@@ -14,9 +18,15 @@ public class StartScreen extends VBox {
 
     public StartScreen(StartHandler handler) {
 
+
+
         setSpacing(20);
         setAlignment(Pos.CENTER);
-        setStyle("-fx-background-color: Grey;");
+        setStyle("""
+    -fx-background-image: url('/images/Millions_background.png');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+""");
 
         Button newGameBtn = new Button("Nytt Spill");
         Button loadGameBtn = new Button("Last Spill");
