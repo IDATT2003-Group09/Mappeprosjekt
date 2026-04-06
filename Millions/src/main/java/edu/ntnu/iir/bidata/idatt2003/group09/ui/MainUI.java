@@ -8,6 +8,8 @@ import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.StartScreen;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
@@ -16,6 +18,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.tradeScreen;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
@@ -28,7 +31,34 @@ public class MainUI extends Application {
    */
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("Stock Trading");
+        primaryStage.setTitle("Millions - A Stock Trading Game");
+
+        root = new BorderPane();
+
+        showStartScreen();
+
+        Scene scene = new Scene(root, 1100, 700);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void showStartScreen() {
+        StartScreen startScreen = new StartScreen(new StartScreen.StartHandler() {
+            @Override
+            public void onNewGame() {
+
+            }
+
+            @Override
+            public void onLoadGame() {
+
+            }
+
+            @Override
+            public void onSettings() {
+
+            }
+        })
 
 		try {
 			List<Stock> stocks = StockCsvReader.readDefaultResource();
@@ -55,16 +85,12 @@ public class MainUI extends Application {
                 }
             });
 
-			Scene scene = new Scene(tabPane, 1100, 700);
-			primaryStage.setScene(scene);
-			primaryStage.show();
+
 		} catch (IOException e) {
 			Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
 			errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
 
 			Scene scene = new Scene(new VBox(errorLabel), 700, 200);
-			primaryStage.setScene(scene);
-			primaryStage.show();
 		}
 	}
 
