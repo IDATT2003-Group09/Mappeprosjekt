@@ -23,6 +23,7 @@ public class SaveManager {
             return (GameState) in.readObject();
 
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Failed to load save: " + e.getMessage());
             return null;
         }
