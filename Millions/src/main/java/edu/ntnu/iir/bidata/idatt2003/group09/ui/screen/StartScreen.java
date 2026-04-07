@@ -21,6 +21,8 @@ public class StartScreen extends VBox {
 
     public StartScreen(StartHandler handler) {
 
+        getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
+
         setSpacing(15);
         setAlignment(Pos.BOTTOM_CENTER);
         setPadding(new Insets(0, 0, 90, 0));
@@ -34,6 +36,11 @@ public class StartScreen extends VBox {
         Button loadGameBtn = new Button("Last Spill");
         Button settingsBtn = new Button("Innstillinger");
         Button exitBtn = new Button("Avslutt");
+
+        newGameBtn.getStyleClass().add("start-button");
+        loadGameBtn.getStyleClass().add("start-button");
+        settingsBtn.getStyleClass().add("start-button");
+        exitBtn.getStyleClass().add("start-button");
 
         String fontFamily = loadStartScreenFontFamily();
         Font startScreenFont = Font.font(fontFamily, START_SCREEN_FONT_SIZE);
