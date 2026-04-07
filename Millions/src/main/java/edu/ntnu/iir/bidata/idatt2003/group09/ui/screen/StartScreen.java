@@ -31,6 +31,7 @@ public class StartScreen extends VBox {
         Button newGameBtn = new Button("Nytt Spill");
         Button loadGameBtn = new Button("Last Spill");
         Button settingsBtn = new Button("Innstillinger");
+        Button exitBtn = new Button("Avslutt");
 
         newGameBtn.setPrefWidth(400);
         newGameBtn.setPrefHeight(30);
@@ -38,11 +39,13 @@ public class StartScreen extends VBox {
         loadGameBtn.setPrefHeight(30);
         settingsBtn.setPrefWidth(400);
         settingsBtn.setPrefHeight(30);
-
+        exitBtn.setPrefWidth(400);
+        exitBtn.setPrefHeight(30);
         newGameBtn.setOnAction(e -> handler.onNewGame());
         loadGameBtn.setOnAction(e -> handler.onLoadGame());
         settingsBtn.setOnAction(e -> handler.onSettings());
+        exitBtn.setOnAction(e -> System.exit(0));
 
-        getChildren().addAll(newGameBtn, loadGameBtn, settingsBtn);
+        getChildren().addAll(newGameBtn, loadGameBtn, settingsBtn, exitBtn);
     }
 }
