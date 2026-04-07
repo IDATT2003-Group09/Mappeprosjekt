@@ -114,7 +114,7 @@ public class MainUI extends Application {
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
 
-			tradeScreen tradeScreen = new tradeScreen(controller, stocks);
+            tradeScreen tradeScreen = new tradeScreen(controller, stocks, this::showStartScreen);
             PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
 
             TabPane tabPane = new TabPane();
@@ -158,7 +158,7 @@ public class MainUI extends Application {
                 new GameController(state.getExchange(), state.getPlayer(), normalizedSaveFileName);
 
         tradeScreen tradeScreen =
-                new tradeScreen(controller, state.getExchange().getStocks());
+            new tradeScreen(controller, state.getExchange().getStocks(), this::showStartScreen);
 
         PortfolioScreen portfolioScreen =
                 new PortfolioScreen(controller);
