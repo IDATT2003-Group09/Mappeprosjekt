@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
@@ -11,7 +12,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.TransactionArchive
  * The player has a name, starting amount, current money balance, a portfolio,
  * and an archive storing completed transactions
  */
-public class Player {
+public class Player implements Serializable {
 
     private final String name;
     private final BigDecimal startingMoney;

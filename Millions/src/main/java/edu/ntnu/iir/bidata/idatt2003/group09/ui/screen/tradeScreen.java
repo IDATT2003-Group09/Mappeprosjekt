@@ -74,6 +74,11 @@ public class tradeScreen extends BorderPane {
         Button sellButton = new Button("Sell");
         Button nextWeekButton = new Button("Next Week");
 
+        Button saveButton = new Button("Save");
+        saveButton.setOnAction(e -> {
+            controller.saveGame();
+        });
+
         buyButton.setOnAction(e -> buySelectedStock());
         sellButton.setOnAction(e -> sellSelectedStock());
 
@@ -84,7 +89,7 @@ public class tradeScreen extends BorderPane {
             updateSelectedStockGraph();
         });
 
-        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton);
+        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
         controls.setPadding(new Insets(0, 0, 10, 0));
 
         VBox headerBox = new VBox(

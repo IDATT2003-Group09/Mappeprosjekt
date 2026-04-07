@@ -1,11 +1,12 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.base.transaction;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class TransactionArchive {
+public class TransactionArchive implements Serializable {
     private final List<Transaction> transactions;
 
     public TransactionArchive() {

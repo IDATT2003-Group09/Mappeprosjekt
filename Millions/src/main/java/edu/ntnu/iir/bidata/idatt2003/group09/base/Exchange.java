@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
@@ -12,7 +13,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Sale;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Transaction;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.TransactionFactory;
 
-public class Exchange {
+public class Exchange implements Serializable {
 
   private String name;
   private int week;
@@ -105,6 +106,15 @@ public class Exchange {
     } else {
       throw new IllegalArgumentException("stock not found");
     }
+  }
+
+    /**
+     * Method to get a list of the stockmap
+     *
+     * @return list of stocks
+     */
+  public List<Stock> getStocks() {
+      return List.copyOf(stockMap.values());
   }
 
   /**
