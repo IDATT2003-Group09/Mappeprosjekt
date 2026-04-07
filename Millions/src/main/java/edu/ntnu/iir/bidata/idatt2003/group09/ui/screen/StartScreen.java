@@ -11,7 +11,7 @@ import javafx.scene.text.Font;
 public class StartScreen extends VBox {
 
     private static final String START_SCREEN_FONT_PATH = "/ThaleahFat.ttf";
-    private static final double START_SCREEN_FONT_SIZE = 18;
+    private static final double START_SCREEN_FONT_SIZE = 38;
 
     public interface StartHandler {
         void onNewGame();
@@ -43,13 +43,13 @@ public class StartScreen extends VBox {
         exitBtn.setFont(startScreenFont);
 
         newGameBtn.setPrefWidth(400);
-        newGameBtn.setPrefHeight(30);
+        newGameBtn.setPrefHeight(60);
         loadGameBtn.setPrefWidth(400);
-        loadGameBtn.setPrefHeight(30);
+        loadGameBtn.setPrefHeight(60);
         settingsBtn.setPrefWidth(400);
-        settingsBtn.setPrefHeight(30);
+        settingsBtn.setPrefHeight(60);
         exitBtn.setPrefWidth(400);
-        exitBtn.setPrefHeight(30);
+        exitBtn.setPrefHeight(60);
         newGameBtn.setOnAction(e -> handler.onNewGame());
         loadGameBtn.setOnAction(e -> handler.onLoadGame());
         settingsBtn.setOnAction(e -> handler.onSettings());
