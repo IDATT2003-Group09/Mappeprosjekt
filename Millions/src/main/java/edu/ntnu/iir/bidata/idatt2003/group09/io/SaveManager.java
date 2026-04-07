@@ -15,7 +15,7 @@ public class SaveManager {
     }
 
     public static void save(GameState state, String fileName) {
-        String targetFile = sanitizeFileName(fileName);
+        String targetFile = normalizeSaveFileName(fileName);
         try (ObjectOutputStream out =
                 new ObjectOutputStream(new FileOutputStream(targetFile))) {
             out.writeObject(state);
@@ -30,7 +30,7 @@ public class SaveManager {
     }
 
     public static GameState load(String fileName) {
-        String sourceFile = sanitizeFileName(fileName);
+        String sourceFile = normalizeSaveFileName(fileName);
         try (ObjectInputStream in =
                      new ObjectInputStream(new FileInputStream(sourceFile))) {
 
@@ -61,10 +61,22 @@ public class SaveManager {
         return new File(DEFAULT_FILE).exists();
     }
 
-    private static String sanitizeFileName(String fileName) {
+    public static String normalizeSaveFileName(String fileName) {
         if (fileName == null || fileName.isBlank()) {
             return DEFAULT_FILE;
         }
-        return fileName;
+
+        String normalized = fileName.trim();
+        normalized = normalized.replaceAll("[^a-zA-Z0-9._-]", "_");
+
+        if (!normalized.startsWith(SAVE_FILE_PREFIX)) {
+            normalized = SAVE_FILE_PREFIX + "-" + normalized;
+        }
+
+        if (!normalized.endsWith(SAVE_FILE_SUFFIX)) {
+            normalized = normalized + SAVE_FILE_SUFFIX;
+        }
+
+        return normalized;
     }
 }

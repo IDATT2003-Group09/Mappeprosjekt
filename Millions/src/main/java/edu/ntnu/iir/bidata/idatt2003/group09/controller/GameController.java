@@ -14,10 +14,16 @@ public class GameController {
 
     private final Exchange exchange;
     private final Player player;
+    private final String saveFileName;
 
     public GameController(Exchange exchange, Player player) {
+        this(exchange, player, null);
+    }
+
+    public GameController(Exchange exchange, Player player, String saveFileName) {
         this.exchange = exchange;
         this.player = player;
+        this.saveFileName = saveFileName;
     }
 
     //game flow
@@ -29,7 +35,7 @@ public class GameController {
     }
 
     public void saveGame() {
-        SaveManager.save(new GameState(player, exchange));
+        SaveManager.save(new GameState(player, exchange), saveFileName);
     }
 
     public int getWeek() {

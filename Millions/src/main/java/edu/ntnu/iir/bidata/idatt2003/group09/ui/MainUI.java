@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.CreateGameScree;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.LoadGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.StartScreen;
 import javafx.scene.control.Tab;
@@ -52,7 +53,7 @@ public class MainUI extends Application {
 
             @Override
             public void onNewGame() {
-                startNewGame();
+                showCreateGameScreen();
             }
 
             @Override
@@ -67,6 +68,22 @@ public class MainUI extends Application {
         });
 
         root.setCenter(startScreen);
+    }
+
+    private void showCreateGameScreen() {
+        CreateGameScree createGameScreen = new CreateGameScree(new CreateGameScree.CreateGameHandler() {
+            @Override
+            public void onCreateGame(String fileName) {
+                startNewGame(fileName);
+            }
+
+            @Override
+            public void onBack() {
+                showStartScreen();
+            }
+        });
+
+        root.setCenter(createGameScreen);
     }
 
     private void showLoadGameScreen() {
@@ -88,12 +105,14 @@ public class MainUI extends Application {
         root.setCenter(loadGameScreen);
     }
 
-    private void startNewGame() {
+    private void startNewGame(String fileName) {
 		try {
+			String normalizedSaveFileName = SaveManager.normalizeSaveFileName(fileName);
 			List<Stock> stocks = StockCsvReader.readDefaultResource();
 			Player player = new Player("Trader", new BigDecimal("100000"));
 			Exchange exchange = new Exchange("Main Exchange", stocks);
-            GameController controller = new GameController(exchange, player);
+            GameController controller = new GameController(exchange, player, normalizedSaveFileName);
+            controller.saveGame();
 
 			tradeScreen tradeScreen = new tradeScreen(controller, stocks);
             PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
@@ -134,8 +153,9 @@ public class MainUI extends Application {
             return;
         }
 
+        String normalizedSaveFileName = SaveManager.normalizeSaveFileName(fileName);
         GameController controller =
-                new GameController(state.getExchange(), state.getPlayer());
+                new GameController(state.getExchange(), state.getPlayer(), normalizedSaveFileName);
 
         tradeScreen tradeScreen =
                 new tradeScreen(controller, state.getExchange().getStocks());
