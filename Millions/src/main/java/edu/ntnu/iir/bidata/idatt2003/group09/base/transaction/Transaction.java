@@ -4,9 +4,10 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.TransactionCalculator;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Transaction {
+public abstract class Transaction implements Serializable {
 
   private final Share share;
   private final int week;

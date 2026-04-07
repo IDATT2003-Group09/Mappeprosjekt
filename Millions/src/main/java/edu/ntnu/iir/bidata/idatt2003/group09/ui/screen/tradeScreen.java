@@ -21,6 +21,7 @@ import javafx.scene.layout.VBox;
 public class tradeScreen extends BorderPane {
 
     private final GameController controller;
+    private final Runnable onSaveAndQuit;
 
     private final TableView<Stock> stockTable;
     private final StockGraph graph;
@@ -35,8 +36,9 @@ public class tradeScreen extends BorderPane {
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
 
-    public tradeScreen(GameController controller, List<Stock> stocks) {
+    public tradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
         this.controller = controller;
+        this.onSaveAndQuit = onSaveAndQuit;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
         stockTable = new StockTable().createStockTable(controller.getPlayer());
@@ -74,6 +76,14 @@ public class tradeScreen extends BorderPane {
         Button sellButton = new Button("Sell");
         Button nextWeekButton = new Button("Next Week");
 
+        Button saveButton = new Button("Save and Quit");
+        saveButton.setOnAction(e -> {
+            controller.saveGame();
+            if (onSaveAndQuit != null) {
+                onSaveAndQuit.run();
+            }
+        });
+
         buyButton.setOnAction(e -> buySelectedStock());
         sellButton.setOnAction(e -> sellSelectedStock());
 
@@ -84,7 +94,7 @@ public class tradeScreen extends BorderPane {
             updateSelectedStockGraph();
         });
 
-        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton);
+        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
         controls.setPadding(new Insets(0, 0, 10, 0));
 
         VBox headerBox = new VBox(

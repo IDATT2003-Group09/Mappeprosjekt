@@ -4,10 +4,17 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.CreateGameScree;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.LoadGameScreen;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.StartScreen;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
@@ -16,6 +23,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.tradeScreen;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
@@ -23,20 +31,90 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 
 public class MainUI extends Application {
 
+    private BorderPane root;
   /**
    * Starts the JavaFX application. Initializes the exchange, player, and trade screen, and sets up the main stage.
    */
 	@Override
 	public void start(Stage primaryStage) {
-		primaryStage.setTitle("Stock Trading");
+        primaryStage.setTitle("Millions - A Stock Trading Game");
 
+        root = new BorderPane();
+
+        showStartScreen();
+
+        Scene scene = new Scene(root, 1100, 700);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void showStartScreen() {
+        StartScreen startScreen = new StartScreen(new StartScreen.StartHandler() {
+
+            @Override
+            public void onNewGame() {
+                showCreateGameScreen();
+            }
+
+            @Override
+            public void onLoadGame() {
+                showLoadGameScreen();
+            }
+
+            @Override
+            public void onSettings() {
+                System.out.println("settings");
+            }
+        });
+
+        root.setCenter(startScreen);
+    }
+
+    private void showCreateGameScreen() {
+        CreateGameScree createGameScreen = new CreateGameScree(new CreateGameScree.CreateGameHandler() {
+            @Override
+            public void onCreateGame(String fileName) {
+                startNewGame(fileName);
+            }
+
+            @Override
+            public void onBack() {
+                showStartScreen();
+            }
+        });
+
+        root.setCenter(createGameScreen);
+    }
+
+    private void showLoadGameScreen() {
+        LoadGameScreen loadGameScreen = new LoadGameScreen(
+                SaveManager.listSaveFiles(),
+                new LoadGameScreen.LoadGameHandler() {
+                    @Override
+                    public void onLoadSelected(String fileName) {
+                        loadGame(fileName);
+                    }
+
+                    @Override
+                    public void onBack() {
+                        showStartScreen();
+                    }
+                }
+        );
+
+        root.setCenter(loadGameScreen);
+    }
+
+    private void startNewGame(String fileName) {
 		try {
+			String normalizedSaveFileName = SaveManager.normalizeSaveFileName(fileName);
 			List<Stock> stocks = StockCsvReader.readDefaultResource();
 			Player player = new Player("Trader", new BigDecimal("100000"));
 			Exchange exchange = new Exchange("Main Exchange", stocks);
-            GameController controller = new GameController(exchange, player);
+            GameController controller = new GameController(exchange, player, normalizedSaveFileName);
+            controller.saveGame();
 
-			tradeScreen tradeScreen = new tradeScreen(controller, stocks);
+            tradeScreen tradeScreen = new tradeScreen(controller, stocks, this::showStartScreen);
             PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
 
             TabPane tabPane = new TabPane();
@@ -55,18 +133,54 @@ public class MainUI extends Application {
                 }
             });
 
-			Scene scene = new Scene(tabPane, 1100, 700);
-			primaryStage.setScene(scene);
-			primaryStage.show();
+            root.setCenter(tabPane);
+
 		} catch (IOException e) {
+            e.printStackTrace();
+
 			Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
 			errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
 
-			Scene scene = new Scene(new VBox(errorLabel), 700, 200);
-			primaryStage.setScene(scene);
-			primaryStage.show();
+            root.setCenter(new VBox(errorLabel));
 		}
 	}
+
+    private void loadGame(String fileName) {
+        GameState state = SaveManager.load(fileName);
+        if (state == null) {
+            System.out.println("No saved game found in file: " + fileName);
+            showLoadGameScreen();
+            return;
+        }
+
+        String normalizedSaveFileName = SaveManager.normalizeSaveFileName(fileName);
+        GameController controller =
+                new GameController(state.getExchange(), state.getPlayer(), normalizedSaveFileName);
+
+        tradeScreen tradeScreen =
+            new tradeScreen(controller, state.getExchange().getStocks(), this::showStartScreen);
+
+        PortfolioScreen portfolioScreen =
+                new PortfolioScreen(controller);
+
+        TabPane tabPane = new TabPane();
+        Tab tradeTab = new Tab("Trade", tradeScreen);
+        Tab portfolioTab = new Tab("Portfolio", portfolioScreen);
+
+        tradeTab.setClosable(false);
+        portfolioTab.setClosable(false);
+
+        tabPane.getTabs().addAll(tradeTab, portfolioTab);
+
+        tabPane.getSelectionModel().selectedItemProperty()
+                .addListener((obs, oldTab, newTab) -> {
+                    if (newTab == portfolioTab) {
+                        portfolioScreen.refresh();
+                    }
+                });
+
+        root.setCenter(tabPane);
+    }
 
   /**
    * write mvn javafx:run to run this method that starts the application
@@ -75,6 +189,4 @@ public class MainUI extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
-
 }

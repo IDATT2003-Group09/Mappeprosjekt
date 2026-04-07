@@ -1,8 +1,9 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class MarketNews {
+public class MarketNews implements Serializable {
 
     private final String headline;
     private final String description;

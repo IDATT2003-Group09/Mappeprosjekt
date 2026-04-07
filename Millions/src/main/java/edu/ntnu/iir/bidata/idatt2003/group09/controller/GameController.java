@@ -1,6 +1,8 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.*;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,10 +14,16 @@ public class GameController {
 
     private final Exchange exchange;
     private final Player player;
+    private final String saveFileName;
 
     public GameController(Exchange exchange, Player player) {
+        this(exchange, player, null);
+    }
+
+    public GameController(Exchange exchange, Player player, String saveFileName) {
         this.exchange = exchange;
         this.player = player;
+        this.saveFileName = saveFileName;
     }
 
     //game flow
@@ -23,6 +31,11 @@ public class GameController {
         player.setLastWeekNetWorth(player.getNetWorth());
 
         exchange.advance();
+        saveGame();
+    }
+
+    public void saveGame() {
+        SaveManager.save(new GameState(player, exchange), saveFileName);
     }
 
     public int getWeek() {
