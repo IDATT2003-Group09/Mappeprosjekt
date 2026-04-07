@@ -8,12 +8,11 @@ import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.math.BigDecimal;
 import java.util.List;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.LoadGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.StartScreen;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -58,7 +57,7 @@ public class MainUI extends Application {
 
             @Override
             public void onLoadGame() {
-                loadGame();
+                showLoadGameScreen();
             }
 
             @Override
@@ -68,6 +67,25 @@ public class MainUI extends Application {
         });
 
         root.setCenter(startScreen);
+    }
+
+    private void showLoadGameScreen() {
+        LoadGameScreen loadGameScreen = new LoadGameScreen(
+                SaveManager.listSaveFiles(),
+                new LoadGameScreen.LoadGameHandler() {
+                    @Override
+                    public void onLoadSelected(String fileName) {
+                        loadGame(fileName);
+                    }
+
+                    @Override
+                    public void onBack() {
+                        showStartScreen();
+                    }
+                }
+        );
+
+        root.setCenter(loadGameScreen);
     }
 
     private void startNewGame() {
@@ -108,10 +126,11 @@ public class MainUI extends Application {
 		}
 	}
 
-    private void loadGame() {
-        GameState state = SaveManager.load();
+    private void loadGame(String fileName) {
+        GameState state = SaveManager.load(fileName);
         if (state == null) {
-            System.out.println("No saved game found");
+            System.out.println("No saved game found in file: " + fileName);
+            showLoadGameScreen();
             return;
         }
 
