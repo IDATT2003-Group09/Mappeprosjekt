@@ -1,15 +1,17 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
+import java.io.IOException;
+import java.io.InputStream;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class StartScreen extends VBox {
+
+    private static final String START_SCREEN_FONT_PATH = "/ThaleahFat.ttf";
+    private static final double START_SCREEN_FONT_SIZE = 18;
 
     public interface StartHandler {
         void onNewGame();
@@ -33,6 +35,13 @@ public class StartScreen extends VBox {
         Button settingsBtn = new Button("Innstillinger");
         Button exitBtn = new Button("Avslutt");
 
+        String fontFamily = loadStartScreenFontFamily();
+        Font startScreenFont = Font.font(fontFamily, START_SCREEN_FONT_SIZE);
+        newGameBtn.setFont(startScreenFont);
+        loadGameBtn.setFont(startScreenFont);
+        settingsBtn.setFont(startScreenFont);
+        exitBtn.setFont(startScreenFont);
+
         newGameBtn.setPrefWidth(400);
         newGameBtn.setPrefHeight(30);
         loadGameBtn.setPrefWidth(400);
@@ -47,5 +56,22 @@ public class StartScreen extends VBox {
         exitBtn.setOnAction(e -> System.exit(0));
 
         getChildren().addAll(newGameBtn, loadGameBtn, settingsBtn, exitBtn);
+    }
+
+    private String loadStartScreenFontFamily() {
+        try (InputStream fontStream = getClass().getResourceAsStream(START_SCREEN_FONT_PATH)) {
+            if (fontStream == null) {
+                return Font.getDefault().getFamily();
+            }
+
+            Font loadedFont = Font.loadFont(fontStream, START_SCREEN_FONT_SIZE);
+            if (loadedFont != null) {
+                return loadedFont.getFamily();
+            }
+        } catch (IOException e) {
+            return Font.getDefault().getFamily();
+        }
+
+        return Font.getDefault().getFamily();
     }
 }
