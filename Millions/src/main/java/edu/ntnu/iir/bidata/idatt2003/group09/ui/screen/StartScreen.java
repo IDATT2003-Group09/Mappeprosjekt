@@ -42,14 +42,16 @@ public class StartScreen extends VBox {
         settingsBtn.setFont(startScreenFont);
         exitBtn.setFont(startScreenFont);
 
-        newGameBtn.setPrefWidth(400);
-        newGameBtn.setPrefHeight(60);
-        loadGameBtn.setPrefWidth(400);
-        loadGameBtn.setPrefHeight(60);
-        settingsBtn.setPrefWidth(400);
-        settingsBtn.setPrefHeight(60);
-        exitBtn.setPrefWidth(400);
-        exitBtn.setPrefHeight(60);
+        int buttonWidth = 400;
+        int buttonHeight = 60;
+        newGameBtn.setPrefWidth(buttonWidth);
+        newGameBtn.setPrefHeight(buttonHeight);
+        loadGameBtn.setPrefWidth(buttonWidth);
+        loadGameBtn.setPrefHeight(buttonHeight);
+        settingsBtn.setPrefWidth(buttonWidth);
+        settingsBtn.setPrefHeight(buttonHeight);
+        exitBtn.setPrefWidth(buttonWidth);
+        exitBtn.setPrefHeight(buttonHeight);
         newGameBtn.setOnAction(e -> handler.onNewGame());
         loadGameBtn.setOnAction(e -> handler.onLoadGame());
         settingsBtn.setOnAction(e -> handler.onSettings());
