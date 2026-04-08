@@ -6,17 +6,29 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.SaleCalculator;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.PortfolioValueCalculator;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.SaleBasedValueCalculator;
 
 public class Portfolio implements Serializable {
 
   private final List<Share> shares;
+  private final PortfolioValueCalculator valueCalculator;
 
   /**
-   * Intitalizes the shares list
+   * Initializes the shares list with the default sale-based value calculator
    */
   public Portfolio() {
+    this(new SaleBasedValueCalculator());
+  }
+
+  /**
+   * Initializes the shares list with a custom value calculator
+   * 
+   * @param valueCalculator the calculator to use for determining share values
+   */
+  public Portfolio(PortfolioValueCalculator valueCalculator) {
     shares = new ArrayList<>();
+    this.valueCalculator = valueCalculator;
   }
 
   /**
@@ -61,13 +73,9 @@ public class Portfolio implements Serializable {
      * @return the total value of all shares after tax and commisions
      */
   public BigDecimal getNetWorth() {
-      BigDecimal total = BigDecimal.ZERO;
-
-      for (Share share : shares) {
-          SaleCalculator calculator = new SaleCalculator(share);
-          total = total.add(calculator.calculateTotal());
-      }
-      return total;
+      return shares.stream()
+          .map(valueCalculator::calculateShareValue)
+          .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
 
 }

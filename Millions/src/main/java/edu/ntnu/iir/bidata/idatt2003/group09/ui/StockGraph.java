@@ -1,26 +1,13 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.PriceGenerator;
-import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.SplitPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 public class StockGraph extends BorderPane {
