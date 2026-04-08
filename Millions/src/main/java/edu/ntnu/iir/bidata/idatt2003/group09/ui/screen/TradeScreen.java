@@ -18,7 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class tradeScreen extends BorderPane {
+public class TradeScreen extends BorderPane {
 
     private final GameController controller;
     private final Runnable onSaveAndQuit;
@@ -36,7 +36,7 @@ public class tradeScreen extends BorderPane {
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
 
-    public tradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
+    public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
         this.controller = controller;
         this.onSaveAndQuit = onSaveAndQuit;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);

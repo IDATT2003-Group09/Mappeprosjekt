@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class CreateGameScree extends VBox {
+public class CreateGameScreen extends VBox {
 
 	private static final String FONT_PATH = "/ThaleahFat.ttf";
 	private static final double TITLE_FONT_SIZE = 32;
@@ -21,7 +21,7 @@ public class CreateGameScree extends VBox {
 		void onBack();
 	}
 
-	public CreateGameScree(CreateGameHandler handler) {
+	public CreateGameScreen(CreateGameHandler handler) {
 		getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
 
 		setSpacing(16);
