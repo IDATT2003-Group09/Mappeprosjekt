@@ -10,6 +10,8 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
  */
 public class SaleBasedValueCalculator implements PortfolioValueCalculator {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     public BigDecimal calculateShareValue(Share share) {
         SaleCalculator calculator = new SaleCalculator(share);
