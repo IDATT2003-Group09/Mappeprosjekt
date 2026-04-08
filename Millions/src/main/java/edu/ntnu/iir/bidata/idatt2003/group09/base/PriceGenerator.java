@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Random;
 import static java.lang.Math.*;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 
 public class PriceGenerator {
 	private static final double BASE_VOLATILITY = 0.05; // baseline weekly stddev for risk=1

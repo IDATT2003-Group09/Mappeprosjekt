@@ -3,7 +3,6 @@ package edu.ntnu.iir.bidata.idatt2003.group09.base.calculator;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Portfolio;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.SaleCalculator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
