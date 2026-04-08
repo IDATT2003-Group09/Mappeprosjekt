@@ -4,10 +4,9 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.SaleCalculator;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Sale extends Transaction implements Serializable {
+public class Sale extends Transaction {
     public Sale(Share share, int week) {
         super(share, week, new SaleCalculator(share));
     }

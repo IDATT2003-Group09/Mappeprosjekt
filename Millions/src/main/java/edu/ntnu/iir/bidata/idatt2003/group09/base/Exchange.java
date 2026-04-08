@@ -6,10 +6,7 @@ import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Purchase;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Sale;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Transaction;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.TransactionFactory;
 
@@ -18,7 +15,6 @@ public class Exchange implements Serializable {
   private String name;
   private int week;
   private Map<String, Stock> stockMap;
-  private Random random;
   private MarketNews pendingNews;
   private final NewsGenerator newsGenerator = new NewsGenerator();
 
@@ -28,7 +24,6 @@ public class Exchange implements Serializable {
    * @param stocks
    */
   public Exchange(String name, List<Stock> stocks) {
-    random = new Random();
     setName(name);
     stockMap = new HashMap<>();
     setStockMap(stocks);

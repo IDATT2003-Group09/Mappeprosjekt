@@ -39,7 +39,7 @@ public class SaleCalculator implements TransactionCalculator {
         return BigDecimal.ZERO;
     }
 
-    return profit.multiply(new BigDecimal("0.3"));
+    return profit.multiply(taxRate);
   }
 
   @Override

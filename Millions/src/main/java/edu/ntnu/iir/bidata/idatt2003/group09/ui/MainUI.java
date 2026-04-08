@@ -12,14 +12,14 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.CreateGameScree;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.CreateGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.LoadGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.StartScreen;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.tradeScreen;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.TradeScreen;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -71,7 +71,7 @@ public class MainUI extends Application {
     }
 
     private void showCreateGameScreen() {
-        CreateGameScree createGameScreen = new CreateGameScree(new CreateGameScree.CreateGameHandler() {
+        CreateGameScreen createGameScreen = new CreateGameScreen(new CreateGameScreen.CreateGameHandler() {
             @Override
             public void onCreateGame(String fileName) {
                 startNewGame(fileName);
@@ -114,7 +114,7 @@ public class MainUI extends Application {
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
 
-            tradeScreen tradeScreen = new tradeScreen(controller, stocks, this::showStartScreen);
+            TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen);
             PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
 
             TabPane tabPane = new TabPane();
@@ -157,8 +157,8 @@ public class MainUI extends Application {
         GameController controller =
                 new GameController(state.getExchange(), state.getPlayer(), normalizedSaveFileName);
 
-        tradeScreen tradeScreen =
-            new tradeScreen(controller, state.getExchange().getStocks(), this::showStartScreen);
+        TradeScreen tradeScreen =
+            new TradeScreen(controller, state.getExchange().getStocks(), this::showStartScreen);
 
         PortfolioScreen portfolioScreen =
                 new PortfolioScreen(controller);
