@@ -16,11 +16,11 @@ public class EnhanceCSV {
   private List<String[]> dataLines;
   private List<String> tags;
 
-  public EnhanceCSV(String filePath) {
+  public EnhanceCSV(String filePath, List<String> tags) {
     this.filePath = filePath;
     this.comments = new ArrayList<>();
     this.dataLines = new ArrayList<>();
-    this.tags = new ArrayList<>();
+    this.tags = tags;
     readCsvFile();
   }
 
