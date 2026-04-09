@@ -9,7 +9,9 @@ public class Event {
   private String headline;
   private String description;
 
-  public Event(){
+  public Event(String headline, String description) {
+    this.headline = headline;
+    this.description = description;
     eventData = new HashMap<>();
   }
 
