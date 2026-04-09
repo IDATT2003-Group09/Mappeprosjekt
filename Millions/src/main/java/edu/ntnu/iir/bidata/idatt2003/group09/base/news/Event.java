@@ -10,7 +10,7 @@ public class Event {
   private String description;
 
   public Event(){
-
+    eventData = new HashMap<>();
   }
 
   public void addEventData(String key, BigDecimal value){
