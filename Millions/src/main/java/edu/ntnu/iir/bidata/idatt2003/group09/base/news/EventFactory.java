@@ -10,7 +10,7 @@ public class EventFactory {
 
   }
 
-  public List<Event> generateEvents(){
+  public List<Event> generateGlobalEvents(){
     List<Event> events = new ArrayList<>();
 
     GlobalEvent event1 = new GlobalEvent("Tech Boom", "The technology sector is experiencing unprecedented growth, with new innovations driving market expansion.");
@@ -19,19 +19,33 @@ public class EventFactory {
     events.add(event1);
 
     GlobalEvent event2 = new GlobalEvent("Financial Crisis", "A major financial institution has collapsed, sending shockwaves through global markets and causing widespread panic.");
-    event2.addEventData("Finance", BigDecimal.valueOf(0.9));
+    event2.addEventData("Finance", BigDecimal.valueOf(-0.9));
     event2.addEventData("Real Estate", BigDecimal.valueOf(0.6));
     events.add(event2);
 
-    StockSpecificEvent event3 = new StockSpecificEvent(
-            "{stock} announces major partnership",
-          "{stock} has signed a strategic partnership expected to improve growth outlook.",
-          BigDecimal.valueOf(0.10)
-    );
-        event3.addStockImpact("AAPL", BigDecimal.valueOf(0.12));
-    events.add(event3);
-
     return events;
 
+  }
+
+  public List<Event> generateStockSpecificEvents(){
+    List<Event> events = new ArrayList<>();
+
+    StockSpecificEvent event1 = new StockSpecificEvent(
+            "{stock} reports record earnings",
+            "{stock} has reported record-breaking earnings for the quarter, exceeding analyst expectations.",
+            BigDecimal.valueOf(0.15)
+    );
+    event1.addStockImpact("AAPL", BigDecimal.valueOf(0.20));
+    events.add(event1);
+
+    StockSpecificEvent event2 = new StockSpecificEvent(
+            "{stock} faces regulatory investigation",
+            "{stock} is under investigation by regulatory authorities, raising concerns about potential legal issues.",
+            BigDecimal.valueOf(-0.25)
+    );
+    event2.addStockImpact("GOOGL", BigDecimal.valueOf(-0.30));
+    events.add(event2);
+
+    return events;
   }
 }
