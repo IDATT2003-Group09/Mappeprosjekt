@@ -6,10 +6,13 @@ import java.util.ArrayList;
 public class TagsFactory {
 
   private List<String> tags = List.of("Tech", "Finance", "Health", "Energy", "Consumer", "Industrial", "Utilities", "Real Estate", "Materials", "Telecom");
-
   private int maxTags = 5;
 
-  public void enhanceCsv(String inputFilePath, String outputFilePath) {
+  private String inputFilePath = "src/main/resources/csv/input/";
+  private String outputFilePath = "src/main/resources/csv/enhanced/";
+
+  public void enhanceCsv(String inputFile, String outputFile) {
+  
     EnhanceCSV enhancer = new EnhanceCSV(inputFilePath, tags);
     enhancer.writeEnhancedCsv(outputFilePath, maxTags);
   }
