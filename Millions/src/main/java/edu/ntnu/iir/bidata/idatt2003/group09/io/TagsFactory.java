@@ -13,8 +13,9 @@ public class TagsFactory {
 
   public void enhanceCsv(String inputFile, String outputFile) {
   
-    EnhanceCSV enhancer = new EnhanceCSV(inputFilePath, tags);
-    enhancer.writeEnhancedCsv(outputFilePath, maxTags);
+    
+    EnhanceCSV enhancer = new EnhanceCSV(inputFilePath + inputFile, tags);
+    enhancer.writeEnhancedCsv(outputFilePath + outputFile, maxTags);
   }
 
   public List<String> getTags(){
