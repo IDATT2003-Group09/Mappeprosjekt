@@ -6,8 +6,18 @@ import java.math.BigDecimal;
 public class Event {
   
   private HashMap<String, BigDecimal> eventData;
+  private String headline;
+  private String description;
 
   public Event(){
 
+  }
+
+  public void addEventData(String key, BigDecimal value){
+    eventData.put(key, value);
+  }
+
+  public HashMap<String, BigDecimal> getEventData() {
+    return eventData;
   }
 }
