@@ -68,30 +68,7 @@ public class EnhanceCSV {
     }
   }
 
-  /**
-   * Generate a tag (can be overridden or used with specific logic).
-   * By default, returns an empty string. Override or use with addTag().
-   *
-   * @return a generated tag
-   */
-  private String generateTag() {
-    return "";
-  }
-
-  /**
-   * Add auto-generated tags to all data lines.
-   * The generateTag() method can be overridden in subclasses for custom logic.
-   *
-   * @param count number of tags to generate
-   */
-  public void addGeneratedTags(int count) {
-    for (int i = 0; i < count; i++) {
-      String tag = generateTag();
-      if (!tag.isEmpty()) {
-        this.tags.add(tag);
-      }
-    }
-  }
+  
 
   /**
    * Write the enhanced CSV to a new file.
