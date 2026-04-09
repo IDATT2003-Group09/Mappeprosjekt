@@ -8,6 +8,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.io.EnhanceCSV;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.TagsFactory;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.CreateGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.LoadGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
@@ -189,9 +190,8 @@ public class Main extends Application {
      * @param args command line arguments
      */
 	public static void main(String[] args) {
-        List<String> tags = List.of("Tech", "Finance", "Health", "Energy", "Consumer", "Industrial", "Utilities", "Real Estate", "Materials", "Telecom");
-        EnhanceCSV enhancer = new EnhanceCSV("src/main/resources/csv/normal/sp500Standard.csv", tags);
-    enhancer.writeEnhancedCsv("src/main/resources/csv/enhanced/sp500Enhanced.csv", tags.size());
+        TagsFactory tagsFactory = new TagsFactory();
+        tagsFactory.enhanceCsv("sp500Standard.csv", "sp500Enhanced.csv");
 		launch(args);
 	}
 }

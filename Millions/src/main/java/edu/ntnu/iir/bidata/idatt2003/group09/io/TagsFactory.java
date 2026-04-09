@@ -9,7 +9,7 @@ public class TagsFactory {
   private int maxTags = 5;
 
   private String inputFilePath = "src/main/resources/csv/input/";
-  private String outputFilePath = "src/main/resources/csv/enhanced/";
+  private String outputFilePath = "src/main/resources/csv/output/";
 
   public void enhanceCsv(String inputFile, String outputFile) {
   
