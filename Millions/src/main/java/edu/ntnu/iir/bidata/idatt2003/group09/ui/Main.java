@@ -191,7 +191,7 @@ public class Main extends Application {
 	public static void main(String[] args) {
         List<String> tags = List.of("Tech", "Finance", "Health", "Energy", "Consumer", "Industrial", "Utilities", "Real Estate", "Materials", "Telecom");
         EnhanceCSV enhancer = new EnhanceCSV("src/main/resources/csv/normal/sp500Standard.csv", tags);
-        enhancer.writeEnhancedCsv("src/main/resources/csv/enhanced/", 0);
+    enhancer.writeEnhancedCsv("src/main/resources/csv/enhanced/sp500Enhanced.csv", tags.size());
 		launch(args);
 	}
 }

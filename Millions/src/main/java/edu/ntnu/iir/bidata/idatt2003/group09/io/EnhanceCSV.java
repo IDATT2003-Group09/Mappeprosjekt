@@ -1,7 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.io;
 
 import java.io.*;
-import java.nio.file.*;
 import java.util.*;
 
 /**
@@ -124,8 +123,13 @@ public class EnhanceCSV {
     if (availableTags.isEmpty()) {
       return new ArrayList<>();
     }
-    
-    int numTags = random.nextInt(Math.min(maxTags, availableTags.size()) + 1);
+
+    int boundedMax = Math.min(maxTags, availableTags.size());
+    if (boundedMax <= 0) {
+      return new ArrayList<>();
+    }
+
+    int numTags = random.nextInt(boundedMax) + 1;
     List<String> shuffled = new ArrayList<>(availableTags);
     Collections.shuffle(shuffled, random);
     
