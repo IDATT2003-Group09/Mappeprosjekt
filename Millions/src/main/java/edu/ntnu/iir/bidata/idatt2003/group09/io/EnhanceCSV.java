@@ -85,22 +85,22 @@ public class EnhanceCSV {
         writer.println(comment);
       }
 
-      // Write header with tag column names
+      // Write header with tag columns
       writer.print(header);
       for (int i = 1; i <= availableTags.size(); i++) {
         writer.print(",Tag_" + i);
       }
       writer.println();
 
-      // Write data lines with randomly selected tags
+      // Write data lines with randomly selected tags as 1/0 values
       for (String[] dataLine : dataLines) {
         writer.print(String.join(",", dataLine));
-        
+
         // Generate random tags for this stock
         List<String> randomTags = getRandomTags(maxTagsPerStock);
         Set<String> selectedTags = new HashSet<>(randomTags);
-        
-        // Write tag values (1 if selected, 0 if not)
+
+        // Write 1 if the tag is selected for this stock, else 0
         for (String tag : availableTags) {
           writer.print(selectedTags.contains(tag) ? ",1" : ",0");
         }
