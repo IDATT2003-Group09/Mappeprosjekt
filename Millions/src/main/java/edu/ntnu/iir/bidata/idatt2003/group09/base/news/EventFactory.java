@@ -25,10 +25,10 @@ public class EventFactory {
 
     StockSpecificEvent event3 = new StockSpecificEvent(
             "{stock} announces major partnership",
-            "{stock} has signed a strategic partnership expected to improve growth outlook."
+          "{stock} has signed a strategic partnership expected to improve growth outlook.",
+          BigDecimal.valueOf(0.10)
     );
-    event3.addStockImpact("AAPL", BigDecimal.valueOf(0.12));
-    event3.addStockImpact("MSFT", BigDecimal.valueOf(0.08));
+        event3.addStockImpact("AAPL", BigDecimal.valueOf(0.12));
     events.add(event3);
 
     return events;

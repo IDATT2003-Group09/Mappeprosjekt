@@ -10,13 +10,30 @@ public class StockSpecificEvent extends Event {
   private final String partialHeadline;
   private final String partialDescription;
   private final Map<String, BigDecimal> stockImpactData;
+  private BigDecimal defaultImpact;
 
 	public StockSpecificEvent(String partialHeadline, String partialDescription) {
+		this(partialHeadline, partialDescription, BigDecimal.ZERO);
+	}
+
+	public StockSpecificEvent(String partialHeadline, String partialDescription, BigDecimal defaultImpact) {
 		super(partialHeadline, partialDescription);
 		this.partialHeadline = partialHeadline;
 		this.partialDescription = partialDescription;
 		this.stockImpactData = new HashMap<>();
+		setDefaultImpact(defaultImpact);
 	}
+
+  public void setDefaultImpact(BigDecimal defaultImpact) {
+    if (defaultImpact == null) {
+      throw new IllegalArgumentException("Default impact cannot be null");
+    }
+    this.defaultImpact = defaultImpact;
+  }
+
+  public BigDecimal getDefaultImpact() {
+    return defaultImpact;
+  }
 
   public void addStockImpact(String symbol, BigDecimal impact) {
     if (symbol == null || symbol.isBlank()) {
@@ -30,9 +47,9 @@ public class StockSpecificEvent extends Event {
 
   public BigDecimal getImpactForStock(String symbol) {
     if (symbol == null || symbol.isBlank()) {
-      return BigDecimal.ZERO;
+      return defaultImpact;
     }
-    return stockImpactData.getOrDefault(symbol, BigDecimal.ZERO);
+    return stockImpactData.getOrDefault(symbol, defaultImpact);
   }
 
   public Map<String, BigDecimal> getStockImpactData() {
