@@ -14,13 +14,15 @@ public class EnhanceCSV {
   private List<String> comments;
   private String header;
   private List<String[]> dataLines;
-  private List<String> tags;
+  private List<String> availableTags;
+  private Random random;
 
-  public EnhanceCSV(String filePath, List<String> tags) {
+  public EnhanceCSV(String filePath, List<String> availableTags) {
     this.filePath = filePath;
     this.comments = new ArrayList<>();
     this.dataLines = new ArrayList<>();
-    this.tags = tags;
+    this.availableTags = new ArrayList<>(availableTags);
+    this.random = new Random();
     readCsvFile();
   }
 
@@ -49,51 +51,59 @@ public class EnhanceCSV {
   }
 
   /**
-   * Add a single tag to all data lines.
+   * Add a single tag to the available tags pool.
    *
    * @param tag the tag to add
    */
-  public void addTag(String tag) {
-    this.tags.add(tag);
+  public void addAvailableTag(String tag) {
+    this.availableTags.add(tag);
   }
 
   /**
-   * Add multiple tags to all data lines.
+   * Add multiple tags to the available tags pool.
    *
    * @param tags array of tags to add
    */
-  public void addTags(String[] tags) {
+  public void addAvailableTags(String[] tags) {
     for (String tag : tags) {
-      this.tags.add(tag);
+      this.availableTags.add(tag);
     }
   }
 
-  
+
 
   /**
-   * Write the enhanced CSV to a new file.
+   * Write the enhanced CSV to a new file with random tags applied to each stock.
+   * Each stock gets a random subset of available tags.
    *
    * @param outputFilePath the path where the enhanced CSV will be written
+   * @param maxTagsPerStock the maximum number of tags to randomly apply to each stock
    */
-  public void writeEnhancedCsv(String outputFilePath) {
+  public void writeEnhancedCsv(String outputFilePath, int maxTagsPerStock) {
     try (PrintWriter writer = new PrintWriter(new FileWriter(outputFilePath))) {
       // Write comments
       for (String comment : comments) {
         writer.println(comment);
       }
 
-      // Write header with tags
+      // Write header with tag column names
       writer.print(header);
-      for (String tag : tags) {
-        writer.print("," + tag);
+      for (int i = 1; i <= availableTags.size(); i++) {
+        writer.print(",Tag_" + i);
       }
       writer.println();
 
-      // Write data lines with tags
+      // Write data lines with randomly selected tags
       for (String[] dataLine : dataLines) {
         writer.print(String.join(",", dataLine));
-        for (String tag : tags) {
-          writer.print(",");
+        
+        // Generate random tags for this stock
+        List<String> randomTags = getRandomTags(maxTagsPerStock);
+        Set<String> selectedTags = new HashSet<>(randomTags);
+        
+        // Write tag values (1 if selected, 0 if not)
+        for (String tag : availableTags) {
+          writer.print(selectedTags.contains(tag) ? ",1" : ",0");
         }
         writer.println();
       }
@@ -102,6 +112,24 @@ public class EnhanceCSV {
     } catch (IOException e) {
       System.err.println("Error writing enhanced CSV: " + e.getMessage());
     }
+  }
+
+  /**
+   * Generate a random subset of tags.
+   *
+   * @param maxTags the maximum number of tags to select
+   * @return a list of randomly selected tags
+   */
+  private List<String> getRandomTags(int maxTags) {
+    if (availableTags.isEmpty()) {
+      return new ArrayList<>();
+    }
+    
+    int numTags = random.nextInt(Math.min(maxTags, availableTags.size()) + 1);
+    List<String> shuffled = new ArrayList<>(availableTags);
+    Collections.shuffle(shuffled, random);
+    
+    return shuffled.subList(0, numTags);
   }
 
   /**
@@ -114,27 +142,27 @@ public class EnhanceCSV {
   }
 
   /**
-   * Get the number of tags added so far.
+   * Get the number of available tags.
    *
-   * @return number of tags
+   * @return number of available tags
    */
   public int getTagCount() {
-    return tags.size();
+    return availableTags.size();
   }
 
   /**
-   * Clear all tags.
+   * Clear all available tags.
    */
   public void clearTags() {
-    tags.clear();
+    availableTags.clear();
   }
 
   /**
-   * Get all tags currently added.
+   * Get all available tags.
    *
-   * @return list of tags
+   * @return list of available tags
    */
   public List<String> getTags() {
-    return new ArrayList<>(tags);
+    return new ArrayList<>(availableTags);
   }
 }
