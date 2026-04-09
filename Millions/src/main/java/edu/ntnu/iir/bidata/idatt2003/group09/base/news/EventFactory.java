@@ -12,15 +12,15 @@ public class EventFactory {
 
   }
 
-  public List<Event> generateEvents(){
-    List<Event> events = new ArrayList<>();
+  public List<GlobalEvent> generateEvents(){
+    List<GlobalEvent> events = new ArrayList<>();
 
-    Event event1 = new Event("Tech Boom", "The technology sector is experiencing unprecedented growth, with new innovations driving market expansion.");
+    GlobalEvent event1 = new GlobalEvent("Tech Boom", "The technology sector is experiencing unprecedented growth, with new innovations driving market expansion.");
     event1.addEventData("Tech", BigDecimal.valueOf(0.8));
     event1.addEventData("Energy", BigDecimal.valueOf(0.4));
     events.add(event1);
 
-    Event event2 = new Event("Financial Crisis", "A major financial institution has collapsed, sending shockwaves through global markets and causing widespread panic.");
+    GlobalEvent event2 = new GlobalEvent("Financial Crisis", "A major financial institution has collapsed, sending shockwaves through global markets and causing widespread panic.");
     event2.addEventData("Finance", BigDecimal.valueOf(0.9));
     event2.addEventData("Real Estate", BigDecimal.valueOf(0.6));
     events.add(event2);
