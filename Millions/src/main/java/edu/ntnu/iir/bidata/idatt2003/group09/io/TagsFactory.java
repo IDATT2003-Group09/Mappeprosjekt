@@ -1,0 +1,21 @@
+package edu.ntnu.iir.bidata.idatt2003.group09.io;
+
+import java.util.List;
+import java.util.ArrayList;
+
+public class TagsFactory {
+
+  private List<String> tags = List.of("Tech", "Finance", "Health", "Energy", "Consumer", "Industrial", "Utilities", "Real Estate", "Materials", "Telecom");
+
+  private int maxTags = 5;
+
+  public void enhanceCsv(String inputFilePath, String outputFilePath) {
+    EnhanceCSV enhancer = new EnhanceCSV(inputFilePath, tags);
+    enhancer.writeEnhancedCsv(outputFilePath, maxTags);
+  }
+
+  public List<String> getTags(){
+    return new ArrayList<>(tags);
+  }
+
+}
