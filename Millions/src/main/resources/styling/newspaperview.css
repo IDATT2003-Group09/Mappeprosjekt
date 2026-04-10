@@ -1,4 +1,10 @@
+@font-face {
+  font-family: "ThaleahFat";
+  src: url("/ThaleahFat.ttf");
+}
+
 .newspaper-root {
+  -fx-font-family: "ThaleahFat";
   -fx-background-color: #f4f0e6;
   -fx-border-color: #1f2a44;
   -fx-border-width: 2;
