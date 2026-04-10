@@ -79,12 +79,26 @@ public class TransactionHistoryScreen extends BorderPane {
 
         TableColumn<Transaction, String> priceCol = new TableColumn<>("Price");
         priceCol.setCellValueFactory(data -> {
-            var share = data.getValue().getShare();
+            var transaction = data.getValue();
+            var share = transaction.getShare();
 
-            return new javafx.beans.property.SimpleStringProperty(
-                    currencyFormat.format(share.getPurchasePrice())
-            );
+            if (transaction instanceof edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Sale) {
+                return new javafx.beans.property.SimpleStringProperty(
+                        currencyFormat.format(share.getStock().getSalesPrice())
+                );
+            } else {
+                return new javafx.beans.property.SimpleStringProperty(
+                        currencyFormat.format(share.getPurchasePrice())
+                );
+            }
         });
+
+        TableColumn<Transaction, String> feesCol = new TableColumn<>("Total Fees");
+
+        feesCol.setCellValueFactory(data ->
+                new javafx.beans.property.SimpleStringProperty(
+                        currencyFormat.format(data.getValue().getFees()))
+        );
 
         TableColumn<Transaction, String> totalCol = new TableColumn<>("Total");
         totalCol.setCellValueFactory(data ->
@@ -95,7 +109,7 @@ public class TransactionHistoryScreen extends BorderPane {
                 )
         );
 
-        table.getColumns().addAll(weekCol, typeCol, tickerCol, qtyCol, priceCol, totalCol);
+        table.getColumns().addAll(weekCol, typeCol, tickerCol, qtyCol, priceCol, feesCol, totalCol);
 
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
