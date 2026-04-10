@@ -64,8 +64,8 @@ public class CreateGameScreen extends StackPane {
 
 		StackPane inputBubble = new StackPane(fileNameField);
 		inputBubble.setPadding(new Insets(12, 16, 12, 16));
-		inputBubble.setMinWidth(220);
-		inputBubble.setMaxWidth(280);
+		inputBubble.setMinWidth(300);
+		inputBubble.setMaxWidth(380);
 		inputBubble.setStyle("""
 			-fx-background-color: #f5f5f5;
 			-fx-border-color: #111111;
@@ -77,7 +77,7 @@ public class CreateGameScreen extends StackPane {
 		Button startButton = new Button("Confirm");
 		startButton.getStyleClass().add("start-button");
 		startButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
-		startButton.setPrefWidth(450);
+		startButton.setPrefWidth(380);
 		startButton.setPrefHeight(55);
 		startButton.setOnAction(e -> handler.onCreateGame(fileNameField.getText()));
 		fileNameField.setOnAction(e -> handler.onCreateGame(fileNameField.getText()));
@@ -105,10 +105,11 @@ public class CreateGameScreen extends StackPane {
 		contentBox.getChildren().addAll(inputBubble, startButton);
 		getChildren().add(contentBox);
 		StackPane.setAlignment(contentBox, Pos.CENTER);
+		StackPane.setMargin(contentBox, new Insets(90, 0, 0, 0));
 
 		getChildren().add(backButton);
-		StackPane.setAlignment(backButton, Pos.BOTTOM_RIGHT);
-		StackPane.setMargin(backButton, new Insets(0, 30, 30, 0));
+		StackPane.setAlignment(backButton, Pos.TOP_LEFT);
+		StackPane.setMargin(backButton, new Insets(20, 0, 0, 20));
 
 		ImageView bossImageView = createBossImageView();
 		if (bossImageView != null) {
@@ -119,7 +120,7 @@ public class CreateGameScreen extends StackPane {
 			ChatBubble bossBubble = new ChatBubble("Hey you! What's your name?", fontFamily);
 			getChildren().add(bossBubble);
 			StackPane.setAlignment(bossBubble, Pos.BOTTOM_LEFT);
-			StackPane.setMargin(bossBubble, new Insets(0, 0, 250, 50));
+			StackPane.setMargin(bossBubble, new Insets(0, 0, 180, 50));
 
 			fileNameField.requestFocus();
 		}
@@ -145,7 +146,7 @@ public class CreateGameScreen extends StackPane {
 			return new ImageView();
 		}
 
-		Image image = new Image(imageStream, EXIT_BUTTON_SIZE, EXIT_BUTTON_SIZE, true, false);
+		Image image = new Image(imageStream, EXIT_BUTTON_SIZE * 0.72, EXIT_BUTTON_SIZE * 0.72, true, false);
 		ImageView imageView = new ImageView(image);
 		imageView.setPreserveRatio(true);
 		imageView.setSmooth(false);
