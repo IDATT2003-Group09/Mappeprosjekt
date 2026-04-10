@@ -9,10 +9,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
-public class CreateGameScreen extends VBox {
+public class CreateGameScreen extends StackPane {
 
 	private static final String FONT_PATH = "/ThaleahFat.ttf";
 	private static final String BOSS_GIF_PATH = "/images/boss/boss.gif";
@@ -27,8 +28,6 @@ public class CreateGameScreen extends VBox {
 	public CreateGameScreen(CreateGameHandler handler) {
 		getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
 
-		setSpacing(16);
-		setAlignment(Pos.CENTER);
 		setPadding(new Insets(40));
 		setStyle("""
 		-fx-background-image: url('/images/Millions_background.png');
@@ -38,11 +37,13 @@ public class CreateGameScreen extends VBox {
 
 		String fontFamily = loadFontFamily();
 
+		VBox contentBox = new VBox(16);
+		contentBox.setAlignment(Pos.CENTER);
+		contentBox.setFillWidth(false);
+
 		Label title = new Label("Opprett nytt spill");
 		title.setStyle("-fx-text-fill: white;");
 		title.setFont(Font.font(fontFamily, TITLE_FONT_SIZE));
-
-		ImageView bossImageView = createBossImageView();
 
 		TextField fileNameField = new TextField();
 		fileNameField.setPromptText("Filnavn (f.eks. slot1)");
@@ -63,10 +64,15 @@ public class CreateGameScreen extends VBox {
 		backButton.setPrefHeight(55);
 		backButton.setOnAction(e -> handler.onBack());
 
+		contentBox.getChildren().addAll(title, fileNameField, startButton, backButton);
+		getChildren().add(contentBox);
+		StackPane.setAlignment(contentBox, Pos.CENTER);
+
+		ImageView bossImageView = createBossImageView();
 		if (bossImageView != null) {
-			getChildren().addAll(title, bossImageView, fileNameField, startButton, backButton);
-		} else {
-			getChildren().addAll(title, fileNameField, startButton, backButton);
+			getChildren().add(bossImageView);
+			StackPane.setAlignment(bossImageView, Pos.BOTTOM_LEFT);
+			StackPane.setMargin(bossImageView, new Insets(0, 0, 10, 10));
 		}
 	}
 
@@ -79,7 +85,7 @@ public class CreateGameScreen extends VBox {
 		Image bossImage = new Image(gifStream);
 		ImageView bossImageView = new ImageView(bossImage);
 		bossImageView.setPreserveRatio(true);
-		bossImageView.setFitHeight(180);
+		bossImageView.setFitHeight(360);
 		bossImageView.setSmooth(true);
 		return bossImageView;
 	}
