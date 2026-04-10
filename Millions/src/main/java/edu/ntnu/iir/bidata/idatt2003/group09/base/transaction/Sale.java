@@ -25,7 +25,7 @@ public class Sale extends Transaction implements Serializable {
 
         player.addMoney(totalValue);
 
-        //store the transaction in the archive
+        player.getTransactionArchive().add(this);
 
         markCommited();
     }

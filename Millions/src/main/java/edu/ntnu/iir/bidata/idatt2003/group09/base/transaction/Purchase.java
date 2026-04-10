@@ -23,7 +23,7 @@ public class Purchase extends Transaction implements Serializable {
 
         player.getPortfolio().addShare(getShare());
 
-        //Store the transaction in the archive
+        player.getTransactionArchive().add(this);
 
         markCommited();
     }
