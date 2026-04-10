@@ -19,14 +19,14 @@
 }
 
 .newspaper-title {
-  -fx-font-size: 46px;
+  -fx-font-size: 56px;
   -fx-font-weight: 800;
   -fx-letter-spacing: 2px;
   -fx-text-fill: #1f2a44;
 }
 
 .newspaper-meta {
-  -fx-font-size: 12px;
+  -fx-font-size: 16px;
   -fx-font-weight: bold;
   -fx-text-fill: #2e3b5b;
 }
@@ -36,19 +36,19 @@
 }
 
 .global-headline {
-  -fx-font-size: 30px;
+  -fx-font-size: 40px;
   -fx-font-weight: 800;
   -fx-text-fill: #1f2a44;
 }
 
 .global-description {
-  -fx-font-size: 14px;
+  -fx-font-size: 20px;
   -fx-text-fill: #293757;
 }
 
 .section-title {
   -fx-padding: 8 0 4 0;
-  -fx-font-size: 18px;
+  -fx-font-size: 26px;
   -fx-font-weight: 800;
   -fx-alignment: center;
   -fx-text-fill: #1f2a44;
@@ -68,19 +68,19 @@
 }
 
 .article-ticker {
-  -fx-font-size: 11px;
+  -fx-font-size: 15px;
   -fx-font-weight: bold;
   -fx-text-fill: #4a5878;
 }
 
 .article-headline {
-  -fx-font-size: 16px;
+  -fx-font-size: 22px;
   -fx-font-weight: 800;
   -fx-text-fill: #1f2a44;
 }
 
 .article-description {
-  -fx-font-size: 13px;
+  -fx-font-size: 18px;
   -fx-text-fill: #2b3858;
 }
 
@@ -92,7 +92,7 @@
 }
 
 .newspaper-footer-text {
-  -fx-font-size: 11px;
+  -fx-font-size: 14px;
   -fx-font-weight: bold;
   -fx-text-fill: #2e3b5b;
 }
