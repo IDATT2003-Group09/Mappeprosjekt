@@ -5,7 +5,7 @@ import java.util.*;
 
 /**
  * EnhanceCSV allows adding tags to CSV files to create enhanced versions.
- * Preserves comments and headers, and appends tags to each data line.
+ * Preserves comments and headers, and appends one text tag to each data line.
  */
 public class EnhanceCSV {
 
@@ -72,39 +72,23 @@ public class EnhanceCSV {
 
 
   /**
-   * Write the enhanced CSV to a new file with random tags applied to each stock.
-   * Each stock gets a random subset of available tags.
+   * Write the enhanced CSV to a new file with one random text tag applied to each stock.
    *
    * @param outputFilePath the path where the enhanced CSV will be written
-   * @param maxTagsPerStock the maximum number of tags to randomly apply to each stock
+   * @param maxTagsPerStock kept for compatibility; only one tag is written per row
    */
   public void writeEnhancedCsv(String outputFilePath, int maxTagsPerStock) {
     try (PrintWriter writer = new PrintWriter(new FileWriter(outputFilePath))) {
-      // Write comments
       for (String comment : comments) {
         writer.println(comment);
       }
 
-      // Write header with tag columns
-      writer.print(header);
-      for (int i = 1; i <= availableTags.size(); i++) {
-        writer.print(",Tag_" + i);
-      }
-      writer.println();
+      writer.println(header + ",Tag");
 
-      // Write data lines with randomly selected tags as 1/0 values
       for (String[] dataLine : dataLines) {
         writer.print(String.join(",", dataLine));
-
-        // Generate random tags for this stock
-        List<String> randomTags = getRandomTags(maxTagsPerStock);
-        Set<String> selectedTags = new HashSet<>(randomTags);
-
-        // Write 1 if the tag is selected for this stock, else 0
-        for (String tag : availableTags) {
-          writer.print(selectedTags.contains(tag) ? ",1" : ",0");
-        }
-        writer.println();
+        writer.print(",");
+        writer.println(getRandomTag());
       }
 
       System.out.println("Enhanced CSV written to: " + outputFilePath);
@@ -114,26 +98,16 @@ public class EnhanceCSV {
   }
 
   /**
-   * Generate a random subset of tags.
+   * Generate one random tag.
    *
-   * @param maxTags the maximum number of tags to select
-   * @return a list of randomly selected tags
+   * @return one randomly selected tag, or an empty string if none are available
    */
-  private List<String> getRandomTags(int maxTags) {
+  private String getRandomTag() {
     if (availableTags.isEmpty()) {
-      return new ArrayList<>();
+      return "";
     }
 
-    int boundedMax = Math.min(maxTags, availableTags.size());
-    if (boundedMax <= 0) {
-      return new ArrayList<>();
-    }
-
-    int numTags = random.nextInt(boundedMax) + 1;
-    List<String> shuffled = new ArrayList<>(availableTags);
-    Collections.shuffle(shuffled, random);
-    
-    return shuffled.subList(0, numTags);
+    return availableTags.get(random.nextInt(availableTags.size()));
   }
 
   /**
