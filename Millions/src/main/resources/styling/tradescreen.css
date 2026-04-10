@@ -135,13 +135,14 @@
 
 .trade-screen .trade-stock-list .virtual-flow .scroll-bar:vertical,
 .trade-screen .trade-stock-list .virtual-flow .scroll-bar:horizontal {
-	-fx-background-color: #0d1834;
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
+	-fx-opacity: 0;
+	-fx-padding: 0;
 }
 
 .trade-screen .trade-stock-list .scroll-bar .thumb {
-	-fx-background-color: #1b4b81;
-	-fx-background-insets: 2;
-	-fx-background-radius: 2;
+	-fx-background-color: transparent;
 }
 
 .trade-screen .trade-stock-list .stock-list-symbol {
