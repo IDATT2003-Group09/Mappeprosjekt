@@ -41,6 +41,7 @@ public class TradeScreen extends BorderPane {
     private final Label requirementLabel;
     private final ProgressBar progressBar;
     private final Label levelUpLabel;
+    private final Label deadlineLabel;
     private int lastLevel = 1;
 
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
@@ -75,6 +76,7 @@ public class TradeScreen extends BorderPane {
         requirementLabel = new Label();
         progressBar = new ProgressBar();
         levelUpLabel = new Label();
+        deadlineLabel = new Label();
 
         buildLayout();
         refreshInfo();
@@ -118,6 +120,8 @@ public class TradeScreen extends BorderPane {
                 requirementLabel,
                 progressBar,
                 levelUpLabel,
+                deadlineLabel,
+
                 infoBox,
                 controls,
                 statusLabel
@@ -212,6 +216,8 @@ public class TradeScreen extends BorderPane {
         netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetWorth()));
         holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
         weekLabel.setText("Week: " + controller.getWeek());
+        deadlineLabel.setText("Deadline in: " + controller.getProgress()
+                .getWeeksUntilDeadline() + " weeks");
 
         var progress = controller.getProgress();
         var player = controller.getPlayer();
