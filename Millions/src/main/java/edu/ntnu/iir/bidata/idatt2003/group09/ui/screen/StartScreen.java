@@ -1,17 +1,11 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
-import java.io.IOException;
-import java.io.InputStream;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 public class StartScreen extends VBox {
-
-    private static final String START_SCREEN_FONT_PATH = "/ThaleahFat.ttf";
-    private static final double START_SCREEN_FONT_SIZE = 38;
 
     public interface StartHandler {
         void onNewGame();
@@ -42,13 +36,6 @@ public class StartScreen extends VBox {
         settingsBtn.getStyleClass().add("start-button");
         exitBtn.getStyleClass().add("start-button");
 
-        String fontFamily = loadStartScreenFontFamily();
-        Font startScreenFont = Font.font(fontFamily, START_SCREEN_FONT_SIZE);
-        newGameBtn.setFont(startScreenFont);
-        loadGameBtn.setFont(startScreenFont);
-        settingsBtn.setFont(startScreenFont);
-        exitBtn.setFont(startScreenFont);
-
         int buttonWidth = 400;
         int buttonHeight = 60;
         newGameBtn.setPrefWidth(buttonWidth);
@@ -65,22 +52,5 @@ public class StartScreen extends VBox {
         exitBtn.setOnAction(e -> System.exit(0));
 
         getChildren().addAll(newGameBtn, loadGameBtn, settingsBtn, exitBtn);
-    }
-
-    private String loadStartScreenFontFamily() {
-        try (InputStream fontStream = getClass().getResourceAsStream(START_SCREEN_FONT_PATH)) {
-            if (fontStream == null) {
-                return Font.getDefault().getFamily();
-            }
-
-            Font loadedFont = Font.loadFont(fontStream, START_SCREEN_FONT_SIZE);
-            if (loadedFont != null) {
-                return loadedFont.getFamily();
-            }
-        } catch (IOException e) {
-            return Font.getDefault().getFamily();
-        }
-
-        return Font.getDefault().getFamily();
     }
 }

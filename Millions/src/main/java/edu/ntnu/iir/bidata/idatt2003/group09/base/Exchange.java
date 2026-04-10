@@ -32,6 +32,7 @@ public class Exchange implements Serializable {
     setName(name);
     stockMap = new HashMap<>();
     setStockMap(stocks);
+    generatePendingNews();
   }
 
   /**
@@ -195,32 +196,41 @@ public class Exchange implements Serializable {
 
   /**
    * Advances the market by one week
-   * Applies last weeks news to this weeks price
-   * Generates new news for this week, to be used in next weeks price
+   * Applies currently pending news to this week's prices
+   * Generates new pending news that will affect next week
    */
   public void advance() {
-      NewsPaper activeNewsPaper = NewsPaper.create(eventFactory, getStocks(), random);
+      NewsPaper activeNewsPaper = pendingNewsPaper;
+
+      if (activeNewsPaper == null) {
+        generatePendingNews();
+        activeNewsPaper = pendingNewsPaper;
+      }
 
       for (Stock stock : stockMap.values()) {
         BigDecimal newPrice = PriceGenerator.nextWeekPrice(stock, activeNewsPaper);
           stock.addNewSalesPrice(newPrice);
       }
 
-        pendingNewsPaper = activeNewsPaper;
-          pendingNews = new MarketNews(
-          activeNewsPaper.getGlobalEvent().getHeadline(),
-          activeNewsPaper.getGlobalEvent().getDescription(),
-              "ALL",
-          activeNewsPaper.getGlobalEvent().getAverageImpact()
-          );
+      generatePendingNews();
 
-          if (pendingNews != null) {
-            System.out.println("Week " + week + " NEWS: " + pendingNews.getHeadline());
-            for (StockSpecificEvent event : activeNewsPaper.getStockSpecificEvents()) {
-              System.out.println(" - " + event.getGeneratedHeadline());
-            }
+      if (pendingNews != null) {
+        System.out.println("Week " + week + " UPCOMING NEWS: " + pendingNews.getHeadline());
+        for (StockSpecificEvent event : pendingNewsPaper.getStockSpecificEvents()) {
+          System.out.println(" - " + event.getGeneratedHeadline());
+        }
       }
 
       week++;
+  }
+
+  private void generatePendingNews() {
+    pendingNewsPaper = NewsPaper.create(eventFactory, getStocks(), random);
+    pendingNews = new MarketNews(
+        pendingNewsPaper.getGlobalEvent().getHeadline(),
+        pendingNewsPaper.getGlobalEvent().getDescription(),
+        "ALL",
+        pendingNewsPaper.getGlobalEvent().getAverageImpact()
+    );
   }
 }

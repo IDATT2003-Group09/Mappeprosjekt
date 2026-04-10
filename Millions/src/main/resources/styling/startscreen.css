@@ -1,4 +1,11 @@
+@font-face {
+	font-family: "ThaleahFat";
+	src: url("/ThaleahFat.ttf");
+}
+
 .start-button {
+	-fx-font-family: "ThaleahFat";
+	-fx-font-size: 38px;
 	-fx-background-color: rgba(23, 23, 28, 0.85);
 	-fx-text-fill: #f5f5f5;
 	-fx-border-color: #f5f5f5;
