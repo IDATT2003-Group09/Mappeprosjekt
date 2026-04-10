@@ -46,8 +46,7 @@ public class GameController {
 
             boolean success = progress.meetsRequirement(
                     player.getNetWorth(),
-                    player.getStartingMoney()
-            );
+                    player.getStartingMoney());
 
             if (!success) {
                 if (onGameOver != null) {
@@ -56,8 +55,12 @@ public class GameController {
                 return;
             }
 
-            progress.advanceLevel();
+            progress.advanceCheckpoint(
+                    player.getNetWorth(),
+                    player.getStartingMoney()
+            );
         }
+
         exchange.advance();
         saveGame();
     }
