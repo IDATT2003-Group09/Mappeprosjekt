@@ -216,19 +216,26 @@ public class TradeScreen extends BorderPane {
         netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetWorth()));
         holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
         weekLabel.setText("Week: " + controller.getWeek());
-        deadlineLabel.setText("Deadline in: " + controller.getProgress()
-                .getWeeksUntilDeadline() + " weeks");
 
         var progress = controller.getProgress();
         var player = controller.getPlayer();
+
+        int currentLevel = progress.getCurrentLevelNumber(
+                player.getNetWorth(),
+                player.getStartingMoney()
+        );
+
+        deadlineLabel.setText("Deadline in: " +
+                progress.getWeeksUntilDeadline() + " weeks");
 
         BigDecimal growth = player.getNetWorth()
                 .subtract(player.getStartingMoney())
                 .divide(player.getStartingMoney(), 4, RoundingMode.HALF_UP);
 
-        BigDecimal required = progress.getCurrentLevel().getRequiredGrowth();
+        BigDecimal required = progress.getBaseRequirement()
+                .multiply(BigDecimal.valueOf(currentLevel));
 
-        levelLabel.setText("Level " + progress.getCurrentLevelNumber());
+        levelLabel.setText("Level " + currentLevel);
 
         requirementLabel.setText("Required: " +
                 required.multiply(BigDecimal.valueOf(100))
@@ -240,17 +247,14 @@ public class TradeScreen extends BorderPane {
                     .divide(required, 4, RoundingMode.HALF_UP)
                     .doubleValue();
         }
-
         progressBar.setProgress(Math.min(progressValue, 1.0));
-
-        int currentLevel = progress.getCurrentLevelNumber();
 
         if (currentLevel > lastLevel) {
             levelUpLabel.setText("Level Up! Now level " + currentLevel);
 
             new Thread(() -> {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException ignored) {}
 
                 Platform.runLater(() -> levelUpLabel.setText(""));
