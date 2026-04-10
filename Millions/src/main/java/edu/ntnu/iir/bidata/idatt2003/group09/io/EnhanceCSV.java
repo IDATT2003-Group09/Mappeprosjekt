@@ -5,7 +5,7 @@ import java.util.*;
 
 /**
  * EnhanceCSV allows adding tags to CSV files to create enhanced versions.
- * Preserves comments and headers, and appends one text tag to each data line.
+ * Preserves comments and headers, and appends one text tag and one volatility score to each data line.
  */
 public class EnhanceCSV {
 
@@ -15,6 +15,7 @@ public class EnhanceCSV {
   private List<String[]> dataLines;
   private List<String> availableTags;
   private Random random;
+  private static int maxVolatility = 7;
 
   public EnhanceCSV(String filePath, List<String> availableTags) {
     this.filePath = filePath;
@@ -69,10 +70,28 @@ public class EnhanceCSV {
     }
   }
 
-
+  /**
+   * Set the maximum volatility score used when writing the enhanced CSV.
+   *
+   * @param maxVolatility the maximum allowed volatility score, must be greater than zero
+   */
+  public void setMaxVolatility(int maxVolatility) {
+    if (maxVolatility <= 0) {
+      throw new IllegalArgumentException("maxVolatility must be greater than zero");
+    }
+    EnhanceCSV.maxVolatility = maxVolatility;
+  }
 
   /**
-   * Write the enhanced CSV to a new file with one random text tag applied to each stock.
+   * Get the maximum volatility score.
+   *
+   * @return the maximum volatility score
+   */
+  public int getMaxVolatility() {
+    return maxVolatility;
+  }
+  /**
+  * Write the enhanced CSV to a new file with one random text tag and volatility score applied to each stock.
    *
    * @param outputFilePath the path where the enhanced CSV will be written
    * @param maxTagsPerStock kept for compatibility; only one tag is written per row
@@ -83,12 +102,14 @@ public class EnhanceCSV {
         writer.println(comment);
       }
 
-      writer.println(header + ",Tag");
+      writer.println(header + ",Tag,Volatility");
 
       for (String[] dataLine : dataLines) {
         writer.print(String.join(",", dataLine));
         writer.print(",");
-        writer.println(getRandomTag());
+        writer.print(getRandomTag());
+        writer.print(",");
+        writer.println(getRandomVolatility());
       }
 
       System.out.println("Enhanced CSV written to: " + outputFilePath);
@@ -108,6 +129,15 @@ public class EnhanceCSV {
     }
 
     return availableTags.get(random.nextInt(availableTags.size()));
+  }
+
+  /**
+   * Generate one random volatility score.
+   *
+   * @return a random volatility score from 1 to maxVolatility
+   */
+  private int getRandomVolatility() {
+    return random.nextInt(maxVolatility) + 1;
   }
 
   /**
