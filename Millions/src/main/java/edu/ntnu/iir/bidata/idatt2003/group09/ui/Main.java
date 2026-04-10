@@ -14,6 +14,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.StartScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.TradeScreen;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -35,6 +36,9 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.*;
  */
 public class Main extends Application {
 
+    private static final double DESIGN_WIDTH = 1100;
+    private static final double DESIGN_HEIGHT = 700;
+
     private BorderPane root;
 
     /**
@@ -45,10 +49,26 @@ public class Main extends Application {
         primaryStage.setTitle("Millions - A Stock Trading Game");
 
         root = new BorderPane();
+        root.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
+        root.setMinSize(DESIGN_WIDTH, DESIGN_HEIGHT);
+        root.setMaxSize(DESIGN_WIDTH, DESIGN_HEIGHT);
 
         showStartScreen();
 
-        Scene scene = new Scene(root, 1100, 700);
+        StackPane viewport = new StackPane(root);
+        viewport.setStyle("-fx-background-color: #202020;");
+
+        Scene scene = new Scene(viewport, DESIGN_WIDTH, DESIGN_HEIGHT);
+
+        root.scaleXProperty().bind(
+            Bindings.createDoubleBinding(
+                () -> Math.min(scene.getWidth() / DESIGN_WIDTH, scene.getHeight() / DESIGN_HEIGHT),
+                scene.widthProperty(),
+                scene.heightProperty()
+            )
+        );
+        root.scaleYProperty().bind(root.scaleXProperty());
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
