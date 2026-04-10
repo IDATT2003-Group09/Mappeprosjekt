@@ -6,7 +6,6 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.ChatBubble;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -45,15 +44,40 @@ public class CreateGameScreen extends StackPane {
 
 		TextField fileNameField = new TextField();
 		fileNameField.setPromptText("");
-		fileNameField.setMaxWidth(450);
-		fileNameField.setPrefHeight(50);
+		fileNameField.setMaxWidth(250);
+		fileNameField.setPrefHeight(38);
+		fileNameField.setFont(Font.font(fontFamily, 22));
+		fileNameField.setAlignment(Pos.CENTER);
+		fileNameField.setStyle("""
+			-fx-background-color: transparent;
+			-fx-background-insets: 0;
+			-fx-background-radius: 0;
+			-fx-border-color: transparent;
+			-fx-border-width: 0;
+			-fx-text-fill: #111111;
+			-fx-highlight-fill: #ffd447;
+			-fx-highlight-text-fill: #111111;
+		""");
 
-		Button startButton = new Button("Start");
+		StackPane inputBubble = new StackPane(fileNameField);
+		inputBubble.setPadding(new Insets(12, 16, 12, 16));
+		inputBubble.setMinWidth(220);
+		inputBubble.setMaxWidth(280);
+		inputBubble.setStyle("""
+			-fx-background-color: #f5f5f5;
+			-fx-border-color: #111111;
+			-fx-border-width: 3px;
+			-fx-background-radius: 0;
+			-fx-border-radius: 0;
+		""");
+
+		Button startButton = new Button("Confirm");
 		startButton.getStyleClass().add("start-button");
 		startButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
 		startButton.setPrefWidth(450);
 		startButton.setPrefHeight(55);
 		startButton.setOnAction(e -> handler.onCreateGame(fileNameField.getText()));
+		fileNameField.setOnAction(e -> handler.onCreateGame(fileNameField.getText()));
 
 		Button backButton = new Button("Back");
 		backButton.getStyleClass().add("start-button");
@@ -62,7 +86,7 @@ public class CreateGameScreen extends StackPane {
 		backButton.setPrefHeight(55);
 		backButton.setOnAction(e -> handler.onBack());
 
-		contentBox.getChildren().addAll(fileNameField, startButton, backButton);
+		contentBox.getChildren().addAll(inputBubble, startButton, backButton);
 		getChildren().add(contentBox);
 		StackPane.setAlignment(contentBox, Pos.CENTER);
 
@@ -72,10 +96,12 @@ public class CreateGameScreen extends StackPane {
 			StackPane.setAlignment(bossImageView, Pos.BOTTOM_LEFT);
 			StackPane.setMargin(bossImageView, new Insets(0, 0, -90, -70));
 
-			ChatBubble bossBubble = new ChatBubble("Hey you! What's your name.", fontFamily);
+			ChatBubble bossBubble = new ChatBubble("Hey you! What's your name?", fontFamily);
 			getChildren().add(bossBubble);
 			StackPane.setAlignment(bossBubble, Pos.BOTTOM_LEFT);
-			StackPane.setMargin(bossBubble, new Insets(0, 0, -250, 50));
+			StackPane.setMargin(bossBubble, new Insets(0, 0, 250, 50));
+
+			fileNameField.requestFocus();
 		}
 	}
 

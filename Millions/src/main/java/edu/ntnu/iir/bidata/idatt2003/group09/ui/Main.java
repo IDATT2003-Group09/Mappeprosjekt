@@ -7,7 +7,6 @@ import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
-import edu.ntnu.iir.bidata.idatt2003.group09.io.TagsFactory;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.CreateGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.LoadGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
@@ -98,8 +97,8 @@ public class Main extends Application {
     private void showCreateGameScreen() {
         CreateGameScreen createGameScreen = new CreateGameScreen(new CreateGameScreen.CreateGameHandler() {
             @Override
-            public void onCreateGame(String fileName) {
-                startNewGame(fileName);
+            public void onCreateGame(String playerName) {
+                startNewGame(playerName);
             }
 
             @Override
@@ -130,11 +129,11 @@ public class Main extends Application {
         root.setCenter(loadGameScreen);
     }
 
-    private void startNewGame(String fileName) {
+    private void startNewGame(String playerName) {
         try {
-            String normalizedSaveFileName = SaveManager.normalizeSaveFileName(fileName);
+            String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName);
             List<Stock> stocks = StockCsvReader.readDefaultResource();
-            Player player = new Player("Trader", new BigDecimal("100000"));
+            Player player = new Player(playerName, new BigDecimal("100000"));
             Exchange exchange = new Exchange("Main Exchange", stocks);
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
