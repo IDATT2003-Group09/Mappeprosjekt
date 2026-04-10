@@ -2,14 +2,14 @@ package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Purchase;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Sale;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.EventFactory;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.StockSpecificEvent;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Transaction;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.TransactionFactory;
 
@@ -18,9 +18,10 @@ public class Exchange implements Serializable {
   private String name;
   private int week;
   private Map<String, Stock> stockMap;
-  private Random random;
   private MarketNews pendingNews;
-  private final NewsGenerator newsGenerator = new NewsGenerator();
+  private NewsPaper pendingNewsPaper;
+  private final EventFactory eventFactory = new EventFactory();
+  private final Random random = new Random();
 
   /**
    * uses setters to validate input
@@ -28,10 +29,10 @@ public class Exchange implements Serializable {
    * @param stocks
    */
   public Exchange(String name, List<Stock> stocks) {
-    random = new Random();
     setName(name);
     stockMap = new HashMap<>();
     setStockMap(stocks);
+    generatePendingNews();
   }
 
   /**
@@ -145,6 +146,10 @@ public class Exchange implements Serializable {
         return pendingNews;
     }
 
+    public NewsPaper getPendingNewsPaper() {
+      return pendingNewsPaper;
+    }
+
   /**
    * searches for stock with symbol or company name matching searchterm
    * @param searchTerm
@@ -191,50 +196,41 @@ public class Exchange implements Serializable {
 
   /**
    * Advances the market by one week
-   * Applies last weeks news to this weeks price
-   * Generates new news for this week, to be used in next weeks price
+   * Applies currently pending news to this week's prices
+   * Generates new pending news that will affect next week
    */
   public void advance() {
-      MarketNews activeNews = pendingNews;
+      NewsPaper activeNewsPaper = pendingNewsPaper;
+
+      if (activeNewsPaper == null) {
+        generatePendingNews();
+        activeNewsPaper = pendingNewsPaper;
+      }
 
       for (Stock stock : stockMap.values()) {
-          BigDecimal currentPrice = stock.getSalesPrice();
-
-          BigDecimal randomPrice = PriceGenerator.nextWeekPrice(stock);
-
-          BigDecimal randomChange = randomPrice
-                  .subtract(currentPrice)
-                  .divide(currentPrice, 6, RoundingMode.HALF_UP);
-
-          BigDecimal eventImpact = BigDecimal.ZERO;
-          if (activeNews != null) {
-              if (activeNews.getSector().equalsIgnoreCase("ALL") ||
-              stock.getSector().equalsIgnoreCase(activeNews.getSector())) {
-                  eventImpact = activeNews.getImpact();
-              }
-          }
-
-          if (eventImpact.compareTo(BigDecimal.ZERO) != 0) {
-              BigDecimal riskFactor = BigDecimal.valueOf(stock.getRisk())
-                      .divide(BigDecimal.valueOf(4), 2, RoundingMode.HALF_UP);
-
-              eventImpact = eventImpact.multiply(riskFactor);
-          }
-
-          BigDecimal totalChange = randomChange.add(eventImpact);
-
-          BigDecimal newPrice = currentPrice.multiply(BigDecimal.ONE.add(totalChange));
-
+        BigDecimal newPrice = PriceGenerator.nextWeekPrice(stock, activeNewsPaper);
           stock.addNewSalesPrice(newPrice);
       }
 
-      MarketNews newNews = newsGenerator.getRandomNews();
-      pendingNews = newNews;
+      generatePendingNews();
 
-      if (newNews != null) {
-          System.out.println("Week " + week + " NEWS: " + newNews.getHeadline());
+      if (pendingNews != null) {
+        System.out.println("Week " + week + " UPCOMING NEWS: " + pendingNews.getHeadline());
+        for (StockSpecificEvent event : pendingNewsPaper.getStockSpecificEvents()) {
+          System.out.println(" - " + event.getGeneratedHeadline());
+        }
       }
 
       week++;
+  }
+
+  private void generatePendingNews() {
+    pendingNewsPaper = NewsPaper.create(eventFactory, getStocks(), random);
+    pendingNews = new MarketNews(
+        pendingNewsPaper.getGlobalEvent().getHeadline(),
+        pendingNewsPaper.getGlobalEvent().getDescription(),
+        "ALL",
+        pendingNewsPaper.getGlobalEvent().getAverageImpact()
+    );
   }
 }

@@ -4,30 +4,39 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.EnhanceCSV;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.TagsFactory;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.CreateGameScreen;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.LoadGameScreen;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.StartScreen;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.TradeScreen;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.*;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-
-import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 
 
-public class MainUI extends Application {
+/**
+ * Main entry point for the Millions stock trading game application.
+ */
+public class Main extends Application {
 
     private BorderPane root;
+
     /**
      * Starts the JavaFX application. Initializes the exchange, player, and trade screen, and sets up the main stage.
      */
@@ -67,7 +76,7 @@ public class MainUI extends Application {
     }
 
     private void showCreateGameScreen() {
-        CreateGameScree createGameScreen = new CreateGameScree(new CreateGameScree.CreateGameHandler() {
+        CreateGameScreen createGameScreen = new CreateGameScreen(new CreateGameScreen.CreateGameHandler() {
             @Override
             public void onCreateGame(String fileName) {
                 startNewGame(fileName);
@@ -141,7 +150,7 @@ public class MainUI extends Application {
 
     private void setupGameUI(GameController controller, List<Stock> stocks) {
 
-        tradeScreen tradeScreen = new tradeScreen(controller, stocks, this::showStartScreen);
+        TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
 
@@ -172,9 +181,12 @@ public class MainUI extends Application {
 
     /**
      * write mvn javafx:run to run this method that starts the application
+     *
      * @param args
      */
     public static void main(String[] args) {
+        TagsFactory tagsFactory = new TagsFactory();
+        tagsFactory.enhanceCsv("sp500Standard.csv", "sp500Enhanced.csv");
         launch(args);
     }
 }

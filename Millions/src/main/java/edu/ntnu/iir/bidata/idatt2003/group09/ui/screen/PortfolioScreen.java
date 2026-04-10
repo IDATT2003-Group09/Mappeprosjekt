@@ -1,6 +1,5 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.PortfolioRow;
 

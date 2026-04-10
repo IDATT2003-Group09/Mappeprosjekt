@@ -1,0 +1,110 @@
+@font-face {
+  font-family: "ThaleahFat";
+  src: url("/ThaleahFat.ttf");
+}
+
+.newspaper-root {
+  -fx-font-family: "ThaleahFat";
+  -fx-background-color: #f4f0e6;
+  -fx-border-color: #1f2a44;
+  -fx-border-width: 2;
+  -fx-padding: 18;
+}
+
+.newspaper-header {
+  -fx-alignment: center;
+  -fx-padding: 8 0 10 0;
+  -fx-border-color: transparent transparent #1f2a44 transparent;
+  -fx-border-width: 0 0 3 0;
+}
+
+.rule-line {
+  -fx-pref-height: 2;
+  -fx-background-color: #1f2a44;
+  -fx-padding: 0;
+}
+
+.rule-line-thick {
+  -fx-pref-height: 4;
+  -fx-background-color: #1f2a44;
+  -fx-padding: 0;
+}
+
+.newspaper-title {
+  -fx-font-size: 56px;
+  -fx-font-weight: 800;
+  -fx-letter-spacing: 2px;
+  -fx-text-fill: #1f2a44;
+}
+
+.newspaper-meta {
+  -fx-font-size: 16px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2e3b5b;
+}
+
+.newspaper-body {
+  -fx-padding: 16 6 14 6;
+}
+
+.global-headline {
+  -fx-font-size: 40px;
+  -fx-font-weight: 800;
+  -fx-text-fill: #1f2a44;
+}
+
+.global-description {
+  -fx-font-size: 20px;
+  -fx-text-fill: #293757;
+}
+
+.section-title {
+  -fx-padding: 8 0 4 0;
+  -fx-font-size: 26px;
+  -fx-font-weight: 800;
+  -fx-alignment: center;
+  -fx-text-fill: #1f2a44;
+  -fx-border-color: #1f2a44 transparent #1f2a44 transparent;
+  -fx-border-width: 2 0 2 0;
+}
+
+.articles-grid {
+  -fx-padding: 4 0 0 0;
+}
+
+.article-card {
+  -fx-background-color: transparent;
+  -fx-border-color: #1f2a44;
+  -fx-border-width: 0 1 0 0;
+  -fx-padding: 8 12 6 0;
+}
+
+.article-ticker {
+  -fx-font-size: 15px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #4a5878;
+}
+
+.article-headline {
+  -fx-font-size: 22px;
+  -fx-font-weight: 800;
+  -fx-text-fill: #1f2a44;
+}
+
+.article-description {
+  -fx-font-size: 18px;
+  -fx-text-fill: #2b3858;
+}
+
+.newspaper-footer {
+  -fx-alignment: center;
+  -fx-padding: 10 0 2 0;
+  -fx-border-color: #1f2a44 transparent transparent transparent;
+  -fx-border-width: 2 0 0 0;
+}
+
+.newspaper-footer-text {
+  -fx-font-size: 14px;
+  -fx-font-weight: bold;
+  -fx-text-fill: #2e3b5b;
+}

@@ -5,7 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.GlobalEvent;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.StockSpecificEvent;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,5 +129,31 @@ public class ExchangeTest {
       exchange.advance();
 
       assertEquals(oldSize + 1, apple.getHistoricalPrices().size());
+    }
+
+    @Test
+    void advance_clampsPriceToMinimumWhenCombinedImpactIsTooNegative() throws Exception {
+      Stock riskyStock = new Stock("RISK", "Risky Inc", new BigDecimal("100.00"), "tech", 7);
+      Exchange extremeExchange = new Exchange("TestExchange", List.of(riskyStock));
+
+      GlobalEvent crashEvent = new GlobalEvent("Market Crash", "Extreme downturn");
+      crashEvent.addEventData("tech", new BigDecimal("-0.90"));
+
+      StockSpecificEvent specificEvent1 =
+        new StockSpecificEvent("A", "A", new BigDecimal("-0.25")).createForStock(riskyStock);
+      StockSpecificEvent specificEvent2 =
+        new StockSpecificEvent("B", "B", new BigDecimal("-0.25")).createForStock(riskyStock);
+      StockSpecificEvent specificEvent3 =
+        new StockSpecificEvent("C", "C", new BigDecimal("-0.25")).createForStock(riskyStock);
+
+      NewsPaper extremeNewsPaper =
+        new NewsPaper(crashEvent, List.of(specificEvent1, specificEvent2, specificEvent3));
+
+      Field pendingNewsPaperField = Exchange.class.getDeclaredField("pendingNewsPaper");
+      pendingNewsPaperField.setAccessible(true);
+      pendingNewsPaperField.set(extremeExchange, extremeNewsPaper);
+
+      assertDoesNotThrow(extremeExchange::advance);
+      assertTrue(riskyStock.getSalesPrice().compareTo(new BigDecimal("0.01")) >= 0);
     }
 }
