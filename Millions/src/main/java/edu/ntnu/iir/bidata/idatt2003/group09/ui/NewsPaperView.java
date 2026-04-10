@@ -25,7 +25,6 @@ public class NewsPaperView extends BorderPane {
 		setPadding(new Insets(14));
 
 		setCenter(buildBody(week, newsPaper));
-		setBottom(buildFooter());
 	}
 
 	private VBox buildMasthead(int week) {
@@ -61,12 +60,17 @@ public class NewsPaperView extends BorderPane {
 		globalDescription.getStyleClass().add("global-description");
 		globalDescription.setWrapText(true);
 
+		Region leftPageSpacer = new Region();
+		VBox.setVgrow(leftPageSpacer, Priority.ALWAYS);
+
 		VBox leftPage = new VBox(10,
 				buildMasthead(week),
 				leftPageTitle,
 				createRuleLine(false),
 				globalHeadline,
-				globalDescription
+				globalDescription,
+				leftPageSpacer,
+				buildPageFooter()
 		);
 		leftPage.getStyleClass().addAll("newspaper-page", "left-page");
 		leftPage.setMaxWidth(Double.MAX_VALUE);
@@ -83,10 +87,15 @@ public class NewsPaperView extends BorderPane {
 			rightPageArticles.getChildren().add(buildArticleCard(event));
 		}
 
+		Region rightPageSpacer = new Region();
+		VBox.setVgrow(rightPageSpacer, Priority.ALWAYS);
+
 		VBox rightPage = new VBox(10,
 				rightPageTitle,
 				createRuleLine(false),
-				rightPageArticles
+				rightPageArticles,
+				rightPageSpacer,
+				buildPageFooter()
 		);
 		rightPage.getStyleClass().addAll("newspaper-page", "right-page");
 		rightPage.setMaxWidth(Double.MAX_VALUE);
@@ -143,11 +152,11 @@ public class NewsPaperView extends BorderPane {
 		return card;
 	}
 
-	private HBox buildFooter() {
+	private HBox buildPageFooter() {
 		Label footerText = new Label("THE MARKET GAZETTE • ALL THE NEWS WORTH TRADING • 2026");
 		footerText.getStyleClass().add("newspaper-footer-text");
 		HBox footer = new HBox(footerText);
-		footer.getStyleClass().add("newspaper-footer");
+		footer.getStyleClass().addAll("newspaper-footer", "page-footer");
 		return footer;
 	}
 
