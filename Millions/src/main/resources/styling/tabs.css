@@ -1,0 +1,75 @@
+@font-face {
+	font-family: "ThaleahFat";
+	src: url("/ThaleahFat.ttf");
+}
+
+.game-tabs {
+	-fx-font-family: "ThaleahFat";
+	-fx-background-color: linear-gradient(to bottom right, #070f2a, #020716);
+}
+
+.game-tabs > .tab-header-area {
+	-fx-padding: 6 10 0 10;
+	-fx-background-color: #0a132d;
+}
+
+.game-tabs > .tab-header-area > .tab-header-background {
+	-fx-background-color: #0a132d;
+	-fx-border-color: transparent transparent #1a355c transparent;
+	-fx-border-width: 0 0 1 0;
+}
+
+.game-tabs > .tab-header-area .headers-region {
+	-fx-spacing: 6;
+}
+
+.game-tabs > .tab-header-area > .headers-region > .tab {
+	-fx-background-color: #12284a;
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 1;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+	-fx-padding: 4 14 4 14;
+}
+
+.game-tabs > .tab-header-area > .headers-region > .tab:hover {
+	-fx-background-color: #17345f;
+}
+
+.game-tabs > .tab-header-area > .headers-region > .tab:selected {
+	-fx-background-color: #0f1f42;
+	-fx-border-color: #00e4ff;
+}
+
+.game-tabs > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
+	-fx-text-fill: #9cb6db;
+	-fx-font-size: 21px;
+}
+
+.game-tabs > .tab-header-area > .headers-region > .tab:selected > .tab-container > .tab-label {
+	-fx-text-fill: #00e4ff;
+	-fx-font-size: 22px;
+}
+
+.game-tabs > .tab-content-area {
+	-fx-background-color: transparent;
+	-fx-padding: 0;
+}
+
+.game-tabs > .tab-content-area > .tab-content {
+	-fx-background-color: transparent;
+}
+
+.game-tabs > .tab-header-area .control-buttons-tab {
+	-fx-background-color: #12284a;
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 1;
+}
+
+.game-tabs > .tab-header-area .tab-down-button {
+	-fx-background-color: transparent;
+}
+
+.game-tabs > .tab-header-area .tab-down-button .arrow {
+	-fx-background-color: #00e4ff;
+}
