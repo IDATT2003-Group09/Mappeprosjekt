@@ -58,6 +58,15 @@ public class Player implements Serializable {
     }
 
     /**
+     * Get method for starting money
+     *
+     * @return the starting money
+     */
+    public BigDecimal getStartingMoney() {
+        return startingMoney;
+    }
+
+    /**
      * Get method for the current money balance of the player
      *
      * @return the current amount of money
