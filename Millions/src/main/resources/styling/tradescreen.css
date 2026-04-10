@@ -1,0 +1,47 @@
+@font-face {
+	font-family: "ThaleahFat";
+	src: url("/ThaleahFat.ttf");
+}
+
+.trade-screen {
+	font-family: "ThaleahFat";
+	font-size: 22px;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-size: 22px;
+	-fx-background-color:rgb(255, 255, 255);
+}
+
+.trade-screen .label,
+.trade-screen .button,
+.trade-screen .text-field,
+.trade-screen .table-view,
+.trade-screen .table-view .column-header .label,
+.trade-screen .tab-pane .tab .tab-label {
+	font-family: "ThaleahFat";
+	font-size: 22px;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-size: 22px;
+}
+
+.trade-screen .button {
+	font-size: 22px;
+	-fx-font-size: 22px;
+}
+
+.trade-screen .text-field {
+	font-size: 22px;
+	-fx-font-size: 22px;
+}
+
+.trade-screen .table-view .cell,
+.trade-screen .table-view .column-header .label {
+	font-size: 20px;
+	-fx-font-size: 20px;
+}
+
+.trade-title {
+	font-size: 34px;
+	font-weight: bold;
+	-fx-font-size: 34px;
+	-fx-font-weight: bold;
+}
