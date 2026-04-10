@@ -7,10 +7,12 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockListView;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -38,6 +40,13 @@ public class TradeScreen extends BorderPane {
 
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
+
+    private final Label levelLabel;
+    private final Label requirementLabel;
+    private final ProgressBar progressBar;
+    private final Label levelUpLabel;
+    private final Label deadlineLabel;
+    private int lastLevel = 1;
 
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
         this.controller = controller;
@@ -69,6 +78,12 @@ public class TradeScreen extends BorderPane {
         holdingsLabel = new Label();
         netWorthLabel = new Label();
         weekLabel = new Label();
+
+        levelLabel = new Label();
+        requirementLabel = new Label();
+        progressBar = new ProgressBar();
+        levelUpLabel = new Label();
+        deadlineLabel = new Label();
 
         buildLayout();
         refreshInfo();
@@ -115,6 +130,12 @@ public class TradeScreen extends BorderPane {
 
         VBox headerBox = new VBox(
                 8,
+                levelLabel,
+                requirementLabel,
+                progressBar,
+                levelUpLabel,
+                deadlineLabel,
+
                 infoBox,
                 controls,
                 statusLabel
@@ -230,5 +251,50 @@ public class TradeScreen extends BorderPane {
         netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetWorth()));
         holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
         weekLabel.setText("Week: " + controller.getWeek());
+
+        var progress = controller.getProgress();
+        var player = controller.getPlayer();
+
+        int currentLevel = progress.getCurrentLevelNumber(
+                player.getNetWorth(),
+                player.getStartingMoney()
+        );
+
+        deadlineLabel.setText("Deadline in: " +
+                progress.getWeeksUntilDeadline() + " weeks");
+
+        BigDecimal growth = player.getNetWorth()
+                .subtract(player.getStartingMoney())
+                .divide(player.getStartingMoney(), 4, RoundingMode.HALF_UP);
+
+        BigDecimal required = progress.getBaseRequirement()
+                .multiply(BigDecimal.valueOf(currentLevel));
+
+        levelLabel.setText("Level " + currentLevel);
+
+        requirementLabel.setText("Next Target: : " +
+                currencyFormat.format(progress.getCurrentTarget()));
+
+        double progressValue = 0;
+        if (required.compareTo(BigDecimal.ZERO) > 0) {
+            progressValue = growth
+                    .divide(required, 4, RoundingMode.HALF_UP)
+                    .doubleValue();
+        }
+        progressBar.setProgress(Math.min(progressValue, 1.0));
+
+        if (currentLevel > lastLevel) {
+            levelUpLabel.setText("Level Up! Now level " + currentLevel);
+
+            new Thread(() -> {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ignored) {}
+
+                Platform.runLater(() -> levelUpLabel.setText(""));
+            }).start();
+
+            lastLevel = currentLevel;
+        }
     }
 }

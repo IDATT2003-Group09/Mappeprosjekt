@@ -170,6 +170,9 @@ public class Main extends Application {
 
     private void setupGameUI(GameController controller, List<Stock> stocks) {
 
+        controller.setOnGameOver(() -> {
+            root.setCenter(new GameOverScreen(this::showStartScreen));
+        });
         TabPane tabPane = new TabPane();
         tabPane.getStylesheets().add(getClass().getResource("/styling/tabs.css").toExternalForm());
         tabPane.getStyleClass().add("game-tabs");

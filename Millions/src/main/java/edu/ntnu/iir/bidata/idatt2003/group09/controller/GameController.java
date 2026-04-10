@@ -1,6 +1,7 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.*;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Game.GameProgress;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
@@ -16,6 +17,10 @@ public class GameController {
     private final Exchange exchange;
     private final Player player;
     private final String saveFileName;
+    private final GameProgress progress;
+
+    private Runnable onGameOver;
+    private static final BigDecimal baseRequirement = new BigDecimal("0.1");
 
     public GameController(Exchange exchange, Player player) {
         this(exchange, player, null);
@@ -25,14 +30,41 @@ public class GameController {
         this.exchange = exchange;
         this.player = player;
         this.saveFileName = saveFileName;
+        this.progress = new GameProgress(baseRequirement, player.getStartingMoney());
+    }
+
+    public void setOnGameOver(Runnable onGameOver) {
+        this.onGameOver = onGameOver;
     }
 
     //game flow
     public void nextWeek() {
         player.setLastWeekNetWorth(player.getNetWorth());
 
+        progress.nextWeek();
+
+        while (progress.meetsRequirement(player.getNetWorth())) {
+            progress.advanceCheckpoint();
+        }
+
+        if (progress.isQuarterComplete()) {
+
+            boolean success = progress.meetsRequirement(player.getNetWorth());
+
+            if (!success) {
+                if (onGameOver != null) {
+                    onGameOver.run();
+                }
+                return;
+            }
+        }
+
         exchange.advance();
         saveGame();
+    }
+
+    public GameProgress getProgress() {
+        return progress;
     }
 
     public void saveGame() {
