@@ -1,506 +1,506 @@
 # S&P 500 Companies by Market Cap
 # Ticker,Name,Price
 Ticker,Name,Price,Tag,Volatility
-NVDA,Nvidia,191.27,Telecom,7
-AAPL,Apple Inc.,276.43,Telecom,3
-MSFT,Microsoft,404.68,Materials,4
-AMZN,Amazon,204.62,Materials,7
-GOOGL,Alphabet Inc. (Class A),311.20,Energy,1
-GOOG,Alphabet Inc. (Class C),311.62,Energy,5
-META,Meta Platforms,669.41,Utilities,4
-AVGO,Broadcom,343.35,Materials,5
-TSLA,Tesla Inc.,426.52,Real Estate,3
-BRK.B,Berkshire Hathaway,501.05,Telecom,1
-WMT,Walmart,128.75,Materials,1
-LLY,Lilly (Eli),1014.43,Tech,4
-JPM,JPMorgan Chase,311.14,Finance,3
-XOM,ExxonMobil,155.28,Telecom,6
-V,Visa Inc.,329.54,Tech,2
-JNJ,Johnson & Johnson,240.70,Health,2
-MA,Mastercard,539.52,Consumer,4
-MU,Micron Technology,411.25,Energy,5
-ORCL,Oracle Corporation,157.08,Telecom,3
-COST,Costco,979.71,Finance,1
-BAC,Bank of America,54.06,Utilities,5
-ABBV,AbbVie,220.17,Telecom,2
-HD,Home Depot (The),389.46,Materials,5
-PG,Procter & Gamble,159.45,Energy,5
-CVX,Chevron Corporation,185.66,Real Estate,7
-CAT,Caterpillar Inc.,773.53,Materials,1
-AMD,Advanced Micro Devices,213.00,Energy,2
-CSCO,Cisco,85.82,Energy,4
-KO,Coca-Cola Company (The),78.51,Health,6
-NFLX,Netflix,79.94,Industrial,5
-GE,GE Aerospace,314.37,Telecom,6
-PLTR,Palantir Technologies,135.59,Tech,6
-LRCX,Lam Research,236.60,Utilities,4
-MRK,Merck & Co.,118.79,Finance,5
-PM,Philip Morris International,185.99,Materials,4
-GS,Goldman Sachs,949.29,Real Estate,4
+NVDA,Nvidia,191.27,Telecom,1
+AAPL,Apple Inc.,276.43,Finance,5
+MSFT,Microsoft,404.68,Health,4
+AMZN,Amazon,204.62,Energy,6
+GOOGL,Alphabet Inc. (Class A),311.20,Materials,7
+GOOG,Alphabet Inc. (Class C),311.62,Industrial,7
+META,Meta Platforms,669.41,Industrial,6
+AVGO,Broadcom,343.35,Consumer,1
+TSLA,Tesla Inc.,426.52,Energy,1
+BRK.B,Berkshire Hathaway,501.05,Health,1
+WMT,Walmart,128.75,Finance,4
+LLY,Lilly (Eli),1014.43,Consumer,4
+JPM,JPMorgan Chase,311.14,Real Estate,3
+XOM,ExxonMobil,155.28,Telecom,7
+V,Visa Inc.,329.54,Consumer,7
+JNJ,Johnson & Johnson,240.70,Energy,6
+MA,Mastercard,539.52,Energy,5
+MU,Micron Technology,411.25,Telecom,7
+ORCL,Oracle Corporation,157.08,Materials,3
+COST,Costco,979.71,Real Estate,4
+BAC,Bank of America,54.06,Real Estate,4
+ABBV,AbbVie,220.17,Real Estate,4
+HD,Home Depot (The),389.46,Industrial,6
+PG,Procter & Gamble,159.45,Tech,3
+CVX,Chevron Corporation,185.66,Energy,7
+CAT,Caterpillar Inc.,773.53,Energy,7
+AMD,Advanced Micro Devices,213.00,Consumer,1
+CSCO,Cisco,85.82,Utilities,3
+KO,Coca-Cola Company (The),78.51,Finance,2
+NFLX,Netflix,79.94,Utilities,5
+GE,GE Aerospace,314.37,Tech,1
+PLTR,Palantir Technologies,135.59,Finance,7
+LRCX,Lam Research,236.60,Utilities,5
+MRK,Merck & Co.,118.79,Materials,2
+PM,Philip Morris International,185.99,Consumer,2
+GS,Goldman Sachs,949.29,Tech,2
 MS,Morgan Stanley,176.86,Finance,4
-WFC,Wells Fargo,89.07,Health,3
-AMAT,Applied Materials,342.19,Finance,1
-RTX,RTX Corporation,197.56,Health,6
-IBM,IBM,273.86,Materials,6
-UNH,UnitedHealth Group,278.79,Materials,2
-AXP,American Express,355.18,Consumer,2
-INTC,Intel,47.85,Real Estate,5
-TMUS,T-Mobile US,207.62,Consumer,3
-PEP,PepsiCo,168.71,Materials,4
-MCD,McDonald's,323.50,Finance,1
-GEV,GE Vernova,822.50,Health,7
-LIN,Linde plc,466.04,Finance,1
-C,Citigroup,117.93,Tech,1
-TXN,Texas Instruments,226.34,Consumer,7
-VZ,Verizon,48.55,Industrial,2
-T,AT&T,28.21,Materials,2
-TMO,Thermo Fisher Scientific,525.00,Tech,6
-AMGN,Amgen,364.77,Industrial,5
-ABT,Abbott Laboratories,112.97,Health,4
-KLAC,KLA Corporation,1492.27,Tech,3
-GILD,Gilead Sciences,155.71,Tech,3
-DIS,Walt Disney Company (The),108.30,Industrial,2
-NEE,NextEra Energy,91.19,Energy,5
-BA,Boeing,236.98,Telecom,7
-ANET,Arista Networks,141.06,Energy,4
-APH,Amphenol,144.60,Consumer,7
-ISRG,Intuitive Surgical,496.14,Energy,1
-CRM,Salesforce,184.94,Utilities,2
-SCHW,Charles Schwab Corporation,95.50,Consumer,6
-BLK,BlackRock,1083.35,Tech,6
-TJX,TJX Companies,150.56,Health,2
-DE,Deere & Company,610.03,Finance,4
-ADI,Analog Devices,336.71,Real Estate,2
-LOW,Lowe's,286.57,Health,5
-PFE,Pfizer,27.77,Telecom,6
-UNP,Union Pacific Corporation,261.95,Health,5
-DHR,Danaher Corporation,219.80,Health,1
-APP,AppLovin Corporation,459.27,Materials,7
-HON,Honeywell,243.56,Energy,1
-ETN,Eaton Corporation,394.94,Energy,5
-QCOM,Qualcomm,141.90,Consumer,6
-UBER,Uber,70.72,Materials,3
-LMT,Lockheed Martin,630.54,Materials,7
-WELL,Welltower,208.65,Consumer,5
-ACN,Accenture,230.79,Utilities,5
-BKNG,Booking Holdings,4322.85,Utilities,3
-SYK,Stryker Corporation,362.53,Telecom,6
-COP,ConocoPhillips,110.75,Industrial,7
-NEM,Newmont,123.89,Energy,7
-COF,Capital One,214.93,Tech,1
-PLD,Prologis,140.35,Consumer,2
-MDT,Medtronic,100.87,Finance,5
-CB,Chubb Limited,328.82,Finance,7
-PH,Parker Hannifin,998.24,Finance,4
-PGR,Progressive Corporation,209.33,Materials,1
-BMY,Bristol Myers Squibb,60.18,Telecom,6
-HCA,HCA Healthcare,531.83,Consumer,2
-SPGI,S&P Global,396.65,Telecom,1
-CMCSA,Comcast,32.53,Materials,5
-VRTX,Vertex Pharmaceuticals,459.93,Real Estate,4
-MCK,McKesson Corporation,944.20,Tech,2
-PANW,Palo Alto Networks,165.49,Industrial,4
-GLW,Corning Inc.,134.16,Finance,6
+WFC,Wells Fargo,89.07,Utilities,7
+AMAT,Applied Materials,342.19,Utilities,6
+RTX,RTX Corporation,197.56,Energy,4
+IBM,IBM,273.86,Real Estate,5
+UNH,UnitedHealth Group,278.79,Industrial,4
+AXP,American Express,355.18,Health,6
+INTC,Intel,47.85,Industrial,2
+TMUS,T-Mobile US,207.62,Real Estate,7
+PEP,PepsiCo,168.71,Health,6
+MCD,McDonald's,323.50,Utilities,5
+GEV,GE Vernova,822.50,Energy,3
+LIN,Linde plc,466.04,Industrial,3
+C,Citigroup,117.93,Materials,4
+TXN,Texas Instruments,226.34,Industrial,1
+VZ,Verizon,48.55,Tech,7
+T,AT&T,28.21,Real Estate,5
+TMO,Thermo Fisher Scientific,525.00,Industrial,1
+AMGN,Amgen,364.77,Real Estate,4
+ABT,Abbott Laboratories,112.97,Utilities,3
+KLAC,KLA Corporation,1492.27,Tech,7
+GILD,Gilead Sciences,155.71,Health,4
+DIS,Walt Disney Company (The),108.30,Utilities,1
+NEE,NextEra Energy,91.19,Tech,2
+BA,Boeing,236.98,Telecom,2
+ANET,Arista Networks,141.06,Real Estate,5
+APH,Amphenol,144.60,Utilities,2
+ISRG,Intuitive Surgical,496.14,Health,7
+CRM,Salesforce,184.94,Health,5
+SCHW,Charles Schwab Corporation,95.50,Health,3
+BLK,BlackRock,1083.35,Energy,2
+TJX,TJX Companies,150.56,Utilities,7
+DE,Deere & Company,610.03,Tech,1
+ADI,Analog Devices,336.71,Utilities,4
+LOW,Lowe's,286.57,Finance,4
+PFE,Pfizer,27.77,Utilities,2
+UNP,Union Pacific Corporation,261.95,Industrial,6
+DHR,Danaher Corporation,219.80,Finance,2
+APP,AppLovin Corporation,459.27,Consumer,2
+HON,Honeywell,243.56,Finance,3
+ETN,Eaton Corporation,394.94,Telecom,6
+QCOM,Qualcomm,141.90,Finance,3
+UBER,Uber,70.72,Tech,6
+LMT,Lockheed Martin,630.54,Tech,7
+WELL,Welltower,208.65,Materials,7
+ACN,Accenture,230.79,Materials,2
+BKNG,Booking Holdings,4322.85,Health,3
+SYK,Stryker Corporation,362.53,Utilities,2
+COP,ConocoPhillips,110.75,Consumer,7
+NEM,Newmont,123.89,Tech,1
+COF,Capital One,214.93,Real Estate,6
+PLD,Prologis,140.35,Utilities,6
+MDT,Medtronic,100.87,Materials,4
+CB,Chubb Limited,328.82,Industrial,4
+PH,Parker Hannifin,998.24,Real Estate,6
+PGR,Progressive Corporation,209.33,Real Estate,5
+BMY,Bristol Myers Squibb,60.18,Utilities,5
+HCA,HCA Healthcare,531.83,Consumer,3
+SPGI,S&P Global,396.65,Industrial,1
+CMCSA,Comcast,32.53,Materials,2
+VRTX,Vertex Pharmaceuticals,459.93,Health,4
+MCK,McKesson Corporation,944.20,Tech,7
+PANW,Palo Alto Networks,165.49,Energy,2
+GLW,Corning Inc.,134.16,Materials,6
 SBUX,Starbucks,99.03,Finance,1
-INTU,Intuit,401.05,Consumer,5
-MO,Altria,65.72,Real Estate,1
-BSX,Boston Scientific,73.76,Real Estate,6
-CME,CME Group,303.44,Real Estate,7
-NOW,ServiceNow,101.55,Finance,5
-ADBE,Adobe Inc.,258.39,Tech,4
-TT,Trane Technologies,473.75,Consumer,2
-CRWD,CrowdStrike,414.94,Utilities,4
-BX,Blackstone Inc.,133.29,Real Estate,4
-UPS,United Parcel Service,119.93,Materials,2
-SO,Southern Company,90.86,Real Estate,3
-CEG,Constellation Energy,274.37,Real Estate,2
-DUK,Duke Energy,124.86,Industrial,2
-CVS,CVS Health,76.36,Finance,5
-MAR,Marriott International,360.71,Tech,2
-NOC,Northrop Grumman,680.45,Telecom,6
-PNC,PNC Financial Services,237.28,Consumer,3
-WM,Waste Management,234.67,Energy,7
-GD,General Dynamics,348.79,Telecom,5
-WDC,Western Digital,277.26,Real Estate,3
-KKR,KKR,105.28,Finance,5
-HWM,Howmet Aerospace,233.13,Industrial,6
-FCX,Freeport-McMoRan,65.30,Consumer,5
-NKE,Nike Inc.,62.43,Health,3
-USB,U.S. Bancorp,59.25,Energy,1
-MMM,3M,173.46,Consumer,4
-SHW,Sherwin-Williams,364.16,Real Estate,3
-RCL,Royal Caribbean Group,331.76,Finance,6
-SNDK,Sandisk Corporation,607.86,Energy,3
-STX,Seagate Technology,409.41,Energy,2
-EMR,Emerson Electric,156.30,Tech,5
-ADP,Automatic Data Processing,217.59,Industrial,1
-WMB,Williams Companies,71.48,Real Estate,3
-ICE,Intercontinental Exchange,153.60,Real Estate,6
-FDX,FedEx,368.49,Industrial,3
-ITW,Illinois Tool Works,298.50,Telecom,2
-JCI,Johnson Controls,140.75,Industrial,1
-CRH,CRH plc,127.89,Health,2
-ECL,Ecolab,301.35,Finance,2
-EQIX,Equinix,863.66,Telecom,3
-BK,BNY Mellon,122.83,Health,4
-MRSH,Marsh & McLennan Companies Inc.,174.09,Health,6
-AMT,American Tower,179.46,Finance,6
-CMI,Cummins,601.45,Energy,4
-SNPS,Synopsys,433.56,Consumer,6
-REGN,Regeneron Pharmaceuticals,780.09,Materials,2
-DELL,Dell Technologies,124.37,Utilities,5
-CDNS,Cadence Design Systems,298.74,Industrial,4
-CTAS,Cintas,201.10,Industrial,3
-ORLY,O'Reilly Auto Parts,93.87,Energy,3
-MNST,Monster Beverage,80.88,Tech,5
-MDLZ,Mondelez International,61.45,Finance,2
-PWR,Quanta Services,523.69,Real Estate,5
-CI,Cigna,292.46,Materials,6
-CSX,CSX Corporation,41.30,Materials,5
-CL,Colgate-Palmolive,95.04,Tech,5
-SLB,Schlumberger,51.14,Tech,7
-HLT,Hilton Worldwide,327.38,Tech,5
-DASH,DoorDash,175.41,Real Estate,7
-TDG,TransDigm Group,1325.26,Finance,6
-MCO,Moody's Corporation,415.20,Health,2
+INTU,Intuit,401.05,Energy,1
+MO,Altria,65.72,Industrial,6
+BSX,Boston Scientific,73.76,Health,7
+CME,CME Group,303.44,Tech,2
+NOW,ServiceNow,101.55,Tech,3
+ADBE,Adobe Inc.,258.39,Real Estate,4
+TT,Trane Technologies,473.75,Utilities,3
+CRWD,CrowdStrike,414.94,Finance,3
+BX,Blackstone Inc.,133.29,Real Estate,6
+UPS,United Parcel Service,119.93,Energy,5
+SO,Southern Company,90.86,Real Estate,1
+CEG,Constellation Energy,274.37,Health,6
+DUK,Duke Energy,124.86,Utilities,5
+CVS,CVS Health,76.36,Utilities,6
+MAR,Marriott International,360.71,Utilities,3
+NOC,Northrop Grumman,680.45,Materials,6
+PNC,PNC Financial Services,237.28,Utilities,4
+WM,Waste Management,234.67,Real Estate,3
+GD,General Dynamics,348.79,Energy,6
+WDC,Western Digital,277.26,Consumer,7
+KKR,KKR,105.28,Materials,3
+HWM,Howmet Aerospace,233.13,Health,3
+FCX,Freeport-McMoRan,65.30,Consumer,6
+NKE,Nike Inc.,62.43,Real Estate,5
+USB,U.S. Bancorp,59.25,Health,3
+MMM,3M,173.46,Health,6
+SHW,Sherwin-Williams,364.16,Telecom,5
+RCL,Royal Caribbean Group,331.76,Real Estate,2
+SNDK,Sandisk Corporation,607.86,Health,3
+STX,Seagate Technology,409.41,Real Estate,2
+EMR,Emerson Electric,156.30,Energy,6
+ADP,Automatic Data Processing,217.59,Utilities,6
+WMB,Williams Companies,71.48,Materials,3
+ICE,Intercontinental Exchange,153.60,Energy,7
+FDX,FedEx,368.49,Health,3
+ITW,Illinois Tool Works,298.50,Health,5
+JCI,Johnson Controls,140.75,Utilities,1
+CRH,CRH plc,127.89,Health,4
+ECL,Ecolab,301.35,Health,4
+EQIX,Equinix,863.66,Utilities,7
+BK,BNY Mellon,122.83,Finance,4
+MRSH,Marsh & McLennan Companies Inc.,174.09,Industrial,5
+AMT,American Tower,179.46,Real Estate,5
+CMI,Cummins,601.45,Consumer,4
+SNPS,Synopsys,433.56,Health,3
+REGN,Regeneron Pharmaceuticals,780.09,Health,2
+DELL,Dell Technologies,124.37,Real Estate,2
+CDNS,Cadence Design Systems,298.74,Tech,3
+CTAS,Cintas,201.10,Materials,1
+ORLY,O'Reilly Auto Parts,93.87,Consumer,7
+MNST,Monster Beverage,80.88,Real Estate,7
+MDLZ,Mondelez International,61.45,Industrial,6
+PWR,Quanta Services,523.69,Finance,2
+CI,Cigna,292.46,Telecom,2
+CSX,CSX Corporation,41.30,Energy,2
+CL,Colgate-Palmolive,95.04,Real Estate,7
+SLB,Schlumberger,51.14,Energy,7
+HLT,Hilton Worldwide,327.38,Tech,2
+DASH,DoorDash,175.41,Consumer,7
+TDG,TransDigm Group,1325.26,Real Estate,1
+MCO,Moody's Corporation,415.20,Energy,6
 APO,Apollo Global Management,127.53,Tech,7
-ELV,Elevance Health,329.59,Tech,4
-ABNB,Airbnb,119.56,Health,4
-GM,General Motors,79.78,Consumer,5
-NSC,Norfolk Southern Railway,316.73,Materials,2
-COR,Cencora,365.43,Energy,1
-MSI,Motorola Solutions,423.10,Materials,7
-KMI,Kinder Morgan,31.64,Real Estate,5
-RSG,Republic Services,226.72,Energy,2
-HOOD,Robinhood Markets Inc.,77.55,Health,4
-WBD,Warner Bros. Discovery,28.01,Telecom,3
-TFC,Truist Financial,54.42,Finance,3
-PCAR,Paccar,129.93,Consumer,1
-AON,Aon,314.02,Tech,1
-TEL,TE Connectivity,227.16,Telecom,7
-APD,Air Products,293.38,Materials,2
-AEP,American Electric Power,122.18,Consumer,7
+ELV,Elevance Health,329.59,Finance,2
+ABNB,Airbnb,119.56,Energy,4
+GM,General Motors,79.78,Materials,6
+NSC,Norfolk Southern Railway,316.73,Energy,7
+COR,Cencora,365.43,Health,2
+MSI,Motorola Solutions,423.10,Materials,4
+KMI,Kinder Morgan,31.64,Finance,6
+RSG,Republic Services,226.72,Utilities,5
+HOOD,Robinhood Markets Inc.,77.55,Industrial,5
+WBD,Warner Bros. Discovery,28.01,Industrial,3
+TFC,Truist Financial,54.42,Materials,3
+PCAR,Paccar,129.93,Finance,5
+AON,Aon,314.02,Finance,6
+TEL,TE Connectivity,227.16,Real Estate,6
+APD,Air Products,293.38,Energy,3
+AEP,American Electric Power,122.18,Telecom,3
 FTNT,Fortinet,87.72,Tech,3
-TRV,Travelers Companies (The),299.75,Energy,5
-PSX,Phillips 66,161.13,Utilities,7
-LHX,L3Harris,341.14,Finance,1
-EOG,EOG Resources,117.39,Industrial,1
-SPG,Simon Property Group,195.66,Tech,3
-NXPI,NXP Semiconductors,249.26,Real Estate,1
-ROST,Ross Stores,192.31,Materials,2
-VLO,Valero Energy,203.89,Utilities,1
-AZO,AutoZone,3733.09,Real Estate,5
+TRV,Travelers Companies (The),299.75,Energy,4
+PSX,Phillips 66,161.13,Telecom,3
+LHX,L3Harris,341.14,Real Estate,7
+EOG,EOG Resources,117.39,Consumer,6
+SPG,Simon Property Group,195.66,Utilities,7
+NXPI,NXP Semiconductors,249.26,Energy,5
+ROST,Ross Stores,192.31,Finance,6
+VLO,Valero Energy,203.89,Consumer,7
+AZO,AutoZone,3733.09,Energy,5
 MPC,Marathon Petroleum,207.85,Telecom,2
-BKR,Baker Hughes,61.16,Utilities,4
-AFL,Aflac,116.20,Tech,2
-DLR,Digital Realty,174.16,Finance,2
-SRE,Sempra,90.83,Finance,5
-O,Realty Income,64.39,Materials,7
-MPWR,Monolithic Power Systems,1197.55,Finance,6
-GWW,W. W. Grainger,1202.13,Utilities,7
-ZTS,Zoetis,128.19,Telecom,6
-CARR,Carrier Global,66.80,Health,1
-D,Dominion Energy,64.61,Energy,2
-F,Ford Motor Company,13.78,Health,3
-URI,United Rentals,870.17,Finance,3
-AME,Ametek,236.33,Utilities,5
-VST,Vistra Corp.,160.43,Industrial,5
-FAST,Fastenal,47.14,Consumer,4
-ALL,Allstate,205.91,Finance,3
-OKE,ONEOK,85.03,Finance,1
-AJG,Arthur J. Gallagher & Co.,207.61,Consumer,3
-CAH,Cardinal Health,225.15,Materials,7
-CVNA,Carvana Co.,365.94,Materials,2
-IDXX,Idexx Laboratories,647.63,Energy,7
-MET,MetLife,78.87,Real Estate,6
-TGT,Target Corporation,114.12,Real Estate,1
-PSA,Public Storage,293.33,Real Estate,4
-BDX,Becton Dickinson,179.62,Materials,6
-CTVA,Corteva,75.48,Consumer,4
-TER,Teradyne,323.92,Materials,2
-EA,Electronic Arts,201.72,Finance,7
-ADSK,Autodesk,232.93,Finance,5
-FITB,Fifth Third Bancorp,54.59,Consumer,7
-CMG,Chipotle Mexican Grill,37.35,Materials,7
-FANG,Diamondback Energy,168.93,Real Estate,5
-TRGP,Targa Resources,222.03,Utilities,3
-FIX,Comfort Systems USA Inc.,1345.62,Consumer,4
-DHI,D. R. Horton,163.35,Finance,4
-HSY,Hershey Company (The),231.46,Health,7
-OXY,Occidental Petroleum,47.34,Consumer,2
-DAL,Delta Air Lines,71.16,Finance,5
-ROK,Rockwell Automation,413.43,Utilities,4
-NDAQ,Nasdaq Inc.,81.05,Consumer,7
-XEL,Xcel Energy,77.79,Consumer,7
-EW,Edwards Lifesciences,78.67,Industrial,6
-CCL,Carnival,32.80,Utilities,2
-CBRE,CBRE Group,151.76,Industrial,1
-ETR,Entergy,100.79,Industrial,2
-EXC,Exelon,44.57,Tech,7
-AMP,Ameriprise Financial,489.27,Materials,1
-NUE,Nucor,194.78,Tech,4
-DDOG,Datadog,126.70,Consumer,7
-YUM,Yum! Brands,160.35,Telecom,6
-MCHP,Microchip Technology,80.90,Industrial,5
-WAB,Wabtec,255.15,Real Estate,3
-KR,Kroger,68.68,Utilities,3
-AIG,American International Group,79.36,Tech,5
-VMC,Vulcan Materials Company,321.01,Health,1
-CIEN,Ciena Corporation,301.11,Energy,1
+BKR,Baker Hughes,61.16,Real Estate,5
+AFL,Aflac,116.20,Real Estate,3
+DLR,Digital Realty,174.16,Real Estate,6
+SRE,Sempra,90.83,Consumer,7
+O,Realty Income,64.39,Telecom,2
+MPWR,Monolithic Power Systems,1197.55,Finance,2
+GWW,W. W. Grainger,1202.13,Utilities,1
+ZTS,Zoetis,128.19,Real Estate,2
+CARR,Carrier Global,66.80,Tech,4
+D,Dominion Energy,64.61,Finance,3
+F,Ford Motor Company,13.78,Energy,3
+URI,United Rentals,870.17,Materials,1
+AME,Ametek,236.33,Finance,5
+VST,Vistra Corp.,160.43,Health,2
+FAST,Fastenal,47.14,Telecom,4
+ALL,Allstate,205.91,Tech,6
+OKE,ONEOK,85.03,Consumer,5
+AJG,Arthur J. Gallagher & Co.,207.61,Industrial,4
+CAH,Cardinal Health,225.15,Tech,4
+CVNA,Carvana Co.,365.94,Health,5
+IDXX,Idexx Laboratories,647.63,Telecom,1
+MET,MetLife,78.87,Tech,5
+TGT,Target Corporation,114.12,Industrial,6
+PSA,Public Storage,293.33,Tech,3
+BDX,Becton Dickinson,179.62,Materials,2
+CTVA,Corteva,75.48,Consumer,7
+TER,Teradyne,323.92,Energy,3
+EA,Electronic Arts,201.72,Consumer,4
+ADSK,Autodesk,232.93,Materials,1
+FITB,Fifth Third Bancorp,54.59,Health,6
+CMG,Chipotle Mexican Grill,37.35,Energy,6
+FANG,Diamondback Energy,168.93,Real Estate,6
+TRGP,Targa Resources,222.03,Materials,5
+FIX,Comfort Systems USA Inc.,1345.62,Health,2
+DHI,D. R. Horton,163.35,Utilities,1
+HSY,Hershey Company (The),231.46,Finance,4
+OXY,Occidental Petroleum,47.34,Energy,4
+DAL,Delta Air Lines,71.16,Health,6
+ROK,Rockwell Automation,413.43,Industrial,6
+NDAQ,Nasdaq Inc.,81.05,Tech,3
+XEL,Xcel Energy,77.79,Industrial,2
+EW,Edwards Lifesciences,78.67,Utilities,5
+CCL,Carnival,32.80,Tech,6
+CBRE,CBRE Group,151.76,Consumer,2
+ETR,Entergy,100.79,Utilities,4
+EXC,Exelon,44.57,Industrial,6
+AMP,Ameriprise Financial,489.27,Finance,6
+NUE,Nucor,194.78,Materials,7
+DDOG,Datadog,126.70,Energy,5
+YUM,Yum! Brands,160.35,Health,5
+MCHP,Microchip Technology,80.90,Energy,1
+WAB,Wabtec,255.15,Tech,1
+KR,Kroger,68.68,Energy,3
+AIG,American International Group,79.36,Telecom,6
+VMC,Vulcan Materials Company,321.01,Finance,6
+CIEN,Ciena Corporation,301.11,Energy,5
 SYY,Sysco,88.04,Health,2
-PEG,Public Service Enterprise Group,83.85,Finance,1
-COIN,Coinbase Global,152.61,Real Estate,3
-ODFL,Old Dominion,195.74,Finance,7
-KEYS,Keysight Technologies,237.88,Finance,4
-KDP,Keurig Dr Pepper,29.84,Industrial,7
-VTR,Ventas,85.29,Real Estate,3
-MLM,Martin Marietta Materials,663.38,Tech,5
-GRMN,Garmin,206.52,Industrial,4
-ED,Consolidated Edison,109.36,Utilities,3
-HIG,Hartford (The),142.02,Real Estate,2
-LVS,Las Vegas Sands,57.75,Energy,4
-CPRT,Copart,39.73,Tech,1
-EL,Estée Lauder Companies (The),106.09,Real Estate,6
-IR,Ingersoll Rand,96.98,Health,6
-WDAY,Workday Inc.,145.19,Tech,3
-MSCI,MSCI,519.16,Tech,1
-TTWO,Take-Two Interactive,204.25,Finance,1
-RMD,ResMed,259.29,Utilities,5
-EBAY,eBay,82.95,Energy,6
-PCG,PG&E Corporation,17.02,Utilities,2
-CCI,Crown Castle,85.66,Finance,1
-PYPL,PayPal,40.26,Finance,2
-PRU,Prudential Financial,105.34,Utilities,1
-WEC,WEC Energy Group,113.19,Telecom,1
-UAL,United Airlines Holdings,113.50,Health,5
-STT,State Street Corporation,131.37,Telecom,5
-HBAN,Huntington Bancshares,18.02,Tech,4
-A,Agilent Technologies,128.22,Materials,2
-GEHC,GE HealthCare,79.29,Finance,5
-MTB,M&T Bank,235.06,Tech,3
-EME,EMCOR Group Inc.,803.53,Materials,3
-ACGL,Arch Capital Group,98.49,Industrial,6
+PEG,Public Service Enterprise Group,83.85,Materials,3
+COIN,Coinbase Global,152.61,Finance,4
+ODFL,Old Dominion,195.74,Health,1
+KEYS,Keysight Technologies,237.88,Materials,6
+KDP,Keurig Dr Pepper,29.84,Real Estate,6
+VTR,Ventas,85.29,Telecom,1
+MLM,Martin Marietta Materials,663.38,Materials,1
+GRMN,Garmin,206.52,Consumer,3
+ED,Consolidated Edison,109.36,Tech,3
+HIG,Hartford (The),142.02,Telecom,7
+LVS,Las Vegas Sands,57.75,Real Estate,7
+CPRT,Copart,39.73,Consumer,3
+EL,Estée Lauder Companies (The),106.09,Energy,5
+IR,Ingersoll Rand,96.98,Consumer,3
+WDAY,Workday Inc.,145.19,Utilities,6
+MSCI,MSCI,519.16,Real Estate,3
+TTWO,Take-Two Interactive,204.25,Materials,5
+RMD,ResMed,259.29,Health,5
+EBAY,eBay,82.95,Industrial,2
+PCG,PG&E Corporation,17.02,Tech,6
+CCI,Crown Castle,85.66,Health,7
+PYPL,PayPal,40.26,Consumer,5
+PRU,Prudential Financial,105.34,Telecom,5
+WEC,WEC Energy Group,113.19,Consumer,5
+UAL,United Airlines Holdings,113.50,Finance,1
+STT,State Street Corporation,131.37,Finance,7
+HBAN,Huntington Bancshares,18.02,Consumer,4
+A,Agilent Technologies,128.22,Tech,5
+GEHC,GE HealthCare,79.29,Consumer,2
+MTB,M&T Bank,235.06,Materials,3
+EME,EMCOR Group Inc.,803.53,Industrial,4
+ACGL,Arch Capital Group,98.49,Health,1
 KMB,Kimberly-Clark,107.35,Industrial,3
-ROP,Roper Technologies,333.96,Telecom,2
-EQT,EQT Corporation,56.73,Utilities,6
-KVUE,Kenvue,18.44,Finance,2
-LYV,Live Nation Entertainment,150.60,Real Estate,5
-OTIS,Otis Worldwide,89.85,Utilities,6
-AXON,Axon Enterprise,436.36,Materials,1
-NRG,NRG Energy,160.11,Tech,6
-CTSH,Cognizant,71.22,Telecom,6
-IBKR,Interactive Brokers Group,76.54,Industrial,3
-PAYX,Paychex,94.49,Finance,5
-FISV,Fiserv Inc.,62.72,Materials,7
-ADM,Archer Daniels Midland,69.24,Energy,1
-XYZ,Block Inc.,53.87,Tech,7
-FICO,Fair Isaac,1369.86,Real Estate,5
-DG,Dollar General,147.49,Telecom,2
-DOV,Dover Corporation,232.52,Consumer,3
-ROL,Rollins Inc.,65.74,Health,5
-HPE,Hewlett Packard Enterprise,23.62,Consumer,6
-RJF,Raymond James Financial,159.60,Consumer,2
-TPR,Tapestry Inc.,154.43,Real Estate,6
-VICI,Vici Properties,29.18,Real Estate,1
-TDY,Teledyne Technologies,657.92,Real Estate,3
-XYL,Xylem Inc.,126.71,Tech,6
-CHTR,Charter Communications,241.08,Industrial,7
-ARES,Ares Management Corporation,137.90,Materials,2
-ULTA,Ulta Beauty,684.25,Real Estate,3
-STLD,Steel Dynamics,206.43,Utilities,3
-EXR,Extra Space Storage,142.02,Materials,4
+ROP,Roper Technologies,333.96,Real Estate,7
+EQT,EQT Corporation,56.73,Industrial,5
+KVUE,Kenvue,18.44,Materials,1
+LYV,Live Nation Entertainment,150.60,Tech,4
+OTIS,Otis Worldwide,89.85,Industrial,6
+AXON,Axon Enterprise,436.36,Health,2
+NRG,NRG Energy,160.11,Materials,4
+CTSH,Cognizant,71.22,Energy,7
+IBKR,Interactive Brokers Group,76.54,Real Estate,3
+PAYX,Paychex,94.49,Energy,2
+FISV,Fiserv Inc.,62.72,Telecom,6
+ADM,Archer Daniels Midland,69.24,Health,1
+XYZ,Block Inc.,53.87,Health,2
+FICO,Fair Isaac,1369.86,Tech,3
+DG,Dollar General,147.49,Tech,4
+DOV,Dover Corporation,232.52,Energy,7
+ROL,Rollins Inc.,65.74,Real Estate,6
+HPE,Hewlett Packard Enterprise,23.62,Health,1
+RJF,Raymond James Financial,159.60,Materials,1
+TPR,Tapestry Inc.,154.43,Health,4
+VICI,Vici Properties,29.18,Utilities,5
+TDY,Teledyne Technologies,657.92,Energy,6
+XYL,Xylem Inc.,126.71,Utilities,6
+CHTR,Charter Communications,241.08,Finance,6
+ARES,Ares Management Corporation,137.90,Telecom,6
+ULTA,Ulta Beauty,684.25,Health,7
+STLD,Steel Dynamics,206.43,Utilities,2
+EXR,Extra Space Storage,142.02,Health,6
 LEN,Lennar,120.76,Real Estate,1
-IQV,IQVIA,175.80,Utilities,3
-IRM,Iron Mountain,99.67,Telecom,2
-KHC,Kraft Heinz,24.88,Health,3
-PPG,PPG Industries,130.53,Health,4
-HAL,Halliburton,34.84,Consumer,3
-ATO,Atmos Energy,175.22,Telecom,7
-DTE,DTE Energy,139.17,Telecom,4
-TSCO,Tractor Supply,54.53,Utilities,7
-EXPE,Expedia Group,235.08,Utilities,2
-CFG,Citizens Financial Group,66.87,Real Estate,5
-AEE,Ameren,106.08,Finance,5
-TPL,Texas Pacific Land Corporation,416.14,Health,1
-CBOE,Cboe Global Markets,271.99,Utilities,3
-ON,ON Semiconductor,70.68,Industrial,7
-MTD,Mettler Toledo,1391.33,Real Estate,3
-STZ,Constellation Brands,163.02,Health,5
-BIIB,Biogen,191.29,Finance,3
-DVN,Devon Energy,44.78,Materials,6
-FE,FirstEnergy,47.94,Tech,1
-JBL,Jabil,260.92,Finance,2
-NTRS,Northern Trust,147.45,Utilities,3
-HUBB,Hubbell Incorporated,513.63,Real Estate,2
-WTW,Willis Towers Watson,282.86,Industrial,6
-WRB,W. R. Berkley Corporation,71.20,Energy,2
-RF,Regions Financial Corporation,30.86,Industrial,1
-PHM,PulteGroup,139.04,Health,3
-CNP,CenterPoint Energy,40.91,Tech,7
-PPL,PPL Corporation,35.97,Real Estate,2
-DXCM,Dexcom,68.19,Real Estate,4
-SW,Smurfit WestRock,50.23,Energy,1
-ES,Eversource Energy,69.77,Finance,2
-GIS,General Mills,48.40,Finance,2
-EIX,Edison International,66.94,Utilities,7
-IP,International Paper,48.64,Tech,2
-WSM,Williams-Sonoma,214.52,Health,7
-CINF,Cincinnati Financial,164.11,Utilities,7
-LUV,Southwest Airlines,51.66,Telecom,7
-AVB,AvalonBay Communities,179.80,Finance,2
-SYF,Synchrony Financial,72.95,Health,5
-FIS,Fidelity National Information Services,48.73,Energy,3
-KEY,KeyCorp,22.67,Real Estate,6
-DLTR,Dollar Tree,125.35,Tech,5
-EQR,Equity Residential,65.09,Materials,4
-EXE,Expand Energy,103.09,Consumer,4
-DRI,Darden Restaurants,212.58,Materials,5
+IQV,IQVIA,175.80,Real Estate,6
+IRM,Iron Mountain,99.67,Finance,7
+KHC,Kraft Heinz,24.88,Tech,6
+PPG,PPG Industries,130.53,Industrial,5
+HAL,Halliburton,34.84,Telecom,1
+ATO,Atmos Energy,175.22,Energy,6
+DTE,DTE Energy,139.17,Telecom,1
+TSCO,Tractor Supply,54.53,Consumer,2
+EXPE,Expedia Group,235.08,Consumer,6
+CFG,Citizens Financial Group,66.87,Real Estate,1
+AEE,Ameren,106.08,Finance,6
+TPL,Texas Pacific Land Corporation,416.14,Materials,3
+CBOE,Cboe Global Markets,271.99,Materials,2
+ON,ON Semiconductor,70.68,Real Estate,6
+MTD,Mettler Toledo,1391.33,Tech,3
+STZ,Constellation Brands,163.02,Energy,7
+BIIB,Biogen,191.29,Utilities,6
+DVN,Devon Energy,44.78,Telecom,6
+FE,FirstEnergy,47.94,Materials,6
+JBL,Jabil,260.92,Tech,4
+NTRS,Northern Trust,147.45,Tech,1
+HUBB,Hubbell Incorporated,513.63,Energy,6
+WTW,Willis Towers Watson,282.86,Industrial,5
+WRB,W. R. Berkley Corporation,71.20,Real Estate,2
+RF,Regions Financial Corporation,30.86,Utilities,1
+PHM,PulteGroup,139.04,Health,1
+CNP,CenterPoint Energy,40.91,Real Estate,7
+PPL,PPL Corporation,35.97,Telecom,6
+DXCM,Dexcom,68.19,Telecom,3
+SW,Smurfit WestRock,50.23,Health,7
+ES,Eversource Energy,69.77,Industrial,4
+GIS,General Mills,48.40,Industrial,1
+EIX,Edison International,66.94,Materials,2
+IP,International Paper,48.64,Materials,5
+WSM,Williams-Sonoma,214.52,Tech,2
+CINF,Cincinnati Financial,164.11,Telecom,5
+LUV,Southwest Airlines,51.66,Telecom,3
+AVB,AvalonBay Communities,179.80,Utilities,4
+SYF,Synchrony Financial,72.95,Tech,1
+FIS,Fidelity National Information Services,48.73,Utilities,7
+KEY,KeyCorp,22.67,Real Estate,7
+DLTR,Dollar Tree,125.35,Real Estate,3
+EQR,Equity Residential,65.09,Telecom,4
+EXE,Expand Energy,103.09,Real Estate,3
+DRI,Darden Restaurants,212.58,Finance,5
 FSLR,First Solar,227.60,Industrial,2
-DOW,Dow Inc.,33.98,Finance,4
-CPAY,Corpay,346.25,Materials,5
-AWK,American Water Works,123.54,Real Estate,5
-CHD,Church & Dwight,100.17,Health,1
-LH,LabCorp,289.08,Finance,1
-VRSK,Verisk Analytics,171.87,Utilities,4
-Q,Qnity Electronics,114.06,Industrial,1
-CTRA,Coterra,31.48,Industrial,4
-STE,Steris,243.09,Health,7
-EFX,Equifax,197.29,Finance,6
-VLTO,Veralto,95.33,Finance,6
-BG,Bunge Global,121.39,Energy,7
-DGX,Quest Diagnostics,209.53,Telecom,3
-CHRW,C.H. Robinson,196.77,Real Estate,4
-AMCR,Amcor,49.62,Telecom,5
-TSN,Tyson Foods,64.52,Industrial,2
+DOW,Dow Inc.,33.98,Utilities,5
+CPAY,Corpay,346.25,Tech,4
+AWK,American Water Works,123.54,Industrial,5
+CHD,Church & Dwight,100.17,Real Estate,3
+LH,LabCorp,289.08,Consumer,4
+VRSK,Verisk Analytics,171.87,Tech,2
+Q,Qnity Electronics,114.06,Tech,4
+CTRA,Coterra,31.48,Energy,7
+STE,Steris,243.09,Utilities,6
+EFX,Equifax,197.29,Tech,3
+VLTO,Veralto,95.33,Finance,5
+BG,Bunge Global,121.39,Materials,2
+DGX,Quest Diagnostics,209.53,Finance,4
+CHRW,C.H. Robinson,196.77,Industrial,6
+AMCR,Amcor,49.62,Materials,2
+TSN,Tyson Foods,64.52,Finance,7
 L,Loews Corporation,110.15,Materials,5
-CMS,CMS Energy,74.16,Real Estate,5
-BRO,Brown & Brown,67.07,Tech,1
-LDOS,Leidos,174.83,Consumer,3
-PKG,Packaging Corporation of America,244.06,Health,7
-JBHT,J.B. Hunt,231.62,Tech,6
-OMC,Omnicom Group,69.53,Energy,2
-EXPD,Expeditors International,163.06,Finance,2
-RL,Ralph Lauren Corporation,359.55,Finance,3
-NVR,NVR Inc.,8082.38,Industrial,5
-DD,DuPont,51.29,Finance,7
-HUM,Humana,176.34,Finance,3
-NI,NiSource,44.78,Materials,3
-NTAP,NetApp,105.69,Utilities,3
-GPC,Genuine Parts Company,149.43,Real Estate,4
-LULU,Lululemon Athletica,176.88,Materials,5
-ALB,Albemarle Corporation,176.03,Industrial,1
-TROW,T. Rowe Price,94.24,Telecom,4
-PFG,Principal Financial Group,92.86,Real Estate,2
-CSGP,CoStar Group,48.09,Telecom,1
-GPN,Global Payments,72.67,Health,3
-SBAC,SBA Communications,190.43,Tech,1
-SNA,Snap-on,383.21,Health,6
-CNC,Centene Corporation,40.26,Real Estate,6
-VRSN,Verisign,215.66,Consumer,7
-WAT,Waters Corporation,331.52,Industrial,4
-IFF,International Flavors & Fragrances,76.65,Energy,7
-BR,Broadridge Financial Solutions,167.88,Industrial,2
-WY,Weyerhaeuser,27.09,Utilities,1
-INCY,Incyte,99.35,Health,6
-LII,Lennox International,553.57,Utilities,2
-LYB,LyondellBasell,59.29,Telecom,5
-SMCI,Supermicro,31.69,Real Estate,3
-MKC,McCormick & Company,70.30,Real Estate,2
-ZBH,Zimmer Biomet,95.21,Utilities,7
-PTC,PTC Inc.,155.52,Tech,3
-FTV,Fortive,58.93,Utilities,5
-VTRS,Viatris,16.02,Materials,3
-EVRG,Evergy,78.94,Materials,3
-BALL,Ball Corporation,67.29,Industrial,2
-HPQ,HP Inc.,19.63,Health,2
-WST,West Pharmaceutical Services,247.87,Utilities,7
-PODD,Insulet Corporation,253.09,Finance,1
-APTV,Aptiv,83.64,Tech,5
-CDW,CDW,135.32,Materials,6
-LNT,Alliant Energy,68.17,Consumer,2
-TXT,Textron,96.68,Finance,6
-ESS,Essex Property Trust,262.76,Consumer,3
-HOLX,Hologic,75.11,Tech,1
-J,Jacobs Solutions,142.70,Industrial,3
-INVH,Invitation Homes,27.16,Telecom,1
-TKO,TKO Group Holdings,210.88,Industrial,4
-NDSN,Nordson Corporation,295.64,Finance,4
-DECK,Deckers Brands,115.15,Materials,7
-PNR,Pentair,99.79,Telecom,1
-COO,Cooper Companies (The),82.84,Real Estate,3
-MAA,Mid-America Apartment Communities,136.74,Health,3
-FFIV,F5 Inc.,282.22,Energy,1
-MAS,Masco,76.24,Telecom,3
-IEX,IDEX Corporation,211.28,Energy,3
-MRNA,Moderna,40.21,Utilities,3
-TRMB,Trimble Inc.,65.06,Finance,6
-ALLE,Allegion,179.40,Utilities,7
-HII,Huntington Ingalls Industries,392.15,Utilities,4
-CLX,Clorox,125.65,Finance,1
-CF,CF Industries,97.23,Finance,3
-GEN,Gen Digital,24.64,Utilities,4
-AVY,Avery Dennison,192.77,Materials,6
-KIM,Kimco Realty,21.96,Consumer,2
-HAS,Hasbro,105.26,Utilities,4
-ERIE,Erie Indemnity,279.84,Finance,7
-TYL,Tyler Technologies,339.51,Tech,4
-UHS,Universal Health Services,231.22,Energy,6
-BEN,Franklin Resources,27.64,Real Estate,6
-ALGN,Align Technology,197.24,Health,2
-SOLV,Solventum,81.25,Materials,7
-BBY,Best Buy,66.84,Telecom,6
-REG,Regency Centers,76.49,Health,2
-SWK,Stanley Black & Decker,90.31,Telecom,7
-BF.B,Brown–Forman,30.11,Real Estate,2
-BLDR,Builders FirstSource,125.44,Materials,6
-HST,Host Hotels & Resorts,19.98,Materials,1
-AKAM,Akamai Technologies,95.00,Energy,7
-EG,Everest Group,331.67,Materials,2
-UDR,UDR Inc.,39.84,Utilities,1
-TTD,The Trade Desk Inc.,27.19,Real Estate,4
-HRL,Hormel Foods,23.79,Tech,5
-DPZ,Domino's,385.50,Energy,6
+CMS,CMS Energy,74.16,Health,6
+BRO,Brown & Brown,67.07,Energy,3
+LDOS,Leidos,174.83,Utilities,6
+PKG,Packaging Corporation of America,244.06,Consumer,6
+JBHT,J.B. Hunt,231.62,Real Estate,2
+OMC,Omnicom Group,69.53,Energy,7
+EXPD,Expeditors International,163.06,Tech,1
+RL,Ralph Lauren Corporation,359.55,Consumer,3
+NVR,NVR Inc.,8082.38,Utilities,5
+DD,DuPont,51.29,Consumer,6
+HUM,Humana,176.34,Industrial,6
+NI,NiSource,44.78,Consumer,3
+NTAP,NetApp,105.69,Real Estate,3
+GPC,Genuine Parts Company,149.43,Consumer,4
+LULU,Lululemon Athletica,176.88,Real Estate,6
+ALB,Albemarle Corporation,176.03,Utilities,5
+TROW,T. Rowe Price,94.24,Utilities,4
+PFG,Principal Financial Group,92.86,Materials,2
+CSGP,CoStar Group,48.09,Real Estate,1
+GPN,Global Payments,72.67,Energy,5
+SBAC,SBA Communications,190.43,Finance,1
+SNA,Snap-on,383.21,Tech,6
+CNC,Centene Corporation,40.26,Industrial,7
+VRSN,Verisign,215.66,Energy,7
+WAT,Waters Corporation,331.52,Finance,6
+IFF,International Flavors & Fragrances,76.65,Consumer,3
+BR,Broadridge Financial Solutions,167.88,Tech,4
+WY,Weyerhaeuser,27.09,Utilities,4
+INCY,Incyte,99.35,Energy,3
+LII,Lennox International,553.57,Consumer,5
+LYB,LyondellBasell,59.29,Materials,1
+SMCI,Supermicro,31.69,Materials,4
+MKC,McCormick & Company,70.30,Energy,6
+ZBH,Zimmer Biomet,95.21,Materials,3
+PTC,PTC Inc.,155.52,Telecom,2
+FTV,Fortive,58.93,Tech,6
+VTRS,Viatris,16.02,Energy,5
+EVRG,Evergy,78.94,Consumer,3
+BALL,Ball Corporation,67.29,Energy,3
+HPQ,HP Inc.,19.63,Telecom,2
+WST,West Pharmaceutical Services,247.87,Telecom,1
+PODD,Insulet Corporation,253.09,Real Estate,5
+APTV,Aptiv,83.64,Utilities,2
+CDW,CDW,135.32,Consumer,3
+LNT,Alliant Energy,68.17,Utilities,7
+TXT,Textron,96.68,Energy,3
+ESS,Essex Property Trust,262.76,Materials,3
+HOLX,Hologic,75.11,Telecom,1
+J,Jacobs Solutions,142.70,Real Estate,7
+INVH,Invitation Homes,27.16,Telecom,2
+TKO,TKO Group Holdings,210.88,Tech,5
+NDSN,Nordson Corporation,295.64,Telecom,2
+DECK,Deckers Brands,115.15,Health,4
+PNR,Pentair,99.79,Real Estate,1
+COO,Cooper Companies (The),82.84,Health,2
+MAA,Mid-America Apartment Communities,136.74,Utilities,3
+FFIV,F5 Inc.,282.22,Materials,3
+MAS,Masco,76.24,Finance,6
+IEX,IDEX Corporation,211.28,Utilities,5
+MRNA,Moderna,40.21,Energy,4
+TRMB,Trimble Inc.,65.06,Utilities,3
+ALLE,Allegion,179.40,Real Estate,4
+HII,Huntington Ingalls Industries,392.15,Finance,5
+CLX,Clorox,125.65,Health,1
+CF,CF Industries,97.23,Finance,2
+GEN,Gen Digital,24.64,Health,5
+AVY,Avery Dennison,192.77,Industrial,6
+KIM,Kimco Realty,21.96,Utilities,3
+HAS,Hasbro,105.26,Finance,4
+ERIE,Erie Indemnity,279.84,Utilities,6
+TYL,Tyler Technologies,339.51,Materials,4
+UHS,Universal Health Services,231.22,Real Estate,2
+BEN,Franklin Resources,27.64,Telecom,3
+ALGN,Align Technology,197.24,Real Estate,6
+SOLV,Solventum,81.25,Utilities,5
+BBY,Best Buy,66.84,Tech,3
+REG,Regency Centers,76.49,Real Estate,2
+SWK,Stanley Black & Decker,90.31,Finance,4
+BF.B,Brown–Forman,30.11,Telecom,5
+BLDR,Builders FirstSource,125.44,Industrial,6
+HST,Host Hotels & Resorts,19.98,Consumer,7
+AKAM,Akamai Technologies,95.00,Telecom,4
+EG,Everest Group,331.67,Consumer,5
+UDR,UDR Inc.,39.84,Telecom,5
+TTD,The Trade Desk Inc.,27.19,Consumer,1
+HRL,Hormel Foods,23.79,Materials,7
+DPZ,Domino's,385.50,Health,3
 ZBRA,Zebra Technologies,250.71,Consumer,6
-GNRC,Generac,214.94,Real Estate,7
-FOX,Fox Corporation (Class B),56.02,Energy,4
-FOXA,Fox Corporation (Class A),61.76,Industrial,7
-GDDY,GoDaddy,91.44,Energy,2
-PSKY,Paramount Skydance Corp,10.96,Health,3
-WYNN,Wynn Resorts,115.18,Utilities,7
-JKHY,Jack Henry & Associates,165.63,Consumer,2
-CPT,Camden Property Trust,111.66,Consumer,6
-DOC,Healthpeak Properties,16.95,Finance,6
-SJM,J.M. Smucker Company (The),109.98,Utilities,2
-IVZ,Invesco,26.42,Tech,4
-AES,AES Corporation,16.45,Consumer,5
-IT,Gartner,160.21,Telecom,7
-GL,Globe Life,144.35,Tech,2
-BAX,Baxter International,22.30,Health,7
-PNW,Pinnacle West,95.57,Utilities,7
-RVTY,Revvity,100.89,Utilities,7
-AOS,A. O. Smith,80.03,Health,2
-AIZ,Assurant,216.77,Energy,4
-TAP,Molson Coors Beverage Company,52.98,Consumer,3
-NCLH,Norwegian Cruise Line Holdings,22.76,Consumer,3
-POOL,Pool Corporation,270.70,Real Estate,7
-EPAM,EPAM Systems,180.79,Industrial,7
-APA,APA Corporation,28.11,Telecom,2
-TECH,Bio-Techne,63.46,Utilities,7
-MOS,Mosaic Company (The),31.21,Tech,6
-BXP,BXP Inc.,61.61,Materials,6
-DVA,DaVita,144.55,Telecom,6
-SWKS,Skyworks Solutions,63.62,Telecom,7
-HSIC,Henry Schein,81.21,Finance,3
-CAG,Conagra Brands,19.95,Industrial,5
-MGM,MGM Resorts,36.39,Health,2
-ARE,Alexandria Real Estate Equities,53.92,Health,5
-FRT,Federal Realty Investment Trust,107.14,Consumer,1
-CPB,Campbell Soup Company,29.16,Industrial,3
-NWSA,News Corp (Class A),23.30,Finance,5
-CRL,Charles River Laboratories,164.83,Energy,6
-MTCH,Match Group,31.27,Industrial,2
-FDS,FactSet,193.29,Materials,3
-LW,Lamb Weston,50.33,Consumer,1
-PAYC,Paycom,117.68,Telecom,6
-MOH,Molina Healthcare,122.46,Telecom,3
-NWS,News Corp (Class B),26.91,Energy,5
+GNRC,Generac,214.94,Telecom,5
+FOX,Fox Corporation (Class B),56.02,Industrial,6
+FOXA,Fox Corporation (Class A),61.76,Materials,3
+GDDY,GoDaddy,91.44,Health,5
+PSKY,Paramount Skydance Corp,10.96,Energy,2
+WYNN,Wynn Resorts,115.18,Tech,1
+JKHY,Jack Henry & Associates,165.63,Industrial,2
+CPT,Camden Property Trust,111.66,Telecom,6
+DOC,Healthpeak Properties,16.95,Utilities,6
+SJM,J.M. Smucker Company (The),109.98,Consumer,7
+IVZ,Invesco,26.42,Energy,1
+AES,AES Corporation,16.45,Finance,5
+IT,Gartner,160.21,Health,3
+GL,Globe Life,144.35,Tech,7
+BAX,Baxter International,22.30,Materials,5
+PNW,Pinnacle West,95.57,Consumer,6
+RVTY,Revvity,100.89,Telecom,7
+AOS,A. O. Smith,80.03,Energy,4
+AIZ,Assurant,216.77,Utilities,6
+TAP,Molson Coors Beverage Company,52.98,Industrial,4
+NCLH,Norwegian Cruise Line Holdings,22.76,Finance,3
+POOL,Pool Corporation,270.70,Consumer,3
+EPAM,EPAM Systems,180.79,Health,3
+APA,APA Corporation,28.11,Health,6
+TECH,Bio-Techne,63.46,Health,7
+MOS,Mosaic Company (The),31.21,Telecom,4
+BXP,BXP Inc.,61.61,Consumer,4
+DVA,DaVita,144.55,Real Estate,5
+SWKS,Skyworks Solutions,63.62,Utilities,3
+HSIC,Henry Schein,81.21,Health,1
+CAG,Conagra Brands,19.95,Utilities,5
+MGM,MGM Resorts,36.39,Materials,2
+ARE,Alexandria Real Estate Equities,53.92,Materials,4
+FRT,Federal Realty Investment Trust,107.14,Consumer,7
+CPB,Campbell Soup Company,29.16,Tech,4
+NWSA,News Corp (Class A),23.30,Consumer,2
+CRL,Charles River Laboratories,164.83,Health,4
+MTCH,Match Group,31.27,Tech,2
+FDS,FactSet,193.29,Industrial,3
+LW,Lamb Weston,50.33,Telecom,5
+PAYC,Paycom,117.68,Telecom,7
+MOH,Molina Healthcare,122.46,Materials,1
+NWS,News Corp (Class B),26.91,Telecom,2

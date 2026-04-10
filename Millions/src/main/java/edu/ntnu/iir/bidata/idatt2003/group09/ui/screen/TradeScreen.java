@@ -14,13 +14,12 @@ import java.util.Locale;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 public class TradeScreen extends BorderPane {
 
@@ -36,6 +35,9 @@ public class TradeScreen extends BorderPane {
     private final Label netWorthLabel;
     private final Label weekLabel;
     private final Label newsLabel;
+    private StackPane contentStack;
+    private BorderPane newsOverlay;
+    private StackPane newsOverlayContent;
 
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
@@ -122,7 +124,40 @@ public class TradeScreen extends BorderPane {
         SplitPane splitPane = new SplitPane();
         splitPane.getItems().addAll(stockTable, graph);
         splitPane.setDividerPositions(0.3);
-        setCenter(splitPane);
+
+        contentStack = new StackPane(splitPane);
+        buildNewsOverlay();
+        contentStack.getChildren().add(newsOverlay);
+        setCenter(contentStack);
+    }
+
+    private void buildNewsOverlay() {
+        newsOverlay = new BorderPane();
+        newsOverlay.setVisible(false);
+        newsOverlay.setManaged(false);
+        newsOverlay.setStyle("-fx-background-color: rgba(0,0,0,0.55);");
+        newsOverlay.setPadding(new Insets(20));
+
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> hideNewsPaper());
+
+        HBox topBar = new HBox(closeButton);
+        topBar.setAlignment(Pos.TOP_RIGHT);
+        topBar.setPadding(new Insets(0, 0, 12, 0));
+
+        newsOverlayContent = new StackPane();
+        newsOverlayContent.setMaxWidth(980);
+        newsOverlayContent.setMaxHeight(700);
+        newsOverlayContent.setOnMouseClicked(e -> e.consume());
+
+        newsOverlay.setTop(topBar);
+        newsOverlay.setCenter(newsOverlayContent);
+
+        newsOverlay.setOnMouseClicked(e -> {
+            if (e.getTarget() == newsOverlay) {
+                hideNewsPaper();
+            }
+        });
     }
 
     private void buySelectedStock() {
@@ -208,12 +243,14 @@ public class TradeScreen extends BorderPane {
 
     private void showNewsPaper() {
         NewsPaperView newsPaperView = new NewsPaperView(controller.getWeek(), controller.getPendingNewsPaper());
-        Scene scene = new Scene(newsPaperView, 980, 700);
+        newsOverlayContent.getChildren().setAll(newsPaperView);
+        newsOverlay.setVisible(true);
+        newsOverlay.setManaged(true);
+    }
 
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("The Market Gazette");
-        stage.setScene(scene);
-        stage.showAndWait();
+    private void hideNewsPaper() {
+        newsOverlay.setVisible(false);
+        newsOverlay.setManaged(false);
+        newsOverlayContent.getChildren().clear();
     }
 }
