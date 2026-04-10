@@ -1,0 +1,16 @@
+@font-face {
+	font-family: "ThaleahFat";
+	src: url("/ThaleahFat.ttf");
+}
+
+.transaction-history-screen {
+	-fx-font-family: "ThaleahFat";
+}
+
+.transaction-history-screen .positive {
+	-fx-text-fill: green;
+}
+
+.transaction-history-screen .negative {
+	-fx-text-fill: red;
+}
