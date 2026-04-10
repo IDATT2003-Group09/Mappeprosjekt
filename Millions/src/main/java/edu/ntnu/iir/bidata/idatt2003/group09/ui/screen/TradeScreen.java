@@ -35,6 +35,12 @@ public class TradeScreen extends BorderPane {
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
 
+    private final Label levelLabel;
+    private final Label requirementLabel;
+    private final ProgressBar progressBar;
+    private final Label levelUpLabel;
+    private int lastLevel = 1;
+
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
         this.controller = controller;
         this.onSaveAndQuit = onSaveAndQuit;
@@ -62,6 +68,11 @@ public class TradeScreen extends BorderPane {
         holdingsLabel = new Label();
         netWorthLabel = new Label();
         weekLabel = new Label();
+
+        levelLabel = new Label();
+        requirementLabel = new Label();
+        progressBar = new ProgressBar();
+        levelUpLabel = new Label();
 
         buildLayout();
         refreshInfo();
