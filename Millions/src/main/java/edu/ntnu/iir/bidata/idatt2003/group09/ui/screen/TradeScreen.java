@@ -44,8 +44,10 @@ public class TradeScreen extends BorderPane {
         getStyleClass().add("trade-screen");
 
         stockTable = new StockTable().createStockTable(controller.getPlayer());
+        stockTable.getStyleClass().add("trade-stock-table");
         stockTable.setItems(FXCollections.observableArrayList(stocks));
         graph = new StockGraph(stocks);
+        graph.getStyleClass().add("trade-graph");
         stockTable.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldStock, newStock) -> {
                     if (newStock != null) {
@@ -56,8 +58,10 @@ public class TradeScreen extends BorderPane {
 
         quantityField = new TextField("1");
         quantityField.setPrefWidth(100);
+        quantityField.getStyleClass().add("trade-quantity-field");
 
         statusLabel = new Label("Select a stock, then buy or sell.");
+        statusLabel.getStyleClass().add("trade-status");
         cashLabel = new Label();
         holdingsLabel = new Label();
         netWorthLabel = new Label();
@@ -70,12 +74,17 @@ public class TradeScreen extends BorderPane {
     private void buildLayout() {
 
         Label quantityLabel = new Label("Quantity:");
+        quantityLabel.getStyleClass().add("trade-quantity-label");
 
         Button buyButton = new Button("Buy");
+        buyButton.getStyleClass().addAll("trade-button", "trade-buy-button");
         Button sellButton = new Button("Sell");
+        sellButton.getStyleClass().addAll("trade-button", "trade-sell-button");
         Button nextWeekButton = new Button("Next Week");
+        nextWeekButton.getStyleClass().addAll("trade-button", "trade-next-button");
 
         Button saveButton = new Button("Save and Quit");
+        saveButton.getStyleClass().addAll("trade-button", "trade-save-button");
         saveButton.setOnAction(e -> {
             controller.saveGame();
             if (onSaveAndQuit != null) {
@@ -94,9 +103,11 @@ public class TradeScreen extends BorderPane {
         });
 
         HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
+        controls.getStyleClass().add("trade-controls");
         controls.setPadding(new Insets(0, 0, 10, 0));
 
         HBox infoBox = new HBox(20, weekLabel, cashLabel, netWorthLabel, holdingsLabel);
+        infoBox.getStyleClass().add("trade-info");
         infoBox.setPadding(new Insets(0, 0, 10, 0));
 
         VBox headerBox = new VBox(
@@ -106,11 +117,13 @@ public class TradeScreen extends BorderPane {
                 statusLabel
         );
 
+        headerBox.getStyleClass().add("trade-header");
         headerBox.setPadding(new Insets(10));
         setTop(headerBox);
         setPadding(new Insets(10));
 
         SplitPane splitPane = new SplitPane();
+        splitPane.getStyleClass().add("trade-split-pane");
         splitPane.getItems().addAll(stockTable, graph);
         splitPane.setDividerPositions(0.3);
 

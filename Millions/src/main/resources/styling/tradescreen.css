@@ -8,7 +8,7 @@
 	font-size: 22px;
 	-fx-font-family: "ThaleahFat";
 	-fx-font-size: 22px;
-	-fx-background-color:rgb(255, 255, 255);
+	-fx-background-color: linear-gradient(to bottom right, #070f2a, #020716);
 }
 
 .trade-screen .label,
@@ -23,14 +23,9 @@
 	-fx-font-size: 22px;
 }
 
-.trade-screen .button {
-	font-size: 22px;
-	-fx-font-size: 22px;
-}
 
-.trade-screen .text-field {
-	font-size: 22px;
-	-fx-font-size: 22px;
+.trade-screen .label {
+	-fx-text-fill: #9cb6db;
 }
 
 .trade-screen .table-view .cell,
@@ -39,9 +34,159 @@
 	-fx-font-size: 20px;
 }
 
-.trade-title {
-	font-size: 34px;
-	font-weight: bold;
-	-fx-font-size: 34px;
-	-fx-font-weight: bold;
+.trade-screen .trade-header {
+	-fx-background-color: #0a132d;
+	-fx-border-color: #1a355c;
+	-fx-border-width: 0 0 1 0;
+}
+
+.trade-screen .trade-info .label {
+	-fx-text-fill: #00e4ff;
+	-fx-font-size: 24px;
+}
+
+.trade-screen .trade-status {
+	-fx-text-fill: #9cb6db;
+	-fx-font-size: 20px;
+}
+
+.trade-screen .trade-quantity-label {
+	-fx-text-fill: #9cb6db;
+}
+
+.trade-screen .trade-quantity-field {
+	-fx-font-size: 20px;
+	-fx-background-color: #070f24;
+	-fx-text-fill: #e5f1ff;
+	-fx-border-color: #1a355c;
+	-fx-border-width: 1;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+}
+
+.trade-screen .trade-button {
+	-fx-font-size: 20px;
+	-fx-text-fill: #dbe8ff;
+	-fx-background-color: #12284a;
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 1;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+	-fx-cursor: hand;
+}
+
+.trade-screen .trade-button:hover {
+	-fx-background-color: #17345f;
+}
+
+.trade-screen .trade-buy-button {
+	-fx-background-color: #049a44;
+	-fx-border-color: #0ddc6a;
+	-fx-text-fill: #e7ffef;
+}
+
+.trade-screen .trade-buy-button:hover {
+	-fx-background-color: #05b34f;
+}
+
+.trade-screen .trade-sell-button {
+	-fx-background-color: #c80020;
+	-fx-border-color: #ff3559;
+	-fx-text-fill: #ffe9ed;
+}
+
+.trade-screen .trade-sell-button:hover {
+	-fx-background-color: #df0024;
+}
+
+.trade-screen .trade-split-pane {
+	-fx-background-color: transparent;
+}
+
+.trade-screen .trade-split-pane > .split-pane-divider {
+	-fx-background-color: #1a355c;
+	-fx-padding: 0 1 0 1;
+}
+
+.trade-screen .trade-stock-table,
+.trade-screen .trade-stock-table .column-header-background,
+.trade-screen .trade-stock-table .filler {
+	-fx-background-color: #0a132d;
+}
+
+.trade-screen .trade-stock-table {
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 1;
+}
+
+.trade-screen .trade-stock-table .column-header,
+.trade-screen .trade-stock-table .column-header .label {
+	-fx-background-color: #0f1f42;
+	-fx-text-fill: #00e4ff;
+}
+
+.trade-screen .trade-stock-table .table-cell {
+	-fx-text-fill: #dce9ff;
+	-fx-border-color: #0f2140;
+}
+
+.trade-screen .trade-stock-table .table-row-cell {
+	-fx-background-color: #070f24;
+}
+
+.trade-screen .trade-stock-table .table-row-cell:odd {
+	-fx-background-color: #0a132d;
+}
+
+.trade-screen .trade-stock-table .table-row-cell:selected {
+	-fx-background-color: #14366a;
+}
+
+.trade-screen .trade-graph {
+	-fx-background-color: #070f24;
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 1;
+}
+
+.trade-screen .chart {
+	-fx-background-color: #070f24;
+	-fx-padding: 12;
+}
+
+.trade-screen .chart-plot-background {
+	-fx-background-color: #0d1834;
+}
+
+.trade-screen .chart-title {
+	-fx-text-fill: #00e4ff;
+	-fx-font-size: 26px;
+}
+
+.trade-screen .axis-label {
+	-fx-text-fill: #9cb6db;
+	-fx-font-size: 20px;
+}
+
+.trade-screen .axis {
+	-fx-tick-label-fill: #8ea9d2;
+}
+
+.trade-screen .axis-tick-mark,
+.trade-screen .axis-minor-tick-mark {
+	-fx-stroke: #335078;
+}
+
+.trade-screen .chart-vertical-grid-lines,
+.trade-screen .chart-horizontal-grid-lines {
+	-fx-stroke: #223a60;
+}
+
+.trade-screen .chart-series-line {
+	-fx-stroke: #23e88c;
+	-fx-stroke-width: 2px;
+}
+
+.trade-screen .default-color0.chart-line-symbol {
+	-fx-background-color: #23e88c, #0d1834;
+}
 }
