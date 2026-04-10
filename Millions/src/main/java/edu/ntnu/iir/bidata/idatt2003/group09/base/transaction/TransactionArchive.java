@@ -70,6 +70,10 @@ public class TransactionArchive implements Serializable {
         return weeks.size();
     }
 
+    public List<Transaction> getAllTransactions() {
+        return Collections.unmodifiableList(transactions);
+    }
+
     private static void validateWeek(int week) {
         if (week < 1) {
             throw new IllegalArgumentException("Week must be greater than 0," +
