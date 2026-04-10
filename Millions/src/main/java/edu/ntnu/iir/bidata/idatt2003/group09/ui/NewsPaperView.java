@@ -11,6 +11,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 public class NewsPaperView extends BorderPane {
@@ -35,7 +36,7 @@ public class NewsPaperView extends BorderPane {
 		Label meta = new Label("WEEK " + week + "   |   " + issueDate.format(DATE_FORMATTER).toUpperCase());
 		meta.getStyleClass().add("newspaper-meta");
 
-		VBox header = new VBox(5, title, meta);
+		VBox header = new VBox(5, title, createRuleLine(false), meta, createRuleLine(false));
 		header.getStyleClass().add("newspaper-header");
 		return header;
 	}
@@ -69,7 +70,16 @@ public class NewsPaperView extends BorderPane {
 			articles.getChildren().add(buildArticleCard(event));
 		}
 
-		VBox body = new VBox(10, globalHeadline, globalDescription, sectionTitle, articles);
+		VBox body = new VBox(
+				10,
+				globalHeadline,
+				globalDescription,
+				createRuleLine(true),
+				sectionTitle,
+				createRuleLine(false),
+				articles,
+				createRuleLine(false)
+		);
 		body.getStyleClass().add("newspaper-body");
 		return body;
 	}
@@ -100,5 +110,12 @@ public class NewsPaperView extends BorderPane {
 		HBox footer = new HBox(footerText);
 		footer.getStyleClass().add("newspaper-footer");
 		return footer;
+	}
+
+	private Region createRuleLine(boolean thick) {
+		Region line = new Region();
+		line.getStyleClass().add(thick ? "rule-line-thick" : "rule-line");
+		line.setMaxWidth(Double.MAX_VALUE);
+		return line;
 	}
 }

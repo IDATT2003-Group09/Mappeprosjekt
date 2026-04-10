@@ -15,7 +15,19 @@
   -fx-alignment: center;
   -fx-padding: 8 0 10 0;
   -fx-border-color: transparent transparent #1f2a44 transparent;
-  -fx-border-width: 0 0 2 0;
+  -fx-border-width: 0 0 3 0;
+}
+
+.rule-line {
+  -fx-pref-height: 2;
+  -fx-background-color: #1f2a44;
+  -fx-padding: 0;
+}
+
+.rule-line-thick {
+  -fx-pref-height: 4;
+  -fx-background-color: #1f2a44;
+  -fx-padding: 0;
 }
 
 .newspaper-title {
@@ -64,7 +76,7 @@
   -fx-background-color: transparent;
   -fx-border-color: #1f2a44;
   -fx-border-width: 0 1 0 0;
-  -fx-padding: 6 10 4 0;
+  -fx-padding: 8 12 6 0;
 }
 
 .article-ticker {
