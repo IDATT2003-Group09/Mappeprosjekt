@@ -19,6 +19,8 @@ public class GameController {
     private final String saveFileName;
     private final GameProgress progress;
 
+    private Runnable onGameOver;
+
     public GameController(Exchange exchange, Player player) {
         this(exchange, player, null);
     }
@@ -28,6 +30,10 @@ public class GameController {
         this.player = player;
         this.saveFileName = saveFileName;
         this.progress = new GameProgress(new BigDecimal("0.10"));
+    }
+
+    public void setOnGameOver(Runnable onGameOver) {
+        this.onGameOver = onGameOver;
     }
 
     //game flow
@@ -44,7 +50,9 @@ public class GameController {
             );
 
             if (!success) {
-                //triggerGameOver();
+                if (onGameOver != null) {
+                    onGameOver.run();
+                }
                 return;
             }
 
