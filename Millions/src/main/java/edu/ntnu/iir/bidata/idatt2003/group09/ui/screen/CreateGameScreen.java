@@ -22,7 +22,7 @@ public class CreateGameScreen extends StackPane {
 	private static final double BOSS_SIZE = 500;
 	private static final double TITLE_FONT_SIZE = 32;
 	private static final double BUTTON_FONT_SIZE = 26;
-	private static final double EXIT_BUTTON_SIZE = 140;
+	private static final double EXIT_BUTTON_SIZE = 50;
 
 	public interface CreateGameHandler {
 		void onCreateGame(String fileName);
@@ -119,8 +119,8 @@ public class CreateGameScreen extends StackPane {
 
 			ChatBubble bossBubble = new ChatBubble("Hey you! What's your name?", fontFamily);
 			getChildren().add(bossBubble);
-			StackPane.setAlignment(bossBubble, Pos.BOTTOM_LEFT);
-			StackPane.setMargin(bossBubble, new Insets(0, 0, 180, 50));
+			StackPane.setAlignment(bossBubble, Pos.TOP_CENTER);
+			StackPane.setMargin(bossBubble, new Insets(220, 0, 0, 0));
 
 			fileNameField.requestFocus();
 		}
@@ -146,7 +146,7 @@ public class CreateGameScreen extends StackPane {
 			return new ImageView();
 		}
 
-		Image image = new Image(imageStream, EXIT_BUTTON_SIZE * 0.72, EXIT_BUTTON_SIZE * 0.72, true, false);
+		Image image = new Image(imageStream, EXIT_BUTTON_SIZE, EXIT_BUTTON_SIZE, true, false);
 		ImageView imageView = new ImageView(image);
 		imageView.setPreserveRatio(true);
 		imageView.setSmooth(false);
