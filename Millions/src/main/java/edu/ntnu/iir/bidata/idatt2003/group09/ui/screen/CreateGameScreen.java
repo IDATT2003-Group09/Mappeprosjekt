@@ -76,7 +76,7 @@ public class CreateGameScreen extends StackPane {
 			StackPane.setAlignment(bossImageView, Pos.BOTTOM_LEFT);
 			StackPane.setMargin(bossImageView, new Insets(0, 0, -90, -70));
 
-			ChatBubble bossBubble = new ChatBubble("Velg et filnavn for å starte!", fontFamily);
+			ChatBubble bossBubble = new ChatBubble("Hey you! What's your name.", fontFamily);
 			getChildren().add(bossBubble);
 			StackPane.setAlignment(bossBubble, Pos.BOTTOM_LEFT);
 			StackPane.setMargin(bossBubble, new Insets(0, 0, 250, 250));
