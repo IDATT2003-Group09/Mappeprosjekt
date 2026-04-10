@@ -47,6 +47,9 @@ public class TradeScreen extends BorderPane {
         this.onSaveAndQuit = onSaveAndQuit;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
+        getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
+        getStyleClass().add("trade-screen");
+
         stockTable = new StockTable().createStockTable(controller.getPlayer());
         stockTable.setItems(FXCollections.observableArrayList(stocks));
         graph = new StockGraph(stocks);
@@ -74,7 +77,7 @@ public class TradeScreen extends BorderPane {
 
     private void buildLayout() {
         Label titleLabel = new Label("Trade Stocks");
-        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        titleLabel.getStyleClass().add("trade-title");
 
         Label quantityLabel = new Label("Quantity:");
 

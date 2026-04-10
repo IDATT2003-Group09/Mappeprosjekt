@@ -1,0 +1,22 @@
+@font-face {
+	font-family: "ThaleahFat";
+	src: url("/ThaleahFat.ttf");
+}
+
+.trade-screen {
+	-fx-font-family: "ThaleahFat";
+}
+
+.trade-screen .label,
+.trade-screen .button,
+.trade-screen .text-field,
+.trade-screen .table-view,
+.trade-screen .table-view .column-header .label,
+.trade-screen .tab-pane .tab .tab-label {
+	-fx-font-family: "ThaleahFat";
+}
+
+.trade-title {
+	-fx-font-size: 18px;
+	-fx-font-weight: bold;
+}
