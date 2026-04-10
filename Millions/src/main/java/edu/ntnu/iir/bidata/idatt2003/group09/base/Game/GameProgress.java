@@ -45,4 +45,15 @@ public class GameProgress {
 
         return growth.compareTo(getCurrentLevel().getRequiredGrowth()) >= 0;
     }
+
+    public int getWeeksUntilDeadline() {
+        int weeksPerQuarter = 13;
+        int currentWeekInQuarter = currentWeek % weeksPerQuarter;
+
+        if (currentWeekInQuarter == 0) {
+            return 13;
+        }
+
+        return weeksPerQuarter - currentWeekInQuarter;
+    }
 }
