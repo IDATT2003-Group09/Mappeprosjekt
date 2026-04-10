@@ -2,6 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
 import java.io.IOException;
 import java.io.InputStream;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.ChatBubble;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -74,6 +75,11 @@ public class CreateGameScreen extends StackPane {
 			getChildren().add(bossImageView);
 			StackPane.setAlignment(bossImageView, Pos.BOTTOM_LEFT);
 			StackPane.setMargin(bossImageView, new Insets(0, 0, -90, -70));
+
+			ChatBubble bossBubble = new ChatBubble("Velg et filnavn for å starte!", fontFamily);
+			getChildren().add(bossBubble);
+			StackPane.setAlignment(bossBubble, Pos.BOTTOM_LEFT);
+			StackPane.setMargin(bossBubble, new Insets(0, 0, 250, 250));
 		}
 	}
 
