@@ -67,6 +67,7 @@ public class NewsPaperView extends BorderPane {
 				globalDescription
 		);
 		leftPage.getStyleClass().addAll("newspaper-page", "left-page");
+		leftPage.setMaxWidth(Double.MAX_VALUE);
 
 		Label rightPageTitle = new Label("STOCK-SPECIFIC EVENTS");
 		rightPageTitle.getStyleClass().add("section-title");
@@ -86,6 +87,7 @@ public class NewsPaperView extends BorderPane {
 				rightPageArticles
 		);
 		rightPage.getStyleClass().addAll("newspaper-page", "right-page");
+		rightPage.setMaxWidth(Double.MAX_VALUE);
 
 		Region centerFoldLine = new Region();
 		centerFoldLine.getStyleClass().add("center-fold-line");
@@ -95,8 +97,11 @@ public class NewsPaperView extends BorderPane {
 
 		HBox spread = new HBox(leftPage, centerFoldLine, rightPage);
 		spread.getStyleClass().add("newspaper-spread");
+		spread.setSpacing(0);
 		HBox.setHgrow(leftPage, Priority.ALWAYS);
+		HBox.setHgrow(centerFoldLine, Priority.NEVER);
 		HBox.setHgrow(rightPage, Priority.ALWAYS);
+		centerFoldLine.prefHeightProperty().bind(spread.heightProperty());
 
 		VBox body = new VBox(10, spread, createRuleLine(false));
 		body.getStyleClass().add("newspaper-body");
