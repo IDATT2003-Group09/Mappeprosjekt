@@ -33,22 +33,7 @@ public class ChatBubble extends VBox {
 			-fx-border-radius: 0;
 		""");
 
-		Region pointer = new Region();
-		pointer.setPrefSize(18, 18);
-		pointer.setMinSize(18, 18);
-		pointer.setMaxSize(18, 18);
-		pointer.setRotate(45);
-		pointer.setStyle("""
-			-fx-background-color: #f5f5f5;
-			-fx-border-color: #111111;
-			-fx-border-width: 3px;
-		""");
-
-		StackPane pointerWrap = new StackPane(pointer);
-		pointerWrap.setAlignment(Pos.CENTER_LEFT);
-		pointerWrap.setPadding(new Insets(-6, 0, 0, 22));
-
-		getChildren().addAll(bubbleBody, pointerWrap);
+		getChildren().addAll(bubbleBody);
 	}
 
 	public void setText(String text) {
