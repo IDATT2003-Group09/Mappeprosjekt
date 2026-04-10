@@ -5,6 +5,7 @@
 
 .portfolio-screen {
 	-fx-font-family: "ThaleahFat";
+  -fx-background-color: white;
 }
 
 .portfolio-screen .portfolio-total-value {
