@@ -1,6 +1,7 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.*;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Game.GameProgress;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
@@ -16,6 +17,7 @@ public class GameController {
     private final Exchange exchange;
     private final Player player;
     private final String saveFileName;
+    private final GameProgress progress;
 
     public GameController(Exchange exchange, Player player) {
         this(exchange, player, null);
@@ -25,14 +27,35 @@ public class GameController {
         this.exchange = exchange;
         this.player = player;
         this.saveFileName = saveFileName;
+        this.progress = new GameProgress(new BigDecimal("0.10"));
     }
 
     //game flow
     public void nextWeek() {
         player.setLastWeekNetWorth(player.getNetWorth());
 
+        progress.nextWeek();
+
+        if (progress.isQuarterComplete()) {
+
+            boolean success = progress.meetsRequirement(
+                    player.getNetWorth(),
+                    player.getStartingMoney()
+            );
+
+            if (!success) {
+                //triggerGameOver();
+                return;
+            }
+
+            progress.advanceLevel();
+        }
         exchange.advance();
         saveGame();
+    }
+
+    public GameProgress getProgress() {
+        return progress;
     }
 
     public void saveGame() {
