@@ -34,6 +34,9 @@ public class PortfolioScreen extends BorderPane {
     public PortfolioScreen(GameController controller) {
         this.controller = controller;
 
+        getStylesheets().add(getClass().getResource("/styling/portfolio.css").toExternalForm());
+        getStyleClass().add("portfolio-screen");
+
         this.table = new TableView<>();
         this.totalValueLabel = new Label();
         this.changeLabel = new Label();
@@ -45,12 +48,15 @@ public class PortfolioScreen extends BorderPane {
     }
 
     private void buildLayout() {
-        totalValueLabel.setStyle("-fx-font-size: 28px; -fx-font-weight: bold;");
-        changeLabel.setStyle("-fx-font-size: 16px;");
-        cashLabel.setStyle("-fx-font-size: 16px;");
+        totalValueLabel.getStyleClass().add("portfolio-total-value");
+        changeLabel.getStyleClass().add("portfolio-change");
+        cashLabel.getStyleClass().add("portfolio-cash");
 
         VBox topBox = new VBox(5, totalValueLabel, changeLabel, cashLabel);
+        topBox.getStyleClass().add("portfolio-top-box");
         topBox.setPadding(new Insets(10));
+
+        table.getStyleClass().add("portfolio-table");
 
         setCenter(table);
         setPadding(new Insets(10));
@@ -126,9 +132,15 @@ public class PortfolioScreen extends BorderPane {
         }
 
         if (change.signum() >= 0) {
-            changeLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: green;");
+            changeLabel.getStyleClass().remove("negative");
+            if (!changeLabel.getStyleClass().contains("positive")) {
+                changeLabel.getStyleClass().add("positive");
+            }
         } else {
-            changeLabel.setStyle("-fx-font-size: 16px; -fx-text-fill: red;");
+            changeLabel.getStyleClass().remove("positive");
+            if (!changeLabel.getStyleClass().contains("negative")) {
+                changeLabel.getStyleClass().add("negative");
+            }
         }
 
         totalValueLabel.setText("Total: " + format(current));
@@ -160,18 +172,28 @@ public class PortfolioScreen extends BorderPane {
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
 
+                if (!getStyleClass().contains("portfolio-colored-cell")) {
+                    getStyleClass().add("portfolio-colored-cell");
+                }
+
                 if (empty || item == null) {
                     setText(null);
-                    setStyle("");
+                    getStyleClass().removeAll("positive", "negative");
                     return;
                 }
 
                 setText(item);
 
                 if (item.startsWith("-")) {
-                    setStyle("-fx-text-fill: red;");
+                    getStyleClass().remove("positive");
+                    if (!getStyleClass().contains("negative")) {
+                        getStyleClass().add("negative");
+                    }
                 } else {
-                    setStyle("-fx-text-fill: green;");
+                    getStyleClass().remove("negative");
+                    if (!getStyleClass().contains("positive")) {
+                        getStyleClass().add("positive");
+                    }
                 }
             }
         };

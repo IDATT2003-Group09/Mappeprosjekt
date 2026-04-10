@@ -1,0 +1,27 @@
+@font-face {
+	font-family: "ThaleahFat";
+	src: url("/ThaleahFat.ttf");
+}
+
+.portfolio-screen {
+	-fx-font-family: "ThaleahFat";
+  -fx-background-color: white;
+}
+
+.portfolio-screen .portfolio-total-value {
+	-fx-font-size: 28px;
+	-fx-font-weight: bold;
+}
+
+.portfolio-screen .portfolio-change,
+.portfolio-screen .portfolio-cash {
+	-fx-font-size: 16px;
+}
+
+.portfolio-screen .positive {
+	-fx-text-fill: green;
+}
+
+.portfolio-screen .negative {
+	-fx-text-fill: red;
+}

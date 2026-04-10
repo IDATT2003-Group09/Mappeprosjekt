@@ -4,7 +4,6 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
-import edu.ntnu.iir.bidata.idatt2003.group09.io.EnhanceCSV;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
@@ -15,11 +14,13 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.StartScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.TradeScreen;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -35,6 +36,9 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.*;
  */
 public class Main extends Application {
 
+    private static final double DESIGN_WIDTH = 1100;
+    private static final double DESIGN_HEIGHT = 700;
+
     private BorderPane root;
 
     /**
@@ -45,10 +49,26 @@ public class Main extends Application {
         primaryStage.setTitle("Millions - A Stock Trading Game");
 
         root = new BorderPane();
+        root.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
+        root.setMinSize(DESIGN_WIDTH, DESIGN_HEIGHT);
+        root.setMaxSize(DESIGN_WIDTH, DESIGN_HEIGHT);
 
         showStartScreen();
 
-        Scene scene = new Scene(root, 1100, 700);
+        StackPane viewport = new StackPane(root);
+        viewport.setStyle("-fx-background-color: #202020;");
+
+        Scene scene = new Scene(viewport, DESIGN_WIDTH, DESIGN_HEIGHT);
+
+        root.scaleXProperty().bind(
+            Bindings.createDoubleBinding(
+                () -> Math.min(scene.getWidth() / DESIGN_WIDTH, scene.getHeight() / DESIGN_HEIGHT),
+                scene.widthProperty(),
+                scene.heightProperty()
+            )
+        );
+        root.scaleYProperty().bind(root.scaleXProperty());
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -150,11 +170,15 @@ public class Main extends Application {
 
     private void setupGameUI(GameController controller, List<Stock> stocks) {
 
+        TabPane tabPane = new TabPane();
+        StackPane newspaperContainer = new StackPane();
+
+        Tab newspaperTab = new Tab("Newspaper", newspaperContainer);
+        newspaperTab.setClosable(false);
+
         TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
-
-        TabPane tabPane = new TabPane();
 
         Tab tradeTab = new Tab("Trade", tradeScreen);
         Tab portfolioTab = new Tab("Portfolio", portfolioScreen);
@@ -164,12 +188,16 @@ public class Main extends Application {
         portfolioTab.setClosable(false);
         historyTab.setClosable(false);
 
-        tabPane.getTabs().addAll(tradeTab, portfolioTab, historyTab);
+        tabPane.getTabs().addAll(tradeTab, portfolioTab, newspaperTab, historyTab);
 
         tabPane.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldTab, newTab) -> {
                     if (newTab == portfolioTab) {
                         portfolioScreen.refresh();
+                    }
+                    if (newTab == newspaperTab) {
+                        newspaperContainer.getChildren()
+                                .setAll(new NewsPaperView(controller.getWeek(), controller.getPendingNewsPaper()));
                     }
                     if (newTab == historyTab) {
                         transactionHistoryScreen.refresh();

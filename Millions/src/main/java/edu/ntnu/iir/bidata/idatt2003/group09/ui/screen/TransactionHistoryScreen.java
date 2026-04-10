@@ -21,7 +21,11 @@ public class TransactionHistoryScreen extends BorderPane {
         this.controller = controller;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
+                getStylesheets().add(getClass().getResource("/styling/transactionHistory.css").toExternalForm());
+                getStyleClass().add("transaction-history-screen");
+
         table = new TableView<>();
+                table.getStyleClass().add("transaction-history-table");
 
         buildTable();
         refresh();
@@ -47,18 +51,29 @@ public class TransactionHistoryScreen extends BorderPane {
             @Override
             protected void updateItem(String item, boolean empty) {
                 super.updateItem(item, empty);
+
+                                if (!getStyleClass().contains("transaction-type-cell")) {
+                                        getStyleClass().add("transaction-type-cell");
+                                }
+
                 if (empty || item == null) {
                     setText(null);
-                    setStyle("");
+                                        getStyleClass().removeAll("positive", "negative");
                     return;
                 }
 
                 setText(item);
 
                 if (item.equals("Buy")) {
-                    setStyle("-fx-text-fill: green;");
+                                        getStyleClass().remove("negative");
+                                        if (!getStyleClass().contains("positive")) {
+                                                getStyleClass().add("positive");
+                                        }
                 } else {
-                    setStyle("-fx-text-fill: red;");
+                                        getStyleClass().remove("positive");
+                                        if (!getStyleClass().contains("negative")) {
+                                                getStyleClass().add("negative");
+                                        }
                 }
             }
         });
