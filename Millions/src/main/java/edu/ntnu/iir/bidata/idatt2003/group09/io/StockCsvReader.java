@@ -46,6 +46,11 @@ public final class StockCsvReader {
 
     String normalizedResourcePath = resourcePath.startsWith("/") ? resourcePath : "/" + resourcePath;
     InputStream inputStream = StockCsvReader.class.getResourceAsStream(normalizedResourcePath);
+
+    if (inputStream == null && "/sp500.csv".equals(normalizedResourcePath)) {
+      inputStream = StockCsvReader.class.getResourceAsStream("/csv/output/sp500.csv");
+    }
+
     if (inputStream == null) {
       throw new IOException("Resource not found: " + normalizedResourcePath);
     }
