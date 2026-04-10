@@ -96,6 +96,9 @@ public class TransactionHistoryScreen extends BorderPane {
         );
 
         table.getColumns().addAll(weekCol, typeCol, tickerCol, qtyCol, priceCol, totalCol);
+
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
     }
 
     public void refresh() {
