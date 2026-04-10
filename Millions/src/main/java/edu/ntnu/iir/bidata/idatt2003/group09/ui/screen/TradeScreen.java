@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.NewsPaperView;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockTable;
 
@@ -13,10 +14,13 @@ import java.util.Locale;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class TradeScreen extends BorderPane {
 
@@ -75,6 +79,7 @@ public class TradeScreen extends BorderPane {
         Button buyButton = new Button("Buy");
         Button sellButton = new Button("Sell");
         Button nextWeekButton = new Button("Next Week");
+        Button newsButton = new Button("News");
 
         Button saveButton = new Button("Save and Quit");
         saveButton.setOnAction(e -> {
@@ -86,6 +91,7 @@ public class TradeScreen extends BorderPane {
 
         buyButton.setOnAction(e -> buySelectedStock());
         sellButton.setOnAction(e -> sellSelectedStock());
+        newsButton.setOnAction(e -> showNewsPaper());
 
         nextWeekButton.setOnAction(e -> {
             controller.nextWeek();
@@ -94,7 +100,7 @@ public class TradeScreen extends BorderPane {
             updateSelectedStockGraph();
         });
 
-        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
+        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, newsButton, saveButton);
         controls.setPadding(new Insets(0, 0, 10, 0));
 
         VBox headerBox = new VBox(
@@ -198,5 +204,16 @@ public class TradeScreen extends BorderPane {
         holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
         weekLabel.setText("Week: " + controller.getWeek());
         newsLabel.setText("News: " + controller.getLatestNews());
+    }
+
+    private void showNewsPaper() {
+        NewsPaperView newsPaperView = new NewsPaperView(controller.getWeek(), controller.getPendingNewsPaper());
+        Scene scene = new Scene(newsPaperView, 980, 700);
+
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("The Market Gazette");
+        stage.setScene(scene);
+        stage.showAndWait();
     }
 }

@@ -1,6 +1,7 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.*;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 
@@ -97,5 +98,9 @@ public class GameController {
     public String getLatestNews() {
         MarketNews news = exchange.getPendingNews();
         return news != null ? news.getHeadline() : "No news";
+    }
+
+    public NewsPaper getPendingNewsPaper() {
+        return exchange.getPendingNewsPaper();
     }
 }
