@@ -2,6 +2,8 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.StockSpecificEvent;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -12,14 +14,19 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class NewsPaperView extends BorderPane {
 
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MMMM d, yyyy");
+	private static final String NEWS_FONT_PATH = "/ThaleahFat.ttf";
+	private static final double NEWS_FONT_SIZE = 24;
 
 	public NewsPaperView(int week, NewsPaper newsPaper) {
 		getStyleClass().add("newspaper-root");
 		getStylesheets().add(getClass().getResource("/styling/newspaperview.css").toExternalForm());
+		String fontFamily = loadNewsFontFamily();
+		setStyle("-fx-font-family: '" + fontFamily + "';");
 		setPadding(new Insets(14));
 
 		setTop(buildHeader(week));
@@ -100,5 +107,22 @@ public class NewsPaperView extends BorderPane {
 		HBox footer = new HBox(footerText);
 		footer.getStyleClass().add("newspaper-footer");
 		return footer;
+	}
+
+	private String loadNewsFontFamily() {
+		try (InputStream fontStream = getClass().getResourceAsStream(NEWS_FONT_PATH)) {
+			if (fontStream == null) {
+				return Font.getDefault().getFamily();
+			}
+
+			Font loadedFont = Font.loadFont(fontStream, NEWS_FONT_SIZE);
+			if (loadedFont != null) {
+				return loadedFont.getFamily();
+			}
+		} catch (IOException e) {
+			return Font.getDefault().getFamily();
+		}
+
+		return Font.getDefault().getFamily();
 	}
 }
