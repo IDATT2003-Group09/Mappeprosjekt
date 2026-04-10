@@ -5,25 +5,22 @@ import java.math.RoundingMode;
 
 public class GameProgress {
 
-    private int currentLevel = 1;
+    private int checkpointLevel = 1;
     private final BigDecimal baseRequirement;
     private int currentWeek = 0;
     private final int weeksPerQuarter = 13;
+    private int checkpointWeek = 13;
 
     public GameProgress(BigDecimal baseRequirement) {
         this.baseRequirement = baseRequirement;
     }
 
-    public GameLevel getCurrentLevel() {
-        return new GameLevel(currentLevel, baseRequirement);
+    public BigDecimal getBaseRequirement() {
+        return baseRequirement;
     }
 
-    public void advanceLevel() {
-        currentLevel++;
-    }
-
-    public int getCurrentLevelNumber() {
-        return currentLevel;
+    public int getCurrentLevelNumber(BigDecimal netWorth, BigDecimal startingMoney) {
+        return calculateLevel(netWorth, startingMoney);
     }
 
     public void nextWeek() {
@@ -43,17 +40,31 @@ public class GameProgress {
         BigDecimal growth = netWorth.subtract(startingMoney)
                 .divide(startingMoney, 4, RoundingMode.HALF_UP);
 
-        return growth.compareTo(getCurrentLevel().getRequiredGrowth()) >= 0;
+        BigDecimal required = baseRequirement.multiply(BigDecimal.valueOf(checkpointLevel));
+
+        return growth.compareTo(required) >= 0;
     }
 
     public int getWeeksUntilDeadline() {
-        int weeksPerQuarter = 13;
-        int currentWeekInQuarter = currentWeek % weeksPerQuarter;
+        return Math.max(0, checkpointWeek - currentWeek);
+    }
 
-        if (currentWeekInQuarter == 0) {
-            return 13;
+    public void advanceCheckpoint(BigDecimal netWorth, BigDecimal startingMoney) {
+
+        int level = calculateLevel(netWorth, startingMoney);
+
+        checkpointWeek = level * weeksPerQuarter;
+    }
+
+    public int calculateLevel(BigDecimal netWorth, BigDecimal startingMoney) {
+
+        BigDecimal growth = netWorth.subtract(startingMoney)
+                .divide(startingMoney, 4, RoundingMode.HALF_UP);
+
+        if (growth.compareTo(BigDecimal.ZERO) <= 0) {
+            return 1;
         }
 
-        return weeksPerQuarter - currentWeekInQuarter;
+        return growth.divide(baseRequirement, 0, RoundingMode.DOWN).intValue() + 1;
     }
 }
