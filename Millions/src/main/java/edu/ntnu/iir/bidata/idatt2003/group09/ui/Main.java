@@ -156,12 +156,7 @@ public class Main extends Application {
         Tab newspaperTab = new Tab("Newspaper", newspaperContainer);
         newspaperTab.setClosable(false);
 
-        Runnable showNewspaperTab = () -> {
-            newspaperContainer.getChildren().setAll(new NewsPaperView(controller.getWeek(), controller.getPendingNewsPaper()));
-            tabPane.getSelectionModel().select(newspaperTab);
-        };
-
-        TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen, showNewspaperTab);
+        TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
 

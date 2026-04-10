@@ -98,8 +98,8 @@ public class NewsPaperView extends BorderPane {
 
 		VBox card = new VBox(4, ticker, headline, description);
 		card.getStyleClass().add("article-card");
-		card.setPrefWidth(260);
-		card.setMinHeight(170);
+		card.setPrefWidth(460);
+		card.setMinHeight(370);
 		VBox.setVgrow(description, Priority.ALWAYS);
 		return card;
 	}

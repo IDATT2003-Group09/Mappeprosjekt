@@ -22,7 +22,6 @@ public class TradeScreen extends BorderPane {
 
     private final GameController controller;
     private final Runnable onSaveAndQuit;
-    private final Runnable onShowNewsPaper;
 
     private final TableView<Stock> stockTable;
     private final StockGraph graph;
@@ -37,10 +36,9 @@ public class TradeScreen extends BorderPane {
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
 
-    public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit, Runnable onShowNewsPaper) {
+    public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
         this.controller = controller;
         this.onSaveAndQuit = onSaveAndQuit;
-        this.onShowNewsPaper = onShowNewsPaper;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
         getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
@@ -80,7 +78,6 @@ public class TradeScreen extends BorderPane {
         Button buyButton = new Button("Buy");
         Button sellButton = new Button("Sell");
         Button nextWeekButton = new Button("Next Week");
-        Button newsButton = new Button("News");
 
         Button saveButton = new Button("Save and Quit");
         saveButton.setOnAction(e -> {
@@ -92,7 +89,6 @@ public class TradeScreen extends BorderPane {
 
         buyButton.setOnAction(e -> buySelectedStock());
         sellButton.setOnAction(e -> sellSelectedStock());
-        newsButton.setOnAction(e -> showNewsPaper());
 
         nextWeekButton.setOnAction(e -> {
             controller.nextWeek();
@@ -101,7 +97,7 @@ public class TradeScreen extends BorderPane {
             updateSelectedStockGraph();
         });
 
-        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, newsButton, saveButton);
+        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
         controls.setPadding(new Insets(0, 0, 10, 0));
 
         VBox headerBox = new VBox(
@@ -206,11 +202,5 @@ public class TradeScreen extends BorderPane {
         holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
         weekLabel.setText("Week: " + controller.getWeek());
         newsLabel.setText("News: " + controller.getLatestNews());
-    }
-
-    private void showNewsPaper() {
-        if (onShowNewsPaper != null) {
-            onShowNewsPaper.run();
-        }
     }
 }
