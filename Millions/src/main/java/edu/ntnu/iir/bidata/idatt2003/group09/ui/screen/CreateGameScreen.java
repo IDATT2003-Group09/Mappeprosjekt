@@ -17,6 +17,7 @@ public class CreateGameScreen extends StackPane {
 
 	private static final String FONT_PATH = "/ThaleahFat.ttf";
 	private static final String BOSS_GIF_PATH = "/images/boss/boss.gif";
+	private static final double BOSS_SIZE = 300;
 	private static final double TITLE_FONT_SIZE = 32;
 	private static final double BUTTON_FONT_SIZE = 26;
 
@@ -82,11 +83,11 @@ public class CreateGameScreen extends StackPane {
 			return null;
 		}
 
-		Image bossImage = new Image(gifStream);
+		Image bossImage = new Image(gifStream, BOSS_SIZE, BOSS_SIZE, true, false);
 		ImageView bossImageView = new ImageView(bossImage);
 		bossImageView.setPreserveRatio(true);
-		bossImageView.setFitHeight(360);
-		bossImageView.setSmooth(true);
+		bossImageView.setSmooth(false);
+		bossImageView.setCache(false);
 		return bossImageView;
 	}
 
