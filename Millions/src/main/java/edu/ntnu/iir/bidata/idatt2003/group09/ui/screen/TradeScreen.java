@@ -15,7 +15,11 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
 public class TradeScreen extends BorderPane {
@@ -121,12 +125,31 @@ public class TradeScreen extends BorderPane {
         setTop(headerBox);
         setPadding(new Insets(10));
 
-        SplitPane splitPane = new SplitPane();
-        splitPane.getStyleClass().add("trade-split-pane");
-        splitPane.getItems().addAll(stockList, graph);
-        splitPane.setDividerPositions(0.3);
+        GridPane contentGrid = new GridPane();
+        contentGrid.getStyleClass().add("trade-content-grid");
 
-        setCenter(splitPane);
+        ColumnConstraints leftColumn = new ColumnConstraints();
+        leftColumn.setPercentWidth(50);
+        leftColumn.setHgrow(Priority.ALWAYS);
+
+        ColumnConstraints rightColumn = new ColumnConstraints();
+        rightColumn.setPercentWidth(50);
+        rightColumn.setHgrow(Priority.ALWAYS);
+
+        RowConstraints row = new RowConstraints();
+        row.setPercentHeight(100);
+        row.setVgrow(Priority.ALWAYS);
+
+        contentGrid.getColumnConstraints().addAll(leftColumn, rightColumn);
+        contentGrid.getRowConstraints().add(row);
+
+        stockList.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        graph.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+        contentGrid.add(stockList, 0, 0);
+        contentGrid.add(graph, 1, 0);
+
+        setCenter(contentGrid);
     }
 
     private void buySelectedStock() {

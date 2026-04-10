@@ -100,6 +100,11 @@
 	-fx-padding: 0 1 0 1;
 }
 
+.trade-screen .trade-content-grid {
+	-fx-hgap: 0;
+	-fx-vgap: 0;
+}
+
 .trade-screen .trade-stock-list {
 	-fx-background-color: #0a132d;
 	-fx-border-color: #1b4b81;
