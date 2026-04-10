@@ -127,11 +127,15 @@
 
 .trade-screen .trade-stock-table .table-cell {
 	-fx-text-fill: #dce9ff;
-	-fx-border-color: #0f2140;
+	-fx-border-color: transparent transparent #122747 transparent;
+	-fx-padding: 12 14 12 14;
 }
 
 .trade-screen .trade-stock-table .table-row-cell {
 	-fx-background-color: #070f24;
+	-fx-cell-size: 86px;
+	-fx-border-color: transparent transparent #112344 transparent;
+	-fx-table-cell-border-color: transparent;
 }
 
 .trade-screen .trade-stock-table .table-row-cell:odd {
@@ -140,6 +144,60 @@
 
 .trade-screen .trade-stock-table .table-row-cell:selected {
 	-fx-background-color: #14366a;
+}
+
+.trade-screen .trade-stock-table .virtual-flow .scroll-bar:vertical,
+.trade-screen .trade-stock-table .virtual-flow .scroll-bar:horizontal {
+	-fx-background-color: #0d1834;
+}
+
+.trade-screen .trade-stock-table .scroll-bar .thumb {
+	-fx-background-color: #1b4b81;
+	-fx-background-insets: 2;
+	-fx-background-radius: 2;
+}
+
+.trade-screen .trade-stock-table .stock-symbol-cell {
+	-fx-text-fill: #05d8ff;
+	-fx-font-size: 28px;
+	-fx-font-weight: bold;
+}
+
+.trade-screen .trade-stock-table .stock-company-cell {
+	-fx-text-fill: #8aa4c9;
+	-fx-font-size: 18px;
+}
+
+.trade-screen .trade-stock-table .stock-price-cell {
+	-fx-alignment: center-right;
+	-fx-font-size: 24px;
+	-fx-font-weight: bold;
+}
+
+.trade-screen .trade-stock-table .stock-price-cell.stock-change-up {
+	-fx-text-fill: #23e88c;
+}
+
+.trade-screen .trade-stock-table .stock-price-cell.stock-change-down {
+	-fx-text-fill: #ff6b78;
+}
+
+.trade-screen .trade-stock-table .stock-price-cell.stock-change-neutral {
+	-fx-text-fill: #9cb6db;
+}
+
+.trade-screen .trade-stock-table .stock-owned-cell {
+	-fx-text-fill: #00e4ff;
+	-fx-font-size: 18px;
+	-fx-alignment: center;
+}
+
+.trade-screen .trade-stock-table .stock-symbol-column .label,
+.trade-screen .trade-stock-table .stock-company-column .label,
+.trade-screen .trade-stock-table .stock-price-column .label,
+.trade-screen .trade-stock-table .stock-owned-column .label {
+	-fx-text-fill: #00e4ff;
+	-fx-font-size: 19px;
 }
 
 .trade-screen .trade-graph {
@@ -188,5 +246,4 @@
 
 .trade-screen .default-color0.chart-line-symbol {
 	-fx-background-color: #23e88c, #0d1834;
-}
 }
