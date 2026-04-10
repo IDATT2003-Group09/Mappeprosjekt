@@ -35,16 +35,12 @@ public class LoadGameScreen extends VBox {
 
     String fontFamily = loadFontFamily();
 
-    Label title = new Label("Velg lagret spill");
-    title.setStyle("-fx-text-fill: white;");
-    title.setFont(Font.font(fontFamily, TITLE_FONT_SIZE));
-
     VBox saveSlotsContainer = new VBox(10);
     saveSlotsContainer.setAlignment(Pos.CENTER);
     saveSlotsContainer.setPadding(new Insets(20));
 
     if (saveFiles == null || saveFiles.isEmpty()) {
-      Label emptyLabel = new Label("Ingen lagrede spill funnet");
+      Label emptyLabel = new Label("No saved games found.");
       emptyLabel.setStyle("-fx-text-fill: white;");
       emptyLabel.setFont(Font.font(fontFamily, 22));
       saveSlotsContainer.getChildren().add(emptyLabel);
@@ -60,14 +56,14 @@ public class LoadGameScreen extends VBox {
       }
     }
 
-    Button backButton = new Button("Tilbake");
+    Button backButton = new Button("Back");
     backButton.getStyleClass().add("start-button");
     backButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
     backButton.setPrefWidth(450);
     backButton.setPrefHeight(55);
     backButton.setOnAction(e -> handler.onBack());
 
-    getChildren().addAll(title, saveSlotsContainer, backButton);
+    getChildren().addAll(saveSlotsContainer, backButton);
   }
 
   private String loadFontFamily() {
