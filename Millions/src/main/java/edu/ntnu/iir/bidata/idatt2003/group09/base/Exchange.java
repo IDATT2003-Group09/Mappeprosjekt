@@ -14,8 +14,6 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.TransactionFactory
 
 public class Exchange implements Serializable {
 
-  private static final BigDecimal MINIMUM_STOCK_PRICE = BigDecimal.valueOf(0.01);
-
   private String name;
   private int week;
   private Map<String, Stock> stockMap;
