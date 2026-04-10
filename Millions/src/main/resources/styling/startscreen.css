@@ -16,10 +16,10 @@
 	-fx-padding: 6 20 6 20;
 }
 
-.start-button:hover {
-	-fx-background-color: rgba(245, 245, 245, 0.92);
-	-fx-text-fill: #111111;
-	-fx-border-color: #111111;
+.start-button:hover,
+.start-button:focused {
+	-fx-border-color: #ffd447;
+	-fx-border-width: 4px;
 }
 
 .start-button:pressed {
@@ -28,7 +28,4 @@
 	-fx-translate-y: 1px;
 }
 
-.start-button:focused {
-	-fx-border-color: #ffd447;
-	-fx-border-width: 4px;
-}
+
