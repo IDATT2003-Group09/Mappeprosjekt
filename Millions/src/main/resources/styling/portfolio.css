@@ -5,23 +5,94 @@
 
 .portfolio-screen {
 	-fx-font-family: "ThaleahFat";
-  -fx-background-color: white;
+	-fx-background-color: linear-gradient(to bottom right, #070f2a, #020716);
+}
+
+.portfolio-screen .label,
+.portfolio-screen .table-view,
+.portfolio-screen .table-view .column-header .label,
+.portfolio-screen .table-view .table-cell {
+	-fx-font-family: "ThaleahFat";
+}
+
+.portfolio-screen .portfolio-top-box {
+	-fx-background-color: #0a132d;
+	-fx-border-color: #1a355c;
+	-fx-border-width: 0 0 1 0;
 }
 
 .portfolio-screen .portfolio-total-value {
 	-fx-font-size: 28px;
 	-fx-font-weight: bold;
+	-fx-text-fill: #00e4ff;
 }
 
 .portfolio-screen .portfolio-change,
 .portfolio-screen .portfolio-cash {
-	-fx-font-size: 16px;
+	-fx-font-size: 20px;
+	-fx-text-fill: #9cb6db;
 }
 
 .portfolio-screen .positive {
-	-fx-text-fill: green;
+	-fx-text-fill: #23e88c;
 }
 
 .portfolio-screen .negative {
-	-fx-text-fill: red;
+	-fx-text-fill: #ff6b78;
+}
+
+.portfolio-screen .portfolio-table,
+.portfolio-screen .portfolio-table .column-header-background,
+.portfolio-screen .portfolio-table .filler {
+	-fx-background-color: #0a132d;
+}
+
+.portfolio-screen .portfolio-table {
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 1;
+	-fx-background-insets: 0;
+}
+
+.portfolio-screen .portfolio-table .column-header {
+	-fx-background-color: #0f1f42;
+	-fx-border-color: #1a355c;
+}
+
+.portfolio-screen .portfolio-table .column-header .label {
+	-fx-text-fill: #00e4ff;
+	-fx-font-size: 19px;
+	-fx-font-weight: bold;
+}
+
+.portfolio-screen .portfolio-table .table-row-cell {
+	-fx-background-color: #070f24;
+	-fx-border-color: transparent transparent #112344 transparent;
+	-fx-table-cell-border-color: transparent;
+	-fx-cell-size: 54px;
+}
+
+.portfolio-screen .portfolio-table .table-row-cell:odd {
+	-fx-background-color: #0a132d;
+}
+
+.portfolio-screen .portfolio-table .table-row-cell:selected {
+	-fx-background-color: #1e2f54;
+}
+
+.portfolio-screen .portfolio-table .table-cell {
+	-fx-text-fill: #dce9ff;
+	-fx-font-size: 18px;
+	-fx-padding: 8 10 8 10;
+}
+
+.portfolio-screen .portfolio-table .virtual-flow .scroll-bar:vertical,
+.portfolio-screen .portfolio-table .virtual-flow .scroll-bar:horizontal {
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
+	-fx-opacity: 0;
+	-fx-padding: 0;
+}
+
+.portfolio-screen .portfolio-table .scroll-bar .thumb {
+	-fx-background-color: transparent;
 }
