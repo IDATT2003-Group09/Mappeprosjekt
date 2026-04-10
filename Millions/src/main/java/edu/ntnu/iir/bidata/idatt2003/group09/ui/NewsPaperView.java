@@ -8,7 +8,6 @@ import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -50,36 +49,50 @@ public class NewsPaperView extends BorderPane {
 			return emptyBody;
 		}
 
+		Label leftPageTitle = new Label("GLOBAL EVENT");
+		leftPageTitle.getStyleClass().add("section-title");
+
 		Label globalHeadline = new Label(newsPaper.getGlobalEvent().getHeadline().toUpperCase());
 		globalHeadline.getStyleClass().add("global-headline");
+		globalHeadline.setWrapText(true);
 
 		Label globalDescription = new Label(newsPaper.getGlobalEvent().getDescription());
 		globalDescription.getStyleClass().add("global-description");
 		globalDescription.setWrapText(true);
 
-		Label sectionTitle = new Label("BUSINESS");
-		sectionTitle.getStyleClass().add("section-title");
+		VBox leftPage = new VBox(10,
+				leftPageTitle,
+				createRuleLine(false),
+				globalHeadline,
+				globalDescription
+		);
+		leftPage.getStyleClass().addAll("newspaper-page", "left-page");
 
-		FlowPane articles = new FlowPane();
-		articles.setHgap(12);
-		articles.setVgap(12);
-		articles.getStyleClass().add("articles-grid");
+		Label rightPageTitle = new Label("STOCK-SPECIFIC EVENTS");
+		rightPageTitle.getStyleClass().add("section-title");
+
+		VBox rightPageArticles = new VBox(12);
+		rightPageArticles.getStyleClass().add("articles-grid");
+		rightPageArticles.setFillWidth(true);
 
 		List<StockSpecificEvent> specificEvents = newsPaper.getStockSpecificEvents();
 		for (StockSpecificEvent event : specificEvents) {
-			articles.getChildren().add(buildArticleCard(event));
+			rightPageArticles.getChildren().add(buildArticleCard(event));
 		}
 
-		VBox body = new VBox(
-				10,
-				globalHeadline,
-				globalDescription,
-				createRuleLine(true),
-				sectionTitle,
+		VBox rightPage = new VBox(10,
+				rightPageTitle,
 				createRuleLine(false),
-				articles,
-				createRuleLine(false)
+				rightPageArticles
 		);
+		rightPage.getStyleClass().addAll("newspaper-page", "right-page");
+
+		HBox spread = new HBox(18, leftPage, rightPage);
+		spread.getStyleClass().add("newspaper-spread");
+		HBox.setHgrow(leftPage, Priority.ALWAYS);
+		HBox.setHgrow(rightPage, Priority.ALWAYS);
+
+		VBox body = new VBox(10, spread, createRuleLine(false));
 		body.getStyleClass().add("newspaper-body");
 		return body;
 	}
@@ -98,8 +111,7 @@ public class NewsPaperView extends BorderPane {
 
 		VBox card = new VBox(4, ticker, headline, description);
 		card.getStyleClass().add("article-card");
-		card.setPrefWidth(460);
-		card.setMinHeight(370);
+		card.setMaxWidth(Double.MAX_VALUE);
 		VBox.setVgrow(description, Priority.ALWAYS);
 		return card;
 	}
