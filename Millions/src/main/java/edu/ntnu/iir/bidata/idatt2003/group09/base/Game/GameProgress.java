@@ -10,6 +10,7 @@ public class GameProgress {
     private int currentWeek = 0;
     private final int weeksPerQuarter = 13;
     private int checkpointWeek = 13;
+    private int lastCalculatedLevel = 1;
 
     public GameProgress(BigDecimal baseRequirement) {
         this.baseRequirement = baseRequirement;
@@ -66,5 +67,13 @@ public class GameProgress {
         }
 
         return growth.divide(baseRequirement, 0, RoundingMode.DOWN).intValue() + 1;
+    }
+
+    public int getLastCalculatedLevel() {
+        return lastCalculatedLevel;
+    }
+
+    public void setLastCalculatedLevel(int level) {
+        this.lastCalculatedLevel = level;
     }
 }

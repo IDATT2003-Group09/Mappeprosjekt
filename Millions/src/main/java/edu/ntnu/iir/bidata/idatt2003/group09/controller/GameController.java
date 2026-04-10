@@ -42,6 +42,19 @@ public class GameController {
 
         progress.nextWeek();
 
+        int newLevel = progress.calculateLevel(
+                player.getNetWorth(),
+                player.getStartingMoney()
+        );
+
+        if (newLevel > progress.getLastCalculatedLevel()) {
+            progress.advanceCheckpoint(
+                    player.getNetWorth(),
+                    player.getStartingMoney()
+            );
+            progress.setLastCalculatedLevel(newLevel);
+        }
+
         if (progress.isQuarterComplete()) {
 
             boolean success = progress.meetsRequirement(
