@@ -2,7 +2,6 @@ package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -201,47 +200,19 @@ public class Exchange implements Serializable {
    * Generates new news for this week, to be used in next weeks price
    */
   public void advance() {
-      NewsPaper activeNewsPaper = pendingNewsPaper;
+      NewsPaper activeNewsPaper = NewsPaper.create(eventFactory, getStocks(), random);
 
       for (Stock stock : stockMap.values()) {
-          BigDecimal currentPrice = stock.getSalesPrice();
-
-          BigDecimal randomPrice = PriceGenerator.nextWeekPrice(stock);
-
-          BigDecimal randomChange = randomPrice
-                  .subtract(currentPrice)
-                  .divide(currentPrice, 6, RoundingMode.HALF_UP);
-
-          BigDecimal eventImpact = BigDecimal.ZERO;
-            if (activeNewsPaper != null) {
-              eventImpact = activeNewsPaper.getImpactForStock(stock);
-          }
-
-          if (eventImpact.compareTo(BigDecimal.ZERO) != 0) {
-              BigDecimal riskFactor = BigDecimal.valueOf(stock.getRisk())
-                      .divide(BigDecimal.valueOf(4), 2, RoundingMode.HALF_UP);
-
-              eventImpact = eventImpact.multiply(riskFactor);
-          }
-
-          BigDecimal totalChange = randomChange.add(eventImpact);
-
-          BigDecimal newPrice = currentPrice.multiply(BigDecimal.ONE.add(totalChange));
-
-          if (newPrice.compareTo(MINIMUM_STOCK_PRICE) < 0) {
-            newPrice = MINIMUM_STOCK_PRICE;
-          }
-
+        BigDecimal newPrice = PriceGenerator.nextWeekPrice(stock, activeNewsPaper);
           stock.addNewSalesPrice(newPrice);
       }
 
-          NewsPaper newNewsPaper = NewsPaper.create(eventFactory, getStocks(), random);
-          pendingNewsPaper = newNewsPaper;
+        pendingNewsPaper = activeNewsPaper;
           pendingNews = new MarketNews(
-              newNewsPaper.getGlobalEvent().getHeadline(),
-              newNewsPaper.getGlobalEvent().getDescription(),
+          activeNewsPaper.getGlobalEvent().getHeadline(),
+          activeNewsPaper.getGlobalEvent().getDescription(),
               "ALL",
-              newNewsPaper.getGlobalEvent().getAverageImpact()
+          activeNewsPaper.getGlobalEvent().getAverageImpact()
           );
 
           if (pendingNews != null) {

@@ -2,35 +2,39 @@ package edu.ntnu.iir.bidata.idatt2003.group09.base;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Random;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
 
 public class PriceGenerator {
 
-	private static final Random RANDOM = new Random();
+	private static final BigDecimal MINIMUM_STOCK_PRICE = BigDecimal.valueOf(0.01);
 
 	private PriceGenerator() {
 	}
 
-	public static BigDecimal nextWeekPrice(Stock stock) {
+	public static BigDecimal nextWeekPrice(Stock stock, NewsPaper newsPaper) {
 		if (stock == null) {
 			throw new IllegalArgumentException("Stock cannot be null");
 		}
 
 		BigDecimal currentPrice = stock.getSalesPrice();
-		double riskScale = Math.max(1, stock.getRisk()) / 7.0;
-		double randomChange = RANDOM.nextGaussian() * (0.015 + (0.035 * riskScale));
+		BigDecimal eventImpact = BigDecimal.ZERO;
 
-		if (randomChange > 0.25) {
-			randomChange = 0.25;
-		} else if (randomChange < -0.25) {
-			randomChange = -0.25;
+		if (newsPaper != null) {
+			eventImpact = newsPaper.getImpactForStock(stock);
 		}
 
-		BigDecimal multiplier = BigDecimal.ONE.add(BigDecimal.valueOf(randomChange));
-		BigDecimal newPrice = currentPrice.multiply(multiplier).setScale(6, RoundingMode.HALF_UP);
+		if (eventImpact.compareTo(BigDecimal.ZERO) != 0) {
+			BigDecimal riskFactor = BigDecimal.valueOf(stock.getRisk())
+					.divide(BigDecimal.valueOf(4), 2, RoundingMode.HALF_UP);
+			eventImpact = eventImpact.multiply(riskFactor);
+		}
 
-		if (newPrice.compareTo(BigDecimal.valueOf(0.01)) < 0) {
-			return BigDecimal.valueOf(0.01);
+		BigDecimal newPrice = currentPrice.multiply(BigDecimal.ONE.add(eventImpact))
+				.setScale(6, RoundingMode.HALF_UP);
+
+		if (newPrice.compareTo(MINIMUM_STOCK_PRICE) < 0) {
+			return MINIMUM_STOCK_PRICE;
 		}
 
 		return newPrice;
