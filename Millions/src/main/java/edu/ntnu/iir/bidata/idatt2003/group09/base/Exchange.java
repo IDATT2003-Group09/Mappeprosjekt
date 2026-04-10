@@ -9,6 +9,7 @@ import java.util.Random;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.EventFactory;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.StockSpecificEvent;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Transaction;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.TransactionFactory;
 
@@ -215,6 +216,9 @@ public class Exchange implements Serializable {
 
           if (pendingNews != null) {
             System.out.println("Week " + week + " NEWS: " + pendingNews.getHeadline());
+            for (StockSpecificEvent event : activeNewsPaper.getStockSpecificEvents()) {
+              System.out.println(" - " + event.getGeneratedHeadline());
+            }
       }
 
       week++;

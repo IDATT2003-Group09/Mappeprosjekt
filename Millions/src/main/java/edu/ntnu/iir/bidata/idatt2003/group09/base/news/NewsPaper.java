@@ -11,7 +11,8 @@ import java.util.Random;
 
 public class NewsPaper implements Serializable {
 
-	private static final int STOCK_SPECIFIC_EVENT_COUNT = 3;
+	private static final int MIN_STOCK_SPECIFIC_EVENT_COUNT = 2;
+	private static final int MAX_STOCK_SPECIFIC_EVENT_COUNT = 3;
 
 	private final GlobalEvent globalEvent;
 	private final List<StockSpecificEvent> stockSpecificEvents;
@@ -20,8 +21,10 @@ public class NewsPaper implements Serializable {
 		if (globalEvent == null) {
 			throw new IllegalArgumentException("Global event cannot be null");
 		}
-		if (stockSpecificEvents == null || stockSpecificEvents.size() != STOCK_SPECIFIC_EVENT_COUNT) {
-			throw new IllegalArgumentException("Newspaper must contain exactly 3 stock specific events");
+		if (stockSpecificEvents == null
+				|| stockSpecificEvents.size() < MIN_STOCK_SPECIFIC_EVENT_COUNT
+				|| stockSpecificEvents.size() > MAX_STOCK_SPECIFIC_EVENT_COUNT) {
+			throw new IllegalArgumentException("Newspaper must contain between 2 and 3 stock specific events");
 		}
 
 		this.globalEvent = globalEvent;
@@ -49,8 +52,11 @@ public class NewsPaper implements Serializable {
 		GlobalEvent selectedGlobal = (GlobalEvent) globalEvents.get(random.nextInt(globalEvents.size()));
 		List<StockSpecificEvent> selectedSpecific = new ArrayList<>();
 		List<Event> availableTemplates = new ArrayList<>(stockTemplates);
+		int stockSpecificEventCount =
+				random.nextInt(MAX_STOCK_SPECIFIC_EVENT_COUNT - MIN_STOCK_SPECIFIC_EVENT_COUNT + 1)
+						+ MIN_STOCK_SPECIFIC_EVENT_COUNT;
 
-		for (int index = 0; index < STOCK_SPECIFIC_EVENT_COUNT; index++) {
+		for (int index = 0; index < stockSpecificEventCount; index++) {
 			if (availableTemplates.isEmpty()) {
 				availableTemplates = new ArrayList<>(stockTemplates);
 			}
