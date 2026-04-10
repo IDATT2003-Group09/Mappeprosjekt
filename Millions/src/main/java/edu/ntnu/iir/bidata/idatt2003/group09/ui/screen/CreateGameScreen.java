@@ -17,9 +17,12 @@ public class CreateGameScreen extends StackPane {
 
 	private static final String FONT_PATH = "/ThaleahFat.ttf";
 	private static final String BOSS_GIF_PATH = "/images/boss/boss.gif";
+	private static final String EXIT_RED_PATH = "/images/util/exit/pixilart-frames/exitred.png";
+	private static final String EXIT_GREEN_PATH = "/images/util/exit/pixilart-frames/exitgreen.png";
 	private static final double BOSS_SIZE = 500;
 	private static final double TITLE_FONT_SIZE = 32;
 	private static final double BUTTON_FONT_SIZE = 26;
+	private static final double EXIT_BUTTON_SIZE = 140;
 
 	public interface CreateGameHandler {
 		void onCreateGame(String fileName);
@@ -79,12 +82,25 @@ public class CreateGameScreen extends StackPane {
 		startButton.setOnAction(e -> handler.onCreateGame(fileNameField.getText()));
 		fileNameField.setOnAction(e -> handler.onCreateGame(fileNameField.getText()));
 
-		Button backButton = new Button("Back");
-		backButton.getStyleClass().add("start-button");
-		backButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
-		backButton.setPrefWidth(450);
-		backButton.setPrefHeight(55);
-		backButton.setOnAction(e -> handler.onBack());
+		ImageView exitRedImage = createExitImageView(EXIT_RED_PATH);
+		ImageView exitGreenImage = createExitImageView(EXIT_GREEN_PATH);
+		exitGreenImage.setVisible(false);
+
+		StackPane backButton = new StackPane(exitRedImage, exitGreenImage);
+		backButton.setPickOnBounds(false);
+		backButton.setMinSize(EXIT_BUTTON_SIZE, EXIT_BUTTON_SIZE);
+		backButton.setPrefSize(EXIT_BUTTON_SIZE, EXIT_BUTTON_SIZE);
+		backButton.setMaxSize(EXIT_BUTTON_SIZE, EXIT_BUTTON_SIZE);
+		backButton.setStyle("-fx-background-color: transparent; -fx-cursor: hand;");
+		backButton.setOnMouseEntered(e -> {
+			exitRedImage.setVisible(false);
+			exitGreenImage.setVisible(true);
+		});
+		backButton.setOnMouseExited(e -> {
+			exitGreenImage.setVisible(false);
+			exitRedImage.setVisible(true);
+		});
+		backButton.setOnMouseClicked(e -> handler.onBack());
 
 		contentBox.getChildren().addAll(inputBubble, startButton);
 		getChildren().add(contentBox);
@@ -92,7 +108,7 @@ public class CreateGameScreen extends StackPane {
 
 		getChildren().add(backButton);
 		StackPane.setAlignment(backButton, Pos.BOTTOM_RIGHT);
-		StackPane.setMargin(backButton, new Insets(0, 40, 40, 0));
+		StackPane.setMargin(backButton, new Insets(0, 30, 30, 0));
 
 		ImageView bossImageView = createBossImageView();
 		if (bossImageView != null) {
@@ -121,6 +137,20 @@ public class CreateGameScreen extends StackPane {
 		bossImageView.setSmooth(false);
 		bossImageView.setCache(false);
 		return bossImageView;
+	}
+
+	private ImageView createExitImageView(String path) {
+		InputStream imageStream = getClass().getResourceAsStream(path);
+		if (imageStream == null) {
+			return new ImageView();
+		}
+
+		Image image = new Image(imageStream, EXIT_BUTTON_SIZE, EXIT_BUTTON_SIZE, true, false);
+		ImageView imageView = new ImageView(image);
+		imageView.setPreserveRatio(true);
+		imageView.setSmooth(false);
+		imageView.setCache(false);
+		return imageView;
 	}
 
 	private String loadFontFamily() {
