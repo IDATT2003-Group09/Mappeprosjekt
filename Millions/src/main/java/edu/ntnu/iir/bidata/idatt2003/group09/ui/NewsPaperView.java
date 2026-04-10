@@ -8,6 +8,8 @@ import java.util.List;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -95,12 +97,26 @@ public class NewsPaperView extends BorderPane {
 		centerFoldLine.setPrefWidth(2);
 		centerFoldLine.setMaxWidth(2);
 
-		HBox spread = new HBox(leftPage, centerFoldLine, rightPage);
+		GridPane spread = new GridPane();
+		spread.add(leftPage, 0, 0);
+		spread.add(centerFoldLine, 1, 0);
+		spread.add(rightPage, 2, 0);
+
+		ColumnConstraints leftCol = new ColumnConstraints();
+		leftCol.setPercentWidth(50);
+
+		ColumnConstraints centerCol = new ColumnConstraints();
+		centerCol.setMinWidth(2);
+		centerCol.setPrefWidth(2);
+		centerCol.setMaxWidth(2);
+
+		ColumnConstraints rightCol = new ColumnConstraints();
+		rightCol.setPercentWidth(50);
+
+		spread.getColumnConstraints().setAll(leftCol, centerCol, rightCol);
 		spread.getStyleClass().add("newspaper-spread");
-		spread.setSpacing(0);
-		HBox.setHgrow(leftPage, Priority.ALWAYS);
-		HBox.setHgrow(centerFoldLine, Priority.NEVER);
-		HBox.setHgrow(rightPage, Priority.ALWAYS);
+		GridPane.setHgrow(leftPage, Priority.ALWAYS);
+		GridPane.setHgrow(rightPage, Priority.ALWAYS);
 		centerFoldLine.prefHeightProperty().bind(spread.heightProperty());
 
 		VBox body = new VBox(10, spread, createRuleLine(false));
