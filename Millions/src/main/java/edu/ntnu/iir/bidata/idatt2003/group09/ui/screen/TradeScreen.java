@@ -31,7 +31,6 @@ public class TradeScreen extends BorderPane {
     private final Label holdingsLabel;
     private final Label netWorthLabel;
     private final Label weekLabel;
-    private final Label newsLabel;
 
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
@@ -63,15 +62,12 @@ public class TradeScreen extends BorderPane {
         holdingsLabel = new Label();
         netWorthLabel = new Label();
         weekLabel = new Label();
-        newsLabel = new Label();
 
         buildLayout();
         refreshInfo();
     }
 
     private void buildLayout() {
-        Label titleLabel = new Label("Trade Stocks");
-        titleLabel.getStyleClass().add("trade-title");
 
         Label quantityLabel = new Label("Quantity:");
 
@@ -100,14 +96,12 @@ public class TradeScreen extends BorderPane {
         HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
         controls.setPadding(new Insets(0, 0, 10, 0));
 
+        HBox infoBox = new HBox(20, weekLabel, cashLabel, netWorthLabel, holdingsLabel);
+        infoBox.setPadding(new Insets(0, 0, 10, 0));
+
         VBox headerBox = new VBox(
                 8,
-                titleLabel,
-                weekLabel,
-                cashLabel,
-                netWorthLabel,
-                holdingsLabel,
-                newsLabel,
+                infoBox,
                 controls,
                 statusLabel
         );
@@ -201,6 +195,5 @@ public class TradeScreen extends BorderPane {
         netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetWorth()));
         holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
         weekLabel.setText("Week: " + controller.getWeek());
-        newsLabel.setText("News: " + controller.getLatestNews());
     }
 }
