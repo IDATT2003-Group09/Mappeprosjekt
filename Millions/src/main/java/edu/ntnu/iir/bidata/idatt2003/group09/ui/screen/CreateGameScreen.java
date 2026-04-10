@@ -43,30 +43,26 @@ public class CreateGameScreen extends StackPane {
 		contentBox.setAlignment(Pos.CENTER);
 		contentBox.setFillWidth(false);
 
-		Label title = new Label("Opprett nytt spill");
-		title.setStyle("-fx-text-fill: white;");
-		title.setFont(Font.font(fontFamily, TITLE_FONT_SIZE));
-
 		TextField fileNameField = new TextField();
-		fileNameField.setPromptText("Filnavn (f.eks. slot1)");
+		fileNameField.setPromptText("");
 		fileNameField.setMaxWidth(450);
 		fileNameField.setPrefHeight(50);
 
-		Button startButton = new Button("Start spill");
+		Button startButton = new Button("Start");
 		startButton.getStyleClass().add("start-button");
 		startButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
 		startButton.setPrefWidth(450);
 		startButton.setPrefHeight(55);
 		startButton.setOnAction(e -> handler.onCreateGame(fileNameField.getText()));
 
-		Button backButton = new Button("Tilbake");
+		Button backButton = new Button("Back");
 		backButton.getStyleClass().add("start-button");
 		backButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
 		backButton.setPrefWidth(450);
 		backButton.setPrefHeight(55);
 		backButton.setOnAction(e -> handler.onBack());
 
-		contentBox.getChildren().addAll(title, fileNameField, startButton, backButton);
+		contentBox.getChildren().addAll(fileNameField, startButton, backButton);
 		getChildren().add(contentBox);
 		StackPane.setAlignment(contentBox, Pos.CENTER);
 
