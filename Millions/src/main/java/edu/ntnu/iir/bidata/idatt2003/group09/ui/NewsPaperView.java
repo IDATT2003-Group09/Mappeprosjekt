@@ -22,12 +22,11 @@ public class NewsPaperView extends BorderPane {
 		getStylesheets().add(getClass().getResource("/styling/newspaperview.css").toExternalForm());
 		setPadding(new Insets(14));
 
-		setTop(buildHeader(week));
-		setCenter(buildBody(newsPaper));
+		setCenter(buildBody(week, newsPaper));
 		setBottom(buildFooter());
 	}
 
-	private VBox buildHeader(int week) {
+	private VBox buildMasthead(int week) {
 		Label title = new Label("THE MARKET GAZETTE");
 		title.getStyleClass().add("newspaper-title");
 
@@ -40,11 +39,11 @@ public class NewsPaperView extends BorderPane {
 		return header;
 	}
 
-	private VBox buildBody(NewsPaper newsPaper) {
+	private VBox buildBody(int week, NewsPaper newsPaper) {
 		if (newsPaper == null) {
 			Label noNews = new Label("No market news available yet. Advance one week to generate headlines.");
 			noNews.getStyleClass().add("article-description");
-			VBox emptyBody = new VBox(noNews);
+			VBox emptyBody = new VBox(10, buildMasthead(week), noNews);
 			emptyBody.getStyleClass().add("newspaper-body");
 			return emptyBody;
 		}
@@ -61,6 +60,7 @@ public class NewsPaperView extends BorderPane {
 		globalDescription.setWrapText(true);
 
 		VBox leftPage = new VBox(10,
+				buildMasthead(week),
 				leftPageTitle,
 				createRuleLine(false),
 				globalHeadline,
@@ -87,7 +87,13 @@ public class NewsPaperView extends BorderPane {
 		);
 		rightPage.getStyleClass().addAll("newspaper-page", "right-page");
 
-		HBox spread = new HBox(18, leftPage, rightPage);
+		Region centerFoldLine = new Region();
+		centerFoldLine.getStyleClass().add("center-fold-line");
+		centerFoldLine.setMinWidth(2);
+		centerFoldLine.setPrefWidth(2);
+		centerFoldLine.setMaxWidth(2);
+
+		HBox spread = new HBox(leftPage, centerFoldLine, rightPage);
 		spread.getStyleClass().add("newspaper-spread");
 		HBox.setHgrow(leftPage, Priority.ALWAYS);
 		HBox.setHgrow(rightPage, Priority.ALWAYS);

@@ -54,19 +54,19 @@
   -fx-padding: 12;
 }
 
+.center-fold-line {
+  -fx-background-color: #1f2a44;
+}
+
 .newspaper-page {
   -fx-background-color: #f8f4ea;
   -fx-padding: 12 14 12 14;
 }
 
 .left-page {
-  -fx-border-color: transparent #1f2a44 transparent transparent;
-  -fx-border-width: 0 2 0 0;
 }
 
 .right-page {
-  -fx-border-color: transparent transparent transparent #d3ccbb;
-  -fx-border-width: 0 0 0 1;
 }
 
 .global-headline {
