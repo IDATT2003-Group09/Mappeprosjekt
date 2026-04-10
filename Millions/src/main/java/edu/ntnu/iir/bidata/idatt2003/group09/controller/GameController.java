@@ -20,6 +20,7 @@ public class GameController {
     private final GameProgress progress;
 
     private Runnable onGameOver;
+    private static final BigDecimal baseRequirement = new BigDecimal("0.1");
 
     public GameController(Exchange exchange, Player player) {
         this(exchange, player, null);
@@ -29,7 +30,7 @@ public class GameController {
         this.exchange = exchange;
         this.player = player;
         this.saveFileName = saveFileName;
-        this.progress = new GameProgress(new BigDecimal("0.10"));
+        this.progress = new GameProgress(baseRequirement, player.getStartingMoney());
     }
 
     public void setOnGameOver(Runnable onGameOver) {
@@ -42,24 +43,13 @@ public class GameController {
 
         progress.nextWeek();
 
-        int newLevel = progress.calculateLevel(
-                player.getNetWorth(),
-                player.getStartingMoney()
-        );
-
-        if (newLevel > progress.getLastCalculatedLevel()) {
-            progress.advanceCheckpoint(
-                    player.getNetWorth(),
-                    player.getStartingMoney()
-            );
-            progress.setLastCalculatedLevel(newLevel);
+        while (progress.meetsRequirement(player.getNetWorth())) {
+            progress.advanceCheckpoint();
         }
 
         if (progress.isQuarterComplete()) {
 
-            boolean success = progress.meetsRequirement(
-                    player.getNetWorth(),
-                    player.getStartingMoney());
+            boolean success = progress.meetsRequirement(player.getNetWorth());
 
             if (!success) {
                 if (onGameOver != null) {
@@ -67,11 +57,6 @@ public class GameController {
                 }
                 return;
             }
-
-            progress.advanceCheckpoint(
-                    player.getNetWorth(),
-                    player.getStartingMoney()
-            );
         }
 
         exchange.advance();

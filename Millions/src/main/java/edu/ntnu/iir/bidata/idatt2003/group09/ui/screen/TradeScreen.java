@@ -237,9 +237,8 @@ public class TradeScreen extends BorderPane {
 
         levelLabel.setText("Level " + currentLevel);
 
-        requirementLabel.setText("Required: " +
-                required.multiply(BigDecimal.valueOf(100))
-                        .setScale(0, RoundingMode.HALF_UP) + "%");
+        requirementLabel.setText("Next Target: : " +
+                currencyFormat.format(progress.getCurrentTarget()));
 
         double progressValue = 0;
         if (required.compareTo(BigDecimal.ZERO) > 0) {

@@ -9,11 +9,14 @@ public class GameProgress {
     private final BigDecimal baseRequirement;
     private int currentWeek = 0;
     private final int weeksPerQuarter = 13;
+
     private int checkpointWeek = 13;
     private int lastCalculatedLevel = 1;
+    private BigDecimal currentTarget;
 
-    public GameProgress(BigDecimal baseRequirement) {
+    public GameProgress(BigDecimal baseRequirement, BigDecimal startingMoney) {
         this.baseRequirement = baseRequirement;
+        this.currentTarget = startingMoney.multiply(BigDecimal.ONE.add(baseRequirement));
     }
 
     public BigDecimal getBaseRequirement() {
@@ -29,32 +32,32 @@ public class GameProgress {
     }
 
     public boolean isQuarterComplete() {
-        return currentWeek % weeksPerQuarter == 0;
+        return currentWeek >= checkpointWeek;
     }
 
     public int getCurrentWeek() {
         return currentWeek;
     }
 
-    public boolean meetsRequirement(BigDecimal netWorth, BigDecimal startingMoney) {
-
-        BigDecimal growth = netWorth.subtract(startingMoney)
-                .divide(startingMoney, 4, RoundingMode.HALF_UP);
-
-        BigDecimal required = baseRequirement.multiply(BigDecimal.valueOf(checkpointLevel));
-
-        return growth.compareTo(required) >= 0;
+    public boolean meetsRequirement(BigDecimal netWorth) {
+        return netWorth.compareTo(currentTarget) >= 0;
     }
 
     public int getWeeksUntilDeadline() {
         return Math.max(0, checkpointWeek - currentWeek);
     }
 
-    public void advanceCheckpoint(BigDecimal netWorth, BigDecimal startingMoney) {
+    public void advanceCheckpoint() {
 
-        int level = calculateLevel(netWorth, startingMoney);
+        currentTarget = currentTarget.multiply(
+                BigDecimal.ONE.add(baseRequirement)
+        );
 
-        checkpointWeek = level * weeksPerQuarter;
+        checkpointWeek += weeksPerQuarter;
+    }
+
+    public BigDecimal getCurrentTarget() {
+        return currentTarget;
     }
 
     public int calculateLevel(BigDecimal netWorth, BigDecimal startingMoney) {
