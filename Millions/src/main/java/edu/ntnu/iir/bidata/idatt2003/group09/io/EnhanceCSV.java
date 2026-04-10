@@ -96,7 +96,7 @@ public class EnhanceCSV {
    * @param outputFilePath the path where the enhanced CSV will be written
    * @param maxTagsPerStock kept for compatibility; only one tag is written per row
    */
-  public void writeEnhancedCsv(String outputFilePath, int maxTagsPerStock) {
+  public void writeEnhancedCsv(String outputFilePath) {
     try (PrintWriter writer = new PrintWriter(new FileWriter(outputFilePath))) {
       for (String comment : comments) {
         writer.println(comment);

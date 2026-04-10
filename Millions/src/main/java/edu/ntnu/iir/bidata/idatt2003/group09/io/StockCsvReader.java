@@ -19,7 +19,8 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
  */
 public final class StockCsvReader {
 
-  private static final String DEFAULT_RESOURCE = "/sp500.csv";
+  private static final Path DEFAULT_MOVED_FILE = Path.of("src/main/resources/csv/output/sp500.csv");
+  private static final String DEFAULT_CLASSPATH_RESOURCE = "/csv/output/sp500.csv";
 
   private StockCsvReader() {
   }
@@ -31,7 +32,10 @@ public final class StockCsvReader {
    * @throws IOException if the resource cannot be read
    */
   public static List<Stock> readDefaultResource() throws IOException {
-    return readFromResource(DEFAULT_RESOURCE);
+    if (Files.exists(DEFAULT_MOVED_FILE)) {
+      return readFromFile(DEFAULT_MOVED_FILE);
+    }
+    return readFromResource(DEFAULT_CLASSPATH_RESOURCE);
   }
 
   /**
@@ -44,9 +48,10 @@ public final class StockCsvReader {
   public static List<Stock> readFromResource(String resourcePath) throws IOException {
     Objects.requireNonNull(resourcePath, "resourcePath cannot be null");
 
-    InputStream inputStream = StockCsvReader.class.getResourceAsStream(resourcePath);
+    String normalizedResourcePath = resourcePath.startsWith("/") ? resourcePath : "/" + resourcePath;
+    InputStream inputStream = StockCsvReader.class.getResourceAsStream(normalizedResourcePath);
     if (inputStream == null) {
-      throw new IOException("Resource not found: " + resourcePath);
+      throw new IOException("Resource not found: " + normalizedResourcePath);
     }
 
     try (BufferedReader reader = new BufferedReader(
@@ -80,6 +85,10 @@ public final class StockCsvReader {
       String trimmedLine = line.trim();
 
       if (trimmedLine.isEmpty() || trimmedLine.startsWith("#")) {
+        continue;
+      }
+
+      if (trimmedLine.toLowerCase().startsWith("ticker,")) {
         continue;
       }
 
