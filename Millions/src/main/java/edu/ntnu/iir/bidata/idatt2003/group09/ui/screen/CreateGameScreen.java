@@ -86,9 +86,13 @@ public class CreateGameScreen extends StackPane {
 		backButton.setPrefHeight(55);
 		backButton.setOnAction(e -> handler.onBack());
 
-		contentBox.getChildren().addAll(inputBubble, startButton, backButton);
+		contentBox.getChildren().addAll(inputBubble, startButton);
 		getChildren().add(contentBox);
 		StackPane.setAlignment(contentBox, Pos.CENTER);
+
+		getChildren().add(backButton);
+		StackPane.setAlignment(backButton, Pos.BOTTOM_RIGHT);
+		StackPane.setMargin(backButton, new Insets(0, 40, 40, 0));
 
 		ImageView bossImageView = createBossImageView();
 		if (bossImageView != null) {
