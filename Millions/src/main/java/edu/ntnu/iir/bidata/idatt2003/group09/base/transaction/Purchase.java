@@ -21,7 +21,7 @@ public class Purchase extends Transaction {
 
         player.getPortfolio().addShare(getShare());
 
-        //Store the transaction in the archive
+        player.getTransactionArchive().add(this);
 
         markCommited();
     }

@@ -5,6 +5,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.TransactionCalculator;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public abstract class Transaction implements Serializable {
@@ -35,6 +36,11 @@ public abstract class Transaction implements Serializable {
   public TransactionCalculator getCalculator() {
     return calculator;
   }
+
+    public BigDecimal getFees() {
+        return getCalculator().calculateCommission()
+                .add(getCalculator().calculateTax());
+    }
 
   public boolean isCommited() {
     return committed;
