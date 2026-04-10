@@ -4,7 +4,6 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
-import edu.ntnu.iir.bidata.idatt2003.group09.io.EnhanceCSV;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
@@ -20,6 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -150,11 +150,20 @@ public class Main extends Application {
 
     private void setupGameUI(GameController controller, List<Stock> stocks) {
 
-        TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen);
+        TabPane tabPane = new TabPane();
+        StackPane newspaperContainer = new StackPane();
+
+        Tab newspaperTab = new Tab("Newspaper", newspaperContainer);
+        newspaperTab.setClosable(false);
+
+        Runnable showNewspaperTab = () -> {
+            newspaperContainer.getChildren().setAll(new NewsPaperView(controller.getWeek(), controller.getPendingNewsPaper()));
+            tabPane.getSelectionModel().select(newspaperTab);
+        };
+
+        TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen, showNewspaperTab);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
-
-        TabPane tabPane = new TabPane();
 
         Tab tradeTab = new Tab("Trade", tradeScreen);
         Tab portfolioTab = new Tab("Portfolio", portfolioScreen);
@@ -164,12 +173,16 @@ public class Main extends Application {
         portfolioTab.setClosable(false);
         historyTab.setClosable(false);
 
-        tabPane.getTabs().addAll(tradeTab, portfolioTab, historyTab);
+        tabPane.getTabs().addAll(tradeTab, portfolioTab, newspaperTab, historyTab);
 
         tabPane.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldTab, newTab) -> {
                     if (newTab == portfolioTab) {
                         portfolioScreen.refresh();
+                    }
+                    if (newTab == newspaperTab) {
+                        newspaperContainer.getChildren()
+                                .setAll(new NewsPaperView(controller.getWeek(), controller.getPendingNewsPaper()));
                     }
                     if (newTab == historyTab) {
                         transactionHistoryScreen.refresh();

@@ -34,7 +34,7 @@ public class EventFactory implements Serializable {
     List<Event> events = new ArrayList<>();
 
     StockSpecificEvent event1 = new StockSpecificEvent(
-            "{stock} reports record earnings",
+            "{stock} to the moon",
             "{stock} has reported record-breaking earnings for the quarter, exceeding analyst expectations.",
             BigDecimal.valueOf(0.15)
     );

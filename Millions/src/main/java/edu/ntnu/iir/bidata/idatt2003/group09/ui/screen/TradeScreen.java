@@ -3,7 +3,6 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
-import edu.ntnu.iir.bidata.idatt2003.group09.ui.NewsPaperView;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockTable;
 
@@ -14,17 +13,16 @@ import java.util.Locale;
 
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class TradeScreen extends BorderPane {
 
     private final GameController controller;
     private final Runnable onSaveAndQuit;
+    private final Runnable onShowNewsPaper;
 
     private final TableView<Stock> stockTable;
     private final StockGraph graph;
@@ -35,16 +33,14 @@ public class TradeScreen extends BorderPane {
     private final Label netWorthLabel;
     private final Label weekLabel;
     private final Label newsLabel;
-    private StackPane contentStack;
-    private BorderPane newsOverlay;
-    private StackPane newsOverlayContent;
 
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
 
-    public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
+    public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit, Runnable onShowNewsPaper) {
         this.controller = controller;
         this.onSaveAndQuit = onSaveAndQuit;
+        this.onShowNewsPaper = onShowNewsPaper;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
         getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
@@ -128,39 +124,7 @@ public class TradeScreen extends BorderPane {
         splitPane.getItems().addAll(stockTable, graph);
         splitPane.setDividerPositions(0.3);
 
-        contentStack = new StackPane(splitPane);
-        buildNewsOverlay();
-        contentStack.getChildren().add(newsOverlay);
-        setCenter(contentStack);
-    }
-
-    private void buildNewsOverlay() {
-        newsOverlay = new BorderPane();
-        newsOverlay.setVisible(false);
-        newsOverlay.setManaged(false);
-        newsOverlay.setStyle("-fx-background-color: rgba(0,0,0,0.55);");
-        newsOverlay.setPadding(new Insets(20));
-
-        Button closeButton = new Button("Close");
-        closeButton.setOnAction(e -> hideNewsPaper());
-
-        HBox topBar = new HBox(closeButton);
-        topBar.setAlignment(Pos.TOP_RIGHT);
-        topBar.setPadding(new Insets(0, 0, 12, 0));
-
-        newsOverlayContent = new StackPane();
-        newsOverlayContent.setMaxWidth(980);
-        newsOverlayContent.setMaxHeight(700);
-        newsOverlayContent.setOnMouseClicked(e -> e.consume());
-
-        newsOverlay.setTop(topBar);
-        newsOverlay.setCenter(newsOverlayContent);
-
-        newsOverlay.setOnMouseClicked(e -> {
-            if (e.getTarget() == newsOverlay) {
-                hideNewsPaper();
-            }
-        });
+        setCenter(splitPane);
     }
 
     private void buySelectedStock() {
@@ -245,15 +209,8 @@ public class TradeScreen extends BorderPane {
     }
 
     private void showNewsPaper() {
-        NewsPaperView newsPaperView = new NewsPaperView(controller.getWeek(), controller.getPendingNewsPaper());
-        newsOverlayContent.getChildren().setAll(newsPaperView);
-        newsOverlay.setVisible(true);
-        newsOverlay.setManaged(true);
-    }
-
-    private void hideNewsPaper() {
-        newsOverlay.setVisible(false);
-        newsOverlay.setManaged(false);
-        newsOverlayContent.getChildren().clear();
+        if (onShowNewsPaper != null) {
+            onShowNewsPaper.run();
+        }
     }
 }
