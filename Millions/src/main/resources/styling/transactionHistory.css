@@ -5,12 +5,80 @@
 
 .transaction-history-screen {
 	-fx-font-family: "ThaleahFat";
+	-fx-background-color: linear-gradient(to bottom right, #070f2a, #020716);
+}
+
+.transaction-history-screen .label,
+.transaction-history-screen .table-view,
+.transaction-history-screen .table-view .column-header .label,
+.transaction-history-screen .table-view .table-cell {
+	-fx-font-family: "ThaleahFat";
 }
 
 .transaction-history-screen .positive {
-	-fx-text-fill: green;
+	-fx-text-fill: #23e88c;
 }
 
 .transaction-history-screen .negative {
-	-fx-text-fill: red;
+	-fx-text-fill: #ff6b78;
+}
+
+.transaction-history-screen .transaction-history-table,
+.transaction-history-screen .transaction-history-table .column-header-background,
+.transaction-history-screen .transaction-history-table .filler {
+	-fx-background-color: #0a132d;
+}
+
+.transaction-history-screen .transaction-history-table {
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 1;
+	-fx-background-insets: 0;
+}
+
+.transaction-history-screen .transaction-history-table .column-header {
+	-fx-background-color: #0f1f42;
+	-fx-border-color: #1a355c;
+}
+
+.transaction-history-screen .transaction-history-table .column-header .label {
+	-fx-text-fill: #00e4ff;
+	-fx-font-size: 19px;
+	-fx-font-weight: bold;
+}
+
+.transaction-history-screen .transaction-history-table .table-row-cell {
+	-fx-background-color: #070f24;
+	-fx-border-color: transparent transparent #112344 transparent;
+	-fx-table-cell-border-color: transparent;
+	-fx-cell-size: 52px;
+}
+
+.transaction-history-screen .transaction-history-table .table-row-cell:odd {
+	-fx-background-color: #0a132d;
+}
+
+.transaction-history-screen .transaction-history-table .table-row-cell:selected {
+	-fx-background-color: #1e2f54;
+}
+
+.transaction-history-screen .transaction-history-table .table-cell {
+	-fx-text-fill: #dce9ff;
+	-fx-font-size: 18px;
+	-fx-padding: 8 10 8 10;
+}
+
+.transaction-history-screen .transaction-history-table .transaction-type-cell {
+	-fx-font-weight: bold;
+}
+
+.transaction-history-screen .transaction-history-table .virtual-flow .scroll-bar:vertical,
+.transaction-history-screen .transaction-history-table .virtual-flow .scroll-bar:horizontal {
+	-fx-pref-width: 0;
+	-fx-pref-height: 0;
+	-fx-opacity: 0;
+	-fx-padding: 0;
+}
+
+.transaction-history-screen .transaction-history-table .scroll-bar .thumb {
+	-fx-background-color: transparent;
 }

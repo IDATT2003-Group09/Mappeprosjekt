@@ -174,6 +174,8 @@ public class Main extends Application {
             root.setCenter(new GameOverScreen(this::showStartScreen));
         });
         TabPane tabPane = new TabPane();
+        tabPane.getStylesheets().add(getClass().getResource("/styling/tabs.css").toExternalForm());
+        tabPane.getStyleClass().add("game-tabs");
         StackPane newspaperContainer = new StackPane();
 
         Tab newspaperTab = new Tab("Newspaper", newspaperContainer);
@@ -216,8 +218,6 @@ public class Main extends Application {
      * @param args
      */
     public static void main(String[] args) {
-        TagsFactory tagsFactory = new TagsFactory();
-        tagsFactory.enhanceCsv("sp500Standard.csv", "sp500Enhanced.csv");
         launch(args);
     }
 }

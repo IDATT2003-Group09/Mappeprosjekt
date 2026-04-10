@@ -26,10 +26,10 @@ public class StartScreen extends VBox {
     -fx-background-position: center;
 """);
 
-        Button newGameBtn = new Button("Nytt Spill");
-        Button loadGameBtn = new Button("Last Spill");
-        Button settingsBtn = new Button("Innstillinger");
-        Button exitBtn = new Button("Avslutt");
+        Button newGameBtn = new Button("New Game");
+        Button loadGameBtn = new Button("Load Game");
+        Button settingsBtn = new Button("Settings");
+        Button exitBtn = new Button("Exit");
 
         newGameBtn.getStyleClass().add("start-button");
         loadGameBtn.getStyleClass().add("start-button");
