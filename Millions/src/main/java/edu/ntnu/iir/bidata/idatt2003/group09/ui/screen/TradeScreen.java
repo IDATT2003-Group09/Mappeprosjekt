@@ -7,10 +7,12 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockTable;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -112,6 +114,10 @@ public class TradeScreen extends BorderPane {
 
         VBox headerBox = new VBox(
                 8,
+                levelLabel,
+                requirementLabel,
+                progressBar,
+                levelUpLabel,
                 infoBox,
                 controls,
                 statusLabel
@@ -206,5 +212,45 @@ public class TradeScreen extends BorderPane {
         netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetWorth()));
         holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
         weekLabel.setText("Week: " + controller.getWeek());
+
+        var progress = controller.getProgress();
+        var player = controller.getPlayer();
+
+        BigDecimal growth = player.getNetWorth()
+                .subtract(player.getStartingMoney())
+                .divide(player.getStartingMoney(), 4, RoundingMode.HALF_UP);
+
+        BigDecimal required = progress.getCurrentLevel().getRequiredGrowth();
+
+        levelLabel.setText("Level " + progress.getCurrentLevelNumber());
+
+        requirementLabel.setText("Required: " +
+                required.multiply(BigDecimal.valueOf(100))
+                        .setScale(0, RoundingMode.HALF_UP) + "%");
+
+        double progressValue = 0;
+        if (required.compareTo(BigDecimal.ZERO) > 0) {
+            progressValue = growth
+                    .divide(required, 4, RoundingMode.HALF_UP)
+                    .doubleValue();
+        }
+
+        progressBar.setProgress(Math.min(progressValue, 1.0));
+
+        int currentLevel = progress.getCurrentLevelNumber();
+
+        if (currentLevel > lastLevel) {
+            levelUpLabel.setText("Level Up! Now level " + currentLevel);
+
+            new Thread(() -> {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ignored) {}
+
+                Platform.runLater(() -> levelUpLabel.setText(""));
+            }).start();
+
+            lastLevel = currentLevel;
+        }
     }
 }
