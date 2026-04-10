@@ -17,7 +17,7 @@ public class CreateGameScreen extends StackPane {
 
 	private static final String FONT_PATH = "/ThaleahFat.ttf";
 	private static final String BOSS_GIF_PATH = "/images/boss/boss.gif";
-	private static final double BOSS_SIZE = 300;
+	private static final double BOSS_SIZE = 500;
 	private static final double TITLE_FONT_SIZE = 32;
 	private static final double BUTTON_FONT_SIZE = 26;
 
