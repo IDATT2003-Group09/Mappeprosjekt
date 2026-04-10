@@ -32,14 +32,14 @@ public class EnhanceCSV {
   private void readCsvFile() {
     try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
       String line;
-      boolean headerFound = false;
 
       while ((line = reader.readLine()) != null) {
         if (line.startsWith("#")) {
           comments.add(line);
-        } else if (!headerFound && !line.trim().isEmpty()) {
-          header = line;
-          headerFound = true;
+          String possibleHeader = line.substring(1).trim();
+          if (header == null && possibleHeader.contains(",")) {
+            header = possibleHeader;
+          }
         } else if (!line.trim().isEmpty()) {
           String[] parts = line.split(",");
           dataLines.add(parts);
@@ -102,7 +102,11 @@ public class EnhanceCSV {
         writer.println(comment);
       }
 
-      writer.println(header + ",Tag,Volatility");
+      if (header != null && !header.isBlank()) {
+        writer.println(header + ",Tag,Volatility");
+      } else {
+        writer.println("Tag,Volatility");
+      }
 
       for (String[] dataLine : dataLines) {
         writer.print(String.join(",", dataLine));
