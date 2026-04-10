@@ -150,6 +150,10 @@ public class Main extends Application {
 
     private void setupGameUI(GameController controller, List<Stock> stocks) {
 
+        controller.setOnGameOver(() -> {
+            root.setCenter(new GameOverScreen(this::showStartScreen));
+        });
+
         TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
