@@ -19,8 +19,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
  */
 public final class StockCsvReader {
 
-  private static final Path DEFAULT_MOVED_FILE = Path.of("src/main/resources/csv/output/sp500.csv");
-  private static final String DEFAULT_CLASSPATH_RESOURCE = "/csv/output/sp500.csv";
+  private static final Path DEFAULT_FILE = Path.of("src/main/resources/csv/output/sp500.csv");
 
   private StockCsvReader() {
   }
@@ -32,10 +31,7 @@ public final class StockCsvReader {
    * @throws IOException if the resource cannot be read
    */
   public static List<Stock> readDefaultResource() throws IOException {
-    if (Files.exists(DEFAULT_MOVED_FILE)) {
-      return readFromFile(DEFAULT_MOVED_FILE);
-    }
-    return readFromResource(DEFAULT_CLASSPATH_RESOURCE);
+    return readFromFile(DEFAULT_FILE);
   }
 
   /**
