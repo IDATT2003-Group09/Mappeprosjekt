@@ -4,7 +4,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
-import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockTable;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockListView;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -23,7 +23,7 @@ public class TradeScreen extends BorderPane {
     private final GameController controller;
     private final Runnable onSaveAndQuit;
 
-    private final TableView<Stock> stockTable;
+    private final ListView<Stock> stockList;
     private final StockGraph graph;
 
     private final Label statusLabel;
@@ -43,12 +43,11 @@ public class TradeScreen extends BorderPane {
         getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
         getStyleClass().add("trade-screen");
 
-        stockTable = new StockTable().createStockTable(controller.getPlayer());
-        stockTable.getStyleClass().add("trade-stock-table");
-        stockTable.setItems(FXCollections.observableArrayList(stocks));
+        stockList = new StockListView().createStockList(controller.getPlayer());
+        stockList.setItems(FXCollections.observableArrayList(stocks));
         graph = new StockGraph(stocks);
         graph.getStyleClass().add("trade-graph");
-        stockTable.getSelectionModel().selectedItemProperty().addListener(
+        stockList.getSelectionModel().selectedItemProperty().addListener(
                 (obs, oldStock, newStock) -> {
                     if (newStock != null) {
                         graph.updateChart(newStock);
@@ -97,7 +96,7 @@ public class TradeScreen extends BorderPane {
 
         nextWeekButton.setOnAction(e -> {
             controller.nextWeek();
-            stockTable.refresh();
+            stockList.refresh();
             refreshInfo();
             updateSelectedStockGraph();
         });
@@ -124,14 +123,14 @@ public class TradeScreen extends BorderPane {
 
         SplitPane splitPane = new SplitPane();
         splitPane.getStyleClass().add("trade-split-pane");
-        splitPane.getItems().addAll(stockTable, graph);
+        splitPane.getItems().addAll(stockList, graph);
         splitPane.setDividerPositions(0.3);
 
         setCenter(splitPane);
     }
 
     private void buySelectedStock() {
-        Stock selectedStock = stockTable.getSelectionModel().getSelectedItem();
+        Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
 
         if (selectedStock == null) {
             statusLabel.setText("Please select a stock first.");
@@ -145,7 +144,7 @@ public class TradeScreen extends BorderPane {
 
             statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
 
-            stockTable.refresh();
+            stockList.refresh();
             refreshInfo();
 
         } catch (Exception e) {
@@ -154,7 +153,7 @@ public class TradeScreen extends BorderPane {
     }
 
     private void sellSelectedStock() {
-        Stock selectedStock = stockTable.getSelectionModel().getSelectedItem();
+        Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
 
         if (selectedStock == null) {
             statusLabel.setText("Please select a stock first.");
@@ -173,7 +172,7 @@ public class TradeScreen extends BorderPane {
 
             statusLabel.setText("Sold " + selectedStock.getSymbol());
 
-            stockTable.refresh();
+            stockList.refresh();
             refreshInfo();
 
         } catch (Exception e) {
@@ -197,7 +196,7 @@ public class TradeScreen extends BorderPane {
     }
 
     private void updateSelectedStockGraph() {
-        Stock selected = stockTable.getSelectionModel().getSelectedItem();
+        Stock selected = stockList.getSelectionModel().getSelectedItem();
         if (selected != null) {
             graph.updateChart(selected);
         }
