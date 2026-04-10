@@ -213,8 +213,6 @@ public class Main extends Application {
      * @param args
      */
     public static void main(String[] args) {
-        TagsFactory tagsFactory = new TagsFactory();
-        tagsFactory.enhanceCsv("sp500Standard.csv", "sp500Enhanced.csv");
         launch(args);
     }
 }
