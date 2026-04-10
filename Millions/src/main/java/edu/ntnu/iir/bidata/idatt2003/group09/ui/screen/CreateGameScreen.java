@@ -32,7 +32,7 @@ public class CreateGameScreen extends StackPane {
 
 		setPadding(new Insets(40));
 		setStyle("""
-		-fx-background-image: url('/images/Millions_background.png');
+		-fx-background-image: url('/images/stockfloor.png');
 		-fx-background-size: cover;
 		-fx-background-position: center;
 """);
