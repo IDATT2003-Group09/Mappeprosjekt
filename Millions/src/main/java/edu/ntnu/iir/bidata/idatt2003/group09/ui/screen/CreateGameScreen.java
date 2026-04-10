@@ -72,7 +72,7 @@ public class CreateGameScreen extends StackPane {
 		if (bossImageView != null) {
 			getChildren().add(bossImageView);
 			StackPane.setAlignment(bossImageView, Pos.BOTTOM_LEFT);
-			StackPane.setMargin(bossImageView, new Insets(0, 0, 10, 10));
+			StackPane.setMargin(bossImageView, new Insets(0, 0, -90, -70));
 		}
 	}
 
