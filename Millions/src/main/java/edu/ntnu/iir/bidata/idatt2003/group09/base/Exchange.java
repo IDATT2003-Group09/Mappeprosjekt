@@ -6,17 +6,24 @@ import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.EventFactory;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Transaction;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.TransactionFactory;
 
 public class Exchange implements Serializable {
 
+  private static final BigDecimal MINIMUM_STOCK_PRICE = BigDecimal.valueOf(0.01);
+
   private String name;
   private int week;
   private Map<String, Stock> stockMap;
   private MarketNews pendingNews;
-  private final NewsGenerator newsGenerator = new NewsGenerator();
+  private NewsPaper pendingNewsPaper;
+  private final EventFactory eventFactory = new EventFactory();
+  private final Random random = new Random();
 
   /**
    * uses setters to validate input
@@ -140,6 +147,10 @@ public class Exchange implements Serializable {
         return pendingNews;
     }
 
+    public NewsPaper getPendingNewsPaper() {
+      return pendingNewsPaper;
+    }
+
   /**
    * searches for stock with symbol or company name matching searchterm
    * @param searchTerm
@@ -190,7 +201,7 @@ public class Exchange implements Serializable {
    * Generates new news for this week, to be used in next weeks price
    */
   public void advance() {
-      MarketNews activeNews = pendingNews;
+      NewsPaper activeNewsPaper = pendingNewsPaper;
 
       for (Stock stock : stockMap.values()) {
           BigDecimal currentPrice = stock.getSalesPrice();
@@ -202,11 +213,8 @@ public class Exchange implements Serializable {
                   .divide(currentPrice, 6, RoundingMode.HALF_UP);
 
           BigDecimal eventImpact = BigDecimal.ZERO;
-          if (activeNews != null) {
-              if (activeNews.getSector().equalsIgnoreCase("ALL") ||
-              stock.getSector().equalsIgnoreCase(activeNews.getSector())) {
-                  eventImpact = activeNews.getImpact();
-              }
+            if (activeNewsPaper != null) {
+              eventImpact = activeNewsPaper.getImpactForStock(stock);
           }
 
           if (eventImpact.compareTo(BigDecimal.ZERO) != 0) {
@@ -220,14 +228,24 @@ public class Exchange implements Serializable {
 
           BigDecimal newPrice = currentPrice.multiply(BigDecimal.ONE.add(totalChange));
 
+          if (newPrice.compareTo(MINIMUM_STOCK_PRICE) < 0) {
+            newPrice = MINIMUM_STOCK_PRICE;
+          }
+
           stock.addNewSalesPrice(newPrice);
       }
 
-      MarketNews newNews = newsGenerator.getRandomNews();
-      pendingNews = newNews;
+          NewsPaper newNewsPaper = NewsPaper.create(eventFactory, getStocks(), random);
+          pendingNewsPaper = newNewsPaper;
+          pendingNews = new MarketNews(
+              newNewsPaper.getGlobalEvent().getHeadline(),
+              newNewsPaper.getGlobalEvent().getDescription(),
+              "ALL",
+              newNewsPaper.getGlobalEvent().getAverageImpact()
+          );
 
-      if (newNews != null) {
-          System.out.println("Week " + week + " NEWS: " + newNews.getHeadline());
+          if (pendingNews != null) {
+            System.out.println("Week " + week + " NEWS: " + pendingNews.getHeadline());
       }
 
       week++;

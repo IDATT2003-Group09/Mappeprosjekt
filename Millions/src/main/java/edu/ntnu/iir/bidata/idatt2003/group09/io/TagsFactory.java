@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class TagsFactory {
 
   private List<String> tags = List.of("Tech", "Finance", "Health", "Energy", "Consumer", "Industrial", "Utilities", "Real Estate", "Materials", "Telecom");
-  private int maxTags = 5;
+  private int maxTags = 1;
 
   private String inputFilePath = "src/main/resources/csv/input/";
   private String outputFilePath = "src/main/resources/csv/output/";

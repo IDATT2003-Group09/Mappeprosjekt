@@ -1,16 +1,17 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.base.news;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
+
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class StockSpecificEvent extends Event {
 
   private final String partialHeadline;
   private final String partialDescription;
-  private final Map<String, BigDecimal> stockImpactData;
   private BigDecimal defaultImpact;
+  private String targetSymbol;
+  private String generatedHeadline;
+  private String generatedDescription;
 
 	public StockSpecificEvent(String partialHeadline, String partialDescription) {
 		this(partialHeadline, partialDescription, BigDecimal.ZERO);
@@ -20,7 +21,6 @@ public class StockSpecificEvent extends Event {
 		super(partialHeadline, partialDescription);
 		this.partialHeadline = partialHeadline;
 		this.partialDescription = partialDescription;
-		this.stockImpactData = new HashMap<>();
 		setDefaultImpact(defaultImpact);
 	}
 
@@ -34,26 +34,43 @@ public class StockSpecificEvent extends Event {
   public BigDecimal getDefaultImpact() {
     return defaultImpact;
   }
-
-  public void addStockImpact(String symbol, BigDecimal impact) {
-    if (symbol == null || symbol.isBlank()) {
-      throw new IllegalArgumentException("Symbol cannot be null or empty");
+  
+  public void addStock(Stock stock) {
+    if (stock == null) {
+      throw new IllegalArgumentException("Stock cannot be null");
     }
-    if (impact == null) {
-      throw new IllegalArgumentException("Impact cannot be null");
-    }
-    stockImpactData.put(symbol, impact);
+    this.targetSymbol = stock.getSymbol();
+    this.generatedHeadline = generateFullHeadline(stock.getCompany());
+    this.generatedDescription = generateFullDescription(stock.getCompany());
   }
 
-  public BigDecimal getImpactForStock(String symbol) {
-    if (symbol == null || symbol.isBlank()) {
+  public String getTargetSymbol() {
+    return targetSymbol;
+  }
+
+  public String getGeneratedHeadline() {
+    return generatedHeadline != null ? generatedHeadline : getHeadline();
+  }
+
+  public String getGeneratedDescription() {
+    return generatedDescription != null ? generatedDescription : getDescription();
+  }
+
+  public BigDecimal getImpactForStock(Stock stock) {
+    if (stock == null) {
+      return BigDecimal.ZERO;
+    }
+    if (targetSymbol == null || targetSymbol.isBlank()) {
       return defaultImpact;
     }
-    return stockImpactData.getOrDefault(symbol, defaultImpact);
+    return targetSymbol.equalsIgnoreCase(stock.getSymbol()) ? defaultImpact : BigDecimal.ZERO;
   }
 
-  public Map<String, BigDecimal> getStockImpactData() {
-    return Collections.unmodifiableMap(stockImpactData);
+  public StockSpecificEvent createForStock(Stock stock) {
+    StockSpecificEvent eventForStock =
+        new StockSpecificEvent(partialHeadline, partialDescription, defaultImpact);
+    eventForStock.addStock(stock);
+    return eventForStock;
   }
 
   public String generateFullHeadline(String stockName) {
