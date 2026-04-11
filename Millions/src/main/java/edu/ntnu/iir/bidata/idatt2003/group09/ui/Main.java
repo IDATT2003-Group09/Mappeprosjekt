@@ -42,6 +42,7 @@ public class Main extends Application {
 
     private static final double DESIGN_WIDTH = 1100;
     private static final double DESIGN_HEIGHT = 700;
+    private static final Path CUSTOM_CSV_DIR = Path.of("src/main/resources/csv/custom");
 
     private BorderPane root;
 
@@ -203,10 +204,14 @@ public class Main extends Application {
     }
 
     private Path enhanceCustomCsv(Path selectedCsvFile) throws IOException {
-        Path enhancedFile = Files.createTempFile("millions-custom-enhanced-", ".csv");
+        Files.createDirectories(CUSTOM_CSV_DIR);
+        String inputName = selectedCsvFile.getFileName().toString();
+        String baseName = inputName.toLowerCase().endsWith(".csv")
+                ? inputName.substring(0, inputName.length() - 4)
+                : inputName;
+        Path enhancedFile = CUSTOM_CSV_DIR.resolve(baseName + "-enhanced.csv");
         EnhanceCSV enhancer = new EnhanceCSV(selectedCsvFile.toString(), new TagsFactory().getTags());
         enhancer.writeEnhancedCsv(enhancedFile.toString());
-        enhancedFile.toFile().deleteOnExit();
         return enhancedFile;
     }
 
