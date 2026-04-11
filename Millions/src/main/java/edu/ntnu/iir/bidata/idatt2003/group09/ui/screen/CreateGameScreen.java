@@ -26,7 +26,7 @@ public class CreateGameScreen extends StackPane {
 	private static final double EXIT_BUTTON_SIZE = 50;
 
 	public interface CreateGameHandler {
-		void onCreateGame(String playerName, String experienceLevel);
+		void onCreateGame(String playerName, String experienceLevel, String exchangeChoice);
 		void onBack();
 	}
 
@@ -90,13 +90,13 @@ public class CreateGameScreen extends StackPane {
 			}
 
 			Button tutorialButton = createOptionButton("Tutorial", fontFamily, () ->
-					handler.onCreateGame(playerName, "Tutorial"));
+					showExchangeOptions(contentBox, bossBubble, fontFamily, handler, playerName, "Tutorial"));
 			Button noviceButton = createOptionButton("Novice", fontFamily, () ->
-					handler.onCreateGame(playerName, "Novice"));
+					showExchangeOptions(contentBox, bossBubble, fontFamily, handler, playerName, "Novice"));
 			Button investorButton = createOptionButton("Investor", fontFamily, () ->
-					handler.onCreateGame(playerName, "Investor"));
+					showExchangeOptions(contentBox, bossBubble, fontFamily, handler, playerName, "Investor"));
 			Button speculatorButton = createOptionButton("Speculator", fontFamily, () ->
-					handler.onCreateGame(playerName, "Speculator"));
+					showExchangeOptions(contentBox, bossBubble, fontFamily, handler, playerName, "Speculator"));
 
 			contentBox.getChildren().setAll(tutorialButton, noviceButton, investorButton, speculatorButton);
 			if (bossBubble[0] != null) {
@@ -204,5 +204,26 @@ public class CreateGameScreen extends StackPane {
 		button.setPrefHeight(50);
 		button.setOnAction(e -> action.run());
 		return button;
+	}
+
+	private void showExchangeOptions(
+			VBox contentBox,
+			ChatBubble[] bossBubble,
+			String fontFamily,
+			CreateGameHandler handler,
+			String playerName,
+			String experienceLevel
+	) {
+		Button spButton = createOptionButton("S&P", fontFamily, () ->
+				handler.onCreateGame(playerName, experienceLevel, "S&P"));
+		Button randomButton = createOptionButton("Random", fontFamily, () ->
+				handler.onCreateGame(playerName, experienceLevel, "Random"));
+		Button customButton = createOptionButton("Custom", fontFamily, () ->
+				handler.onCreateGame(playerName, experienceLevel, "Custom"));
+
+		contentBox.getChildren().setAll(spButton, randomButton, customButton);
+		if (bossBubble[0] != null) {
+			bossBubble[0].setText("Which exchange do you play?");
+		}
 	}
 }

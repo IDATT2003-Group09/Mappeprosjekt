@@ -97,7 +97,7 @@ public class Main extends Application {
     private void showCreateGameScreen() {
         CreateGameScreen createGameScreen = new CreateGameScreen(new CreateGameScreen.CreateGameHandler() {
             @Override
-            public void onCreateGame(String playerName, String experienceLevel) {
+            public void onCreateGame(String playerName, String experienceLevel, String exchangeChoice) {
                 startNewGame(playerName);
             }
 
