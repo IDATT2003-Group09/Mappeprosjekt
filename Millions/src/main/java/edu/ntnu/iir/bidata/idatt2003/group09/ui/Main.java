@@ -98,7 +98,7 @@ public class Main extends Application {
         CreateGameScreen createGameScreen = new CreateGameScreen(new CreateGameScreen.CreateGameHandler() {
             @Override
             public void onCreateGame(String playerName, String experienceLevel, String exchangeChoice) {
-                startNewGame(playerName);
+                startNewGame(playerName, exchangeChoice);
             }
 
             @Override
@@ -129,12 +129,12 @@ public class Main extends Application {
         root.setCenter(loadGameScreen);
     }
 
-    private void startNewGame(String playerName) {
+    private void startNewGame(String playerName, String exchangeChoice) {
         try {
             String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName);
-            List<Stock> stocks = StockCsvReader.readDefaultResource();
+            List<Stock> stocks = loadStocksForExchange(exchangeChoice);
             Player player = new Player(playerName, new BigDecimal("100000"));
-            Exchange exchange = new Exchange("Main Exchange", stocks);
+            Exchange exchange = new Exchange(getExchangeName(exchangeChoice), stocks);
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
 
@@ -148,6 +148,30 @@ public class Main extends Application {
 
             root.setCenter(new VBox(errorLabel));
         }
+    }
+
+    private List<Stock> loadStocksForExchange(String exchangeChoice) throws IOException {
+        if (exchangeChoice == null) {
+            return StockCsvReader.readDefaultResource();
+        }
+
+        return switch (exchangeChoice.trim().toLowerCase()) {
+            case "random" -> StockCsvReader.readFromResource("/csv/output/random.csv");
+            case "sp500" -> StockCsvReader.readFromResource("/csv/output/sp500.csv");
+            default -> StockCsvReader.readDefaultResource();
+        };
+    }
+
+    private String getExchangeName(String exchangeChoice) {
+        if (exchangeChoice == null) {
+            return "Main Exchange";
+        }
+
+        return switch (exchangeChoice.trim().toLowerCase()) {
+            case "random" -> "Random Exchange";
+            case "sp500" -> "S&P 500";
+            default -> "Main Exchange";
+        };
     }
 
     private void loadGame(String fileName) {
@@ -217,6 +241,7 @@ public class Main extends Application {
      * @param args
      */
     public static void main(String[] args) {
+        
         launch(args);
     }
 }

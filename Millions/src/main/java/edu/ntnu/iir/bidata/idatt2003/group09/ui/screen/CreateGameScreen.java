@@ -214,12 +214,12 @@ public class CreateGameScreen extends StackPane {
 			String playerName,
 			String experienceLevel
 	) {
-		Button spButton = createOptionButton("S&P", fontFamily, () ->
-				handler.onCreateGame(playerName, experienceLevel, "S&P"));
+		Button spButton = createOptionButton("sp500", fontFamily, () ->
+				handler.onCreateGame(playerName, experienceLevel, "sp500"));
 		Button randomButton = createOptionButton("Random", fontFamily, () ->
-				handler.onCreateGame(playerName, experienceLevel, "Random"));
+				handler.onCreateGame(playerName, experienceLevel, "random"));
 		Button customButton = createOptionButton("Custom", fontFamily, () ->
-				handler.onCreateGame(playerName, experienceLevel, "Custom"));
+				handler.onCreateGame(playerName, experienceLevel, "custom"));
 
 		contentBox.getChildren().setAll(spButton, randomButton, customButton);
 		if (bossBubble[0] != null) {
