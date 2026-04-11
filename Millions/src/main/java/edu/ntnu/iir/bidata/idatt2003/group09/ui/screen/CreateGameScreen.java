@@ -22,10 +22,11 @@ public class CreateGameScreen extends StackPane {
 	private static final double BOSS_SIZE = 500;
 	private static final double TITLE_FONT_SIZE = 32;
 	private static final double BUTTON_FONT_SIZE = 26;
+	private static final double OPTION_BUTTON_FONT_SIZE = 24;
 	private static final double EXIT_BUTTON_SIZE = 50;
 
 	public interface CreateGameHandler {
-		void onCreateGame(String fileName);
+		void onCreateGame(String playerName, String experienceLevel);
 		void onBack();
 	}
 
@@ -74,13 +75,37 @@ public class CreateGameScreen extends StackPane {
 			-fx-border-radius: 0;
 		""");
 
-		Button startButton = new Button("Confirm");
-		startButton.getStyleClass().add("start-button");
-		startButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
-		startButton.setPrefWidth(380);
-		startButton.setPrefHeight(55);
-		startButton.setOnAction(e -> handler.onCreateGame(fileNameField.getText()));
-		fileNameField.setOnAction(e -> handler.onCreateGame(fileNameField.getText()));
+		Button confirmNameButton = new Button("Confirm");
+		confirmNameButton.getStyleClass().add("start-button");
+		confirmNameButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
+		confirmNameButton.setPrefWidth(380);
+		confirmNameButton.setPrefHeight(55);
+		final ChatBubble[] bossBubble = new ChatBubble[1];
+
+		Runnable showExperienceOptions = () -> {
+			String playerName = fileNameField.getText() == null ? "" : fileNameField.getText().trim();
+			if (playerName.isBlank()) {
+				fileNameField.requestFocus();
+				return;
+			}
+
+			Button tutorialButton = createOptionButton("Tutorial", fontFamily, () ->
+					handler.onCreateGame(playerName, "Tutorial"));
+			Button noviceButton = createOptionButton("Novice", fontFamily, () ->
+					handler.onCreateGame(playerName, "Novice"));
+			Button investorButton = createOptionButton("Investor", fontFamily, () ->
+					handler.onCreateGame(playerName, "Investor"));
+			Button speculatorButton = createOptionButton("Speculator", fontFamily, () ->
+					handler.onCreateGame(playerName, "Speculator"));
+
+			contentBox.getChildren().setAll(tutorialButton, noviceButton, investorButton, speculatorButton);
+			if (bossBubble[0] != null) {
+				bossBubble[0].setText("Are you any good at this?");
+			}
+		};
+
+		confirmNameButton.setOnAction(e -> showExperienceOptions.run());
+		fileNameField.setOnAction(e -> showExperienceOptions.run());
 
 		ImageView exitRedImage = createExitImageView(EXIT_RED_PATH);
 		ImageView exitGreenImage = createExitImageView(EXIT_GREEN_PATH);
@@ -102,7 +127,7 @@ public class CreateGameScreen extends StackPane {
 		});
 		backButton.setOnMouseClicked(e -> handler.onBack());
 
-		contentBox.getChildren().addAll(inputBubble, startButton);
+		contentBox.getChildren().addAll(inputBubble, confirmNameButton);
 		getChildren().add(contentBox);
 		StackPane.setAlignment(contentBox, Pos.CENTER);
 		StackPane.setMargin(contentBox, new Insets(90, 0, 0, 0));
@@ -117,10 +142,10 @@ public class CreateGameScreen extends StackPane {
 			StackPane.setAlignment(bossImageView, Pos.BOTTOM_LEFT);
 			StackPane.setMargin(bossImageView, new Insets(0, 0, -90, -70));
 
-			ChatBubble bossBubble = new ChatBubble("Hey you! What's your name?", fontFamily);
-			getChildren().add(bossBubble);
-			StackPane.setAlignment(bossBubble, Pos.TOP_CENTER);
-			StackPane.setMargin(bossBubble, new Insets(220, 0, 0, 0));
+			bossBubble[0] = new ChatBubble("Hey you! What's your name?", fontFamily);
+			getChildren().add(bossBubble[0]);
+			StackPane.setAlignment(bossBubble[0], Pos.TOP_CENTER);
+			StackPane.setMargin(bossBubble[0], new Insets(220, 0, 0, 0));
 
 			fileNameField.requestFocus();
 		}
@@ -169,5 +194,15 @@ public class CreateGameScreen extends StackPane {
 		}
 
 		return Font.getDefault().getFamily();
+	}
+
+	private Button createOptionButton(String text, String fontFamily, Runnable action) {
+		Button button = new Button(text);
+		button.getStyleClass().add("start-button");
+		button.setFont(Font.font(fontFamily, OPTION_BUTTON_FONT_SIZE));
+		button.setPrefWidth(380);
+		button.setPrefHeight(50);
+		button.setOnAction(e -> action.run());
+		return button;
 	}
 }
