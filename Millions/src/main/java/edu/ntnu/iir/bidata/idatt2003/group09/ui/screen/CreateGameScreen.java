@@ -2,7 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
 import java.io.IOException;
 import java.io.InputStream;
-import edu.ntnu.iir.bidata.idatt2003.group09.ui.ChatBubble;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.Boss;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -16,7 +16,6 @@ import javafx.scene.text.Font;
 public class CreateGameScreen extends StackPane {
 
 	private static final String FONT_PATH = "/ThaleahFat.ttf";
-	private static final String BOSS_GIF_PATH = "/images/boss/boss.gif";
 	private static final String EXIT_RED_PATH = "/images/util/exit/pixilart-frames/exitred.png";
 	private static final String EXIT_GREEN_PATH = "/images/util/exit/pixilart-frames/exitgreen.png";
 	private static final double BOSS_SIZE = 500;
@@ -80,7 +79,8 @@ public class CreateGameScreen extends StackPane {
 		confirmNameButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
 		confirmNameButton.setPrefWidth(380);
 		confirmNameButton.setPrefHeight(55);
-		final ChatBubble[] bossBubble = new ChatBubble[1];
+
+		Boss boss = new Boss("Hey you! What's your name?", fontFamily, BOSS_SIZE);
 
 		Runnable showExperienceOptions = () -> {
 			String playerName = fileNameField.getText() == null ? "" : fileNameField.getText().trim();
@@ -90,18 +90,16 @@ public class CreateGameScreen extends StackPane {
 			}
 
 			Button tutorialButton = createOptionButton("Tutorial", fontFamily, () ->
-					showExchangeOptions(contentBox, bossBubble, fontFamily, handler, playerName, "Tutorial"));
+					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Tutorial"));
 			Button noviceButton = createOptionButton("Novice", fontFamily, () ->
-					showExchangeOptions(contentBox, bossBubble, fontFamily, handler, playerName, "Novice"));
+					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Novice"));
 			Button investorButton = createOptionButton("Investor", fontFamily, () ->
-					showExchangeOptions(contentBox, bossBubble, fontFamily, handler, playerName, "Investor"));
+					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Investor"));
 			Button speculatorButton = createOptionButton("Speculator", fontFamily, () ->
-					showExchangeOptions(contentBox, bossBubble, fontFamily, handler, playerName, "Speculator"));
+					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Speculator"));
 
 			contentBox.getChildren().setAll(tutorialButton, noviceButton, investorButton, speculatorButton);
-			if (bossBubble[0] != null) {
-				bossBubble[0].setText("Are you any good at this?");
-			}
+			boss.updateTalkingBubble("Are you any good at this?");
 		};
 
 		confirmNameButton.setOnAction(e -> showExperienceOptions.run());
@@ -136,33 +134,11 @@ public class CreateGameScreen extends StackPane {
 		StackPane.setAlignment(backButton, Pos.TOP_LEFT);
 		StackPane.setMargin(backButton, new Insets(20, 0, 0, 20));
 
-		ImageView bossImageView = createBossImageView();
-		if (bossImageView != null) {
-			getChildren().add(bossImageView);
-			StackPane.setAlignment(bossImageView, Pos.BOTTOM_LEFT);
-			StackPane.setMargin(bossImageView, new Insets(0, 0, -90, -70));
+		getChildren().add(boss);
+		StackPane.setAlignment(boss, Pos.BOTTOM_LEFT);
+		StackPane.setMargin(boss, new Insets(120, 0, -90, -70));
 
-			bossBubble[0] = new ChatBubble("Hey you! What's your name?", fontFamily);
-			getChildren().add(bossBubble[0]);
-			StackPane.setAlignment(bossBubble[0], Pos.TOP_CENTER);
-			StackPane.setMargin(bossBubble[0], new Insets(220, 0, 0, 0));
-
-			fileNameField.requestFocus();
-		}
-	}
-
-	private ImageView createBossImageView() {
-		InputStream gifStream = getClass().getResourceAsStream(BOSS_GIF_PATH);
-		if (gifStream == null) {
-			return null;
-		}
-
-		Image bossImage = new Image(gifStream, BOSS_SIZE, BOSS_SIZE, true, false);
-		ImageView bossImageView = new ImageView(bossImage);
-		bossImageView.setPreserveRatio(true);
-		bossImageView.setSmooth(false);
-		bossImageView.setCache(false);
-		return bossImageView;
+		fileNameField.requestFocus();
 	}
 
 	private ImageView createExitImageView(String path) {
@@ -208,7 +184,7 @@ public class CreateGameScreen extends StackPane {
 
 	private void showExchangeOptions(
 			VBox contentBox,
-			ChatBubble[] bossBubble,
+			Boss boss,
 			String fontFamily,
 			CreateGameHandler handler,
 			String playerName,
@@ -222,8 +198,6 @@ public class CreateGameScreen extends StackPane {
 				handler.onCreateGame(playerName, experienceLevel, "custom"));
 
 		contentBox.getChildren().setAll(spButton, randomButton, customButton);
-		if (bossBubble[0] != null) {
-			bossBubble[0].setText("Which exchange do you play?");
-		}
+		boss.updateTalkingBubble("Which exchange do you play?");
 	}
 }
