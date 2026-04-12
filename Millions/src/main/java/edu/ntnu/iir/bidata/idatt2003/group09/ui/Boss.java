@@ -22,6 +22,7 @@ public class Boss extends VBox {
   private static final String TALKING_PATH = "/images/boss/talking.gif";
   private static final String HAIR_PATH = "/images/boss/hair.gif";
   private static final Duration TALKING_FALLBACK_DURATION = Duration.seconds(2);
+  private static final int DEFAULT_TALKING_LOOPS = 2;
 
   private final Image idleImage;
   private final Image talkingImage;
@@ -30,6 +31,7 @@ public class Boss extends VBox {
   private final ImageView imageView;
   private final ChatBubble chatBubble;
   private final PauseTransition talkingToIdleTransition;
+  private int talkingLoops;
 
   public Boss(String initialText, String fontFamily, double imageSize) {
     this.idleImage = loadImage(IDLE_PATH, imageSize);
@@ -43,7 +45,8 @@ public class Boss extends VBox {
     this.imageView.setCache(false);
 
     this.chatBubble = new ChatBubble(initialText, fontFamily);
-  this.talkingToIdleTransition = new PauseTransition(talkingCycleDuration.multiply(2));
+    this.talkingLoops = DEFAULT_TALKING_LOOPS;
+    this.talkingToIdleTransition = new PauseTransition(talkingCycleDuration.multiply(this.talkingLoops));
   this.talkingToIdleTransition.setOnFinished(event -> setIdle());
 
     setAlignment(Pos.TOP_LEFT);
@@ -147,10 +150,24 @@ public class Boss extends VBox {
   }
 
   public void updateTalkingBubble(String text) {
+    updateTalkingBubble(text, talkingLoops);
+  }
+
+  public void updateTalkingBubble(String text, int loops) {
     setTalking();
     chatBubble.setText(text);
+    int effectiveLoops = Math.max(1, loops);
+    talkingToIdleTransition.setDuration(talkingCycleDuration.multiply(effectiveLoops));
     talkingToIdleTransition.stop();
     talkingToIdleTransition.playFromStart();
+  }
+
+  public void setTalkingLoops(int loops) {
+    this.talkingLoops = Math.max(1, loops);
+  }
+
+  public int getTalkingLoops() {
+    return talkingLoops;
   }
 
   public ChatBubble getChatBubble() {
