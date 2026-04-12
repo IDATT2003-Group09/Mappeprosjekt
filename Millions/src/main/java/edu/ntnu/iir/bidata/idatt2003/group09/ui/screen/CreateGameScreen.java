@@ -73,16 +73,33 @@ public class CreateGameScreen extends StackPane {
 			-fx-background-radius: 0;
 			-fx-border-radius: 0;
 		""");
+		inputBubble.setVisible(false);
+		inputBubble.setManaged(false);
 
 		Button confirmNameButton = new Button("Confirm");
 		confirmNameButton.getStyleClass().add("start-button");
 		confirmNameButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
 		confirmNameButton.setPrefWidth(380);
 		confirmNameButton.setPrefHeight(55);
+		confirmNameButton.setText("Start");
 
-		Boss boss = new Boss("Hey you! What's your name?", fontFamily, BOSS_SIZE);
+		fileNameField.setEditable(false);
+
+		Boss boss = new Boss("...", fontFamily, BOSS_SIZE);
+		final boolean[] introStarted = {false};
 
 		Runnable showExperienceOptions = () -> {
+			if (!introStarted[0]) {
+				introStarted[0] = true;
+				boss.updateTalkingBubble("Hey you! What's your name?");
+				confirmNameButton.setText("Confirm");
+				fileNameField.setEditable(true);
+				inputBubble.setVisible(true);
+				inputBubble.setManaged(true);
+				fileNameField.requestFocus();
+				return;
+			}
+
 			String playerName = fileNameField.getText() == null ? "" : fileNameField.getText().trim();
 			if (playerName.isBlank()) {
 				fileNameField.requestFocus();
