@@ -7,7 +7,7 @@ import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -16,7 +16,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class Boss extends VBox {
+public class Boss extends StackPane {
 
   private static final String IDLE_PATH = "/images/boss/blinking.gif";
   private static final String TALKING_PATH = "/images/boss/talking.gif";
@@ -47,12 +47,17 @@ public class Boss extends VBox {
     this.chatBubble = new ChatBubble(initialText, fontFamily);
     this.talkingLoops = DEFAULT_TALKING_LOOPS;
     this.talkingToIdleTransition = new PauseTransition(talkingCycleDuration.multiply(this.talkingLoops));
-  this.talkingToIdleTransition.setOnFinished(event -> setIdle());
+    this.talkingToIdleTransition.setOnFinished(event -> setIdle());
 
-    setAlignment(Pos.TOP_LEFT);
-    setSpacing(10);
+    chatBubble.setManaged(false);
+    chatBubble.setTranslateX(220);
+    chatBubble.setTranslateY(-140);
+
+    setAlignment(Pos.BOTTOM_LEFT);
     setPickOnBounds(false);
-    getChildren().addAll(chatBubble, imageView);
+    getChildren().addAll(imageView, chatBubble);
+    StackPane.setAlignment(imageView, Pos.BOTTOM_LEFT);
+    StackPane.setAlignment(chatBubble, Pos.BOTTOM_LEFT);
   }
 
   private Image loadImage(String path, double imageSize) {
