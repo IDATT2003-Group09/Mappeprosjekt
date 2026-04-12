@@ -7,6 +7,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.EnhanceCSV;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.TagsFactory;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.CreateGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.LoadGameScreen;
@@ -22,10 +23,13 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.*;
@@ -98,8 +102,8 @@ public class Main extends Application {
     private void showCreateGameScreen() {
         CreateGameScreen createGameScreen = new CreateGameScreen(new CreateGameScreen.CreateGameHandler() {
             @Override
-            public void onCreateGame(String fileName) {
-                startNewGame(fileName);
+            public void onCreateGame(String playerName, String experienceLevel, String exchangeChoice) {
+                startNewGame(playerName, exchangeChoice);
             }
 
             @Override
@@ -130,12 +134,15 @@ public class Main extends Application {
         root.setCenter(loadGameScreen);
     }
 
-    private void startNewGame(String fileName) {
+    private void startNewGame(String playerName, String exchangeChoice) {
         try {
-            String normalizedSaveFileName = SaveManager.normalizeSaveFileName(fileName);
-            List<Stock> stocks = StockCsvReader.readDefaultResource();
-            Player player = new Player("Trader", new BigDecimal("100000"));
-            Exchange exchange = new Exchange("Main Exchange", stocks);
+            String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName);
+            List<Stock> stocks = loadStocksForExchange(exchangeChoice);
+            if (stocks == null) {
+                return;
+            }
+            Player player = new Player(playerName, new BigDecimal("100000"));
+            Exchange exchange = new Exchange(getExchangeName(exchangeChoice), stocks);
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
 
@@ -149,6 +156,58 @@ public class Main extends Application {
 
             root.setCenter(new VBox(errorLabel));
         }
+    }
+
+    private List<Stock> loadStocksForExchange(String exchangeChoice) throws IOException {
+        if (exchangeChoice == null) {
+            return StockCsvReader.readDefaultResource();
+        }
+
+        return switch (exchangeChoice.trim().toLowerCase()) {
+            case "random" -> StockCsvReader.readFromResource("/csv/output/random.csv");
+            case "sp500" -> StockCsvReader.readFromResource("/csv/output/sp500.csv");
+            case "custom" -> {
+                Path selectedCsvFile = promptCustomCsvFile();
+                if (selectedCsvFile == null) {
+                    yield null;
+                }
+                Path enhancedCsv = enhanceCustomCsv(selectedCsvFile);
+                yield StockCsvReader.readFromFile(enhancedCsv);
+            }
+            default -> StockCsvReader.readDefaultResource();
+        };
+    }
+
+    private String getExchangeName(String exchangeChoice) {
+        if (exchangeChoice == null) {
+            return "Main Exchange";
+        }
+
+        return switch (exchangeChoice.trim().toLowerCase()) {
+            case "random" -> "Random Exchange";
+            case "sp500" -> "S&P 500";
+            case "custom" -> "Custom Exchange";
+            default -> "Main Exchange";
+        };
+    }
+
+    private Path promptCustomCsvFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select CSV file");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("CSV files", "*.csv")
+        );
+
+        java.io.File selectedFile = fileChooser.showOpenDialog(root.getScene().getWindow());
+        return selectedFile == null ? null : selectedFile.toPath();
+    }
+
+    private Path enhanceCustomCsv(Path selectedCsvFile) throws IOException {
+        Path enhancedFile = Files.createTempFile("millions-custom-enhanced-", ".csv");
+        EnhanceCSV enhancer = new EnhanceCSV(selectedCsvFile.toString(), new TagsFactory().getTags());
+        enhancer.writeEnhancedCsv(enhancedFile.toString());
+        enhancedFile.toFile().deleteOnExit();
+        return enhancedFile;
     }
 
     private void loadGame(String fileName) {
@@ -218,6 +277,7 @@ public class Main extends Application {
      * @param args
      */
     public static void main(String[] args) {
+        
         launch(args);
     }
 }
