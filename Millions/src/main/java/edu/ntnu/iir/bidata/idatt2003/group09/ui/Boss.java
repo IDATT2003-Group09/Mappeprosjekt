@@ -50,8 +50,8 @@ public class Boss extends StackPane {
     this.talkingToIdleTransition.setOnFinished(event -> setIdle());
 
     chatBubble.setManaged(false);
-    chatBubble.setTranslateX(220);
-    chatBubble.setTranslateY(-140);
+    chatBubble.setTranslateX(185);
+    chatBubble.setTranslateY(30);
 
     setAlignment(Pos.BOTTOM_LEFT);
     setPickOnBounds(false);
