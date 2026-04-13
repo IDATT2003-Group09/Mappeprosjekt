@@ -30,6 +30,7 @@ public final class UiSoundEffects {
   private static volatile Clip backgroundClip;
   private static volatile boolean backgroundSoundDisabled;
   private static volatile boolean backgroundMusicEnabled = true;
+  private static volatile boolean soundEffectsEnabled = true;
   private static volatile Clip selectedHoverClip;
   private static volatile boolean selectedHoverSoundDisabled;
   private static volatile Clip clickedClip;
@@ -92,6 +93,10 @@ public final class UiSoundEffects {
     return backgroundMusicEnabled;
   }
 
+  public static boolean isSoundEffectsEnabled() {
+    return soundEffectsEnabled;
+  }
+
   public static void setBackgroundMusicEnabled(boolean enabled) {
     backgroundMusicEnabled = enabled;
     if (enabled) {
@@ -99,6 +104,10 @@ public final class UiSoundEffects {
     } else {
       stopBackgroundMusic();
     }
+  }
+
+  public static void setSoundEffectsEnabled(boolean enabled) {
+    soundEffectsEnabled = enabled;
   }
 
   public static void installHoverSound(TabPane tabPane) {
@@ -126,7 +135,7 @@ public final class UiSoundEffects {
   }
 
   public static void playSelectedHoverSound() {
-    if (selectedHoverSoundDisabled) {
+    if (!soundEffectsEnabled || selectedHoverSoundDisabled) {
       return;
     }
 
@@ -147,7 +156,7 @@ public final class UiSoundEffects {
   }
 
   public static void playClickedSound() {
-    if (clickedSoundDisabled) {
+    if (!soundEffectsEnabled || clickedSoundDisabled) {
       return;
     }
 

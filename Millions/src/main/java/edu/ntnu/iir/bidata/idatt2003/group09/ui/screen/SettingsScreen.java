@@ -36,6 +36,13 @@ public class SettingsScreen extends VBox {
 				UiSoundEffects.setBackgroundMusicEnabled(enabled)
 		);
 
+		CheckBox soundEffectsToggle = new CheckBox("Sound effects");
+		soundEffectsToggle.setSelected(UiSoundEffects.isSoundEffectsEnabled());
+		soundEffectsToggle.setStyle("-fx-font-size: 26px; -fx-text-fill: #f5f5f5;");
+		soundEffectsToggle.selectedProperty().addListener((obs, oldValue, enabled) ->
+				UiSoundEffects.setSoundEffectsEnabled(enabled)
+		);
+
 		Button backButton = new Button("Back");
 		backButton.getStyleClass().add("start-button");
 		backButton.setPrefWidth(400);
@@ -45,6 +52,6 @@ public class SettingsScreen extends VBox {
 		UiSoundEffects.installHoverSound(backButton);
 		UiSoundEffects.installClickSound(backButton);
 
-		getChildren().addAll(titleLabel, backgroundMusicToggle, backButton);
+		getChildren().addAll(titleLabel, backgroundMusicToggle, soundEffectsToggle, backButton);
 	}
 }

@@ -190,7 +190,7 @@ public class Boss extends StackPane {
   }
 
   private void playTalkingSound() {
-    if (!talkingSoundEnabled || talkingSoundClip == null) {
+    if (!UiSoundEffects.isSoundEffectsEnabled() || !talkingSoundEnabled || talkingSoundClip == null) {
       return;
     }
 
