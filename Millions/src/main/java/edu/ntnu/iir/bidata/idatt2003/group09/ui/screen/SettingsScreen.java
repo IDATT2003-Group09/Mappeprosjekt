@@ -39,7 +39,7 @@ public class SettingsScreen extends VBox {
 
 		getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
 
-		setSpacing(20);
+		setSpacing(0);
 		setAlignment(Pos.CENTER);
 		setPadding(new Insets(40));
 		setStyle("""
@@ -114,7 +114,19 @@ public class SettingsScreen extends VBox {
 		UiSoundEffects.installHoverSound(backButton);
 		UiSoundEffects.installClickSound(backButton);
 
-		getChildren().addAll(
+		VBox settingsCard = new VBox(16);
+		settingsCard.setAlignment(Pos.CENTER);
+		settingsCard.setPadding(new Insets(28));
+		settingsCard.setMaxWidth(560);
+		settingsCard.setStyle("""
+		-fx-background-color: rgba(23, 23, 28, 0.88);
+		-fx-border-color: #f5f5f5;
+		-fx-border-width: 3px;
+		-fx-background-radius: 0;
+		-fx-border-radius: 0;
+""");
+
+		settingsCard.getChildren().addAll(
 				titleLabel,
 				masterVolumeLabel,
 				masterVolumeRow,
@@ -124,6 +136,8 @@ public class SettingsScreen extends VBox {
 				musicVolumeRow,
 				backButton
 		);
+
+		getChildren().add(settingsCard);
 	}
 
 	private HBox createVolumeRow(Slider slider, ImageView iconView) {
