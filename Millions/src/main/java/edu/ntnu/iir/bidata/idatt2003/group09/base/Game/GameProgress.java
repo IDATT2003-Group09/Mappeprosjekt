@@ -1,9 +1,13 @@
-package edu.ntnu.iir.bidata.idatt2003.group09.base.Game;
 
+package edu.ntnu.iir.bidata.idatt2003.group09.base.Game;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class GameProgress {
+
+    public int getCheckpointLevel() {
+        return checkpointLevel;
+    }
 
     private int checkpointLevel = 1;
     private final BigDecimal baseRequirement;

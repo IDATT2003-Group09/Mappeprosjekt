@@ -291,46 +291,39 @@ public class TradeScreen extends BorderPane {
         var progress = controller.getProgress();
         var player = controller.getPlayer();
 
-        int currentLevel = progress.getCurrentLevelNumber(
-                player.getNetWorth(),
-                player.getStartingMoney()
-        );
-
-        deadlineLabel.setText("Deadline in: " +
-                progress.getWeeksUntilDeadline() + " weeks");
+        int checkpointLevel = progress.getCheckpointLevel();
+        deadlineLabel.setText("Deadline in: " + progress.getWeeksUntilDeadline() + " weeks");
 
         BigDecimal growth = player.getNetWorth()
-                .subtract(player.getStartingMoney())
-                .divide(player.getStartingMoney(), 4, RoundingMode.HALF_UP);
+            .subtract(player.getStartingMoney())
+            .divide(player.getStartingMoney(), 4, RoundingMode.HALF_UP);
 
         BigDecimal required = progress.getBaseRequirement()
-                .multiply(BigDecimal.valueOf(currentLevel));
+            .multiply(BigDecimal.valueOf(checkpointLevel));
 
-        levelLabel.setText("Level " + currentLevel);
-
-        requirementLabel.setText("Next Target: : " +
-                currencyFormat.format(progress.getCurrentTarget()));
+        levelLabel.setText("Level " + checkpointLevel);
+        requirementLabel.setText("Next Target: : " + currencyFormat.format(progress.getCurrentTarget()));
 
         double progressValue = 0;
         if (required.compareTo(BigDecimal.ZERO) > 0) {
             progressValue = growth
-                    .divide(required, 4, RoundingMode.HALF_UP)
-                    .doubleValue();
+                .divide(required, 4, RoundingMode.HALF_UP)
+                .doubleValue();
         }
         progressBar.setProgress(Math.min(progressValue, 1.0));
 
-        if (currentLevel > lastLevel) {
-            levelUpLabel.setText("Level Up! Now level " + currentLevel);
+        if (checkpointLevel > lastLevel) {
+            levelUpLabel.setText("Level Up! Now level " + checkpointLevel);
 
             new Thread(() -> {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException ignored) {}
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException ignored) {}
 
-                Platform.runLater(() -> levelUpLabel.setText(""));
+            Platform.runLater(() -> levelUpLabel.setText(""));
             }).start();
 
-            lastLevel = currentLevel;
+            lastLevel = checkpointLevel;
         }
     }
 
