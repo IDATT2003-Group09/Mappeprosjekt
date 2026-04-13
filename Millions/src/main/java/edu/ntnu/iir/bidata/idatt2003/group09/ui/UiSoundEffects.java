@@ -51,7 +51,7 @@ public final class UiSoundEffects {
       return;
     }
 
-    node.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> playClickedSound());
+    node.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> playClickedSound());
   }
 
   public static void playSelectedHoverSound() {
