@@ -17,10 +17,10 @@ public class SettingsScreen extends VBox {
 	private static final double SLIDER_WIDTH = 300;
 	private static final double VOLUME_ICON_SIZE = 28;
 
-	private static final String VOLUME_ICON_0_PATH = "/images/volume/0.png";
-	private static final String VOLUME_ICON_1_PATH = "/images/volume/1.png";
-	private static final String VOLUME_ICON_2_PATH = "/images/volume/2.png";
-	private static final String VOLUME_ICON_3_PATH = "/images/volume/3.png";
+	private static final String VOLUME_ICON_0_PATH = "/images/util/volume/0.png";
+	private static final String VOLUME_ICON_1_PATH = "/images/util/volume/1.png";
+	private static final String VOLUME_ICON_2_PATH = "/images/util/volume/2.png";
+	private static final String VOLUME_ICON_3_PATH = "/images/util/volume/3.png";
 
 	private final Image volumeIcon0;
 	private final Image volumeIcon1;
