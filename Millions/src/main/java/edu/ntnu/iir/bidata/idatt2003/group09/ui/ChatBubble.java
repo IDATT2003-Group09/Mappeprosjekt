@@ -48,6 +48,7 @@ public class ChatBubble extends VBox {
 
 	public void setText(String text) {
 		textLabel.setText(text);
+		showTextOnly();
 	}
 
 	public String getText() {
@@ -79,5 +80,10 @@ public class ChatBubble extends VBox {
 		bubbleBody.getChildren().clear();
 		bubbleBody.getChildren().add(content);
 		bubbleBody.setMouseTransparent(false);
+	}
+
+	private void showTextOnly() {
+		bubbleBody.getChildren().clear();
+		bubbleBody.getChildren().add(textLabel);
 	}
 }
