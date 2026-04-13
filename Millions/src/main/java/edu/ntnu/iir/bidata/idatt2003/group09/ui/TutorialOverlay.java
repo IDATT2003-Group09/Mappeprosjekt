@@ -50,7 +50,7 @@ public class TutorialOverlay {
   private static final double NEWSPAPER_VIEW_W = 1055;
   private static final double NEWSPAPER_VIEW_H = 604;
   private static final double TAB_CONTENT_X = 0;
-  private static final double TAB_CONTENT_Y = 20;
+  private static final double TAB_CONTENT_Y = 40;
   private static final double TAB_CONTENT_W = 1100;
   private static final double TAB_CONTENT_H = 684;
 
