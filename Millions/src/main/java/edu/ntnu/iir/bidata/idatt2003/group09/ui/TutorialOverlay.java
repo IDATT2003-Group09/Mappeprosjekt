@@ -14,41 +14,45 @@ public class TutorialOverlay {
   private static final double TITLE_FONT_SIZE = 32;
   private static final double BOSS_SIZE = 430;
 
-  private static final double NEWSPAPER_TAB_X = 180;
-  private static final double TRADE_TAB_X = 20;
+  private static final double NEWSPAPER_TAB_X = 200;
+  private static final double NEWSPAPER_TAB_W = 150;
+  private static final double TRADE_TAB_X = 14;
+  private static final double TRADE_TAB_W = 90;
   private static final double PORTFOLIO_TAB_X = 90;
-  private static final double HISTORY_TAB_X = 230;
-  private static final double TAB_Y = 10;
-  private static final double TAB_H = 55;
+  private static final double PORTFOLIO_TAB_W = 125;
+  private static final double HISTORY_TAB_X = 350;
+  private static final double HISTORY_TAB_W = 220;
+  private static final double TAB_Y = 0;
+  private static final double TAB_H = 46;
 
-  private static final double STOCK_LIST_X = 20;
-  private static final double STOCK_LIST_Y = 380;
-  private static final double STOCK_LIST_W = 520;
-  private static final double STOCK_LIST_H = 300;
+  private static final double STOCK_LIST_X = 16;
+  private static final double STOCK_LIST_Y = 360;
+  private static final double STOCK_LIST_W = 524;
+  private static final double STOCK_LIST_H = 338;
 
   private static final double BUY_BUTTON_X = 220;
-  private static final double BUY_BUTTON_Y = 275;
-  private static final double BUY_BUTTON_W = 85;
-  private static final double BUY_BUTTON_H = 45;
+  private static final double BUY_BUTTON_Y = 260;
+  private static final double BUY_BUTTON_W = 70;
+  private static final double BUY_BUTTON_H = 36;
 
-  private static final double SELL_BUTTON_X = 312;
-  private static final double SELL_BUTTON_Y = 275;
-  private static final double SELL_BUTTON_W = 85;
-  private static final double SELL_BUTTON_H = 45;
+  private static final double SELL_BUTTON_X = 250;
+  private static final double SELL_BUTTON_Y = 260;
+  private static final double SELL_BUTTON_W = 90;
+  private static final double SELL_BUTTON_H = 46;
 
-  private static final double NEXT_WEEK_BUTTON_X = 400;
-  private static final double NEXT_WEEK_BUTTON_Y = 275;
-  private static final double NEXT_WEEK_BUTTON_W = 130;
-  private static final double NEXT_WEEK_BUTTON_H = 45;
+  private static final double NEXT_WEEK_BUTTON_X = 354;
+  private static final double NEXT_WEEK_BUTTON_Y = 260;
+  private static final double NEXT_WEEK_BUTTON_W = 132;
+  private static final double NEXT_WEEK_BUTTON_H = 46;
 
-  private static final double NEWSPAPER_VIEW_X = 15;
-  private static final double NEWSPAPER_VIEW_Y = 70;
-  private static final double NEWSPAPER_VIEW_W = 1070;
-  private static final double NEWSPAPER_VIEW_H = 610;
-  private static final double TAB_CONTENT_X = 15;
-  private static final double TAB_CONTENT_Y = 70;
-  private static final double TAB_CONTENT_W = 1070;
-  private static final double TAB_CONTENT_H = 610;
+  private static final double NEWSPAPER_VIEW_X = 18;
+  private static final double NEWSPAPER_VIEW_Y = 76;
+  private static final double NEWSPAPER_VIEW_W = 1055;
+  private static final double NEWSPAPER_VIEW_H = 604;
+  private static final double TAB_CONTENT_X = 18;
+  private static final double TAB_CONTENT_Y = 76;
+  private static final double TAB_CONTENT_W = 1100;
+  private static final double TAB_CONTENT_H = 684;
 
   private final AnchorPane layer;
   private final Pane dimLayer;
@@ -178,7 +182,7 @@ public class TutorialOverlay {
     }
 
     tutorialStep = 7;
-    spotlight(HISTORY_TAB_X, TAB_Y, 190, TAB_H);
+    spotlight(HISTORY_TAB_X, TAB_Y, HISTORY_TAB_W, TAB_H);
     boss.updateTalkingBubble("If you want more information about your stocks, go to the transaction history.");
   }
 
@@ -250,19 +254,19 @@ public class TutorialOverlay {
 
     if (tutorialStep == 1) {
       tutorialStep = 2;
-      spotlight(NEWSPAPER_TAB_X, TAB_Y, 140, TAB_H);
+      spotlight(NEWSPAPER_TAB_X, TAB_Y, NEWSPAPER_TAB_W, TAB_H);
       boss.updateTalkingBubble("You can start by reading the newspaper.");
     } else if (tutorialStep == 3) {
       tutorialStep = 4;
-      spotlight(TRADE_TAB_X, TAB_Y, 120, TAB_H);
+      spotlight(TRADE_TAB_X, TAB_Y, TRADE_TAB_W, TAB_H);
       boss.updateTalkingBubble("With all that news you should have an idea of what to buy. Go to the trade screen and buy something.");
     } else if (tutorialStep == 8) {
       tutorialStep = 9;
-      spotlight(PORTFOLIO_TAB_X, TAB_Y, 140, TAB_H);
+      spotlight(PORTFOLIO_TAB_X, TAB_Y, PORTFOLIO_TAB_W, TAB_H);
       boss.updateTalkingBubble("Or look at your portfolio to see what you own.");
     } else if (tutorialStep == 10) {
       tutorialStep = 11;
-      spotlight(TRADE_TAB_X, TAB_Y, 120, TAB_H);
+      spotlight(TRADE_TAB_X, TAB_Y, TRADE_TAB_W, TAB_H);
       boss.updateTalkingBubble("Now go back to the trade screen.");
     } else if (tutorialStep == 13) {
       tutorialStep = 14;
