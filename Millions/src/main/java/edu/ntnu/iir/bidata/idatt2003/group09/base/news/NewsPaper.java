@@ -11,15 +11,16 @@ import java.util.Random;
 
 public class NewsPaper implements Serializable {
 
+	private static final int GLOBAL_EVENT_COUNT = 2;
 	private static final int MIN_STOCK_SPECIFIC_EVENT_COUNT = 2;
 	private static final int MAX_STOCK_SPECIFIC_EVENT_COUNT = 3;
 
-	private final GlobalEvent globalEvent;
+	private final List<GlobalEvent> globalEvents;
 	private final List<StockSpecificEvent> stockSpecificEvents;
 
-	public NewsPaper(GlobalEvent globalEvent, List<StockSpecificEvent> stockSpecificEvents) {
-		if (globalEvent == null) {
-			throw new IllegalArgumentException("Global event cannot be null");
+	public NewsPaper(List<GlobalEvent> globalEvents, List<StockSpecificEvent> stockSpecificEvents) {
+		if (globalEvents == null || globalEvents.size() != GLOBAL_EVENT_COUNT || globalEvents.stream().anyMatch(event -> event == null)) {
+			throw new IllegalArgumentException("Newspaper must contain exactly 2 global events");
 		}
 		if (stockSpecificEvents == null
 				|| stockSpecificEvents.size() < MIN_STOCK_SPECIFIC_EVENT_COUNT
@@ -27,7 +28,7 @@ public class NewsPaper implements Serializable {
 			throw new IllegalArgumentException("Newspaper must contain between 2 and 3 stock specific events");
 		}
 
-		this.globalEvent = globalEvent;
+		this.globalEvents = new ArrayList<>(globalEvents);
 		this.stockSpecificEvents = new ArrayList<>(stockSpecificEvents);
 	}
 
@@ -40,8 +41,8 @@ public class NewsPaper implements Serializable {
 		}
 
 		List<Event> globalEvents = eventFactory.generateGlobalEvents();
-		if (globalEvents.isEmpty()) {
-			throw new IllegalStateException("EventFactory must provide at least one global event");
+		if (globalEvents.size() < GLOBAL_EVENT_COUNT) {
+			throw new IllegalStateException("EventFactory must provide at least 2 global events");
 		}
 
 		List<Event> stockTemplates = eventFactory.generateStockSpecificEvents();
@@ -49,7 +50,14 @@ public class NewsPaper implements Serializable {
 			throw new IllegalStateException("EventFactory must provide stock specific event templates");
 		}
 
-		GlobalEvent selectedGlobal = (GlobalEvent) globalEvents.get(random.nextInt(globalEvents.size()));
+		List<Event> availableGlobalEvents = new ArrayList<>(globalEvents);
+		List<GlobalEvent> selectedGlobals = new ArrayList<>(GLOBAL_EVENT_COUNT);
+
+		for (int index = 0; index < GLOBAL_EVENT_COUNT; index++) {
+			int globalIndex = random.nextInt(availableGlobalEvents.size());
+			selectedGlobals.add((GlobalEvent) availableGlobalEvents.remove(globalIndex));
+		}
+
 		List<StockSpecificEvent> selectedSpecific = new ArrayList<>();
 		List<Event> availableTemplates = new ArrayList<>(stockTemplates);
 		int stockSpecificEventCount =
@@ -67,11 +75,15 @@ public class NewsPaper implements Serializable {
 			selectedSpecific.add(template.createForStock(stock));
 		}
 
-		return new NewsPaper(selectedGlobal, selectedSpecific);
+		return new NewsPaper(selectedGlobals, selectedSpecific);
+	}
+
+	public List<GlobalEvent> getGlobalEvents() {
+		return Collections.unmodifiableList(globalEvents);
 	}
 
 	public GlobalEvent getGlobalEvent() {
-		return globalEvent;
+		return globalEvents.get(0);
 	}
 
 	public List<StockSpecificEvent> getStockSpecificEvents() {
@@ -79,7 +91,11 @@ public class NewsPaper implements Serializable {
 	}
 
 	public BigDecimal getImpactForStock(Stock stock) {
-		BigDecimal totalImpact = globalEvent.getImpactForSector(stock.getSector());
+		BigDecimal totalImpact = BigDecimal.ZERO;
+
+		for (GlobalEvent globalEvent : globalEvents) {
+			totalImpact = totalImpact.add(globalEvent.getImpactForSector(stock.getSector()));
+		}
 
 		for (StockSpecificEvent stockSpecificEvent : stockSpecificEvents) {
 			totalImpact = totalImpact.add(stockSpecificEvent.getImpactForStock(stock));
