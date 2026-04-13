@@ -5,7 +5,19 @@ import java.util.ArrayList;
 
 public class TagsFactory {
 
-  private List<String> tags = List.of("Tech", "Finance", "Health", "Energy", "Consumer", "Industrial", "Utilities", "Real Estate", "Materials", "Telecom");
+    List<String> tags = List.of(
+            "Technology",
+            "Consumer Discretionary",
+            "Communication Services",
+            "Financials",
+            "Consumer Staples",
+            "Health Care",
+            "Energy",
+            "Industrials",
+            "Materials",
+            "Utilities",
+            "Real Estate"
+    );
 
   private String inputFilePath = "src/main/resources/csv/input/";
   private String outputFilePath = "src/main/resources/csv/output/";
