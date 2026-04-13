@@ -110,7 +110,7 @@ public class CreateGameScreen extends StackPane {
 			}
 
 			Button tutorialButton = createOptionButton("Tutorial", fontFamily, () ->
-					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Tutorial"));
+					handler.onCreateGame(playerName, "Tutorial", "sp500"));
 			Button noviceButton = createOptionButton("Novice", fontFamily, () ->
 					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Novice"));
 			Button investorButton = createOptionButton("Investor", fontFamily, () ->

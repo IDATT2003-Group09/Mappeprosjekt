@@ -26,6 +26,10 @@
 	-fx-text-fill: #9cb6db;
 }
 
+.trade-screen .chat-bubble-label {
+	-fx-text-fill: #111111;
+}
+
 .trade-screen .trade-header {
 	-fx-background-color: #0a132d;
 	-fx-border-color: #1a355c;

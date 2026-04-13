@@ -5,8 +5,8 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockListView;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.TutorialOverlay;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -29,6 +29,8 @@ public class TradeScreen extends BorderPane {
 
     private final GameController controller;
     private final Runnable onSaveAndQuit;
+    private final boolean tutorialMode;
+    private final TutorialOverlay tutorialOverlay;
 
     private final ListView<Stock> stockList;
     private final StockGraph graph;
@@ -50,8 +52,24 @@ public class TradeScreen extends BorderPane {
     private int lastLevel = 1;
 
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
+        this(controller, stocks, onSaveAndQuit, false, null);
+    }
+
+    public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit, boolean tutorialMode) {
+        this(controller, stocks, onSaveAndQuit, tutorialMode, null);
+    }
+
+    public TradeScreen(
+        GameController controller,
+        List<Stock> stocks,
+        Runnable onSaveAndQuit,
+        boolean tutorialMode,
+        TutorialOverlay tutorialOverlay
+    ) {
         this.controller = controller;
         this.onSaveAndQuit = onSaveAndQuit;
+        this.tutorialMode = tutorialMode;
+        this.tutorialOverlay = tutorialOverlay;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
         getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
@@ -65,6 +83,7 @@ public class TradeScreen extends BorderPane {
                 (obs, oldStock, newStock) -> {
                     if (newStock != null) {
                         graph.updateChart(newStock);
+                        onTutorialStockSelected();
                     }
                 }
         );
@@ -73,7 +92,9 @@ public class TradeScreen extends BorderPane {
         quantityField.setPrefWidth(100);
         quantityField.getStyleClass().add("trade-quantity-field");
 
-        statusLabel = new Label("Select a stock, then buy or sell.");
+        statusLabel = new Label(tutorialMode
+            ? "Tutorial mode: use S&P 500 stocks and practice buying/selling."
+            : "Select a stock, then buy or sell.");
         statusLabel.getStyleClass().add("trade-status");
         cashLabel = new Label();
         holdingsLabel = new Label();
@@ -128,6 +149,7 @@ public class TradeScreen extends BorderPane {
             stockList.refresh();
             refreshInfo();
             updateSelectedStockGraph();
+            onTutorialNextWeek();
         });
 
         HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
@@ -197,6 +219,7 @@ public class TradeScreen extends BorderPane {
             controller.buy(selectedStock.getSymbol(), quantity);
 
             statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
+            onTutorialBuySuccess();
 
             stockList.refresh();
             refreshInfo();
@@ -225,6 +248,7 @@ public class TradeScreen extends BorderPane {
             controller.sell(shares.getFirst());
 
             statusLabel.setText("Sold " + selectedStock.getSymbol());
+            onTutorialSellSuccess();
 
             stockList.refresh();
             refreshInfo();
@@ -306,5 +330,33 @@ public class TradeScreen extends BorderPane {
 
             lastLevel = currentLevel;
         }
+    }
+
+    private void onTutorialStockSelected() {
+        if (!tutorialMode || tutorialOverlay == null) {
+            return;
+        }
+        tutorialOverlay.onStockSelected();
+    }
+
+    private void onTutorialBuySuccess() {
+        if (!tutorialMode || tutorialOverlay == null) {
+            return;
+        }
+        tutorialOverlay.onBuySuccess();
+    }
+
+    private void onTutorialNextWeek() {
+        if (!tutorialMode || tutorialOverlay == null) {
+            return;
+        }
+        tutorialOverlay.onNextWeek();
+    }
+
+    private void onTutorialSellSuccess() {
+        if (!tutorialMode || tutorialOverlay == null) {
+            return;
+        }
+        tutorialOverlay.onSellSuccess();
     }
 }
