@@ -3,13 +3,10 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
-import edu.ntnu.iir.bidata.idatt2003.group09.ui.Boss;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockListView;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.TutorialOverlay;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
-import java.io.IOException;
-import java.io.InputStream;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -19,28 +16,21 @@ import java.util.Locale;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 public class TradeScreen extends BorderPane {
-
-    private static final String FONT_PATH = "/ThaleahFat.ttf";
-    private static final double TITLE_FONT_SIZE = 32;
-    private static final double BOSS_SIZE = 430;
 
     private final GameController controller;
     private final Runnable onSaveAndQuit;
     private final boolean tutorialMode;
+    private final TutorialOverlay tutorialOverlay;
 
     private final ListView<Stock> stockList;
     private final StockGraph graph;
@@ -59,18 +49,27 @@ public class TradeScreen extends BorderPane {
     private final ProgressBar progressBar;
     private final Label levelUpLabel;
     private final Label deadlineLabel;
-    private Boss tutorialBoss;
-    private int tutorialStep;
     private int lastLevel = 1;
 
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
-        this(controller, stocks, onSaveAndQuit, false);
+        this(controller, stocks, onSaveAndQuit, false, null);
     }
 
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit, boolean tutorialMode) {
+        this(controller, stocks, onSaveAndQuit, tutorialMode, null);
+    }
+
+    public TradeScreen(
+        GameController controller,
+        List<Stock> stocks,
+        Runnable onSaveAndQuit,
+        boolean tutorialMode,
+        TutorialOverlay tutorialOverlay
+    ) {
         this.controller = controller;
         this.onSaveAndQuit = onSaveAndQuit;
         this.tutorialMode = tutorialMode;
+        this.tutorialOverlay = tutorialOverlay;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
         getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
@@ -203,17 +202,7 @@ public class TradeScreen extends BorderPane {
         contentGrid.add(stockList, 0, 0);
         contentGrid.add(graph, 1, 0);
 
-        AnchorPane centerContainer = new AnchorPane(contentGrid);
-        AnchorPane.setTopAnchor(contentGrid, 0.0);
-        AnchorPane.setRightAnchor(contentGrid, 0.0);
-        AnchorPane.setBottomAnchor(contentGrid, 0.0);
-        AnchorPane.setLeftAnchor(contentGrid, 0.0);
-
-        if (tutorialMode) {
-            setupTutorialOverlay(centerContainer);
-        }
-
-        setCenter(centerContainer);
+        setCenter(contentGrid);
     }
 
     private void buySelectedStock() {
@@ -343,69 +332,31 @@ public class TradeScreen extends BorderPane {
         }
     }
 
-    private void setupTutorialOverlay(AnchorPane centerContainer) {
-        tutorialBoss = new Boss("Welcome! Select a stock on the left to begin.", loadFontFamily(), BOSS_SIZE);
-        tutorialBoss.setTalkingLoops(1);
-        tutorialBoss.getImageView().setScaleX(-1);
-        tutorialBoss.getChatBubble().setTranslateX(-185);
-        tutorialBoss.setMouseTransparent(true);
-        tutorialStep = 0;
-
-        centerContainer.getChildren().add(tutorialBoss);
-        AnchorPane.setBottomAnchor(tutorialBoss, 0.0);
-        AnchorPane.setRightAnchor(tutorialBoss, -40.0);
-    }
-
-    private String loadFontFamily() {
-        try (InputStream fontStream = getClass().getResourceAsStream(FONT_PATH)) {
-            if (fontStream == null) {
-                return Font.getDefault().getFamily();
-            }
-
-            Font loadedFont = Font.loadFont(fontStream, TITLE_FONT_SIZE);
-            if (loadedFont != null) {
-                return loadedFont.getFamily();
-            }
-        } catch (IOException e) {
-            return Font.getDefault().getFamily();
-        }
-
-        return Font.getDefault().getFamily();
-    }
-
     private void onTutorialStockSelected() {
-        if (!tutorialMode || tutorialBoss == null || tutorialStep != 0) {
+        if (!tutorialMode || tutorialOverlay == null) {
             return;
         }
-
-        tutorialStep = 1;
-        tutorialBoss.updateTalkingBubble("Great! Now click Buy to purchase one share.");
+        tutorialOverlay.onStockSelected();
     }
 
     private void onTutorialBuySuccess() {
-        if (!tutorialMode || tutorialBoss == null || tutorialStep > 2) {
+        if (!tutorialMode || tutorialOverlay == null) {
             return;
         }
-
-        tutorialStep = 2;
-        tutorialBoss.updateTalkingBubble("Nice buy. Click Next Week to advance the market.");
+        tutorialOverlay.onBuySuccess();
     }
 
     private void onTutorialNextWeek() {
-        if (!tutorialMode || tutorialBoss == null || tutorialStep != 2) {
+        if (!tutorialMode || tutorialOverlay == null) {
             return;
         }
-
-        tutorialStep = 3;
-        tutorialBoss.updateTalkingBubble("Good! Now click Sell to close one position.");
+        tutorialOverlay.onNextWeek();
     }
 
     private void onTutorialSellSuccess() {
-        if (!tutorialMode || tutorialBoss == null || tutorialStep < 3) {
+        if (!tutorialMode || tutorialOverlay == null) {
             return;
         }
-
-        tutorialStep = 4;
-        tutorialBoss.updateTalkingBubble("Perfect. You completed the basics—keep trading!");
+        tutorialOverlay.onSellSuccess();
     }
 }

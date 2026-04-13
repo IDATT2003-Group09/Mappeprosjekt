@@ -46,7 +46,9 @@ public class Main extends Application {
     private static final double DESIGN_WIDTH = 1100;
     private static final double DESIGN_HEIGHT = 700;
 
-    private BorderPane root;
+    private StackPane root;
+    private BorderPane contentRoot;
+    private TutorialOverlay tutorialOverlay;
 
     /**
      * Starts the JavaFX application. Initializes the exchange, player, and trade screen, and sets up the main stage.
@@ -57,7 +59,14 @@ public class Main extends Application {
 
         UiSoundEffects.startBackgroundMusic();
 
-        root = new BorderPane();
+        contentRoot = new BorderPane();
+        contentRoot.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
+        contentRoot.setMinSize(DESIGN_WIDTH, DESIGN_HEIGHT);
+        contentRoot.setMaxSize(DESIGN_WIDTH, DESIGN_HEIGHT);
+
+        tutorialOverlay = new TutorialOverlay();
+
+        root = new StackPane(contentRoot, tutorialOverlay.getLayer());
         root.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         root.setMinSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         root.setMaxSize(DESIGN_WIDTH, DESIGN_HEIGHT);
@@ -106,7 +115,8 @@ public class Main extends Application {
             }
         });
 
-        root.setCenter(startScreen);
+        tutorialOverlay.stopTutorial();
+        contentRoot.setCenter(startScreen);
     }
 
     private void showSettingsScreen() {
@@ -117,9 +127,10 @@ public class Main extends Application {
             }
         });
 
-        root.setCenter(settingsScreen);
-        root.applyCss();
-        root.layout();
+        tutorialOverlay.stopTutorial();
+        contentRoot.setCenter(settingsScreen);
+        contentRoot.applyCss();
+        contentRoot.layout();
     }
 
     private void showCreateGameScreen() {
@@ -139,7 +150,8 @@ public class Main extends Application {
             }
         });
 
-        root.setCenter(createGameScreen);
+        tutorialOverlay.stopTutorial();
+        contentRoot.setCenter(createGameScreen);
     }
 
     private void showLoadGameScreen() {
@@ -158,7 +170,8 @@ public class Main extends Application {
                 }
         );
 
-        root.setCenter(loadGameScreen);
+        tutorialOverlay.stopTutorial();
+        contentRoot.setCenter(loadGameScreen);
     }
 
     private void startTutorialGame(String playerName) {
@@ -171,13 +184,14 @@ public class Main extends Application {
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
 
+            tutorialOverlay.startTutorial();
             setupGameUI(controller, stocks, true);
         } catch (IOException e) {
             e.printStackTrace();
 
             Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
             errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
-            root.setCenter(new VBox(errorLabel));
+            contentRoot.setCenter(new VBox(errorLabel));
         }
     }
 
@@ -193,6 +207,7 @@ public class Main extends Application {
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
 
+            tutorialOverlay.stopTutorial();
             setupGameUI(controller, stocks, false);
 
         } catch (IOException e) {
@@ -201,7 +216,7 @@ public class Main extends Application {
             Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
             errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
 
-            root.setCenter(new VBox(errorLabel));
+            contentRoot.setCenter(new VBox(errorLabel));
         }
     }
 
@@ -277,8 +292,9 @@ public class Main extends Application {
     private void setupGameUI(GameController controller, List<Stock> stocks, boolean tutorialMode) {
 
         if (!tutorialMode) {
+            tutorialOverlay.stopTutorial();
             controller.setOnGameOver(() -> {
-                root.setCenter(new GameOverScreen(this::showStartScreen));
+                contentRoot.setCenter(new GameOverScreen(this::showStartScreen));
             });
         }
         TabPane tabPane = new TabPane();
@@ -289,7 +305,7 @@ public class Main extends Application {
         Tab newspaperTab = new Tab("Newspaper", newspaperContainer);
         newspaperTab.setClosable(false);
 
-        TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen, tutorialMode);
+        TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen, tutorialMode, tutorialOverlay);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
 
@@ -319,7 +335,7 @@ public class Main extends Application {
 
         Platform.runLater(() -> UiSoundEffects.installHoverSound(tabPane));
 
-        root.setCenter(tabPane);
+        contentRoot.setCenter(tabPane);
     }
 
     /**
