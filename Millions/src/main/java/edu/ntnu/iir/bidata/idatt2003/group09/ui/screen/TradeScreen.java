@@ -29,6 +29,7 @@ public class TradeScreen extends BorderPane {
 
     private final GameController controller;
     private final Runnable onSaveAndQuit;
+    private final boolean tutorialMode;
 
     private final ListView<Stock> stockList;
     private final StockGraph graph;
@@ -50,8 +51,13 @@ public class TradeScreen extends BorderPane {
     private int lastLevel = 1;
 
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
+        this(controller, stocks, onSaveAndQuit, false);
+    }
+
+    public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit, boolean tutorialMode) {
         this.controller = controller;
         this.onSaveAndQuit = onSaveAndQuit;
+        this.tutorialMode = tutorialMode;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
         getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
@@ -73,7 +79,9 @@ public class TradeScreen extends BorderPane {
         quantityField.setPrefWidth(100);
         quantityField.getStyleClass().add("trade-quantity-field");
 
-        statusLabel = new Label("Select a stock, then buy or sell.");
+        statusLabel = new Label(tutorialMode
+            ? "Tutorial mode: use S&P 500 stocks and practice buying/selling."
+            : "Select a stock, then buy or sell.");
         statusLabel.getStyleClass().add("trade-status");
         cashLabel = new Label();
         holdingsLabel = new Label();

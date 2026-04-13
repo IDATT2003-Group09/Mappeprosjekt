@@ -126,7 +126,11 @@ public class Main extends Application {
         CreateGameScreen createGameScreen = new CreateGameScreen(new CreateGameScreen.CreateGameHandler() {
             @Override
             public void onCreateGame(String playerName, String experienceLevel, String exchangeChoice) {
-                startNewGame(playerName, exchangeChoice);
+                if ("tutorial".equalsIgnoreCase(experienceLevel)) {
+                    startTutorialGame(playerName);
+                } else {
+                    startNewGame(playerName, exchangeChoice);
+                }
             }
 
             @Override
@@ -157,6 +161,26 @@ public class Main extends Application {
         root.setCenter(loadGameScreen);
     }
 
+    private void startTutorialGame(String playerName) {
+        try {
+            String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName + "-tutorial");
+            List<Stock> stocks = StockCsvReader.readFromResource("/csv/output/sp500.csv");
+
+            Player player = new Player(playerName, new BigDecimal("100000"));
+            Exchange exchange = new Exchange("S&P 500 Tutorial", stocks);
+            GameController controller = new GameController(exchange, player, normalizedSaveFileName);
+            controller.saveGame();
+
+            setupGameUI(controller, stocks, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
+            errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
+            root.setCenter(new VBox(errorLabel));
+        }
+    }
+
     private void startNewGame(String playerName, String exchangeChoice) {
         try {
             String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName);
@@ -169,7 +193,7 @@ public class Main extends Application {
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
 
-            setupGameUI(controller, stocks);
+            setupGameUI(controller, stocks, false);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -247,14 +271,16 @@ public class Main extends Application {
         GameController controller =
                 new GameController(state.getExchange(), state.getPlayer(), normalizedSaveFileName);
 
-        setupGameUI(controller, state.getExchange().getStocks());
+        setupGameUI(controller, state.getExchange().getStocks(), false);
     }
 
-    private void setupGameUI(GameController controller, List<Stock> stocks) {
+    private void setupGameUI(GameController controller, List<Stock> stocks, boolean tutorialMode) {
 
-        controller.setOnGameOver(() -> {
-            root.setCenter(new GameOverScreen(this::showStartScreen));
-        });
+        if (!tutorialMode) {
+            controller.setOnGameOver(() -> {
+                root.setCenter(new GameOverScreen(this::showStartScreen));
+            });
+        }
         TabPane tabPane = new TabPane();
         tabPane.getStylesheets().add(getClass().getResource("/styling/tabs.css").toExternalForm());
         tabPane.getStyleClass().add("game-tabs");
@@ -263,7 +289,7 @@ public class Main extends Application {
         Tab newspaperTab = new Tab("Newspaper", newspaperContainer);
         newspaperTab.setClosable(false);
 
-        TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen);
+        TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen, tutorialMode);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
 
