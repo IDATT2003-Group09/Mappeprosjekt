@@ -12,6 +12,7 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -57,7 +58,7 @@ public class TradeScreen extends BorderPane {
     private final Label deadlineLabel;
     private int lastLevel = 1;
 
-    private final TextField searchField;
+    private TextField searchField;
     private ObservableList<Stock> allStocks;
     private ObservableList<Stock> filteredStocks;
 
@@ -86,7 +87,11 @@ public class TradeScreen extends BorderPane {
         getStyleClass().add("trade-screen");
 
         stockList = new StockListView().createStockList(controller.getPlayer());
-        stockList.setItems(FXCollections.observableArrayList(stocks));
+
+        this.allStocks = FXCollections.observableArrayList(stocks);
+        this.filteredStocks = FXCollections.observableArrayList(allStocks);
+        stockList.setItems(filteredStocks);
+
         graph = new StockGraph(stocks);
         graph.getStyleClass().add("trade-graph");
         stockList.getSelectionModel().selectedItemProperty().addListener(
@@ -189,6 +194,11 @@ public class TradeScreen extends BorderPane {
             onTutorialNextWeek();
         });
 
+        searchField = new TextField();
+        searchField.setPromptText("Search stocks by symbol or name...");
+        searchField.getStyleClass().add("trade-search-field");
+        setupSearchFilter();
+
         HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
         controls.getStyleClass().add("trade-controls");
         controls.setPadding(new Insets(0, 0, 10, 0));
@@ -202,7 +212,8 @@ public class TradeScreen extends BorderPane {
             progressBarStack,
             infoBox,
             controls,
-            statusLabel
+            statusLabel,
+            searchField
         );
 
         headerBox.getStyleClass().add("trade-header");
@@ -386,6 +397,29 @@ public class TradeScreen extends BorderPane {
             return;
         }
         tutorialOverlay.onSellSuccess();
+    }
+
+    private void setupSearchFilter() {
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterStockList(newValue);
+        });
+    }
+
+    private void filterStockList(String searchText) {
+        if (searchText == null || searchText.trim().isEmpty()) {
+            filteredStocks.setAll(allStocks);
+            return;
+        }
+    
+        String lowerCaseSearch = searchText.toLowerCase().trim();
+        List<Stock> filtered = allStocks.stream()
+            .filter(stock -> 
+                stock.getSymbol().toLowerCase().contains(lowerCaseSearch) ||
+                stock.getCompany().toLowerCase().contains(lowerCaseSearch)
+            )
+            .collect(Collectors.toList());
+    
+        filteredStocks.setAll(filtered);
     }
 
 }
