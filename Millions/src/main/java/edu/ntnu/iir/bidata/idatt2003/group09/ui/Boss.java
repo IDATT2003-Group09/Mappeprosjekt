@@ -195,7 +195,7 @@ public class Boss extends StackPane {
     }
 
     try {
-      applyGain(talkingSoundClip, TALKING_GAIN_DB + UiSoundEffects.getMasterVolumeDbOffset());
+      applyGain(talkingSoundClip, TALKING_GAIN_DB + UiSoundEffects.getCombinedSoundEffectsVolumeDbOffset());
       talkingSoundClip.stop();
       talkingSoundClip.setFramePosition(0);
       talkingSoundClip.start();

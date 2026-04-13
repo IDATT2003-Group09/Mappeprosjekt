@@ -23,8 +23,8 @@ public final class UiSoundEffects {
   private static final float BACKGROUND_GAIN_DB = -20.0f;
   private static final float CLICKED_GAIN_DB = -6.0f;
   private static final float SELECTED_GAIN_DB = -6.0f;
-  private static final double MIN_MASTER_VOLUME = 0.0;
-  private static final double MAX_MASTER_VOLUME = 1.0;
+  private static final double MIN_VOLUME = 0.0;
+  private static final double MAX_VOLUME = 1.0;
   private static final float MIN_VOLUME_DB = -80.0f;
   private static final Object BACKGROUND_SOUND_LOCK = new Object();
   private static final Object HOVER_SOUND_LOCK = new Object();
@@ -35,6 +35,8 @@ public final class UiSoundEffects {
   private static volatile boolean backgroundMusicEnabled = true;
   private static volatile boolean soundEffectsEnabled = true;
   private static volatile double masterVolume = 1.0;
+  private static volatile double musicVolume = 1.0;
+  private static volatile double soundEffectsVolume = 1.0;
   private static volatile Clip selectedHoverClip;
   private static volatile boolean selectedHoverSoundDisabled;
   private static volatile Clip clickedClip;
@@ -106,13 +108,41 @@ public final class UiSoundEffects {
   }
 
   public static void setMasterVolume(double volume) {
-    double clampedVolume = Math.max(MIN_MASTER_VOLUME, Math.min(MAX_MASTER_VOLUME, volume));
+    double clampedVolume = Math.max(MIN_VOLUME, Math.min(MAX_VOLUME, volume));
     masterVolume = clampedVolume;
     updateLoadedClipGains();
   }
 
+  public static double getMusicVolume() {
+    return musicVolume;
+  }
+
+  public static void setMusicVolume(double volume) {
+    double clampedVolume = Math.max(MIN_VOLUME, Math.min(MAX_VOLUME, volume));
+    musicVolume = clampedVolume;
+    updateLoadedClipGains();
+  }
+
+  public static double getSoundEffectsVolume() {
+    return soundEffectsVolume;
+  }
+
+  public static void setSoundEffectsVolume(double volume) {
+    double clampedVolume = Math.max(MIN_VOLUME, Math.min(MAX_VOLUME, volume));
+    soundEffectsVolume = clampedVolume;
+    updateLoadedClipGains();
+  }
+
   public static float getMasterVolumeDbOffset() {
-    return toMasterVolumeDbOffset(masterVolume);
+    return toVolumeDbOffset(masterVolume);
+  }
+
+  public static float getCombinedMusicVolumeDbOffset() {
+    return toVolumeDbOffset(masterVolume) + toVolumeDbOffset(musicVolume);
+  }
+
+  public static float getCombinedSoundEffectsVolumeDbOffset() {
+    return toVolumeDbOffset(masterVolume) + toVolumeDbOffset(soundEffectsVolume);
   }
 
   public static void setBackgroundMusicEnabled(boolean enabled) {
@@ -263,7 +293,7 @@ public final class UiSoundEffects {
     try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundResource)) {
       Clip clip = AudioSystem.getClip();
       clip.open(audioInputStream);
-      applyGainWithMasterVolume(clip, gainDb);
+      applyGainForCategory(clip, resourcePath, gainDb);
       return clip;
     } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | IllegalArgumentException ignored) {
       return null;
@@ -273,28 +303,33 @@ public final class UiSoundEffects {
   private static void updateLoadedClipGains() {
     synchronized (BACKGROUND_SOUND_LOCK) {
       if (backgroundClip != null) {
-        applyGainWithMasterVolume(backgroundClip, BACKGROUND_GAIN_DB);
+        applyGain(backgroundClip, BACKGROUND_GAIN_DB + getCombinedMusicVolumeDbOffset());
       }
     }
 
     synchronized (HOVER_SOUND_LOCK) {
       if (selectedHoverClip != null) {
-        applyGainWithMasterVolume(selectedHoverClip, SELECTED_GAIN_DB);
+        applyGain(selectedHoverClip, SELECTED_GAIN_DB + getCombinedSoundEffectsVolumeDbOffset());
       }
     }
 
     synchronized (CLICK_SOUND_LOCK) {
       if (clickedClip != null) {
-        applyGainWithMasterVolume(clickedClip, CLICKED_GAIN_DB);
+        applyGain(clickedClip, CLICKED_GAIN_DB + getCombinedSoundEffectsVolumeDbOffset());
       }
     }
   }
 
-  private static void applyGainWithMasterVolume(Clip clip, float baseGainDb) {
-    applyGain(clip, baseGainDb + toMasterVolumeDbOffset(masterVolume));
+  private static void applyGainForCategory(Clip clip, String resourcePath, float baseGainDb) {
+    if (BACKGROUND_SOUND_PATH.equals(resourcePath)) {
+      applyGain(clip, baseGainDb + getCombinedMusicVolumeDbOffset());
+      return;
+    }
+
+    applyGain(clip, baseGainDb + getCombinedSoundEffectsVolumeDbOffset());
   }
 
-  private static float toMasterVolumeDbOffset(double volume) {
+  private static float toVolumeDbOffset(double volume) {
     if (volume <= 0.0) {
       return MIN_VOLUME_DB;
     }

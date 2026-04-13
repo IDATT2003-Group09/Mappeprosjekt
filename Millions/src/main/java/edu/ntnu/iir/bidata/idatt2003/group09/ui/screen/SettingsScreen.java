@@ -44,17 +44,43 @@ public class SettingsScreen extends VBox {
 				UiSoundEffects.setSoundEffectsEnabled(enabled)
 		);
 
-		Label volumeLabel = new Label("Volume");
-		volumeLabel.setStyle("-fx-font-size: 26px; -fx-text-fill: #f5f5f5;");
+		Label masterVolumeLabel = new Label("Master volume");
+		masterVolumeLabel.setStyle("-fx-font-size: 26px; -fx-text-fill: #f5f5f5;");
 
-		Slider volumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getMasterVolume());
-		volumeSlider.setPrefWidth(420);
-		volumeSlider.setMajorTickUnit(0.25);
-		volumeSlider.setMinorTickCount(4);
-		volumeSlider.setShowTickMarks(true);
-		volumeSlider.setShowTickLabels(true);
-		volumeSlider.valueProperty().addListener((obs, oldValue, value) ->
+		Slider masterVolumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getMasterVolume());
+		masterVolumeSlider.setPrefWidth(420);
+		masterVolumeSlider.setMajorTickUnit(0.25);
+		masterVolumeSlider.setMinorTickCount(4);
+		masterVolumeSlider.setShowTickMarks(true);
+		masterVolumeSlider.setShowTickLabels(true);
+		masterVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
 				UiSoundEffects.setMasterVolume(value.doubleValue())
+		);
+
+		Label soundEffectsVolumeLabel = new Label("Sound FX volume");
+		soundEffectsVolumeLabel.setStyle("-fx-font-size: 26px; -fx-text-fill: #f5f5f5;");
+
+		Slider soundEffectsVolumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getSoundEffectsVolume());
+		soundEffectsVolumeSlider.setPrefWidth(420);
+		soundEffectsVolumeSlider.setMajorTickUnit(0.25);
+		soundEffectsVolumeSlider.setMinorTickCount(4);
+		soundEffectsVolumeSlider.setShowTickMarks(true);
+		soundEffectsVolumeSlider.setShowTickLabels(true);
+		soundEffectsVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
+				UiSoundEffects.setSoundEffectsVolume(value.doubleValue())
+		);
+
+		Label musicVolumeLabel = new Label("Music volume");
+		musicVolumeLabel.setStyle("-fx-font-size: 26px; -fx-text-fill: #f5f5f5;");
+
+		Slider musicVolumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getMusicVolume());
+		musicVolumeSlider.setPrefWidth(420);
+		musicVolumeSlider.setMajorTickUnit(0.25);
+		musicVolumeSlider.setMinorTickCount(4);
+		musicVolumeSlider.setShowTickMarks(true);
+		musicVolumeSlider.setShowTickLabels(true);
+		musicVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
+				UiSoundEffects.setMusicVolume(value.doubleValue())
 		);
 
 		Button backButton = new Button("Back");
@@ -66,6 +92,17 @@ public class SettingsScreen extends VBox {
 		UiSoundEffects.installHoverSound(backButton);
 		UiSoundEffects.installClickSound(backButton);
 
-		getChildren().addAll(titleLabel, backgroundMusicToggle, soundEffectsToggle, volumeLabel, volumeSlider, backButton);
+		getChildren().addAll(
+				titleLabel,
+				backgroundMusicToggle,
+				soundEffectsToggle,
+				masterVolumeLabel,
+				masterVolumeSlider,
+				soundEffectsVolumeLabel,
+				soundEffectsVolumeSlider,
+				musicVolumeLabel,
+				musicVolumeSlider,
+				backButton
+		);
 	}
 }
