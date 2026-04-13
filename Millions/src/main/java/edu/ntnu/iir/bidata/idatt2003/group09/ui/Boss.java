@@ -2,6 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Iterator;
 import javafx.animation.PauseTransition;
 import javafx.geometry.Pos;
@@ -9,6 +10,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
@@ -21,6 +27,7 @@ public class Boss extends StackPane {
   private static final String IDLE_PATH = "/images/boss/blinking.gif";
   private static final String TALKING_PATH = "/images/boss/talking.gif";
   private static final String HAIR_PATH = "/images/boss/hair.gif";
+  private static final String TALKING_SOUND_PATH = "/sound/talking.wav";
   private static final Duration TALKING_FALLBACK_DURATION = Duration.seconds(2);
   private static final int DEFAULT_TALKING_LOOPS = 2;
 
@@ -31,6 +38,8 @@ public class Boss extends StackPane {
   private final ImageView imageView;
   private final ChatBubble chatBubble;
   private final PauseTransition talkingToIdleTransition;
+  private final Clip talkingSoundClip;
+  private boolean talkingSoundEnabled;
   private int talkingLoops;
 
   public Boss(String initialText, String fontFamily, double imageSize) {
@@ -46,6 +55,8 @@ public class Boss extends StackPane {
 
     this.chatBubble = new ChatBubble(initialText, fontFamily);
     this.talkingLoops = DEFAULT_TALKING_LOOPS;
+    this.talkingSoundClip = createTalkingSoundClip();
+    this.talkingSoundEnabled = this.talkingSoundClip != null;
     this.talkingToIdleTransition = new PauseTransition(talkingCycleDuration.multiply(this.talkingLoops));
     this.talkingToIdleTransition.setOnFinished(event -> setIdle());
 
@@ -103,6 +114,21 @@ public class Boss extends StackPane {
     return TALKING_FALLBACK_DURATION;
   }
 
+  private Clip createTalkingSoundClip() {
+    URL soundResource = getClass().getResource(TALKING_SOUND_PATH);
+    if (soundResource == null) {
+      return null;
+    }
+
+    try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundResource)) {
+      Clip clip = AudioSystem.getClip();
+      clip.open(audioInputStream);
+      return clip;
+    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | IllegalArgumentException ignored) {
+      return null;
+    }
+  }
+
   private long readFrameDelayMs(Node root) {
     if (root == null) {
       return 0;
@@ -137,6 +163,7 @@ public class Boss extends StackPane {
   }
 
   public void setIdle() {
+    stopTalkingSound();
     setImage(idleImage);
   }
 
@@ -145,7 +172,35 @@ public class Boss extends StackPane {
   }
 
   public void setHair() {
+    stopTalkingSound();
     setImage(hairImage != null ? hairImage : idleImage);
+  }
+
+  private void playTalkingSound() {
+    if (!talkingSoundEnabled || talkingSoundClip == null) {
+      return;
+    }
+
+    try {
+      talkingSoundClip.stop();
+      talkingSoundClip.setFramePosition(0);
+      talkingSoundClip.start();
+    } catch (RuntimeException ignored) {
+      talkingSoundEnabled = false;
+    }
+  }
+
+  private void stopTalkingSound() {
+    if (!talkingSoundEnabled || talkingSoundClip == null) {
+      return;
+    }
+
+    try {
+      talkingSoundClip.stop();
+      talkingSoundClip.setFramePosition(0);
+    } catch (RuntimeException ignored) {
+      talkingSoundEnabled = false;
+    }
   }
 
   private void setImage(Image image) {
@@ -160,6 +215,7 @@ public class Boss extends StackPane {
 
   public void updateTalkingBubble(String text, int loops) {
     setTalking();
+    playTalkingSound();
     chatBubble.setText(text);
     int effectiveLoops = Math.max(1, loops);
     talkingToIdleTransition.setDuration(talkingCycleDuration.multiply(effectiveLoops));
