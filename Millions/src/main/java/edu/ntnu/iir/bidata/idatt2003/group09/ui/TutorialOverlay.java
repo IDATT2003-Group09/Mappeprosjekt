@@ -56,15 +56,6 @@ public class TutorialOverlay {
   }
 
   public void onNewspaperViewed() {
-    if (!isActive() || tutorialStep != 1) {
-      return;
-    }
-
-    tutorialStep = 2;
-    boss.updateTalkingBubble("You can start by reading the newspaper.");
-  }
-
-  public void onReadyToBuy() {
     if (!isActive() || tutorialStep != 2) {
       return;
     }
@@ -73,7 +64,7 @@ public class TutorialOverlay {
     boss.updateTalkingBubble("WOW! Look at those news this makes it obvious what you should buy. Go buy something.");
   }
 
-  public void onStockSelected() {
+  public void onReadyToBuy() {
     if (!isActive() || tutorialStep != 3) {
       return;
     }
@@ -82,7 +73,7 @@ public class TutorialOverlay {
     boss.updateTalkingBubble("Select the stock that you know will make me money.");
   }
 
-  public void onBuySuccess() {
+  public void onStockSelected() {
     if (!isActive() || tutorialStep != 4) {
       return;
     }
@@ -91,13 +82,23 @@ public class TutorialOverlay {
     boss.updateTalkingBubble("Now buy it.");
   }
 
-  public void onPortfolioViewed() {
+  public void onBuySuccess() {
     if (!isActive() || tutorialStep != 5) {
       return;
     }
 
     tutorialStep = 6;
     boss.updateTalkingBubble("If you ever want to know more about your purchases check your transaction history.");
+    boss.getChatBubble().addContinueButton(this::onContinuePressed);
+  }
+
+  public void onPortfolioViewed() {
+    if (!isActive() || tutorialStep != 6) {
+      return;
+    }
+
+    tutorialStep = 7;
+    boss.updateTalkingBubble("Or look at your portfolio to see what you own.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
@@ -112,47 +113,28 @@ public class TutorialOverlay {
   }
 
   public void onNextWeek() {
-    if (!isActive() || tutorialStep != 7) {
+    if (!isActive() || tutorialStep != 8) {
       return;
     }
 
-    tutorialStep = 8;
-    boss.updateTalkingBubble("Now advance to the next week.");
-    
-    new Thread(() -> {
-      try {
-        Thread.sleep(1500);
-      } catch (InterruptedException ignored) {}
-      
-      if (layer.isVisible() && tutorialStep == 8) {
-        tutorialStep = 9;
-        boss.updateTalkingBubble("What!? You didn't earn nearly enough money for me.");
-      }
-    }).start();
+    tutorialStep = 9;
+    boss.updateTalkingBubble("What!? You didn't earn nearly enough money for me.");
+    boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void onSellSuccess() {
-    if (!isActive() || tutorialStep != 9) {
+    if (!isActive() || tutorialStep != 10) {
       return;
     }
 
-    tutorialStep = 10;
-    boss.updateTalkingBubble("Sell that stock.");
-    
+    tutorialStep = 11;
+    boss.updateTalkingBubble("You better start earning more money before the next Q or you are out of here!");
+
     new Thread(() -> {
       try {
-        Thread.sleep(1500);
+        Thread.sleep(3000);
       } catch (InterruptedException ignored) {}
-      
-      if (layer.isVisible() && tutorialStep == 10) {
-        tutorialStep = 11;
-        boss.updateTalkingBubble("You better start earning more money before the next Q or you are out of here!");
-        
-        try {
-          Thread.sleep(3000);
-        } catch (InterruptedException ignored) {}
-        stopTutorial();
-      }
+      stopTutorial();
     }).start();
   }
 
@@ -181,12 +163,12 @@ public class TutorialOverlay {
     if (tutorialStep == 1) {
       tutorialStep = 2;
       boss.updateTalkingBubble("You can start by reading the newspaper.");
-    } else if (tutorialStep == 6) {
-      tutorialStep = 8;
-      onNextWeek();
     } else if (tutorialStep == 7) {
       tutorialStep = 8;
-      onNextWeek();
+      boss.updateTalkingBubble("Now advance to the next week.");
+    } else if (tutorialStep == 9) {
+      tutorialStep = 10;
+      boss.updateTalkingBubble("Sell that stock.");
     }
   }
 }
