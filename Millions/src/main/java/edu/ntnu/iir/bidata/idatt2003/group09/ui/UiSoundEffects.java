@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javafx.scene.Node;
@@ -19,6 +20,9 @@ public final class UiSoundEffects {
   private static final String BACKGROUND_SOUND_PATH = "/sound/background.wav";
   private static final String CLICKED_SOUND_PATH = "/sound/clicked.wav";
   private static final String SELECTED_SOUND_PATH = "/sound/selected.wav";
+  private static final float BACKGROUND_GAIN_DB = -20.0f;
+  private static final float CLICKED_GAIN_DB = -6.0f;
+  private static final float SELECTED_GAIN_DB = -6.0f;
   private static final Object BACKGROUND_SOUND_LOCK = new Object();
   private static final Object HOVER_SOUND_LOCK = new Object();
   private static final Object CLICK_SOUND_LOCK = new Object();
@@ -155,7 +159,7 @@ public final class UiSoundEffects {
         return selectedHoverClip;
       }
 
-      selectedHoverClip = createClip(SELECTED_SOUND_PATH);
+      selectedHoverClip = createClip(SELECTED_SOUND_PATH, SELECTED_GAIN_DB);
       if (selectedHoverClip == null) {
         selectedHoverSoundDisabled = true;
       }
@@ -175,7 +179,7 @@ public final class UiSoundEffects {
         return backgroundClip;
       }
 
-      backgroundClip = createClip(BACKGROUND_SOUND_PATH);
+      backgroundClip = createClip(BACKGROUND_SOUND_PATH, BACKGROUND_GAIN_DB);
       if (backgroundClip == null) {
         backgroundSoundDisabled = true;
       }
@@ -195,7 +199,7 @@ public final class UiSoundEffects {
         return clickedClip;
       }
 
-      clickedClip = createClip(CLICKED_SOUND_PATH);
+      clickedClip = createClip(CLICKED_SOUND_PATH, CLICKED_GAIN_DB);
       if (clickedClip == null) {
         clickedSoundDisabled = true;
       }
@@ -204,7 +208,7 @@ public final class UiSoundEffects {
     }
   }
 
-  private static Clip createClip(String resourcePath) {
+  private static Clip createClip(String resourcePath, float gainDb) {
     URL soundResource = UiSoundEffects.class.getResource(resourcePath);
     if (soundResource == null) {
       return null;
@@ -213,9 +217,20 @@ public final class UiSoundEffects {
     try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundResource)) {
       Clip clip = AudioSystem.getClip();
       clip.open(audioInputStream);
+      applyGain(clip, gainDb);
       return clip;
     } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | IllegalArgumentException ignored) {
       return null;
     }
+  }
+
+  private static void applyGain(Clip clip, float gainDb) {
+    if (clip == null || !clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+      return;
+    }
+
+    FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+    float clamped = Math.max(gainControl.getMinimum(), Math.min(gainControl.getMaximum(), gainDb));
+    gainControl.setValue(clamped);
   }
 }

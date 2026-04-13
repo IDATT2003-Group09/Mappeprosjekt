@@ -13,6 +13,7 @@ import javafx.util.Duration;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.imageio.ImageIO;
@@ -28,6 +29,7 @@ public class Boss extends StackPane {
   private static final String TALKING_PATH = "/images/boss/talking.gif";
   private static final String HAIR_PATH = "/images/boss/hair.gif";
   private static final String TALKING_SOUND_PATH = "/sound/talking.wav";
+  private static final float TALKING_GAIN_DB = -4.0f;
   private static final Duration TALKING_FALLBACK_DURATION = Duration.seconds(2);
   private static final int DEFAULT_TALKING_LOOPS = 2;
 
@@ -123,10 +125,21 @@ public class Boss extends StackPane {
     try (AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundResource)) {
       Clip clip = AudioSystem.getClip();
       clip.open(audioInputStream);
+      applyGain(clip, TALKING_GAIN_DB);
       return clip;
     } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | IllegalArgumentException ignored) {
       return null;
     }
+  }
+
+  private void applyGain(Clip clip, float gainDb) {
+    if (clip == null || !clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+      return;
+    }
+
+    FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+    float clamped = Math.max(gainControl.getMinimum(), Math.min(gainControl.getMaximum(), gainDb));
+    gainControl.setValue(clamped);
   }
 
   private long readFrameDelayMs(Node root) {
