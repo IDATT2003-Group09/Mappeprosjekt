@@ -35,7 +35,7 @@ public class TutorialOverlay {
   private static final double BUY_BUTTON_W = 70;
   private static final double BUY_BUTTON_H = 36;
 
-  private static final double SELL_BUTTON_X = 250;
+  private static final double SELL_BUTTON_X = 270;
   private static final double SELL_BUTTON_Y = 260;
   private static final double SELL_BUTTON_W = 90;
   private static final double SELL_BUTTON_H = 46;
@@ -49,8 +49,8 @@ public class TutorialOverlay {
   private static final double NEWSPAPER_VIEW_Y = 76;
   private static final double NEWSPAPER_VIEW_W = 1055;
   private static final double NEWSPAPER_VIEW_H = 604;
-  private static final double TAB_CONTENT_X = 18;
-  private static final double TAB_CONTENT_Y = 76;
+  private static final double TAB_CONTENT_X = 0;
+  private static final double TAB_CONTENT_Y = 20;
   private static final double TAB_CONTENT_W = 1100;
   private static final double TAB_CONTENT_H = 684;
 
@@ -214,7 +214,7 @@ public class TutorialOverlay {
     }
 
     tutorialStep = 13;
-    spotlight(SELL_BUTTON_X, SELL_BUTTON_Y, SELL_BUTTON_W, SELL_BUTTON_H);
+    clearSpotlight();
     boss.updateTalkingBubble("What!? You didn't earn nearly enough money for me.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
