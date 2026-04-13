@@ -38,21 +38,18 @@ public class SettingsScreen extends VBox {
 		this.volumeIcon3 = loadVolumeIcon(VOLUME_ICON_3_PATH);
 
 		getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
+		getStylesheets().add(getClass().getResource("/styling/settingsscreen.css").toExternalForm());
+		getStyleClass().add("settings-screen");
 
 		setSpacing(0);
 		setAlignment(Pos.CENTER);
 		setPadding(new Insets(40));
-		setStyle("""
-		-fx-background-image: url('/images/Millions_background.png');
-		-fx-background-size: cover;
-		-fx-background-position: center;
-""");
 
 		Label titleLabel = new Label("Settings");
-		titleLabel.setStyle("-fx-font-size: 52px; -fx-text-fill: #f5f5f5;");
+		titleLabel.getStyleClass().add("settings-title");
 
 		Label masterVolumeLabel = new Label("Master volume");
-		masterVolumeLabel.setStyle("-fx-font-size: 26px; -fx-text-fill: #f5f5f5;");
+		masterVolumeLabel.getStyleClass().add("settings-label");
 
 		Slider masterVolumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getMasterVolume());
 		masterVolumeSlider.setPrefWidth(SLIDER_WIDTH);
@@ -70,7 +67,7 @@ public class SettingsScreen extends VBox {
 		HBox masterVolumeRow = createVolumeRow(masterVolumeSlider, masterVolumeIcon);
 
 		Label soundEffectsVolumeLabel = new Label("Sound FX volume");
-		soundEffectsVolumeLabel.setStyle("-fx-font-size: 26px; -fx-text-fill: #f5f5f5;");
+		soundEffectsVolumeLabel.getStyleClass().add("settings-label");
 
 		Slider soundEffectsVolumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getSoundEffectsVolume());
 		soundEffectsVolumeSlider.setPrefWidth(SLIDER_WIDTH);
@@ -88,7 +85,7 @@ public class SettingsScreen extends VBox {
 		HBox soundEffectsVolumeRow = createVolumeRow(soundEffectsVolumeSlider, soundEffectsVolumeIcon);
 
 		Label musicVolumeLabel = new Label("Music volume");
-		musicVolumeLabel.setStyle("-fx-font-size: 26px; -fx-text-fill: #f5f5f5;");
+		musicVolumeLabel.getStyleClass().add("settings-label");
 
 		Slider musicVolumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getMusicVolume());
 		musicVolumeSlider.setPrefWidth(SLIDER_WIDTH);
@@ -115,16 +112,10 @@ public class SettingsScreen extends VBox {
 		UiSoundEffects.installClickSound(backButton);
 
 		VBox settingsCard = new VBox(16);
+		settingsCard.getStyleClass().add("settings-card");
 		settingsCard.setAlignment(Pos.CENTER);
 		settingsCard.setPadding(new Insets(28));
 		settingsCard.setMaxWidth(560);
-		settingsCard.setStyle("""
-		-fx-background-color: rgba(23, 23, 28, 0.88);
-		-fx-border-color: #f5f5f5;
-		-fx-border-width: 3px;
-		-fx-background-radius: 0;
-		-fx-border-radius: 0;
-""");
 
 		settingsCard.getChildren().addAll(
 				titleLabel,
