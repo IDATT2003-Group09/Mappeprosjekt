@@ -129,19 +129,13 @@ public class TutorialOverlay {
   }
 
   public void onSellSuccess() {
-    if (!isActive() || tutorialStep != 10) {
+    if (!isActive() || tutorialStep != 11) {
       return;
     }
 
-    tutorialStep = 11;
+    tutorialStep = 12;
     boss.updateTalkingBubble("You better start earning more money before the next Q or you are out of here!");
-
-    new Thread(() -> {
-      try {
-        Thread.sleep(3000);
-      } catch (InterruptedException ignored) {}
-      stopTutorial();
-    }).start();
+    boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   private String loadFontFamily() {
@@ -172,9 +166,11 @@ public class TutorialOverlay {
     } else if (tutorialStep == 7) {
       tutorialStep = 8;
       boss.updateTalkingBubble("Now advance to the next week.");
-    } else if (tutorialStep == 9) {
-      tutorialStep = 10;
+    } else if (tutorialStep == 10) {
+      tutorialStep = 11;
       boss.updateTalkingBubble("Sell that stock.");
+    } else if (tutorialStep == 12) {
+      stopTutorial();
     }
   }
 }
