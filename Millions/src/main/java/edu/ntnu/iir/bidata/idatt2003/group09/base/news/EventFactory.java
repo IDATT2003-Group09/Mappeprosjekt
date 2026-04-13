@@ -13,88 +13,141 @@ public class EventFactory implements Serializable {
 
   }
 
-  public List<Event> generateGlobalEvents(){
-    List<Event> events = new ArrayList<>();
+    public List<Event> generateGlobalEvents(){
+        List<Event> events = new ArrayList<>();
 
-    GlobalEvent event1 = new GlobalEvent("Tech Boom", "The technology sector is experiencing unprecedented growth, with new innovations driving market expansion.");
-    event1.addEventData("Tech", BigDecimal.valueOf(0.06));
-    event1.addEventData("Energy", BigDecimal.valueOf(0.03));
-    events.add(event1);
+        GlobalEvent event1 = new GlobalEvent(
+                "Tech Boom",
+                "The technology sector is experiencing unprecedented growth."
+        );
+        event1.addEventData("Technology", BigDecimal.valueOf(0.06));
+        event1.addEventData("Energy", BigDecimal.valueOf(0.03));
+        events.add(event1);
 
-    GlobalEvent event2 = new GlobalEvent("Financial Crisis", "A major financial institution has collapsed, sending shockwaves through global markets and causing widespread panic.");
-    event2.addEventData("Financial", BigDecimal.valueOf(-0.05));
-    event2.addEventData("Real Estate", BigDecimal.valueOf(0.05));
-    events.add(event2);
+        GlobalEvent event2 = new GlobalEvent(
+                "Financial Crisis",
+                "A major financial institution has collapsed."
+        );
+        event2.addEventData("Financials", BigDecimal.valueOf(-0.05));
+        event2.addEventData("Real Estate", BigDecimal.valueOf(0.04));
+        events.add(event2);
 
-      GlobalEvent e3 = new GlobalEvent("Interest Rate Cuts", "Central banks lower interest rates to stimulate economic growth.");
-      e3.addEventData("Financial", BigDecimal.valueOf(0.04));
-      e3.addEventData("Technology", BigDecimal.valueOf(0.03));
-      events.add(e3);
+        GlobalEvent e3 = new GlobalEvent(
+                "Interest Rate Cuts",
+                "Central banks lower interest rates."
+        );
+        e3.addEventData("Financials", BigDecimal.valueOf(0.04));
+        e3.addEventData("Real Estate", BigDecimal.valueOf(0.03));
+        events.add(e3);
 
-      GlobalEvent e4 = new GlobalEvent("Interest Rate Hike", "Central banks increase interest rates to combat inflation.");
-      e4.addEventData("Financial", BigDecimal.valueOf(-0.02));
-      e4.addEventData("Real Estate", BigDecimal.valueOf(-0.03));
-      events.add(e4);
+        GlobalEvent e4 = new GlobalEvent(
+                "Interest Rate Hike",
+                "Central banks increase interest rates."
+        );
+        e4.addEventData("Financials", BigDecimal.valueOf(-0.03));
+        e4.addEventData("Real Estate", BigDecimal.valueOf(-0.04));
+        events.add(e4);
 
-      GlobalEvent e5 = new GlobalEvent("Oil Price Surge", "Oil prices spike due to geopolitical tensions.");
-      e5.addEventData("Energy", BigDecimal.valueOf(0.05));
-      e5.addEventData("Consumer", BigDecimal.valueOf(-0.02));
-      events.add(e5);
+        GlobalEvent e5 = new GlobalEvent(
+                "Oil Price Surge",
+                "Oil prices spike due to geopolitical tensions."
+        );
+        e5.addEventData("Energy", BigDecimal.valueOf(0.05));
+        e5.addEventData("Consumer Discretionary", BigDecimal.valueOf(-0.02));
+        events.add(e5);
 
-      GlobalEvent e6 = new GlobalEvent("Global Supply Chain Recovery", "Supply chains stabilize, improving production and delivery worldwide.");
-      e6.addEventData("Industrial", BigDecimal.valueOf(0.05));
-      e6.addEventData("Retail", BigDecimal.valueOf(0.02));
-      events.add(e6);
+        GlobalEvent e6 = new GlobalEvent(
+                "Supply Chain Recovery",
+                "Global logistics improve."
+        );
+        e6.addEventData("Industrials", BigDecimal.valueOf(0.04));
+        e6.addEventData("Materials", BigDecimal.valueOf(0.03));
+        events.add(e6);
 
-      GlobalEvent e7 = new GlobalEvent("Recession Fears", "Economists warn of a potential global recession.");
-      e7.addEventData("Financial", BigDecimal.valueOf(-0.03));
-      e7.addEventData("Consumer", BigDecimal.valueOf(-0.02));
-      events.add(e7);
+        GlobalEvent e7 = new GlobalEvent(
+                "Recession Fears",
+                "Economic slowdown concerns spread."
+        );
+        e7.addEventData("Financials", BigDecimal.valueOf(-0.03));
+        e7.addEventData("Industrials", BigDecimal.valueOf(-0.02));
+        events.add(e7);
 
-      GlobalEvent e8 = new GlobalEvent("AI Breakthrough", "Major advancements in artificial intelligence drive optimism in tech markets.");
-      e8.addEventData("Technology", BigDecimal.valueOf(0.07));
-      events.add(e8);
+        GlobalEvent e8 = new GlobalEvent(
+                "AI Breakthrough",
+                "Major AI advancements boost tech."
+        );
+        e8.addEventData("Technology", BigDecimal.valueOf(0.07));
+        events.add(e8);
 
-      GlobalEvent e9 = new GlobalEvent("Cybersecurity Threat", "Large-scale cyber attacks raise concerns across industries.");
-      e9.addEventData("Technology", BigDecimal.valueOf(-0.03));
-      events.add(e9);
+        GlobalEvent e9 = new GlobalEvent(
+                "Cybersecurity Threat",
+                "Large-scale cyber attacks raise concerns."
+        );
+        e9.addEventData("Technology", BigDecimal.valueOf(-0.03));
+        events.add(e9);
 
-      GlobalEvent e10 = new GlobalEvent("Green Energy Push", "Governments increase investments in renewable energy.");
-      e10.addEventData("Energy", BigDecimal.valueOf(0.07));
-      events.add(e10);
+        GlobalEvent e10 = new GlobalEvent(
+                "Green Energy Push",
+                "Governments invest in renewable energy."
+        );
+        e10.addEventData("Energy", BigDecimal.valueOf(0.06));
+        e10.addEventData("Utilities", BigDecimal.valueOf(0.03));
+        events.add(e10);
 
-      GlobalEvent e11 = new GlobalEvent("Housing Market Slowdown", "Rising interest rates slow down the housing market.");
-      e11.addEventData("Real Estate", BigDecimal.valueOf(-0.03));
-      events.add(e11);
+        GlobalEvent e11 = new GlobalEvent(
+                "Housing Slowdown",
+                "Housing demand declines."
+        );
+        e11.addEventData("Real Estate", BigDecimal.valueOf(-0.03));
+        events.add(e11);
 
-      GlobalEvent e12 = new GlobalEvent("Consumer Spending Boom", "Consumers increase spending, boosting retail and services.");
-      e12.addEventData("Retail", BigDecimal.valueOf(0.05));
-      events.add(e12);
+        GlobalEvent e12 = new GlobalEvent(
+                "Consumer Boom",
+                "Consumers increase spending."
+        );
+        e12.addEventData("Consumer Discretionary", BigDecimal.valueOf(0.05));
+        e12.addEventData("Consumer Staples", BigDecimal.valueOf(0.02));
+        events.add(e12);
 
-      GlobalEvent e13 = new GlobalEvent("Trade War Escalation", "New tariffs disrupt global trade.");
-      e13.addEventData("Industrial", BigDecimal.valueOf(-0.03));
-      events.add(e13);
+        GlobalEvent e13 = new GlobalEvent(
+                "Trade War",
+                "New tariffs disrupt trade."
+        );
+        e13.addEventData("Industrials", BigDecimal.valueOf(-0.03));
+        e13.addEventData("Materials", BigDecimal.valueOf(-0.02));
+        events.add(e13);
 
-      GlobalEvent e14 = new GlobalEvent("Healthcare Innovation", "New medical breakthroughs improve industry outlook.");
-      e14.addEventData("Healthcare", BigDecimal.valueOf(0.05));
-      events.add(e14);
+        GlobalEvent e14 = new GlobalEvent(
+                "Healthcare Breakthrough",
+                "Medical innovation improves outlook."
+        );
+        e14.addEventData("Health Care", BigDecimal.valueOf(0.05));
+        events.add(e14);
 
-      GlobalEvent e15 = new GlobalEvent("Banking Stability Concerns", "Concerns over banking stability spread uncertainty.");
-      e15.addEventData("Financial", BigDecimal.valueOf(-0.03));
-      events.add(e15);
+        GlobalEvent e15 = new GlobalEvent(
+                "Banking Concerns",
+                "Uncertainty in financial markets."
+        );
+        e15.addEventData("Financials", BigDecimal.valueOf(-0.03));
+        events.add(e15);
 
-      GlobalEvent e16 = new GlobalEvent("Strong Job Market", "Employment rates improve, boosting economic confidence.");
-      e16.addEventData("Consumer", BigDecimal.valueOf(0.06));
-      events.add(e16);
+        GlobalEvent e16 = new GlobalEvent(
+                "Strong Job Market",
+                "Employment rates improve."
+        );
+        e16.addEventData("Consumer Discretionary", BigDecimal.valueOf(0.04));
+        events.add(e16);
 
-      GlobalEvent e17 = new GlobalEvent("Inflation Spike", "Inflation rises faster than expected.");
-      e17.addEventData("Consumer", BigDecimal.valueOf(-0.02));
-      e17.addEventData("Financial", BigDecimal.valueOf(-0.02));
-      events.add(e17);
+        GlobalEvent e17 = new GlobalEvent(
+                "Inflation Spike",
+                "Inflation rises unexpectedly."
+        );
+        e17.addEventData("Consumer Staples", BigDecimal.valueOf(-0.02));
+        e17.addEventData("Financials", BigDecimal.valueOf(-0.02));
+        events.add(e17);
 
-    return events;
-
-  }
+        return events;
+    }
 
   public List<Event> generateStockSpecificEvents(){
     List<Event> events = new ArrayList<>();
