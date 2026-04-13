@@ -42,7 +42,12 @@ public final class UiSoundEffects {
       return;
     }
 
-    node.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> playSelectedHoverSound());
+    node.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+      if (node.isFocusTraversable()) {
+        node.requestFocus();
+      }
+      playSelectedHoverSound();
+    });
   }
 
   public static void startBackgroundMusic() {
