@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 
 public class SettingsScreen extends VBox {
@@ -43,6 +44,19 @@ public class SettingsScreen extends VBox {
 				UiSoundEffects.setSoundEffectsEnabled(enabled)
 		);
 
+		Label volumeLabel = new Label("Volume");
+		volumeLabel.setStyle("-fx-font-size: 26px; -fx-text-fill: #f5f5f5;");
+
+		Slider volumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getMasterVolume());
+		volumeSlider.setPrefWidth(420);
+		volumeSlider.setMajorTickUnit(0.25);
+		volumeSlider.setMinorTickCount(4);
+		volumeSlider.setShowTickMarks(true);
+		volumeSlider.setShowTickLabels(true);
+		volumeSlider.valueProperty().addListener((obs, oldValue, value) ->
+				UiSoundEffects.setMasterVolume(value.doubleValue())
+		);
+
 		Button backButton = new Button("Back");
 		backButton.getStyleClass().add("start-button");
 		backButton.setPrefWidth(400);
@@ -52,6 +66,6 @@ public class SettingsScreen extends VBox {
 		UiSoundEffects.installHoverSound(backButton);
 		UiSoundEffects.installClickSound(backButton);
 
-		getChildren().addAll(titleLabel, backgroundMusicToggle, soundEffectsToggle, backButton);
+		getChildren().addAll(titleLabel, backgroundMusicToggle, soundEffectsToggle, volumeLabel, volumeSlider, backButton);
 	}
 }
