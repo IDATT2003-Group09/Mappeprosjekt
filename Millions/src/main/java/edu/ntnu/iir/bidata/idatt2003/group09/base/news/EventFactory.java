@@ -146,6 +146,135 @@ public class EventFactory implements Serializable {
         e17.addEventData("Financials", BigDecimal.valueOf(-0.02));
         events.add(e17);
 
+        GlobalEvent e18 = new GlobalEvent(
+                "Utility Rate Increase",
+                "Electricity prices rise, boosting utility revenues."
+        );
+        e18.addEventData("Utilities", BigDecimal.valueOf(0.03));
+        events.add(e18);
+
+        GlobalEvent e19 = new GlobalEvent(
+                "Energy Price Drop",
+                "Oil and gas prices fall due to oversupply."
+        );
+        e19.addEventData("Energy", BigDecimal.valueOf(-0.03));
+        events.add(e19);
+
+        GlobalEvent e20 = new GlobalEvent(
+                "Streaming Boom",
+                "Demand for streaming services surges."
+        );
+        e20.addEventData("Communication Services", BigDecimal.valueOf(0.04));
+        events.add(e20);
+
+        GlobalEvent e21 = new GlobalEvent(
+                "Advertising Slump",
+                "Companies cut marketing budgets."
+        );
+        e21.addEventData("Communication Services", BigDecimal.valueOf(-0.03));
+        events.add(e21);
+
+        GlobalEvent e22 = new GlobalEvent(
+                "Retail Expansion",
+                "Retail chains expand aggressively."
+        );
+        e22.addEventData("Consumer Discretionary", BigDecimal.valueOf(0.03));
+        events.add(e22);
+
+        GlobalEvent e23 = new GlobalEvent(
+                "Consumer Confidence Drops",
+                "Consumers reduce spending amid uncertainty."
+        );
+        e23.addEventData("Consumer Discretionary", BigDecimal.valueOf(-0.03));
+        events.add(e23);
+
+        GlobalEvent e24 = new GlobalEvent(
+                "Staples Demand Surge",
+                "Demand for essential goods increases."
+        );
+        e24.addEventData("Consumer Staples", BigDecimal.valueOf(0.03));
+        events.add(e24);
+
+        GlobalEvent e25 = new GlobalEvent(
+                "Food Cost Pressure",
+                "Rising input costs hurt consumer staples margins."
+        );
+        e25.addEventData("Consumer Staples", BigDecimal.valueOf(-0.02));
+        events.add(e25);
+
+        GlobalEvent e26 = new GlobalEvent(
+                "Industrial Growth",
+                "Manufacturing output increases globally."
+        );
+        e26.addEventData("Industrials", BigDecimal.valueOf(0.04));
+        events.add(e26);
+
+        GlobalEvent e27 = new GlobalEvent(
+                "Factory Slowdown",
+                "Production slows due to weak demand."
+        );
+        e27.addEventData("Industrials", BigDecimal.valueOf(-0.03));
+        events.add(e27);
+
+        GlobalEvent e28 = new GlobalEvent(
+                "Materials Shortage",
+                "Shortage of raw materials drives prices higher."
+        );
+        e28.addEventData("Materials", BigDecimal.valueOf(0.03));
+        events.add(e28);
+
+        GlobalEvent e29 = new GlobalEvent(
+                "Commodity Price Drop",
+                "Raw material prices fall sharply."
+        );
+        e29.addEventData("Materials", BigDecimal.valueOf(-0.03));
+        events.add(e29);
+
+        GlobalEvent e30 = new GlobalEvent(
+                "Real Estate Investment Boom",
+                "Investors flood into real estate markets."
+        );
+        e30.addEventData("Real Estate", BigDecimal.valueOf(0.04));
+        events.add(e30);
+
+        GlobalEvent e31 = new GlobalEvent(
+                "Tech Momentum",
+                "Tech stocks continue strong upward momentum."
+        );
+        e31.addEventData("Technology", BigDecimal.valueOf(0.04));
+        events.add(e31);
+
+        GlobalEvent e32 = new GlobalEvent(
+                "Consumer Strength",
+                "Strong consumer spending boosts markets."
+        );
+        e32.addEventData("Consumer Discretionary", BigDecimal.valueOf(0.04));
+        events.add(e32);
+
+        GlobalEvent e33 = new GlobalEvent(
+                "Healthcare Stability",
+                "Stable growth in healthcare sector."
+        );
+        e33.addEventData("Health Care", BigDecimal.valueOf(0.03));
+        events.add(e33);
+
+        GlobalEvent e34 = new GlobalEvent(
+                "Market Pullback",
+                "Markets experience a short-term correction."
+        );
+        e34.addEventData("Technology", BigDecimal.valueOf(-0.03));
+        e34.addEventData("Financials", BigDecimal.valueOf(-0.03));
+        events.add(e34);
+
+        GlobalEvent e35 = new GlobalEvent(
+                "Market Rally",
+                "Broad market rally driven by strong investor optimism."
+        );
+        e35.addEventData("Technology", BigDecimal.valueOf(0.06));
+        e35.addEventData("Financials", BigDecimal.valueOf(0.05));
+        e35.addEventData("Industrials", BigDecimal.valueOf(0.04));
+        events.add(e35);
+
         return events;
     }
 
