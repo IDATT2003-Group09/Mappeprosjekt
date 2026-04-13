@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 public class SettingsScreen extends VBox {
 
 	private static final double SLIDER_WIDTH = 300;
-	private static final double VOLUME_ICON_SIZE = 28;
+	private static final double VOLUME_ICON_SIZE = 20;
 
 	private static final String VOLUME_ICON_0_PATH = "/images/util/volume/0.png";
 	private static final String VOLUME_ICON_1_PATH = "/images/util/volume/1.png";
@@ -143,6 +143,7 @@ public class SettingsScreen extends VBox {
 		iconView.setFitHeight(VOLUME_ICON_SIZE);
 		iconView.setPreserveRatio(true);
 		iconView.setSmooth(false);
+		iconView.setCache(false);
 		updateVolumeIcon(iconView, volume);
 		return iconView;
 	}
@@ -169,7 +170,7 @@ public class SettingsScreen extends VBox {
 			if (stream == null) {
 				return null;
 			}
-			return new Image(stream, VOLUME_ICON_SIZE, VOLUME_ICON_SIZE, true, false);
+			return new Image(stream);
 		} catch (Exception e) {
 			return null;
 		}
