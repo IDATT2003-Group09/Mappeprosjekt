@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.Boss;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockListView;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
@@ -16,6 +17,7 @@ import java.util.Locale;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -23,7 +25,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 
 public class TradeScreen extends BorderPane {
 
@@ -48,6 +52,8 @@ public class TradeScreen extends BorderPane {
     private final ProgressBar progressBar;
     private final Label levelUpLabel;
     private final Label deadlineLabel;
+    private Boss tutorialBoss;
+    private int tutorialStep;
     private int lastLevel = 1;
 
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
@@ -71,6 +77,7 @@ public class TradeScreen extends BorderPane {
                 (obs, oldStock, newStock) -> {
                     if (newStock != null) {
                         graph.updateChart(newStock);
+                        onTutorialStockSelected();
                     }
                 }
         );
@@ -136,6 +143,7 @@ public class TradeScreen extends BorderPane {
             stockList.refresh();
             refreshInfo();
             updateSelectedStockGraph();
+            onTutorialNextWeek();
         });
 
         HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
@@ -188,7 +196,12 @@ public class TradeScreen extends BorderPane {
         contentGrid.add(stockList, 0, 0);
         contentGrid.add(graph, 1, 0);
 
-        setCenter(contentGrid);
+        StackPane centerContainer = new StackPane(contentGrid);
+        if (tutorialMode) {
+            setupTutorialOverlay(centerContainer);
+        }
+
+        setCenter(centerContainer);
     }
 
     private void buySelectedStock() {
@@ -205,6 +218,7 @@ public class TradeScreen extends BorderPane {
             controller.buy(selectedStock.getSymbol(), quantity);
 
             statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
+            onTutorialBuySuccess();
 
             stockList.refresh();
             refreshInfo();
@@ -233,6 +247,7 @@ public class TradeScreen extends BorderPane {
             controller.sell(shares.getFirst());
 
             statusLabel.setText("Sold " + selectedStock.getSymbol());
+            onTutorialSellSuccess();
 
             stockList.refresh();
             refreshInfo();
@@ -314,5 +329,55 @@ public class TradeScreen extends BorderPane {
 
             lastLevel = currentLevel;
         }
+    }
+
+    private void setupTutorialOverlay(StackPane centerContainer) {
+        tutorialBoss = new Boss("Welcome! Select a stock on the left to begin.", Font.getDefault().getFamily(), 300);
+        tutorialBoss.setTalkingLoops(1);
+        tutorialStep = 0;
+
+        StackPane tutorialLayer = new StackPane(tutorialBoss);
+        tutorialLayer.setPickOnBounds(false);
+        tutorialLayer.setMouseTransparent(true);
+
+        StackPane.setAlignment(tutorialBoss, Pos.BOTTOM_LEFT);
+        StackPane.setMargin(tutorialBoss, new Insets(0, 0, -40, -40));
+        centerContainer.getChildren().add(tutorialLayer);
+    }
+
+    private void onTutorialStockSelected() {
+        if (!tutorialMode || tutorialBoss == null || tutorialStep != 0) {
+            return;
+        }
+
+        tutorialStep = 1;
+        tutorialBoss.updateTalkingBubble("Great! Now click Buy to purchase one share.");
+    }
+
+    private void onTutorialBuySuccess() {
+        if (!tutorialMode || tutorialBoss == null || tutorialStep > 2) {
+            return;
+        }
+
+        tutorialStep = 2;
+        tutorialBoss.updateTalkingBubble("Nice buy. Click Next Week to advance the market.");
+    }
+
+    private void onTutorialNextWeek() {
+        if (!tutorialMode || tutorialBoss == null || tutorialStep != 2) {
+            return;
+        }
+
+        tutorialStep = 3;
+        tutorialBoss.updateTalkingBubble("Good! Now click Sell to close one position.");
+    }
+
+    private void onTutorialSellSuccess() {
+        if (!tutorialMode || tutorialBoss == null || tutorialStep < 3) {
+            return;
+        }
+
+        tutorialStep = 4;
+        tutorialBoss.updateTalkingBubble("Perfect. You completed the basics—keep trading!");
     }
 }
