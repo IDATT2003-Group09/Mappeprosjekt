@@ -1,24 +1,42 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
+import java.io.InputStream;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class SettingsScreen extends VBox {
 
 	private static final double SLIDER_WIDTH = 300;
+	private static final double VOLUME_ICON_SIZE = 28;
+
+	private static final String VOLUME_ICON_0_PATH = "/images/volume/0.png";
+	private static final String VOLUME_ICON_1_PATH = "/images/volume/1.png";
+	private static final String VOLUME_ICON_2_PATH = "/images/volume/2.png";
+	private static final String VOLUME_ICON_3_PATH = "/images/volume/3.png";
+
+	private final Image volumeIcon0;
+	private final Image volumeIcon1;
+	private final Image volumeIcon2;
+	private final Image volumeIcon3;
 
 	public interface SettingsHandler {
 		void onBack();
 	}
 
 	public SettingsScreen(SettingsHandler handler) {
+		this.volumeIcon0 = loadVolumeIcon(VOLUME_ICON_0_PATH);
+		this.volumeIcon1 = loadVolumeIcon(VOLUME_ICON_1_PATH);
+		this.volumeIcon2 = loadVolumeIcon(VOLUME_ICON_2_PATH);
+		this.volumeIcon3 = loadVolumeIcon(VOLUME_ICON_3_PATH);
+
 		getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
 
 		setSpacing(20);
@@ -42,11 +60,11 @@ public class SettingsScreen extends VBox {
 		masterVolumeSlider.setMinorTickCount(4);
 		masterVolumeSlider.setShowTickMarks(true);
 		masterVolumeSlider.setShowTickLabels(true);
-		Label masterVolumeIcon = createVolumeIcon(masterVolumeSlider.getValue());
+		ImageView masterVolumeIcon = createVolumeIcon(masterVolumeSlider.getValue());
 		masterVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
 				{
 					UiSoundEffects.setMasterVolume(value.doubleValue());
-					masterVolumeIcon.setText(getVolumeIcon(value.doubleValue()));
+					updateVolumeIcon(masterVolumeIcon, value.doubleValue());
 				}
 		);
 		HBox masterVolumeRow = createVolumeRow(masterVolumeSlider, masterVolumeIcon);
@@ -60,11 +78,11 @@ public class SettingsScreen extends VBox {
 		soundEffectsVolumeSlider.setMinorTickCount(4);
 		soundEffectsVolumeSlider.setShowTickMarks(true);
 		soundEffectsVolumeSlider.setShowTickLabels(true);
-		Label soundEffectsVolumeIcon = createVolumeIcon(soundEffectsVolumeSlider.getValue());
+		ImageView soundEffectsVolumeIcon = createVolumeIcon(soundEffectsVolumeSlider.getValue());
 		soundEffectsVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
 				{
 					UiSoundEffects.setSoundEffectsVolume(value.doubleValue());
-					soundEffectsVolumeIcon.setText(getVolumeIcon(value.doubleValue()));
+					updateVolumeIcon(soundEffectsVolumeIcon, value.doubleValue());
 				}
 		);
 		HBox soundEffectsVolumeRow = createVolumeRow(soundEffectsVolumeSlider, soundEffectsVolumeIcon);
@@ -78,11 +96,11 @@ public class SettingsScreen extends VBox {
 		musicVolumeSlider.setMinorTickCount(4);
 		musicVolumeSlider.setShowTickMarks(true);
 		musicVolumeSlider.setShowTickLabels(true);
-		Label musicVolumeIcon = createVolumeIcon(musicVolumeSlider.getValue());
+		ImageView musicVolumeIcon = createVolumeIcon(musicVolumeSlider.getValue());
 		musicVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
 				{
 					UiSoundEffects.setMusicVolume(value.doubleValue());
-					musicVolumeIcon.setText(getVolumeIcon(value.doubleValue()));
+					updateVolumeIcon(musicVolumeIcon, value.doubleValue());
 				}
 		);
 		HBox musicVolumeRow = createVolumeRow(musicVolumeSlider, musicVolumeIcon);
@@ -108,28 +126,47 @@ public class SettingsScreen extends VBox {
 		);
 	}
 
-	private HBox createVolumeRow(Slider slider, Label iconLabel) {
-		HBox row = new HBox(12, slider, iconLabel);
+	private HBox createVolumeRow(Slider slider, ImageView iconView) {
+		HBox row = new HBox(12, slider, iconView);
 		row.setAlignment(Pos.CENTER);
 		return row;
 	}
 
-	private Label createVolumeIcon(double volume) {
-		Label icon = new Label(getVolumeIcon(volume));
-		icon.setStyle("-fx-font-size: 28px; -fx-text-fill: #f5f5f5;");
-		return icon;
+	private ImageView createVolumeIcon(double volume) {
+		ImageView iconView = new ImageView();
+		iconView.setFitWidth(VOLUME_ICON_SIZE);
+		iconView.setFitHeight(VOLUME_ICON_SIZE);
+		iconView.setPreserveRatio(true);
+		iconView.setSmooth(false);
+		updateVolumeIcon(iconView, volume);
+		return iconView;
 	}
 
-	private String getVolumeIcon(double volume) {
+	private void updateVolumeIcon(ImageView iconView, double volume) {
+		iconView.setImage(getVolumeIconImage(volume));
+	}
+
+	private Image getVolumeIconImage(double volume) {
 		if (volume <= 0.01) {
-			return "🔇";
+			return volumeIcon0;
 		}
 		if (volume < 0.34) {
-			return "🔈";
+			return volumeIcon1;
 		}
 		if (volume < 0.67) {
-			return "🔉";
+			return volumeIcon2;
 		}
-		return "🔊";
+		return volumeIcon3;
+	}
+
+	private Image loadVolumeIcon(String path) {
+		try (InputStream stream = getClass().getResourceAsStream(path)) {
+			if (stream == null) {
+				return null;
+			}
+			return new Image(stream, VOLUME_ICON_SIZE, VOLUME_ICON_SIZE, true, false);
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }
