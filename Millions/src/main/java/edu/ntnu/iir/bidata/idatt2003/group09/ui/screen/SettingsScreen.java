@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -53,10 +54,8 @@ public class SettingsScreen extends VBox {
 
 		Slider masterVolumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getMasterVolume());
 		masterVolumeSlider.setPrefWidth(SLIDER_WIDTH);
-		masterVolumeSlider.setMajorTickUnit(0.25);
-		masterVolumeSlider.setMinorTickCount(4);
-		masterVolumeSlider.setShowTickMarks(true);
-		masterVolumeSlider.setShowTickLabels(true);
+		masterVolumeSlider.setShowTickMarks(false);
+		masterVolumeSlider.setShowTickLabels(false);
 		ImageView masterVolumeIcon = createVolumeIcon(masterVolumeSlider.getValue());
 		masterVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
 				{
@@ -64,17 +63,15 @@ public class SettingsScreen extends VBox {
 					updateVolumeIcon(masterVolumeIcon, value.doubleValue());
 				}
 		);
-		HBox masterVolumeRow = createVolumeRow(masterVolumeSlider, masterVolumeIcon);
+		VBox masterVolumeBlock = createVolumeBlock(masterVolumeSlider, masterVolumeIcon);
 
 		Label soundEffectsVolumeLabel = new Label("Sound FX volume");
 		soundEffectsVolumeLabel.getStyleClass().add("settings-label");
 
 		Slider soundEffectsVolumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getSoundEffectsVolume());
 		soundEffectsVolumeSlider.setPrefWidth(SLIDER_WIDTH);
-		soundEffectsVolumeSlider.setMajorTickUnit(0.25);
-		soundEffectsVolumeSlider.setMinorTickCount(4);
-		soundEffectsVolumeSlider.setShowTickMarks(true);
-		soundEffectsVolumeSlider.setShowTickLabels(true);
+		soundEffectsVolumeSlider.setShowTickMarks(false);
+		soundEffectsVolumeSlider.setShowTickLabels(false);
 		ImageView soundEffectsVolumeIcon = createVolumeIcon(soundEffectsVolumeSlider.getValue());
 		soundEffectsVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
 				{
@@ -82,17 +79,15 @@ public class SettingsScreen extends VBox {
 					updateVolumeIcon(soundEffectsVolumeIcon, value.doubleValue());
 				}
 		);
-		HBox soundEffectsVolumeRow = createVolumeRow(soundEffectsVolumeSlider, soundEffectsVolumeIcon);
+		VBox soundEffectsVolumeBlock = createVolumeBlock(soundEffectsVolumeSlider, soundEffectsVolumeIcon);
 
 		Label musicVolumeLabel = new Label("Music volume");
 		musicVolumeLabel.getStyleClass().add("settings-label");
 
 		Slider musicVolumeSlider = new Slider(0.0, 1.0, UiSoundEffects.getMusicVolume());
 		musicVolumeSlider.setPrefWidth(SLIDER_WIDTH);
-		musicVolumeSlider.setMajorTickUnit(0.25);
-		musicVolumeSlider.setMinorTickCount(4);
-		musicVolumeSlider.setShowTickMarks(true);
-		musicVolumeSlider.setShowTickLabels(true);
+		musicVolumeSlider.setShowTickMarks(false);
+		musicVolumeSlider.setShowTickLabels(false);
 		ImageView musicVolumeIcon = createVolumeIcon(musicVolumeSlider.getValue());
 		musicVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
 				{
@@ -100,7 +95,7 @@ public class SettingsScreen extends VBox {
 					updateVolumeIcon(musicVolumeIcon, value.doubleValue());
 				}
 		);
-		HBox musicVolumeRow = createVolumeRow(musicVolumeSlider, musicVolumeIcon);
+		VBox musicVolumeBlock = createVolumeBlock(musicVolumeSlider, musicVolumeIcon);
 
 		Button backButton = new Button("Back");
 		backButton.getStyleClass().add("start-button");
@@ -120,11 +115,11 @@ public class SettingsScreen extends VBox {
 		settingsCard.getChildren().addAll(
 				titleLabel,
 				masterVolumeLabel,
-				masterVolumeRow,
+				masterVolumeBlock,
 				soundEffectsVolumeLabel,
-				soundEffectsVolumeRow,
+				soundEffectsVolumeBlock,
 				musicVolumeLabel,
-				musicVolumeRow,
+				musicVolumeBlock,
 				backButton
 		);
 
@@ -135,6 +130,32 @@ public class SettingsScreen extends VBox {
 		HBox row = new HBox(12, slider, iconView);
 		row.setAlignment(Pos.CENTER);
 		return row;
+	}
+
+	private VBox createVolumeBlock(Slider slider, ImageView iconView) {
+		HBox row = createVolumeRow(slider, iconView);
+		HBox scaleRow = createScaleRow();
+		VBox block = new VBox(4, row, scaleRow);
+		block.setAlignment(Pos.CENTER);
+		return block;
+	}
+
+	private HBox createScaleRow() {
+		HBox scaleRow = new HBox();
+		scaleRow.setAlignment(Pos.CENTER);
+		scaleRow.setPrefWidth(SLIDER_WIDTH);
+		scaleRow.setMaxWidth(SLIDER_WIDTH);
+
+		for (String text : new String[] {"0", "25", "50", "75", "100"}) {
+			Label tick = new Label(text);
+			tick.getStyleClass().add("settings-slider-tick");
+			HBox wrapper = new HBox(tick);
+			wrapper.setAlignment(Pos.CENTER);
+			HBox.setHgrow(wrapper, Priority.ALWAYS);
+			scaleRow.getChildren().add(wrapper);
+		}
+
+		return scaleRow;
 	}
 
 	private ImageView createVolumeIcon(double volume) {

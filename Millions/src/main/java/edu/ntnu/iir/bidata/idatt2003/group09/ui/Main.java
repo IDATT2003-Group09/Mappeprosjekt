@@ -118,6 +118,8 @@ public class Main extends Application {
         });
 
         root.setCenter(settingsScreen);
+        root.applyCss();
+        root.layout();
     }
 
     private void showCreateGameScreen() {
