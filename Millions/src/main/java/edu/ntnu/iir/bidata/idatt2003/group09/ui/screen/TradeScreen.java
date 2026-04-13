@@ -188,16 +188,13 @@ public class TradeScreen extends BorderPane {
         controls.getStyleClass().add("trade-controls");
         controls.setPadding(new Insets(0, 0, 10, 0));
 
-        HBox infoBox = new HBox(20, weekLabel, cashLabel, netWorthLabel, holdingsLabel);
+        HBox infoBox = new HBox(20,deadlineLabel, weekLabel, cashLabel, holdingsLabel, levelUpLabel);
         infoBox.getStyleClass().add("trade-info");
         infoBox.setPadding(new Insets(0, 0, 10, 0));
 
         VBox headerBox = new VBox(
             8,
             progressBarStack,
-            levelUpLabel,
-            deadlineLabel,
-
             infoBox,
             controls,
             statusLabel
