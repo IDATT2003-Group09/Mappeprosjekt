@@ -484,12 +484,34 @@ public class TradeScreen extends BorderPane {
     private void createSectorFilters(List<Stock> stocks) {
         Set<String> sectors = getAllSectors(stocks);
         selectedSectors = new HashSet<>();
-        
-        // Add "All" button to clear all sector filters
-        Button allButton = new Button("All");
+        Set<String> allSectorNames = new HashSet<>(sectors);
+
+        // Add "All" button to reverse all sector filters
+        Button allButton = new Button("Switch");
         allButton.getStyleClass().addAll("trade-sector-button", "trade-sector-all");
         allButton.setOnAction(e -> {
-            selectedSectors.clear();
+            if (selectedSectors.size() < allSectorNames.size()) {
+                // Select all
+                selectedSectors.clear();
+                selectedSectors.addAll(allSectorNames);
+            } else {
+                // Deselect all
+                selectedSectors.clear();
+            }
+            // Update all sector button styles visually
+            for (javafx.scene.Node node : sectorButtonContainer.getChildren()) {
+                if (node instanceof Button && node != allButton) {
+                    Button btn = (Button) node;
+                    String sector = btn.getText();
+                    if (selectedSectors.contains(sector)) {
+                        if (!btn.getStyleClass().contains("trade-sector-active")) {
+                            btn.getStyleClass().add("trade-sector-active");
+                        }
+                    } else {
+                        btn.getStyleClass().remove("trade-sector-active");
+                    }
+                }
+            }
             updateSectorButtonStyles(allButton);
             filterBySectors();
         });
