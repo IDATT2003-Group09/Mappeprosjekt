@@ -89,35 +89,41 @@ public class TutorialOverlay {
 
     tutorialStep = 6;
     boss.updateTalkingBubble("If you ever want to know more about your purchases check your transaction history.");
-    boss.getChatBubble().addContinueButton(this::onContinuePressed);
+  }
+
+  public void onTransactionHistoryViewed() {
+    if (!isActive() || tutorialStep != 6) {
+      return;
+    }
+
+    tutorialStep = 7;
+    boss.updateTalkingBubble("Or look at your portfolio to see what you own.");
   }
 
   public void onPortfolioViewed() {
-    if (!isActive() || tutorialStep != 6) {
+    if (!isActive() || tutorialStep != 7) {
       return;
     }
 
-    tutorialStep = 7;
-    boss.updateTalkingBubble("Or look at your portfolio to see what you own.");
-    boss.getChatBubble().addContinueButton(this::onContinuePressed);
+    tutorialStep = 8;
+    boss.updateTalkingBubble("Good! Now go to the trade screen and advance to the next week.");
   }
 
-  public void onHistoryViewed() {
-    if (!isActive() || tutorialStep != 6) {
-      return;
-    }
-
-    tutorialStep = 7;
-    boss.updateTalkingBubble("Or look at your portfolio to see what you own.");
-    boss.getChatBubble().addContinueButton(this::onContinuePressed);
-  }
-
-  public void onNextWeek() {
+  public void onTradeScreenViewed() {
     if (!isActive() || tutorialStep != 8) {
       return;
     }
 
     tutorialStep = 9;
+    boss.updateTalkingBubble("Now advance to the next week.");
+  }
+
+  public void onNextWeek() {
+    if (!isActive() || tutorialStep != 9) {
+      return;
+    }
+
+    tutorialStep = 10;
     boss.updateTalkingBubble("What!? You didn't earn nearly enough money for me.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }

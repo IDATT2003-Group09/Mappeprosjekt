@@ -337,11 +337,12 @@ public class Main extends Application {
                     if (newTab == historyTab) {
                         transactionHistoryScreen.refresh();
                         if (tutorialMode) {
-                            tutorialOverlay.onHistoryViewed();
+                            tutorialOverlay.onTransactionHistoryViewed();
                         }
                     }
                     if (newTab == tradeTab && tutorialMode) {
                         tutorialOverlay.onReadyToBuy();
+                        tutorialOverlay.onTradeScreenViewed();
                     }
                 });
 
