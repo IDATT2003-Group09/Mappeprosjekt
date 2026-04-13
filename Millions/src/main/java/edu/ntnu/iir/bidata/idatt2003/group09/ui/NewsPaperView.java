@@ -28,7 +28,7 @@ public class NewsPaperView extends BorderPane {
 	}
 
 	private VBox buildMasthead(int week) {
-		Label title = new Label("THE MARKET GAZETTE");
+		Label title = new Label("THE MILLIONS JOURNAL");
 		title.getStyleClass().add("newspaper-title");
 
 		LocalDate issueDate = LocalDate.of(2026, 4, 9).plusWeeks(Math.max(week - 1, 0));
@@ -153,7 +153,7 @@ public class NewsPaperView extends BorderPane {
 	}
 
 	private HBox buildPageFooter() {
-		Label footerText = new Label("THE MARKET GAZETTE • ALL THE NEWS WORTH TRADING • 2026");
+		Label footerText = new Label("THE MILLIONS JOURNAL • ALL THE NEWS WORTH TRADING • 2026");
 		footerText.getStyleClass().add("newspaper-footer-text");
 		HBox footer = new HBox(footerText);
 		footer.getStyleClass().addAll("newspaper-footer", "page-footer");
