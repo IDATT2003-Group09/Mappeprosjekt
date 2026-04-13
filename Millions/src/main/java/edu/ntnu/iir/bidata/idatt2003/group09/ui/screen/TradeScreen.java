@@ -5,6 +5,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockListView;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -109,6 +110,11 @@ public class TradeScreen extends BorderPane {
                 onSaveAndQuit.run();
             }
         });
+
+        UiSoundEffects.installHoverSound(buyButton);
+        UiSoundEffects.installHoverSound(sellButton);
+        UiSoundEffects.installHoverSound(nextWeekButton);
+        UiSoundEffects.installHoverSound(saveButton);
 
         buyButton.setOnAction(e -> buySelectedStock());
         sellButton.setOnAction(e -> sellSelectedStock());

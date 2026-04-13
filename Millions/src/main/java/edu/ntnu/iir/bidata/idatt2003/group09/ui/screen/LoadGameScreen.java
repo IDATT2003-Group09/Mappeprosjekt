@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -52,6 +53,7 @@ public class LoadGameScreen extends VBox {
         saveFileButton.setPrefWidth(450);
         saveFileButton.setPrefHeight(55);
         saveFileButton.setOnAction(e -> handler.onLoadSelected(fileName));
+        UiSoundEffects.installHoverSound(saveFileButton);
         saveSlotsContainer.getChildren().add(saveFileButton);
       }
     }
@@ -62,6 +64,7 @@ public class LoadGameScreen extends VBox {
     backButton.setPrefWidth(450);
     backButton.setPrefHeight(55);
     backButton.setOnAction(e -> handler.onBack());
+    UiSoundEffects.installHoverSound(backButton);
 
     getChildren().addAll(saveSlotsContainer, backButton);
   }

@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -50,6 +51,11 @@ public class StartScreen extends VBox {
         loadGameBtn.setOnAction(e -> handler.onLoadGame());
         settingsBtn.setOnAction(e -> handler.onSettings());
         exitBtn.setOnAction(e -> System.exit(0));
+
+        UiSoundEffects.installHoverSound(newGameBtn);
+        UiSoundEffects.installHoverSound(loadGameBtn);
+        UiSoundEffects.installHoverSound(settingsBtn);
+        UiSoundEffects.installHoverSound(exitBtn);
 
         getChildren().addAll(newGameBtn, loadGameBtn, settingsBtn, exitBtn);
     }

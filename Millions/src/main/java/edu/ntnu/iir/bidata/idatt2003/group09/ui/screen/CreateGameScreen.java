@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 import java.io.IOException;
 import java.io.InputStream;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.Boss;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -82,6 +83,7 @@ public class CreateGameScreen extends StackPane {
 		confirmNameButton.setPrefWidth(380);
 		confirmNameButton.setPrefHeight(55);
 		confirmNameButton.setText("Start");
+		UiSoundEffects.installHoverSound(confirmNameButton);
 
 		fileNameField.setEditable(false);
 
@@ -141,6 +143,7 @@ public class CreateGameScreen extends StackPane {
 			exitRedImage.setVisible(true);
 		});
 		backButton.setOnMouseClicked(e -> handler.onBack());
+		UiSoundEffects.installHoverSound(backButton);
 
 		contentBox.getChildren().addAll(inputBubble, confirmNameButton);
 		getChildren().add(contentBox);
@@ -196,6 +199,7 @@ public class CreateGameScreen extends StackPane {
 		button.setPrefWidth(380);
 		button.setPrefHeight(50);
 		button.setOnAction(e -> action.run());
+		UiSoundEffects.installHoverSound(button);
 		return button;
 	}
 
