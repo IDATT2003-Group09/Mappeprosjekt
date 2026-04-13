@@ -86,7 +86,7 @@ public class TutorialOverlay {
     }
 
     tutorialStep = 4;
-    boss.updateTalkingBubble("Perfect. You completed the basics—keep trading!");
+    stopTutorial();
   }
 
   private String loadFontFamily() {
