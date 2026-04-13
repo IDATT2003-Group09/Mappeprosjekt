@@ -7,6 +7,8 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.Boss;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockListView;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
+import java.io.IOException;
+import java.io.InputStream;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -31,6 +33,10 @@ import javafx.scene.text.Font;
 
 public class TradeScreen extends BorderPane {
 
+    private static final String FONT_PATH = "/ThaleahFat.ttf";
+    private static final double TITLE_FONT_SIZE = 32;
+    private static final double BOSS_SIZE = 430;
+
     private final GameController controller;
     private final Runnable onSaveAndQuit;
     private final boolean tutorialMode;
@@ -52,6 +58,7 @@ public class TradeScreen extends BorderPane {
     private final ProgressBar progressBar;
     private final Label levelUpLabel;
     private final Label deadlineLabel;
+    private StackPane tutorialOverlayLayer;
     private Boss tutorialBoss;
     private int tutorialStep;
     private int lastLevel = 1;
@@ -196,12 +203,11 @@ public class TradeScreen extends BorderPane {
         contentGrid.add(stockList, 0, 0);
         contentGrid.add(graph, 1, 0);
 
-        StackPane centerContainer = new StackPane(contentGrid);
-        if (tutorialMode) {
-            setupTutorialOverlay(centerContainer);
-        }
+        setCenter(contentGrid);
 
-        setCenter(centerContainer);
+        if (tutorialMode) {
+            setupTutorialOverlay();
+        }
     }
 
     private void buySelectedStock() {
@@ -331,18 +337,43 @@ public class TradeScreen extends BorderPane {
         }
     }
 
-    private void setupTutorialOverlay(StackPane centerContainer) {
-        tutorialBoss = new Boss("Welcome! Select a stock on the left to begin.", Font.getDefault().getFamily(), 300);
+    private void setupTutorialOverlay() {
+        tutorialBoss = new Boss("Welcome! Select a stock on the left to begin.", loadFontFamily(), BOSS_SIZE);
         tutorialBoss.setTalkingLoops(1);
         tutorialStep = 0;
 
-        StackPane tutorialLayer = new StackPane(tutorialBoss);
-        tutorialLayer.setPickOnBounds(false);
-        tutorialLayer.setMouseTransparent(true);
+        tutorialOverlayLayer = new StackPane(tutorialBoss);
+        tutorialOverlayLayer.setManaged(false);
+        tutorialOverlayLayer.setPickOnBounds(false);
+        tutorialOverlayLayer.setMouseTransparent(true);
+        tutorialOverlayLayer.resizeRelocate(0, 0, getWidth(), getHeight());
+        widthProperty().addListener((obs, oldWidth, newWidth) ->
+            tutorialOverlayLayer.resizeRelocate(0, 0, newWidth.doubleValue(), getHeight()));
+        heightProperty().addListener((obs, oldHeight, newHeight) ->
+            tutorialOverlayLayer.resizeRelocate(0, 0, getWidth(), newHeight.doubleValue()));
 
         StackPane.setAlignment(tutorialBoss, Pos.BOTTOM_LEFT);
-        StackPane.setMargin(tutorialBoss, new Insets(0, 0, -40, -40));
-        centerContainer.getChildren().add(tutorialLayer);
+        StackPane.setMargin(tutorialBoss, new Insets(0, 0, 0, -70));
+
+        getChildren().add(tutorialOverlayLayer);
+        tutorialOverlayLayer.toFront();
+    }
+
+    private String loadFontFamily() {
+        try (InputStream fontStream = getClass().getResourceAsStream(FONT_PATH)) {
+            if (fontStream == null) {
+                return Font.getDefault().getFamily();
+            }
+
+            Font loadedFont = Font.loadFont(fontStream, TITLE_FONT_SIZE);
+            if (loadedFont != null) {
+                return loadedFont.getFamily();
+            }
+        } catch (IOException e) {
+            return Font.getDefault().getFamily();
+        }
+
+        return Font.getDefault().getFamily();
     }
 
     private void onTutorialStockSelected() {
