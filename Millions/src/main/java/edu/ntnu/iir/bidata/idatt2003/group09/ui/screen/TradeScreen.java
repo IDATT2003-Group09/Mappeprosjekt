@@ -24,6 +24,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
+import javafx.geometry.Pos;
 
 public class TradeScreen extends BorderPane {
 
@@ -44,8 +46,10 @@ public class TradeScreen extends BorderPane {
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
 
-    private final Label levelLabel;
-    private final Label requirementLabel;
+    // Removed levelLabel; Quartal label will reflect current quarter
+    private final Label quarterLabel;
+    private final Label requirementOverlayLabel;
+    private final StackPane progressBarStack;
     private final ProgressBar progressBar;
     private final Label levelUpLabel;
     private final Label deadlineLabel;
@@ -101,9 +105,24 @@ public class TradeScreen extends BorderPane {
         netWorthLabel = new Label();
         weekLabel = new Label();
 
-        levelLabel = new Label();
-        requirementLabel = new Label();
+        // Removed levelLabel initialization
+        quarterLabel = new Label();
+        requirementOverlayLabel = new Label();
         progressBar = new ProgressBar();
+        progressBar.setMaxWidth(Double.MAX_VALUE);
+        progressBarStack = new StackPane();
+        HBox progressOverlay = new HBox();
+        progressOverlay.setPadding(new Insets(0, 10, 0, 10));
+        progressOverlay.setSpacing(10);
+        progressOverlay.setAlignment(Pos.CENTER);
+        HBox.setHgrow(quarterLabel, Priority.ALWAYS);
+        HBox.setHgrow(requirementOverlayLabel, Priority.ALWAYS);
+        quarterLabel.setMaxWidth(Double.MAX_VALUE);
+        requirementOverlayLabel.setMaxWidth(Double.MAX_VALUE);
+        quarterLabel.setAlignment(Pos.CENTER_LEFT);
+        requirementOverlayLabel.setAlignment(Pos.CENTER_RIGHT);
+        progressOverlay.getChildren().addAll(quarterLabel, requirementOverlayLabel);
+        progressBarStack.getChildren().addAll(progressBar, progressOverlay);
         levelUpLabel = new Label();
         deadlineLabel = new Label();
 
@@ -161,16 +180,14 @@ public class TradeScreen extends BorderPane {
         infoBox.setPadding(new Insets(0, 0, 10, 0));
 
         VBox headerBox = new VBox(
-                8,
-                levelLabel,
-                requirementLabel,
-                progressBar,
-                levelUpLabel,
-                deadlineLabel,
+            8,
+            progressBarStack,
+            levelUpLabel,
+            deadlineLabel,
 
-                infoBox,
-                controls,
-                statusLabel
+            infoBox,
+            controls,
+            statusLabel
         );
 
         headerBox.getStyleClass().add("trade-header");
@@ -291,7 +308,9 @@ public class TradeScreen extends BorderPane {
         var progress = controller.getProgress();
         var player = controller.getPlayer();
 
-        int checkpointLevel = progress.getCheckpointLevel();
+
+
+        int currentQuarter = (progress.getCurrentWeek() / 13) + 1;
         deadlineLabel.setText("Deadline in: " + progress.getWeeksUntilDeadline() + " weeks");
 
         BigDecimal growth = player.getNetWorth()
@@ -299,10 +318,10 @@ public class TradeScreen extends BorderPane {
             .divide(player.getStartingMoney(), 4, RoundingMode.HALF_UP);
 
         BigDecimal required = progress.getBaseRequirement()
-            .multiply(BigDecimal.valueOf(checkpointLevel));
+            .multiply(BigDecimal.valueOf(progress.getCheckpointLevel()));
 
-        levelLabel.setText("Level " + checkpointLevel);
-        requirementLabel.setText("Next Target: : " + currencyFormat.format(progress.getCurrentTarget()));
+        quarterLabel.setText("Q" + currentQuarter);
+        requirementOverlayLabel.setText("Requirement: " + currencyFormat.format(progress.getCurrentTarget()));
 
         double progressValue = 0;
         if (required.compareTo(BigDecimal.ZERO) > 0) {
@@ -312,15 +331,16 @@ public class TradeScreen extends BorderPane {
         }
         progressBar.setProgress(Math.min(progressValue, 1.0));
 
+        int checkpointLevel = progress.getCheckpointLevel();
         if (checkpointLevel > lastLevel) {
-            levelUpLabel.setText("Level Up! Now level " + checkpointLevel);
+            levelUpLabel.setText("Quarter Up! Now Q" + checkpointLevel);
 
             new Thread(() -> {
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException ignored) {}
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ignored) {}
 
-            Platform.runLater(() -> levelUpLabel.setText(""));
+                Platform.runLater(() -> levelUpLabel.setText(""));
             }).start();
 
             lastLevel = checkpointLevel;
