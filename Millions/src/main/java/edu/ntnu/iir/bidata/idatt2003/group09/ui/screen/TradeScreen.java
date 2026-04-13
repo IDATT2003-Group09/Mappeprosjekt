@@ -26,6 +26,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
+import javafx.collections.ObservableList;
 
 public class TradeScreen extends BorderPane {
 
@@ -55,6 +56,10 @@ public class TradeScreen extends BorderPane {
     private final Label levelUpLabel;
     private final Label deadlineLabel;
     private int lastLevel = 1;
+
+    private final TextField searchField;
+    private ObservableList<Stock> allStocks;
+    private ObservableList<Stock> filteredStocks;
 
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
         this(controller, stocks, onSaveAndQuit, false, null);
@@ -382,4 +387,5 @@ public class TradeScreen extends BorderPane {
         }
         tutorialOverlay.onSellSuccess();
     }
+
 }
