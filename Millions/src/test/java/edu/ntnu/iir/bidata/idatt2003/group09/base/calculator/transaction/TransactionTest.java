@@ -116,6 +116,11 @@ public class TransactionTest {
         }
 
         @Override
+        protected TransactionCalculator createCalculator(Share share) {
+            return new PurchaseCalculator(share);
+        }
+
+        @Override
         public void commit(Player player) {
             validateCommit(player);
             markCommited();

@@ -12,6 +12,11 @@ public class Sale extends Transaction {
     }
 
     @Override
+    protected SaleCalculator createCalculator(Share share) {
+        return new SaleCalculator(share);
+    }
+
+    @Override
     public void commit(Player player) {
         validateCommit(player);
 

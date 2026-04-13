@@ -12,7 +12,7 @@ public abstract class Transaction implements Serializable {
 
   private final Share share;
   private final int week;
-  private final TransactionCalculator calculator;
+  private transient TransactionCalculator calculator;
   private boolean committed;
 
   protected Transaction(Share share, int week, TransactionCalculator calculator) {
@@ -34,8 +34,13 @@ public abstract class Transaction implements Serializable {
   }
 
   public TransactionCalculator getCalculator() {
+    if (calculator == null) {
+      calculator = createCalculator(share);
+    }
     return calculator;
   }
+
+  protected abstract TransactionCalculator createCalculator(Share share);
 
     public BigDecimal getFees() {
         return getCalculator().calculateCommission()

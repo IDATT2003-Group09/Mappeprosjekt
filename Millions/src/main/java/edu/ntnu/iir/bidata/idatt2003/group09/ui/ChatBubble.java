@@ -18,13 +18,19 @@ public class ChatBubble extends VBox {
 
 		textLabel = new Label(text);
 		textLabel.setWrapText(true);
+		textLabel.setMaxWidth(320);
+		textLabel.setMinHeight(Region.USE_PREF_SIZE);
+		textLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
 		textLabel.setTextFill(javafx.scene.paint.Color.web("#111111"));
-		textLabel.setFont(Font.font(fontFamily, 20));
+		textLabel.setFont(Font.font(fontFamily, 22));
 
 		StackPane bubbleBody = new StackPane(textLabel);
-		bubbleBody.setPadding(new Insets(12, 16, 12, 16));
-		bubbleBody.setMinWidth(220);
-		bubbleBody.setMaxWidth(280);
+		bubbleBody.setPadding(new Insets(14, 20, 14, 20));
+		bubbleBody.setMinWidth(280);
+		bubbleBody.setPrefWidth(360);
+		bubbleBody.setMaxWidth(360);
+		bubbleBody.setMinHeight(Region.USE_PREF_SIZE);
+		bubbleBody.setPrefHeight(Region.USE_COMPUTED_SIZE);
 		bubbleBody.setStyle("""
 			-fx-background-color: #f5f5f5;
 			-fx-border-color: #111111;

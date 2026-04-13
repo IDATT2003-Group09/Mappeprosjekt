@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,6 +15,8 @@ public class GameOverScreen extends VBox {
 
         Button back = new Button("Back to menu");
         back.setOnAction(e -> onBack.run());
+        UiSoundEffects.installHoverSound(back);
+        UiSoundEffects.installClickSound(back);
 
         setSpacing(20);
         setAlignment(Pos.CENTER);

@@ -1,8 +1,10 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 public class StartScreen extends VBox {
@@ -51,6 +53,24 @@ public class StartScreen extends VBox {
         settingsBtn.setOnAction(e -> handler.onSettings());
         exitBtn.setOnAction(e -> System.exit(0));
 
+        UiSoundEffects.installHoverSound(newGameBtn);
+        UiSoundEffects.installHoverSound(loadGameBtn);
+        UiSoundEffects.installHoverSound(settingsBtn);
+        UiSoundEffects.installHoverSound(exitBtn);
+        UiSoundEffects.installClickSound(newGameBtn);
+        UiSoundEffects.installClickSound(loadGameBtn);
+        UiSoundEffects.installClickSound(settingsBtn);
+        UiSoundEffects.installClickSound(exitBtn);
+
+        syncMouseFocus(newGameBtn);
+        syncMouseFocus(loadGameBtn);
+        syncMouseFocus(settingsBtn);
+        syncMouseFocus(exitBtn);
+
         getChildren().addAll(newGameBtn, loadGameBtn, settingsBtn, exitBtn);
+    }
+
+    private void syncMouseFocus(Button button) {
+        button.addEventHandler(MouseEvent.MOUSE_ENTERED, e -> button.requestFocus());
     }
 }

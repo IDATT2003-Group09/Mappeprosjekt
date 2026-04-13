@@ -14,7 +14,9 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.LoadGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.StartScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.TradeScreen;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -52,6 +54,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Millions - A Stock Trading Game");
 
+        UiSoundEffects.startBackgroundMusic();
+
         root = new BorderPane();
         root.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         root.setMinSize(DESIGN_WIDTH, DESIGN_HEIGHT);
@@ -75,6 +79,11 @@ public class Main extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() {
+        UiSoundEffects.stopBackgroundMusic();
     }
 
     private void showStartScreen() {
@@ -267,6 +276,8 @@ public class Main extends Application {
                         transactionHistoryScreen.refresh();
                     }
                 });
+
+        Platform.runLater(() -> UiSoundEffects.installHoverSound(tabPane));
 
         root.setCenter(tabPane);
     }
