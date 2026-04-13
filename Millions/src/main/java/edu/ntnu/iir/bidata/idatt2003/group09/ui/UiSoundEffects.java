@@ -9,6 +9,8 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 
@@ -52,6 +54,11 @@ public final class UiSoundEffects {
     }
 
     node.addEventHandler(MouseEvent.MOUSE_PRESSED, event -> playClickedSound());
+    node.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+      if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.SPACE) {
+        playClickedSound();
+      }
+    });
   }
 
   public static void playSelectedHoverSound() {
