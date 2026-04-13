@@ -12,31 +12,42 @@ public class PriceGenerator {
 	private PriceGenerator() {
 	}
 
-	public static BigDecimal nextWeekPrice(Stock stock, NewsPaper newsPaper) {
-		if (stock == null) {
-			throw new IllegalArgumentException("Stock cannot be null");
-		}
+    public static BigDecimal nextWeekPrice(Stock stock, NewsPaper newsPaper) {
+        if (stock == null) {
+            throw new IllegalArgumentException("Stock cannot be null");
+        }
 
-		BigDecimal currentPrice = stock.getSalesPrice();
-		BigDecimal eventImpact = BigDecimal.ZERO;
+        BigDecimal currentPrice = stock.getSalesPrice();
+        BigDecimal eventImpact = BigDecimal.ZERO;
 
-		if (newsPaper != null) {
-			eventImpact = newsPaper.getImpactForStock(stock);
-		}
+        double baseNoise = 0.01;
+        double scaledNoise = baseNoise * (stock.getRisk() / 5.0);
 
-		if (eventImpact.compareTo(BigDecimal.ZERO) != 0) {
-			BigDecimal riskFactor = BigDecimal.valueOf(stock.getRisk())
-					.divide(BigDecimal.valueOf(4), 2, RoundingMode.HALF_UP);
-			eventImpact = eventImpact.multiply(riskFactor);
-		}
+        double rand = java.util.concurrent.ThreadLocalRandom.current()
+                .nextDouble(-scaledNoise * 0.7, scaledNoise);
 
-		BigDecimal newPrice = currentPrice.multiply(BigDecimal.ONE.add(eventImpact))
-				.setScale(6, RoundingMode.HALF_UP);
+        eventImpact = eventImpact.add(BigDecimal.valueOf(rand));
 
-		if (newPrice.compareTo(MINIMUM_STOCK_PRICE) < 0) {
-			return MINIMUM_STOCK_PRICE;
-		}
+        if (newsPaper != null) {
+            BigDecimal marketImpact = newsPaper.getGlobalEvent().getImpactForSector(stock.getSector());
 
-		return newPrice;
-	}
+            BigDecimal stockImpact = newsPaper.getImpactForStock(stock);
+
+            eventImpact = eventImpact.add(marketImpact).add(stockImpact);
+        }
+
+        BigDecimal riskFactor = BigDecimal.valueOf(1)
+                .add(BigDecimal.valueOf(stock.getRisk()).multiply(BigDecimal.valueOf(0.1)));
+
+        eventImpact = eventImpact.multiply(riskFactor);
+
+        BigDecimal newPrice = currentPrice.multiply(BigDecimal.ONE.add(eventImpact))
+                .setScale(6, RoundingMode.HALF_UP);
+
+        if (newPrice.compareTo(MINIMUM_STOCK_PRICE) < 0) {
+            return MINIMUM_STOCK_PRICE;
+        }
+
+        return newPrice;
+    }
 }
