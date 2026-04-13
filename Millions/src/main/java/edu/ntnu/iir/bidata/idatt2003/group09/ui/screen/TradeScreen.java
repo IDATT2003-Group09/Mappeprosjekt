@@ -340,6 +340,8 @@ public class TradeScreen extends BorderPane {
     private void setupTutorialOverlay() {
         tutorialBoss = new Boss("Welcome! Select a stock on the left to begin.", loadFontFamily(), BOSS_SIZE);
         tutorialBoss.setTalkingLoops(1);
+        tutorialBoss.getImageView().setScaleX(-1);
+        tutorialBoss.getChatBubble().setTranslateX(-185);
         tutorialStep = 0;
 
         tutorialOverlayLayer = new StackPane(tutorialBoss);
@@ -352,8 +354,8 @@ public class TradeScreen extends BorderPane {
         heightProperty().addListener((obs, oldHeight, newHeight) ->
             tutorialOverlayLayer.resizeRelocate(0, 0, getWidth(), newHeight.doubleValue()));
 
-        StackPane.setAlignment(tutorialBoss, Pos.BOTTOM_LEFT);
-        StackPane.setMargin(tutorialBoss, new Insets(0, 0, 0, -70));
+        StackPane.setAlignment(tutorialBoss, Pos.BOTTOM_RIGHT);
+        StackPane.setMargin(tutorialBoss, new Insets(0, -70, 0, 0));
 
         getChildren().add(tutorialOverlayLayer);
         tutorialOverlayLayer.toFront();
