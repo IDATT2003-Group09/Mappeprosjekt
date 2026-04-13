@@ -1,4 +1,25 @@
 
+
+.trade-search-field {
+	-fx-background-color: #070f24;
+	-fx-text-fill: #e5f1ff;
+	-fx-border-color: #1a355c;
+	-fx-border-width: 1;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+	-fx-padding: 8 10 8 10;
+	-fx-font-size: 22px;
+	-fx-font-family: "ThaleahFat";
+	-fx-prompt-text-fill: #7f95b8;
+}
+
+.trade-search-field:focused {
+	-fx-border-color: #4a90e2;
+	-fx-border-width: 2;
+	-fx-background-color: #070f24;
+	-fx-effect: dropshadow(gaussian, #00e4ff44, 5, 0, 0, 1);
+}
+
 .trade-screen .trade-progress-bar-label {
 	-fx-text-fill: white;
 	-fx-font-size: 22px;
