@@ -56,7 +56,7 @@ public class SettingsScreen extends VBox {
 		masterVolumeSlider.setMajorTickUnit(0.25);
 		masterVolumeSlider.setMinorTickCount(4);
 		masterVolumeSlider.setShowTickMarks(true);
-		masterVolumeSlider.setShowTickLabels(true);
+		masterVolumeSlider.setShowTickLabels(false);
 		ImageView masterVolumeIcon = createVolumeIcon(masterVolumeSlider.getValue());
 		masterVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
 				{
@@ -74,7 +74,7 @@ public class SettingsScreen extends VBox {
 		soundEffectsVolumeSlider.setMajorTickUnit(0.25);
 		soundEffectsVolumeSlider.setMinorTickCount(4);
 		soundEffectsVolumeSlider.setShowTickMarks(true);
-		soundEffectsVolumeSlider.setShowTickLabels(true);
+		soundEffectsVolumeSlider.setShowTickLabels(false);
 		ImageView soundEffectsVolumeIcon = createVolumeIcon(soundEffectsVolumeSlider.getValue());
 		soundEffectsVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
 				{
@@ -92,7 +92,7 @@ public class SettingsScreen extends VBox {
 		musicVolumeSlider.setMajorTickUnit(0.25);
 		musicVolumeSlider.setMinorTickCount(4);
 		musicVolumeSlider.setShowTickMarks(true);
-		musicVolumeSlider.setShowTickLabels(true);
+		musicVolumeSlider.setShowTickLabels(false);
 		ImageView musicVolumeIcon = createVolumeIcon(musicVolumeSlider.getValue());
 		musicVolumeSlider.valueProperty().addListener((obs, oldValue, value) ->
 				{
