@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.EventFactory;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.GlobalEvent;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.StockSpecificEvent;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Transaction;
@@ -226,11 +227,22 @@ public class Exchange implements Serializable {
 
   private void generatePendingNews() {
     pendingNewsPaper = NewsPaper.create(eventFactory, getStocks(), random);
+    String combinedHeadline = pendingNewsPaper.getGlobalEvents().stream()
+      .map(GlobalEvent::getHeadline)
+      .reduce((first, second) -> first + " | " + second)
+      .orElse("Market Update");
+    String combinedDescription = pendingNewsPaper.getGlobalEvents().stream()
+      .map(GlobalEvent::getDescription)
+      .reduce((first, second) -> first + "\n\n" + second)
+      .orElse("No details available");
+    BigDecimal combinedImpact = pendingNewsPaper.getGlobalEvents().stream()
+      .map(GlobalEvent::getAverageImpact)
+      .reduce(BigDecimal.ZERO, BigDecimal::add);
     pendingNews = new MarketNews(
-        pendingNewsPaper.getGlobalEvent().getHeadline(),
-        pendingNewsPaper.getGlobalEvent().getDescription(),
+      combinedHeadline,
+      combinedDescription,
         "ALL",
-        pendingNewsPaper.getGlobalEvent().getAverageImpact()
+      combinedImpact
     );
   }
 }

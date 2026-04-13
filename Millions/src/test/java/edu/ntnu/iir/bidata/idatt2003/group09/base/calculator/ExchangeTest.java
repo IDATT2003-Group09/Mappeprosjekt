@@ -138,6 +138,8 @@ public class ExchangeTest {
 
       GlobalEvent crashEvent = new GlobalEvent("Market Crash", "Extreme downturn");
       crashEvent.addEventData("tech", new BigDecimal("-0.90"));
+      GlobalEvent secondCrashEvent = new GlobalEvent("Banking Panic", "Credit markets freeze");
+      secondCrashEvent.addEventData("tech", new BigDecimal("-0.20"));
 
       StockSpecificEvent specificEvent1 =
         new StockSpecificEvent("A", "A", new BigDecimal("-0.25")).createForStock(riskyStock);
@@ -147,7 +149,7 @@ public class ExchangeTest {
         new StockSpecificEvent("C", "C", new BigDecimal("-0.25")).createForStock(riskyStock);
 
       NewsPaper extremeNewsPaper =
-        new NewsPaper(crashEvent, List.of(specificEvent1, specificEvent2, specificEvent3));
+        new NewsPaper(List.of(crashEvent, secondCrashEvent), List.of(specificEvent1, specificEvent2, specificEvent3));
 
       Field pendingNewsPaperField = Exchange.class.getDeclaredField("pendingNewsPaper");
       pendingNewsPaperField.setAccessible(true);

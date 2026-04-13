@@ -29,11 +29,8 @@ public class PriceGenerator {
         eventImpact = eventImpact.add(BigDecimal.valueOf(rand));
 
         if (newsPaper != null) {
-            BigDecimal marketImpact = newsPaper.getGlobalEvent().getImpactForSector(stock.getSector());
-
-            BigDecimal stockImpact = newsPaper.getImpactForStock(stock);
-
-            eventImpact = eventImpact.add(marketImpact).add(stockImpact);
+            BigDecimal totalNewsImpact = newsPaper.getImpactForStock(stock);
+            eventImpact = eventImpact.add(totalNewsImpact);
         }
 
         BigDecimal riskFactor = BigDecimal.valueOf(1)

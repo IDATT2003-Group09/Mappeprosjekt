@@ -1,6 +1,7 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.news.GlobalEvent;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.StockSpecificEvent;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -52,13 +53,18 @@ public class NewsPaperView extends BorderPane {
 		Label leftPageTitle = new Label("GLOBAL EVENT");
 		leftPageTitle.getStyleClass().add("section-title");
 
-		Label globalHeadline = new Label(newsPaper.getGlobalEvent().getHeadline().toUpperCase());
-		globalHeadline.getStyleClass().add("global-headline");
-		globalHeadline.setWrapText(true);
+		VBox globalEventsContent = new VBox(10);
+		for (GlobalEvent globalEvent : newsPaper.getGlobalEvents()) {
+			Label globalHeadline = new Label(globalEvent.getHeadline().toUpperCase());
+			globalHeadline.getStyleClass().add("global-headline");
+			globalHeadline.setWrapText(true);
 
-		Label globalDescription = new Label(newsPaper.getGlobalEvent().getDescription());
-		globalDescription.getStyleClass().add("global-description");
-		globalDescription.setWrapText(true);
+			Label globalDescription = new Label(globalEvent.getDescription());
+			globalDescription.getStyleClass().add("global-description");
+			globalDescription.setWrapText(true);
+
+			globalEventsContent.getChildren().addAll(globalHeadline, globalDescription, createRuleLine(false));
+		}
 
 		Region leftPageSpacer = new Region();
 		VBox.setVgrow(leftPageSpacer, Priority.ALWAYS);
@@ -67,8 +73,7 @@ public class NewsPaperView extends BorderPane {
 				buildMasthead(week),
 				leftPageTitle,
 				createRuleLine(false),
-				globalHeadline,
-				globalDescription,
+				globalEventsContent,
 				leftPageSpacer,
 				buildPageFooter()
 		);
