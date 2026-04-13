@@ -57,6 +57,7 @@ public class ChatBubble extends VBox {
 	public void addContinueButton(Runnable onContinue) {
 		VBox content = new VBox(8);
 		content.setAlignment(Pos.TOP_LEFT);
+		content.setMouseTransparent(false);
 
 		content.getChildren().add(textLabel);
 
@@ -68,13 +69,15 @@ public class ChatBubble extends VBox {
 			-fx-padding: 6 12 6 12;
 			-fx-border-radius: 0;
 			-fx-background-radius: 0;
+			-fx-cursor: hand;
 		""");
 		continueButton.setOnAction(e -> onContinue.run());
-		continueButton.setCursor(javafx.scene.Cursor.HAND);
+		continueButton.setMouseTransparent(false);
 
 		content.getChildren().add(continueButton);
 
 		bubbleBody.getChildren().clear();
 		bubbleBody.getChildren().add(content);
+		bubbleBody.setMouseTransparent(false);
 	}
 }

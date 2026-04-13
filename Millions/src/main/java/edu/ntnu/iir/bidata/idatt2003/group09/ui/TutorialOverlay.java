@@ -20,11 +20,11 @@ public class TutorialOverlay {
     this.boss.setTalkingLoops(1);
     this.boss.getImageView().setScaleX(-1);
     this.boss.getChatBubble().setTranslateX(-185);
-    this.boss.setMouseTransparent(true);
+    this.boss.setPickOnBounds(false);
 
     this.layer = new AnchorPane();
     this.layer.setPickOnBounds(false);
-    this.layer.setMouseTransparent(true);
+    this.layer.setMouseTransparent(false);
     this.layer.setVisible(false);
 
     this.layer.getChildren().add(this.boss);
