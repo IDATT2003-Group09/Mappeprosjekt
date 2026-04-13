@@ -40,8 +40,3 @@
 .settings-screen .slider .axis {
 	-fx-tick-label-fill: #9cb6db;
 }
-
-.settings-slider-tick {
-	-fx-text-fill: #9cb6db;
-	-fx-font-size: 16px;
-}
