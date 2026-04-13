@@ -13,10 +13,12 @@ public class ChatBubble extends VBox {
 	private final Label textLabel;
 
 	public ChatBubble(String text, String fontFamily) {
+		getStyleClass().add("chat-bubble");
 		setAlignment(Pos.TOP_LEFT);
 		setPickOnBounds(false);
 
 		textLabel = new Label(text);
+		textLabel.getStyleClass().add("chat-bubble-label");
 		textLabel.setWrapText(true);
 		textLabel.setMaxWidth(320);
 		textLabel.setMinHeight(Region.USE_PREF_SIZE);
