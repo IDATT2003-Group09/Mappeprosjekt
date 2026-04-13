@@ -110,11 +110,18 @@ public class TradeScreen extends BorderPane {
         quarterLabel = new Label();
         requirementOverlayLabel = new Label();
         netWorthOverlayLabel = new Label();
+        quarterLabel.getStyleClass().add("trade-progress-bar-label");
+        requirementOverlayLabel.getStyleClass().add("trade-progress-bar-label");
+        netWorthOverlayLabel.getStyleClass().add("trade-progress-bar-label");
+        quarterLabel.setStyle("-fx-text-fill: white;");
+        requirementOverlayLabel.setStyle("-fx-text-fill: white;");
+        netWorthOverlayLabel.setStyle("-fx-text-fill: white;");
         progressBar = new ProgressBar(0);
         progressBar.setMaxWidth(Double.MAX_VALUE);
         progressBar.getStyleClass().add("trade-progress-bar");
         progressBarStack = new StackPane();
         HBox progressOverlay = new HBox();
+        progressOverlay.getStyleClass().add("trade-progress-bar-overlay");
         progressOverlay.setPadding(new Insets(0, 10, 0, 10));
         progressOverlay.setSpacing(10);
         progressOverlay.setAlignment(Pos.CENTER);

@@ -1,4 +1,12 @@
 
+.trade-screen .trade-progress-bar-label {
+	-fx-text-fill: white;
+	-fx-font-size: 22px;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-weight: bold;
+	-fx-effect: dropshadow(gaussian, #00000088, 2, 0.2, 0, 1);
+}
+
 .trade-screen .trade-progress-bar {
 	-fx-accent: #23e88c;
 	-fx-control-inner-background: #070f24;
@@ -17,7 +25,7 @@
 }
 
 .trade-screen .trade-progress-bar .bar {
-	-fx-background-color: linear-gradient(to right, #23e88c, #05d8ff);
+	-fx-background-color: linear-gradient(to right, #05d8ff, #05d8ff);
 	-fx-background-radius: 6;
 }
 @font-face {
