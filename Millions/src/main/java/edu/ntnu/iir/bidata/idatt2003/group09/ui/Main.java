@@ -323,13 +323,25 @@ public class Main extends Application {
                 .addListener((obs, oldTab, newTab) -> {
                     if (newTab == portfolioTab) {
                         portfolioScreen.refresh();
+                        if (tutorialMode) {
+                            tutorialOverlay.onPortfolioViewed();
+                        }
                     }
                     if (newTab == newspaperTab) {
                         newspaperContainer.getChildren()
                                 .setAll(new NewsPaperView(controller.getWeek(), controller.getPendingNewsPaper()));
+                        if (tutorialMode) {
+                            tutorialOverlay.onNewspaperViewed();
+                        }
                     }
                     if (newTab == historyTab) {
                         transactionHistoryScreen.refresh();
+                        if (tutorialMode) {
+                            tutorialOverlay.onHistoryViewed();
+                        }
+                    }
+                    if (newTab == tradeTab && tutorialMode) {
+                        tutorialOverlay.onReadyToBuy();
                     }
                 });
 
