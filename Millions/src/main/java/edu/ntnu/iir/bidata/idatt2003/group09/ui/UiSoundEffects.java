@@ -29,6 +29,7 @@ public final class UiSoundEffects {
 
   private static volatile Clip backgroundClip;
   private static volatile boolean backgroundSoundDisabled;
+  private static volatile boolean backgroundMusicEnabled = true;
   private static volatile Clip selectedHoverClip;
   private static volatile boolean selectedHoverSoundDisabled;
   private static volatile Clip clickedClip;
@@ -51,7 +52,7 @@ public final class UiSoundEffects {
   }
 
   public static void startBackgroundMusic() {
-    if (backgroundSoundDisabled) {
+    if (backgroundSoundDisabled || !backgroundMusicEnabled) {
       return;
     }
 
@@ -84,6 +85,19 @@ public final class UiSoundEffects {
       } catch (RuntimeException ignored) {
         backgroundSoundDisabled = true;
       }
+    }
+  }
+
+  public static boolean isBackgroundMusicEnabled() {
+    return backgroundMusicEnabled;
+  }
+
+  public static void setBackgroundMusicEnabled(boolean enabled) {
+    backgroundMusicEnabled = enabled;
+    if (enabled) {
+      startBackgroundMusic();
+    } else {
+      stopBackgroundMusic();
     }
   }
 
