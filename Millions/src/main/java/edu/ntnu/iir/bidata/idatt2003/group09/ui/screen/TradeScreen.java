@@ -21,6 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -58,7 +59,6 @@ public class TradeScreen extends BorderPane {
     private final ProgressBar progressBar;
     private final Label levelUpLabel;
     private final Label deadlineLabel;
-    private StackPane tutorialOverlayLayer;
     private Boss tutorialBoss;
     private int tutorialStep;
     private int lastLevel = 1;
@@ -203,11 +203,17 @@ public class TradeScreen extends BorderPane {
         contentGrid.add(stockList, 0, 0);
         contentGrid.add(graph, 1, 0);
 
-        setCenter(contentGrid);
+        AnchorPane centerContainer = new AnchorPane(contentGrid);
+        AnchorPane.setTopAnchor(contentGrid, 0.0);
+        AnchorPane.setRightAnchor(contentGrid, 0.0);
+        AnchorPane.setBottomAnchor(contentGrid, 0.0);
+        AnchorPane.setLeftAnchor(contentGrid, 0.0);
 
         if (tutorialMode) {
-            setupTutorialOverlay();
+            setupTutorialOverlay(centerContainer);
         }
+
+        setCenter(centerContainer);
     }
 
     private void buySelectedStock() {
@@ -337,28 +343,17 @@ public class TradeScreen extends BorderPane {
         }
     }
 
-    private void setupTutorialOverlay() {
+    private void setupTutorialOverlay(AnchorPane centerContainer) {
         tutorialBoss = new Boss("Welcome! Select a stock on the left to begin.", loadFontFamily(), BOSS_SIZE);
         tutorialBoss.setTalkingLoops(1);
         tutorialBoss.getImageView().setScaleX(-1);
         tutorialBoss.getChatBubble().setTranslateX(-185);
+        tutorialBoss.setMouseTransparent(true);
         tutorialStep = 0;
 
-        tutorialOverlayLayer = new StackPane(tutorialBoss);
-        tutorialOverlayLayer.setManaged(false);
-        tutorialOverlayLayer.setPickOnBounds(false);
-        tutorialOverlayLayer.setMouseTransparent(true);
-        tutorialOverlayLayer.resizeRelocate(0, 0, getWidth(), getHeight());
-        widthProperty().addListener((obs, oldWidth, newWidth) ->
-            tutorialOverlayLayer.resizeRelocate(0, 0, newWidth.doubleValue(), getHeight()));
-        heightProperty().addListener((obs, oldHeight, newHeight) ->
-            tutorialOverlayLayer.resizeRelocate(0, 0, getWidth(), newHeight.doubleValue()));
-
-        StackPane.setAlignment(tutorialBoss, Pos.BOTTOM_RIGHT);
-        StackPane.setMargin(tutorialBoss, new Insets(0, -70, 0, 0));
-
-        getChildren().add(tutorialOverlayLayer);
-        tutorialOverlayLayer.toFront();
+        centerContainer.getChildren().add(tutorialBoss);
+        AnchorPane.setBottomAnchor(tutorialBoss, 0.0);
+        AnchorPane.setRightAnchor(tutorialBoss, -40.0);
     }
 
     private String loadFontFamily() {
