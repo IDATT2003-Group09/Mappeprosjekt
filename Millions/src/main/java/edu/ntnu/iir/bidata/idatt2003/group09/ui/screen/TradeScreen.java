@@ -13,7 +13,9 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -62,6 +64,10 @@ public class TradeScreen extends BorderPane {
     private ObservableList<Stock> allStocks;
     private ObservableList<Stock> filteredStocks;
 
+    private ToggleGroup sectorToggleGroup;
+    private final HBox sectorButtonContainer;
+    private Set<String> selectedSectors;
+
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
         this(controller, stocks, onSaveAndQuit, false, null);
     }
@@ -89,6 +95,10 @@ public class TradeScreen extends BorderPane {
         stockList = new StockListView().createStockList(controller.getPlayer());
 
         this.allStocks = FXCollections.observableArrayList(stocks);
+        sectorButtonContainer = new HBox(10);
+        sectorButtonContainer.getStyleClass().add("trade-sector-container");
+        createSectorFilters(stocks);
+
         this.filteredStocks = FXCollections.observableArrayList(allStocks);
         stockList.setItems(filteredStocks);
 
@@ -213,7 +223,8 @@ public class TradeScreen extends BorderPane {
             infoBox,
             controls,
             statusLabel,
-            searchField
+            searchField,
+            sectorButtonContainer
         );
 
         headerBox.getStyleClass().add("trade-header");
@@ -405,21 +416,111 @@ public class TradeScreen extends BorderPane {
         });
     }
 
+
     private void filterStockList(String searchText) {
+        // First filter by sectors if any are selected
+        List<Stock> filteredBySector = allStocks.stream()
+            .filter(stock -> {
+                if (selectedSectors == null || selectedSectors.isEmpty()) {
+                    return true;
+                }
+                String stockSector = stock.getSector();
+                return stockSector != null && selectedSectors.contains(stockSector);
+            })
+            .collect(Collectors.toList());
+        
+        // Then filter by search text
         if (searchText == null || searchText.trim().isEmpty()) {
-            filteredStocks.setAll(allStocks);
+            filteredStocks.setAll(filteredBySector);
             return;
         }
-    
+
         String lowerCaseSearch = searchText.toLowerCase().trim();
-        List<Stock> filtered = allStocks.stream()
+        List<Stock> filtered = filteredBySector.stream()
             .filter(stock -> 
                 stock.getSymbol().toLowerCase().contains(lowerCaseSearch) ||
                 stock.getCompany().toLowerCase().contains(lowerCaseSearch)
             )
             .collect(Collectors.toList());
-    
+        
         filteredStocks.setAll(filtered);
+    }
+
+    private Set<String> getAllSectors(List<Stock> stocks) {
+        return stocks.stream()
+            .map(Stock::getSector)
+            .filter(sector -> sector != null && !sector.isEmpty())
+            .collect(Collectors.toSet());
+    }
+
+    private void filterBySectors() {
+        String searchText = searchField.getText();
+
+        // First filter by sectors
+        List<Stock> filteredBySector = allStocks.stream()
+            .filter(stock -> {
+                if (selectedSectors.isEmpty()) {
+                    return true; // No sector filter active
+                }
+                String stockSector = stock.getSector();
+                return stockSector != null && selectedSectors.contains(stockSector);
+            })
+            .collect(Collectors.toList());
+        
+        // Then filter by search text
+        if (searchText != null && !searchText.trim().isEmpty()) {
+            String lowerCaseSearch = searchText.toLowerCase().trim();
+            filteredBySector = filteredBySector.stream()
+                .filter(stock -> 
+                    stock.getSymbol().toLowerCase().contains(lowerCaseSearch) ||
+                    stock.getCompany().toLowerCase().contains(lowerCaseSearch)
+                )
+                .collect(Collectors.toList());
+        }
+
+        filteredStocks.setAll(filteredBySector);
+    }
+
+    private void createSectorFilters(List<Stock> stocks) {
+        Set<String> sectors = getAllSectors(stocks);
+        selectedSectors = new HashSet<>();
+        
+        // Add "All" button to clear all sector filters
+        Button allButton = new Button("All");
+        allButton.getStyleClass().addAll("trade-sector-button", "trade-sector-all");
+        allButton.setOnAction(e -> {
+            selectedSectors.clear();
+            updateSectorButtonStyles(allButton);
+            filterBySectors();
+        });
+        sectorButtonContainer.getChildren().add(allButton);
+
+        // Create a button for each sector
+        for (String sector : sectors) {
+            Button sectorButton = new Button(sector);
+            sectorButton.getStyleClass().add("trade-sector-button");
+            sectorButton.setOnAction(e -> {
+                if (selectedSectors.contains(sector)) {
+                    selectedSectors.remove(sector);
+                    sectorButton.getStyleClass().remove("trade-sector-active");
+                } else {
+                    selectedSectors.add(sector);
+                    sectorButton.getStyleClass().add("trade-sector-active");
+                }
+                updateSectorButtonStyles(allButton);
+                filterBySectors();
+            });
+            sectorButtonContainer.getChildren().add(sectorButton);
+        }
+    }
+
+    private void updateSectorButtonStyles(Button allButton) {
+        // Update All button style
+        if (selectedSectors.isEmpty()) {
+            allButton.getStyleClass().add("trade-sector-active");
+        } else {
+            allButton.getStyleClass().remove("trade-sector-active");
+        }
     }
 
 }
