@@ -1,10 +1,28 @@
+.trade-screen {
+	font-family: "ThaleahFat";
+	font-size: 22px;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-size: 22px;
+	-fx-background-color: linear-gradient(to bottom right, #070f2a, #020716);
+}
 
-.trade-sector-button {
+.trade-screen .label,
+.trade-screen .button,
+.trade-screen .text-field,
+.trade-screen .list-view,
+.trade-screen .tab-pane .tab .tab-label {
+	font-family: "ThaleahFat";
+	font-size: 22px;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-size: 22px;
+}
+
+.trade-screen .trade-sector-button {
 	-fx-background-color: #12284a;
 	-fx-text-fill: #dbe8ff;
-	-fx-font-size: 20px;
+	-fx-font-size: 14px;
 	-fx-font-family: "ThaleahFat";
-	-fx-padding: 6 18 6 18;
+	-fx-padding: 0 0 0 0;
 	-fx-background-radius: 0;
 	-fx-border-radius: 0;
 	-fx-border-color: #1b4b81;
@@ -83,24 +101,8 @@
 	src: url("/ThaleahFat.ttf");
 }
 
-.trade-screen {
-	font-family: "ThaleahFat";
-	font-size: 22px;
-	-fx-font-family: "ThaleahFat";
-	-fx-font-size: 22px;
-	-fx-background-color: linear-gradient(to bottom right, #070f2a, #020716);
-}
 
-.trade-screen .label,
-.trade-screen .button,
-.trade-screen .text-field,
-.trade-screen .list-view,
-.trade-screen .tab-pane .tab .tab-label {
-	font-family: "ThaleahFat";
-	font-size: 22px;
-	-fx-font-family: "ThaleahFat";
-	-fx-font-size: 22px;
-}
+
 
 .trade-screen .label {
 	-fx-text-fill: #9cb6db;
