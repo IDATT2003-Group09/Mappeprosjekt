@@ -2,12 +2,14 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Set;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javafx.scene.Node;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 
 public final class UiSoundEffects {
@@ -31,6 +33,17 @@ public final class UiSoundEffects {
     }
 
     node.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> playSelectedHoverSound());
+  }
+
+  public static void installHoverSound(TabPane tabPane) {
+    if (tabPane == null) {
+      return;
+    }
+
+    Set<Node> tabNodes = tabPane.lookupAll(".tab");
+    for (Node tabNode : tabNodes) {
+      installHoverSound(tabNode);
+    }
   }
 
   public static void installClickSound(Node node) {
