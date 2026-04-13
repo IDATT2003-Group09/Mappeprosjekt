@@ -2,6 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -11,6 +12,7 @@ import javafx.scene.text.Font;
 public class ChatBubble extends VBox {
 
 	private final Label textLabel;
+	private final StackPane bubbleBody;
 
 	public ChatBubble(String text, String fontFamily) {
 		getStyleClass().add("chat-bubble");
@@ -26,7 +28,7 @@ public class ChatBubble extends VBox {
 		textLabel.setTextFill(javafx.scene.paint.Color.web("#111111"));
 		textLabel.setFont(Font.font(fontFamily, 22));
 
-		StackPane bubbleBody = new StackPane(textLabel);
+		bubbleBody = new StackPane(textLabel);
 		bubbleBody.setPadding(new Insets(14, 20, 14, 20));
 		bubbleBody.setMinWidth(280);
 		bubbleBody.setPrefWidth(360);
@@ -50,5 +52,29 @@ public class ChatBubble extends VBox {
 
 	public String getText() {
 		return textLabel.getText();
+	}
+
+	public void addContinueButton(Runnable onContinue) {
+		VBox content = new VBox(8);
+		content.setAlignment(Pos.TOP_LEFT);
+
+		content.getChildren().add(textLabel);
+
+		Button continueButton = new Button("Continue");
+		continueButton.setStyle("""
+			-fx-background-color: #111111;
+			-fx-text-fill: #f5f5f5;
+			-fx-font-size: 14;
+			-fx-padding: 6 12 6 12;
+			-fx-border-radius: 0;
+			-fx-background-radius: 0;
+		""");
+		continueButton.setOnAction(e -> onContinue.run());
+		continueButton.setCursor(javafx.scene.Cursor.HAND);
+
+		content.getChildren().add(continueButton);
+
+		bubbleBody.getChildren().clear();
+		bubbleBody.getChildren().add(content);
 	}
 }

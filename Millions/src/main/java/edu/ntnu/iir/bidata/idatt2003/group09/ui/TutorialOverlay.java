@@ -43,6 +43,7 @@ public class TutorialOverlay {
     layer.setVisible(true);
     tutorialStep = 1;
     boss.updateTalkingBubble("Congratulations rookie, you get to work for me. Start earning me money.");
+    boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void stopTutorial() {
@@ -97,6 +98,7 @@ public class TutorialOverlay {
 
     tutorialStep = 6;
     boss.updateTalkingBubble("If you ever want to know more about your purchases check your transaction history.");
+    boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void onHistoryViewed() {
@@ -106,6 +108,7 @@ public class TutorialOverlay {
 
     tutorialStep = 7;
     boss.updateTalkingBubble("Or look at your portfolio to see what you own.");
+    boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void onNextWeek() {
@@ -168,5 +171,22 @@ public class TutorialOverlay {
     }
 
     return Font.getDefault().getFamily();
+  }
+
+  private void onContinuePressed() {
+    if (!isActive()) {
+      return;
+    }
+
+    if (tutorialStep == 1) {
+      tutorialStep = 2;
+      boss.updateTalkingBubble("You can start by reading the newspaper.");
+    } else if (tutorialStep == 6) {
+      tutorialStep = 8;
+      onNextWeek();
+    } else if (tutorialStep == 7) {
+      tutorialStep = 8;
+      onNextWeek();
+    }
   }
 }
