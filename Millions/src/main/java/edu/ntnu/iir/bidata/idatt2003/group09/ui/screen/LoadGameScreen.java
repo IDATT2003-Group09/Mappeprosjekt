@@ -54,6 +54,7 @@ public class LoadGameScreen extends VBox {
         saveFileButton.setPrefHeight(55);
         saveFileButton.setOnAction(e -> handler.onLoadSelected(fileName));
         UiSoundEffects.installHoverSound(saveFileButton);
+        UiSoundEffects.installClickSound(saveFileButton);
         saveSlotsContainer.getChildren().add(saveFileButton);
       }
     }
@@ -65,6 +66,7 @@ public class LoadGameScreen extends VBox {
     backButton.setPrefHeight(55);
     backButton.setOnAction(e -> handler.onBack());
     UiSoundEffects.installHoverSound(backButton);
+    UiSoundEffects.installClickSound(backButton);
 
     getChildren().addAll(saveSlotsContainer, backButton);
   }

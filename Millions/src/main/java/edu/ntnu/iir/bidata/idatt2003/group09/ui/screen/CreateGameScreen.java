@@ -84,6 +84,7 @@ public class CreateGameScreen extends StackPane {
 		confirmNameButton.setPrefHeight(55);
 		confirmNameButton.setText("Start");
 		UiSoundEffects.installHoverSound(confirmNameButton);
+		UiSoundEffects.installClickSound(confirmNameButton);
 
 		fileNameField.setEditable(false);
 
@@ -144,6 +145,7 @@ public class CreateGameScreen extends StackPane {
 		});
 		backButton.setOnMouseClicked(e -> handler.onBack());
 		UiSoundEffects.installHoverSound(backButton);
+		UiSoundEffects.installClickSound(backButton);
 
 		contentBox.getChildren().addAll(inputBubble, confirmNameButton);
 		getChildren().add(contentBox);
@@ -200,6 +202,7 @@ public class CreateGameScreen extends StackPane {
 		button.setPrefHeight(50);
 		button.setOnAction(e -> action.run());
 		UiSoundEffects.installHoverSound(button);
+		UiSoundEffects.installClickSound(button);
 		return button;
 	}
 

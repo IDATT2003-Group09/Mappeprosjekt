@@ -115,6 +115,10 @@ public class TradeScreen extends BorderPane {
         UiSoundEffects.installHoverSound(sellButton);
         UiSoundEffects.installHoverSound(nextWeekButton);
         UiSoundEffects.installHoverSound(saveButton);
+        UiSoundEffects.installClickSound(buyButton);
+        UiSoundEffects.installClickSound(sellButton);
+        UiSoundEffects.installClickSound(nextWeekButton);
+        UiSoundEffects.installClickSound(saveButton);
 
         buyButton.setOnAction(e -> buySelectedStock());
         sellButton.setOnAction(e -> sellSelectedStock());

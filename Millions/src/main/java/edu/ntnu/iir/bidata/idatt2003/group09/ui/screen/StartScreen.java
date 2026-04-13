@@ -57,6 +57,10 @@ public class StartScreen extends VBox {
         UiSoundEffects.installHoverSound(loadGameBtn);
         UiSoundEffects.installHoverSound(settingsBtn);
         UiSoundEffects.installHoverSound(exitBtn);
+        UiSoundEffects.installClickSound(newGameBtn);
+        UiSoundEffects.installClickSound(loadGameBtn);
+        UiSoundEffects.installClickSound(settingsBtn);
+        UiSoundEffects.installClickSound(exitBtn);
 
         syncMouseFocus(newGameBtn);
         syncMouseFocus(loadGameBtn);

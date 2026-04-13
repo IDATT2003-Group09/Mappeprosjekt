@@ -16,6 +16,7 @@ public class GameOverScreen extends VBox {
         Button back = new Button("Back to menu");
         back.setOnAction(e -> onBack.run());
         UiSoundEffects.installHoverSound(back);
+        UiSoundEffects.installClickSound(back);
 
         setSpacing(20);
         setAlignment(Pos.CENTER);

@@ -12,11 +12,15 @@ import javafx.scene.input.MouseEvent;
 
 public final class UiSoundEffects {
 
+  private static final String CLICKED_SOUND_PATH = "/sound/clicked.wav";
   private static final String SELECTED_SOUND_PATH = "/sound/selected.wav";
   private static final Object HOVER_SOUND_LOCK = new Object();
+  private static final Object CLICK_SOUND_LOCK = new Object();
 
   private static volatile Clip selectedHoverClip;
   private static volatile boolean selectedHoverSoundDisabled;
+  private static volatile Clip clickedClip;
+  private static volatile boolean clickedSoundDisabled;
 
   private UiSoundEffects() {
   }
@@ -27,6 +31,14 @@ public final class UiSoundEffects {
     }
 
     node.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> playSelectedHoverSound());
+  }
+
+  public static void installClickSound(Node node) {
+    if (node == null) {
+      return;
+    }
+
+    node.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> playClickedSound());
   }
 
   public static void playSelectedHoverSound() {
@@ -50,6 +62,27 @@ public final class UiSoundEffects {
     }
   }
 
+  public static void playClickedSound() {
+    if (clickedSoundDisabled) {
+      return;
+    }
+
+    Clip clip = getOrCreateClickedClip();
+    if (clip == null) {
+      return;
+    }
+
+    synchronized (CLICK_SOUND_LOCK) {
+      try {
+        clip.stop();
+        clip.setFramePosition(0);
+        clip.start();
+      } catch (RuntimeException ignored) {
+        clickedSoundDisabled = true;
+      }
+    }
+  }
+
   private static Clip getOrCreateSelectedHoverClip() {
     Clip clip = selectedHoverClip;
     if (clip != null || selectedHoverSoundDisabled) {
@@ -67,6 +100,26 @@ public final class UiSoundEffects {
       }
 
       return selectedHoverClip;
+    }
+  }
+
+  private static Clip getOrCreateClickedClip() {
+    Clip clip = clickedClip;
+    if (clip != null || clickedSoundDisabled) {
+      return clip;
+    }
+
+    synchronized (CLICK_SOUND_LOCK) {
+      if (clickedClip != null || clickedSoundDisabled) {
+        return clickedClip;
+      }
+
+      clickedClip = createClip(CLICKED_SOUND_PATH);
+      if (clickedClip == null) {
+        clickedSoundDisabled = true;
+      }
+
+      return clickedClip;
     }
   }
 
