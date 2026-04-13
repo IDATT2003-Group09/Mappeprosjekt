@@ -312,12 +312,16 @@ public class Main extends Application {
         Tab tradeTab = new Tab("Trade", tradeScreen);
         Tab portfolioTab = new Tab("Portfolio", portfolioScreen);
         Tab historyTab = new Tab("Transaction History", transactionHistoryScreen);
+        SettingsScreen inGameSettingsScreen = new SettingsScreen(() ->
+            tabPane.getSelectionModel().select(tradeTab));
+        Tab settingsTab = new Tab("Settings", inGameSettingsScreen);
 
         tradeTab.setClosable(false);
         portfolioTab.setClosable(false);
         historyTab.setClosable(false);
+        settingsTab.setClosable(false);
 
-        tabPane.getTabs().addAll(tradeTab, portfolioTab, newspaperTab, historyTab);
+        tabPane.getTabs().addAll(tradeTab, portfolioTab, newspaperTab, historyTab, settingsTab);
 
         tabPane.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldTab, newTab) -> {
