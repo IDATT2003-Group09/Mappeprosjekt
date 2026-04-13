@@ -54,6 +54,8 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Millions - A Stock Trading Game");
 
+        UiSoundEffects.startBackgroundMusic();
+
         root = new BorderPane();
         root.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         root.setMinSize(DESIGN_WIDTH, DESIGN_HEIGHT);
@@ -77,6 +79,11 @@ public class Main extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() {
+        UiSoundEffects.stopBackgroundMusic();
     }
 
     private void showStartScreen() {

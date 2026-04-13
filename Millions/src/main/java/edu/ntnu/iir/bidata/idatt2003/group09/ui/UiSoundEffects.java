@@ -16,11 +16,15 @@ import javafx.scene.input.MouseEvent;
 
 public final class UiSoundEffects {
 
+  private static final String BACKGROUND_SOUND_PATH = "/sound/background.wav";
   private static final String CLICKED_SOUND_PATH = "/sound/clicked.wav";
   private static final String SELECTED_SOUND_PATH = "/sound/selected.wav";
+  private static final Object BACKGROUND_SOUND_LOCK = new Object();
   private static final Object HOVER_SOUND_LOCK = new Object();
   private static final Object CLICK_SOUND_LOCK = new Object();
 
+  private static volatile Clip backgroundClip;
+  private static volatile boolean backgroundSoundDisabled;
   private static volatile Clip selectedHoverClip;
   private static volatile boolean selectedHoverSoundDisabled;
   private static volatile Clip clickedClip;
@@ -35,6 +39,43 @@ public final class UiSoundEffects {
     }
 
     node.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> playSelectedHoverSound());
+  }
+
+  public static void startBackgroundMusic() {
+    if (backgroundSoundDisabled) {
+      return;
+    }
+
+    Clip clip = getOrCreateBackgroundClip();
+    if (clip == null) {
+      return;
+    }
+
+    synchronized (BACKGROUND_SOUND_LOCK) {
+      try {
+        if (!clip.isRunning()) {
+          clip.setFramePosition(0);
+          clip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+      } catch (RuntimeException ignored) {
+        backgroundSoundDisabled = true;
+      }
+    }
+  }
+
+  public static void stopBackgroundMusic() {
+    Clip clip = backgroundClip;
+    if (clip == null) {
+      return;
+    }
+
+    synchronized (BACKGROUND_SOUND_LOCK) {
+      try {
+        clip.stop();
+      } catch (RuntimeException ignored) {
+        backgroundSoundDisabled = true;
+      }
+    }
   }
 
   public static void installHoverSound(TabPane tabPane) {
@@ -120,6 +161,26 @@ public final class UiSoundEffects {
       }
 
       return selectedHoverClip;
+    }
+  }
+
+  private static Clip getOrCreateBackgroundClip() {
+    Clip clip = backgroundClip;
+    if (clip != null || backgroundSoundDisabled) {
+      return clip;
+    }
+
+    synchronized (BACKGROUND_SOUND_LOCK) {
+      if (backgroundClip != null || backgroundSoundDisabled) {
+        return backgroundClip;
+      }
+
+      backgroundClip = createClip(BACKGROUND_SOUND_PATH);
+      if (backgroundClip == null) {
+        backgroundSoundDisabled = true;
+      }
+
+      return backgroundClip;
     }
   }
 
