@@ -12,6 +12,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.io.TagsFactory;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.CreateGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.LoadGameScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.PortfolioScreen;
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.SettingsScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.StartScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.screen.TradeScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
@@ -101,11 +102,24 @@ public class Main extends Application {
 
             @Override
             public void onSettings() {
-                System.out.println("settings");
+                showSettingsScreen();
             }
         });
 
         root.setCenter(startScreen);
+    }
+
+    private void showSettingsScreen() {
+        SettingsScreen settingsScreen = new SettingsScreen(new SettingsScreen.SettingsHandler() {
+            @Override
+            public void onBack() {
+                showStartScreen();
+            }
+        });
+
+        root.setCenter(settingsScreen);
+        root.applyCss();
+        root.layout();
     }
 
     private void showCreateGameScreen() {

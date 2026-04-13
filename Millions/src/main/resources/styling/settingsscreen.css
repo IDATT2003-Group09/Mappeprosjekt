@@ -1,0 +1,42 @@
+@font-face {
+	font-family: "ThaleahFat";
+	src: url("/ThaleahFat.ttf");
+}
+
+.settings-screen {
+	-fx-background-image: url('/images/Millions_background.png');
+	-fx-background-size: cover;
+	-fx-background-position: center;
+	-fx-font-family: "ThaleahFat";
+}
+
+.settings-card {
+	-fx-background-color: #0a132d;
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 3px;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+}
+
+.settings-title {
+	-fx-text-fill: rgb(0, 229, 255);
+	-fx-font-size: 52px;
+}
+
+.settings-label {
+	-fx-text-fill: #9cb6db;
+	-fx-font-size: 26px;
+}
+
+.settings-screen .slider .track {
+	-fx-background-color: #12284a;
+	-fx-border-color: #1b4b81;
+}
+
+.settings-screen .slider .thumb {
+	-fx-background-color: #00e4ff;
+}
+
+.settings-screen .slider .axis {
+	-fx-tick-label-fill: #9cb6db;
+}
