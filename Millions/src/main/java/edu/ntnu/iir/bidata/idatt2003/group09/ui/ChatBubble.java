@@ -62,16 +62,22 @@ public class ChatBubble extends VBox {
 
 		content.getChildren().add(textLabel);
 
-		Button continueButton = new Button("Continue");
+		Button continueButton = new Button("Continue →");
+		String buttonFontFamily = textLabel.getFont() != null
+			? textLabel.getFont().getFamily()
+			: "System";
 		continueButton.setStyle("""
-			-fx-background-color: #111111;
-			-fx-text-fill: #f5f5f5;
-			-fx-font-size: 14;
-			-fx-padding: 6 12 6 12;
+			-fx-background-color: transparent;
+			-fx-text-fill: #111111;
+			-fx-font-family: '%s';
+			-fx-font-size: 18;
+			-fx-padding: 2 0 0 0;
+			-fx-border-color: transparent;
+			-fx-border-width: 0;
 			-fx-border-radius: 0;
 			-fx-background-radius: 0;
 			-fx-cursor: hand;
-		""");
+		""".formatted(buttonFontFamily));
 		continueButton.setOnAction(e -> onContinue.run());
 		continueButton.setMouseTransparent(false);
 
