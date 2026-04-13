@@ -22,7 +22,7 @@
 	-fx-text-fill: #dbe8ff;
 	-fx-font-size: 14px;
 	-fx-font-family: "ThaleahFat";
-	-fx-padding: 0 0 0 0;
+	-fx-padding: 1 1 1 1;
 	-fx-background-radius: 0;
 	-fx-border-radius: 0;
 	-fx-border-color: #1b4b81;
@@ -40,7 +40,7 @@
 	-fx-scale-y: 1.05;
 }
 
-.trade-sector-button:toggle, .trade-sector-active {
+.trade-screen .trade-sector-button.trade-sector-active {
 	-fx-background-color: #05d8ff;
 	-fx-text-fill: #12284a;
 	-fx-font-weight: bold;
