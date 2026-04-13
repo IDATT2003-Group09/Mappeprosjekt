@@ -195,6 +195,41 @@ public class Exchange implements Serializable {
     return sale;
   }
 
+  public void sell(String symbol, Player player, BigDecimal quantity) {
+    if (quantity == null || quantity.compareTo(BigDecimal.ZERO) <= 0) {
+      throw new IllegalArgumentException("Quantity must be > 0");
+    }
+
+    List<Share> shares = player.getPortfolio().getShares(symbol);
+    if (shares.isEmpty()) {
+      throw new IllegalStateException("The player does not own the share being sold");
+    }
+
+    BigDecimal totalOwned = shares.stream()
+        .map(Share::getQuantity)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+    if (totalOwned.compareTo(quantity) < 0) {
+      throw new IllegalStateException("Cannot sell more shares than owned");
+    }
+
+    BigDecimal remaining = quantity;
+    for (Share ownedShare : shares) {
+      if (remaining.compareTo(BigDecimal.ZERO) == 0) {
+        break;
+      }
+
+      BigDecimal sellQuantity = ownedShare.getQuantity().min(remaining);
+      Share shareToSell = new Share(
+          ownedShare.getStock(),
+          sellQuantity,
+          ownedShare.getPurchasePrice()
+      );
+      sell(shareToSell, player);
+      remaining = remaining.subtract(sellQuantity);
+    }
+  }
+
   /**
    * Advances the market by one week
    * Applies currently pending news to this week's prices

@@ -245,9 +245,11 @@ public class TradeScreen extends BorderPane {
         }
 
         try {
-            controller.sell(shares.getFirst());
+            BigDecimal quantity = parseQuantity();
+            controller.sell(selectedStock.getSymbol(), quantity);
 
-            statusLabel.setText("Sold " + selectedStock.getSymbol());
+            statusLabel.setText("Sold " + quantity.stripTrailingZeros().toPlainString()
+                + " of " + selectedStock.getSymbol());
             onTutorialSellSuccess();
 
             stockList.refresh();

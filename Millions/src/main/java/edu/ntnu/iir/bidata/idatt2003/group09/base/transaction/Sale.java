@@ -22,7 +22,23 @@ public class Sale extends Transaction {
 
         boolean removed = player.getPortfolio().removeShare(getShare());
         if (!removed) {
-            throw new IllegalStateException("The player does not own the share being sold");
+            Share ownedShare = player.getPortfolio().getShares().stream()
+                .filter(share -> share.getStock().getSymbol().equalsIgnoreCase(getShare().getStock().getSymbol()))
+                .filter(share -> share.getPurchasePrice().compareTo(getShare().getPurchasePrice()) == 0)
+                .filter(share -> share.getQuantity().compareTo(getShare().getQuantity()) >= 0)
+                .findFirst()
+                .orElse(null);
+
+            if (ownedShare == null) {
+                throw new IllegalStateException("The player does not own the share being sold");
+            }
+
+            BigDecimal remainingQuantity = ownedShare.getQuantity().subtract(getShare().getQuantity());
+            if (remainingQuantity.compareTo(BigDecimal.ZERO) == 0) {
+                player.getPortfolio().removeShare(ownedShare);
+            } else {
+                ownedShare.setQuantity(remainingQuantity);
+            }
         }
 
         BigDecimal totalValue = getCalculator().calculateTotal();

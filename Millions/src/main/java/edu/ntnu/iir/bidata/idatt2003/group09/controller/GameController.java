@@ -127,6 +127,10 @@ public class GameController {
         exchange.sell(share, player);
     }
 
+    public void sell(String symbol, BigDecimal quantity) {
+        exchange.sell(symbol, player, quantity);
+    }
+
     public String getLatestNews() {
         MarketNews news = exchange.getPendingNews();
         return news != null ? news.getHeadline() : "No news";
