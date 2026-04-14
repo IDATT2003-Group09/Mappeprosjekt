@@ -21,7 +21,7 @@
 .game-tabs > .tab-header-area > .headers-region > .tab.spacer-tab {
 	-fx-background-color: transparent;
 	-fx-border-color: transparent;
-	-fx-padding: 4 300 4 4;
+	-fx-padding: 4 290 4 4;
 	-fx-max-width: 100;
 	-fx-min-width: 100;
 	-fx-opacity: 0;
