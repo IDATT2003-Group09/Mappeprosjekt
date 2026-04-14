@@ -128,14 +128,14 @@ public class CreateGameScreen extends StackPane {
 					// Name is valid - show experience options
 					Button tutorialButton = createOptionButton("Tutorial", fontFamily, () ->
 							handler.onCreateGame(playerName, "Tutorial", "sp500"));
-					Button noviceButton = createOptionButton("Novice", fontFamily, () ->
-							showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Novice"));
-					Button investorButton = createOptionButton("Investor", fontFamily, () ->
-							showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Investor"));
-					Button speculatorButton = createOptionButton("Speculator", fontFamily, () ->
-							showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Speculator"));
+					Button easyButton = createOptionButton("Easy", fontFamily, () ->
+							showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Easy"));
+					Button mediumButton = createOptionButton("Medium", fontFamily, () ->
+							showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Medium"));
+					Button hardButton = createOptionButton("Hard", fontFamily, () ->
+							showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Hard"));
 					
-					contentBox.getChildren().setAll(tutorialButton, noviceButton, investorButton, speculatorButton);
+					contentBox.getChildren().setAll(tutorialButton, easyButton, mediumButton, hardButton);
 					boss.updateTalkingBubble("Are you any good at this?");
 					
 					// Disable name editing after confirmation
