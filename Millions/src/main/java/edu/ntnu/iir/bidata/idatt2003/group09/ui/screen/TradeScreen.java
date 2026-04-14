@@ -178,23 +178,12 @@ public class TradeScreen extends BorderPane {
         Button nextWeekButton = new Button("Next Week");
         nextWeekButton.getStyleClass().addAll("trade-button", "trade-next-button");
 
-        Button saveButton = new Button("Save and Quit");
-        saveButton.getStyleClass().addAll("trade-button", "trade-save-button");
-        saveButton.setOnAction(e -> {
-            controller.saveGame();
-            if (onSaveAndQuit != null) {
-                onSaveAndQuit.run();
-            }
-        });
-
         UiSoundEffects.installHoverSound(buyButton);
         UiSoundEffects.installHoverSound(sellButton);
         UiSoundEffects.installHoverSound(nextWeekButton);
-        UiSoundEffects.installHoverSound(saveButton);
         UiSoundEffects.installClickSound(buyButton);
         UiSoundEffects.installClickSound(sellButton);
         UiSoundEffects.installClickSound(nextWeekButton);
-        UiSoundEffects.installClickSound(saveButton);
 
         buyButton.setOnAction(e -> buySelectedStock());
         sellButton.setOnAction(e -> sellSelectedStock());
@@ -254,7 +243,7 @@ public class TradeScreen extends BorderPane {
         infoBox.getStyleClass().add("trade-info");
         infoBox.setPadding(new Insets(0, 0, 10, 0));
 
-        HBox controls = new HBox(10, nextWeekButton, saveButton);
+        HBox controls = new HBox(10, nextWeekButton);
         controls.getStyleClass().add("trade-controls");
         controls.setPadding(new Insets(10, 0, 0, 0));
 
