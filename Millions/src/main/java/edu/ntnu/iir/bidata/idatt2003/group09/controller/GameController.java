@@ -40,18 +40,15 @@ public class GameController {
     //game flow
     public void nextWeek() {
         player.setLastWeekNetWorth(player.getNetWorth());
-
         progress.nextWeek();
 
-        while (progress.meetsRequirement(player.getNetWorth())) {
-            progress.advanceCheckpoint();
-        }
+        boolean deadlineReached = progress.isQuarterComplete();
+        boolean requirementMet = progress.meetsRequirement(player.getNetWorth());
 
-        if (progress.isQuarterComplete()) {
-
-            boolean success = progress.meetsRequirement(player.getNetWorth());
-
-            if (!success) {
+        if (deadlineReached) {
+            if (requirementMet) {
+                progress.advanceCheckpoint();
+            } else {
                 if (onGameOver != null) {
                     onGameOver.run();
                 }
@@ -125,6 +122,10 @@ public class GameController {
 
     public void sell(Share share) {
         exchange.sell(share, player);
+    }
+
+    public void sell(String symbol, BigDecimal quantity) {
+        exchange.sell(symbol, player, quantity);
     }
 
     public String getLatestNews() {

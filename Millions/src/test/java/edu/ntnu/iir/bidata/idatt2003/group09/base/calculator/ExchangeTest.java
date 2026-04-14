@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.GlobalEvent;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
@@ -157,5 +159,30 @@ public class ExchangeTest {
 
       assertDoesNotThrow(extremeExchange::advance);
       assertTrue(riskyStock.getSalesPrice().compareTo(new BigDecimal("0.01")) >= 0);
+    }
+
+    @Test
+    void sellByQuantity_shouldSellRequestedAmountAcrossLots() {
+      Player player = new Player("Alice", new BigDecimal("10000.00"));
+
+      exchange.buy("AAPL", player, new BigDecimal("2"));
+      exchange.buy("AAPL", player, new BigDecimal("3"));
+
+      exchange.sell("AAPL", player, new BigDecimal("4"));
+
+      BigDecimal remainingQuantity = player.getPortfolio().getShares("AAPL").stream()
+          .map(Share::getQuantity)
+          .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+      assertEquals(0, remainingQuantity.compareTo(new BigDecimal("1")));
+    }
+
+    @Test
+    void sellByQuantity_shouldThrowWhenTryingToSellMoreThanOwned() {
+      Player player = new Player("Alice", new BigDecimal("10000.00"));
+      exchange.buy("AAPL", player, new BigDecimal("1"));
+
+      assertThrows(IllegalStateException.class,
+          () -> exchange.sell("AAPL", player, new BigDecimal("2")));
     }
 }

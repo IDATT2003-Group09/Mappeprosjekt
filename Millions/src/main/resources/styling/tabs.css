@@ -39,6 +39,16 @@
 .game-tabs > .tab-header-area > .headers-region > .tab:selected {
 	-fx-background-color: #0f1f42;
 	-fx-border-color: #00e4ff;
+  	-fx-border-width: 2;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.game-tabs > .tab-header-area > .headers-region > .tab:selected > .tab-container,
+.game-tabs > .tab-header-area > .headers-region > .tab:selected > .tab-container > .tab-label {
+    -fx-border-width: 0;
+    -fx-border-color: transparent;
+    -fx-effect: none;
 }
 
 .game-tabs > .tab-header-area > .headers-region > .tab > .tab-container > .tab-label {
