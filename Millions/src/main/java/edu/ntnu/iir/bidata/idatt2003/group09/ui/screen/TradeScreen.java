@@ -209,13 +209,17 @@ public class TradeScreen extends BorderPane {
         searchField.getStyleClass().add("trade-search-field");
         setupSearchFilter();
 
-        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
-        controls.getStyleClass().add("trade-controls");
-        controls.setPadding(new Insets(0, 0, 10, 0));
+        HBox buysell = new HBox(10, quantityLabel, quantityField, buyButton, sellButton);
+        buysell.getStyleClass().add("trade-buysell");
+        buysell.setPadding(new Insets(10, 0, 0, 0));
 
-        HBox infoBox = new HBox(20,deadlineLabel, weekLabel, cashLabel, holdingsLabel, levelUpLabel);
+        HBox infoBox = new HBox(20, deadlineLabel, weekLabel, cashLabel, holdingsLabel, levelUpLabel);
         infoBox.getStyleClass().add("trade-info");
         infoBox.setPadding(new Insets(0, 0, 10, 0));
+
+        HBox controls = new HBox(10, nextWeekButton, saveButton);
+        controls.getStyleClass().add("trade-controls");
+        controls.setPadding(new Insets(10, 0, 0, 0));
 
         VBox headerBox = new VBox(
             8,
@@ -226,7 +230,6 @@ public class TradeScreen extends BorderPane {
             searchField,
             sectorButtonContainer
         );
-
         headerBox.getStyleClass().add("trade-header");
         headerBox.setPadding(new Insets(10));
         setTop(headerBox);
@@ -254,7 +257,11 @@ public class TradeScreen extends BorderPane {
         graph.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         contentGrid.add(stockList, 0, 0);
-        contentGrid.add(graph, 1, 0);
+        // Add graph and controls in a VBox in the right cell
+        VBox graphAndControls = new VBox(10, graph, buysell);
+        graphAndControls.setFillWidth(true);
+        graphAndControls.setPadding(new Insets(0));
+        contentGrid.add(graphAndControls, 1, 0);
 
         setCenter(contentGrid);
     }
