@@ -12,6 +12,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -74,7 +75,10 @@ public class PortfolioScreen extends BorderPane {
         changeLabel.getStyleClass().add("portfolio-change");
         cashLabel.getStyleClass().add("portfolio-cash");
 
-        VBox topBox = new VBox(5, totalValueLabel, changeLabel, cashLabel);
+        HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel);
+        topBox.getStyleClass().add("portfolio-top-box");
+        topBox.setPadding(new Insets(10));
+        
         topBox.getStyleClass().add("portfolio-top-box");
         topBox.setPadding(new Insets(10));
 
