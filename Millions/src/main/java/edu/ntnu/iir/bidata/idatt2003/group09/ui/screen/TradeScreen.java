@@ -7,6 +7,9 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockListView;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.TutorialOverlay;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.PurchaseCalculator;
+import javafx.collections.FXCollections;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -209,7 +212,41 @@ public class TradeScreen extends BorderPane {
         searchField.getStyleClass().add("trade-search-field");
         setupSearchFilter();
 
-        HBox buysell = new HBox(10, quantityLabel, quantityField, buyButton, sellButton);
+
+        Button maxButton = new Button("Max");
+        maxButton.getStyleClass().addAll("trade-button", "trade-max-button");
+        maxButton.setOnAction(e -> {
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
+            if (selectedStock != null) {
+                BigDecimal price = selectedStock.getSalesPrice();
+                BigDecimal cash = controller.getMoney();
+                if (price.compareTo(BigDecimal.ZERO) > 0 && cash.compareTo(BigDecimal.ZERO) > 0) {
+                    BigDecimal low = BigDecimal.ZERO;
+                    BigDecimal high = cash.divide(price, 0, RoundingMode.FLOOR).add(BigDecimal.ONE);
+                    BigDecimal best = BigDecimal.ZERO;
+                    while (low.compareTo(high) < 0) {
+                        BigDecimal mid = low.add(high).divide(new BigDecimal("2"), 0, RoundingMode.FLOOR);
+                        if (mid.compareTo(BigDecimal.ZERO) <= 0) {
+                            low = mid.add(BigDecimal.ONE);
+                            continue;
+                        }
+                        Share tempShare = new Share(selectedStock, mid, price);
+                        PurchaseCalculator calc =
+                                new PurchaseCalculator(tempShare);
+                        BigDecimal totalCost = calc.calculateTotal();
+                        if (totalCost.compareTo(cash) <= 0) {
+                            best = mid;
+                            low = mid.add(BigDecimal.ONE);
+                        } else {
+                            high = mid;
+                        }
+                    }
+                    quantityField.setText(best.toPlainString());
+                }
+            }
+        });
+
+        HBox buysell = new HBox(10, quantityLabel, quantityField, maxButton, buyButton, sellButton);
         buysell.getStyleClass().add("trade-buysell");
         buysell.setPadding(new Insets(10, 0, 0, 0));
 
