@@ -72,7 +72,7 @@ public class StockGraph extends BorderPane {
         lineChart.getData().clear();
         lineChart.getData().add(series);
 
-        lineChart.setTitle(stock.getCompany() + " (" + stock.getSymbol() + ")");
+        lineChart.setTitle("");
 
         NumberAxis xAxis = (NumberAxis) lineChart.getXAxis();
         xAxis.setAutoRanging(false);
