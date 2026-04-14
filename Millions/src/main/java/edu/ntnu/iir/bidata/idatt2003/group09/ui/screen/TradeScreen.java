@@ -12,7 +12,10 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
-
+import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -26,6 +29,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
+import javafx.collections.ObservableList;
 
 public class TradeScreen extends BorderPane {
 
@@ -56,6 +60,14 @@ public class TradeScreen extends BorderPane {
     private final Label deadlineLabel;
     private int lastLevel = 1;
 
+    private TextField searchField;
+    private ObservableList<Stock> allStocks;
+    private ObservableList<Stock> filteredStocks;
+
+    private ToggleGroup sectorToggleGroup;
+    private final HBox sectorButtonContainer;
+    private Set<String> selectedSectors;
+
     public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
         this(controller, stocks, onSaveAndQuit, false, null);
     }
@@ -81,7 +93,15 @@ public class TradeScreen extends BorderPane {
         getStyleClass().add("trade-screen");
 
         stockList = new StockListView().createStockList(controller.getPlayer());
-        stockList.setItems(FXCollections.observableArrayList(stocks));
+
+        this.allStocks = FXCollections.observableArrayList(stocks);
+        sectorButtonContainer = new HBox(10);
+        sectorButtonContainer.getStyleClass().add("trade-sector-container");
+        createSectorFilters(stocks);
+
+        this.filteredStocks = FXCollections.observableArrayList(allStocks);
+        stockList.setItems(filteredStocks);
+
         graph = new StockGraph(stocks);
         graph.getStyleClass().add("trade-graph");
         stockList.getSelectionModel().selectedItemProperty().addListener(
@@ -184,6 +204,11 @@ public class TradeScreen extends BorderPane {
             onTutorialNextWeek();
         });
 
+        searchField = new TextField();
+        searchField.setPromptText("Search stocks by symbol or name...");
+        searchField.getStyleClass().add("trade-search-field");
+        setupSearchFilter();
+
         HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
         controls.getStyleClass().add("trade-controls");
         controls.setPadding(new Insets(0, 0, 10, 0));
@@ -197,7 +222,9 @@ public class TradeScreen extends BorderPane {
             progressBarStack,
             infoBox,
             controls,
-            statusLabel
+            statusLabel,
+            searchField,
+            sectorButtonContainer
         );
 
         headerBox.getStyleClass().add("trade-header");
@@ -382,4 +409,140 @@ public class TradeScreen extends BorderPane {
         }
         tutorialOverlay.onSellSuccess();
     }
+
+    private void setupSearchFilter() {
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            filterStockList(newValue);
+        });
+    }
+
+
+    private void filterStockList(String searchText) {
+        // First filter by sectors if any are selected
+        List<Stock> filteredBySector = allStocks.stream()
+            .filter(stock -> {
+                if (selectedSectors == null || selectedSectors.isEmpty()) {
+                    return true;
+                }
+                String stockSector = stock.getSector();
+                return stockSector != null && selectedSectors.contains(stockSector);
+            })
+            .collect(Collectors.toList());
+        
+        // Then filter by search text
+        if (searchText == null || searchText.trim().isEmpty()) {
+            filteredStocks.setAll(filteredBySector);
+            return;
+        }
+
+        String lowerCaseSearch = searchText.toLowerCase().trim();
+        List<Stock> filtered = filteredBySector.stream()
+            .filter(stock -> 
+                stock.getSymbol().toLowerCase().contains(lowerCaseSearch) ||
+                stock.getCompany().toLowerCase().contains(lowerCaseSearch)
+            )
+            .collect(Collectors.toList());
+        
+        filteredStocks.setAll(filtered);
+    }
+
+    private Set<String> getAllSectors(List<Stock> stocks) {
+        return stocks.stream()
+            .map(Stock::getSector)
+            .filter(sector -> sector != null && !sector.isEmpty())
+            .collect(Collectors.toSet());
+    }
+
+    private void filterBySectors() {
+        String searchText = searchField.getText();
+
+        // First filter by sectors
+        List<Stock> filteredBySector = allStocks.stream()
+            .filter(stock -> {
+                if (selectedSectors.isEmpty()) {
+                    return true; // No sector filter active
+                }
+                String stockSector = stock.getSector();
+                return stockSector != null && selectedSectors.contains(stockSector);
+            })
+            .collect(Collectors.toList());
+        
+        // Then filter by search text
+        if (searchText != null && !searchText.trim().isEmpty()) {
+            String lowerCaseSearch = searchText.toLowerCase().trim();
+            filteredBySector = filteredBySector.stream()
+                .filter(stock -> 
+                    stock.getSymbol().toLowerCase().contains(lowerCaseSearch) ||
+                    stock.getCompany().toLowerCase().contains(lowerCaseSearch)
+                )
+                .collect(Collectors.toList());
+        }
+
+        filteredStocks.setAll(filteredBySector);
+    }
+
+    private void createSectorFilters(List<Stock> stocks) {
+        Set<String> sectors = getAllSectors(stocks);
+        selectedSectors = new HashSet<>();
+        Set<String> allSectorNames = new HashSet<>(sectors);
+
+        // Add "All" button to reverse all sector filters
+        Button allButton = new Button("Switch");
+        allButton.getStyleClass().addAll("trade-sector-button", "trade-sector-all");
+        allButton.setOnAction(e -> {
+            if (selectedSectors.size() < allSectorNames.size()) {
+                // Select all
+                selectedSectors.clear();
+                selectedSectors.addAll(allSectorNames);
+            } else {
+                // Deselect all
+                selectedSectors.clear();
+            }
+            // Update all sector button styles visually
+            for (javafx.scene.Node node : sectorButtonContainer.getChildren()) {
+                if (node instanceof Button && node != allButton) {
+                    Button btn = (Button) node;
+                    String sector = btn.getText();
+                    if (selectedSectors.contains(sector)) {
+                        if (!btn.getStyleClass().contains("trade-sector-active")) {
+                            btn.getStyleClass().add("trade-sector-active");
+                        }
+                    } else {
+                        btn.getStyleClass().remove("trade-sector-active");
+                    }
+                }
+            }
+            updateSectorButtonStyles(allButton);
+            filterBySectors();
+        });
+        sectorButtonContainer.getChildren().add(allButton);
+
+        // Create a button for each sector
+        for (String sector : sectors) {
+            Button sectorButton = new Button(sector);
+            sectorButton.getStyleClass().add("trade-sector-button");
+            sectorButton.setOnAction(e -> {
+                if (selectedSectors.contains(sector)) {
+                    selectedSectors.remove(sector);
+                    sectorButton.getStyleClass().remove("trade-sector-active");
+                } else {
+                    selectedSectors.add(sector);
+                    sectorButton.getStyleClass().add("trade-sector-active");
+                }
+                updateSectorButtonStyles(allButton);
+                filterBySectors();
+            });
+            sectorButtonContainer.getChildren().add(sectorButton);
+        }
+    }
+
+    private void updateSectorButtonStyles(Button allButton) {
+        // Update All button style
+        if (selectedSectors.isEmpty()) {
+            allButton.getStyleClass().add("trade-sector-active");
+        } else {
+            allButton.getStyleClass().remove("trade-sector-active");
+        }
+    }
+
 }
