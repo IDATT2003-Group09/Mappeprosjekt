@@ -19,9 +19,7 @@ public class StockGraph extends BorderPane {
 
 		// Chart setup
 		NumberAxis xAxis = new NumberAxis();
-		xAxis.setLabel("Week");
 		NumberAxis yAxis = new NumberAxis();
-		yAxis.setLabel("Price");
 		lineChart = new LineChart<>(xAxis, yAxis);
 		lineChart.setAnimated(false);
 		lineChart.setLegendVisible(false);
