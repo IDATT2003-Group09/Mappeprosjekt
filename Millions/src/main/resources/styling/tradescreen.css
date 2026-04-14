@@ -311,7 +311,7 @@
 
 .trade-screen .axis {
 	-fx-tick-label-fill: #8ea9d2;
-	-fx-font-family: "ThaleahFat";
+	-fx-tick-label-font-family: "ThaleahFat";
 }
 
 .trade-screen .axis-tick-mark,

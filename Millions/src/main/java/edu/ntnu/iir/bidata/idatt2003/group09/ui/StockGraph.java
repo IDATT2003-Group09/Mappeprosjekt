@@ -36,8 +36,14 @@ public class StockGraph extends BorderPane {
                 }
             }
         });
-        yAxis.setStyle("-fx-tick-label-font-family: 'ThaleahFat';");
+        getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
+
+        xAxis.setTickLabelsVisible(false);
+        xAxis.setTickMarkVisible(false);
+
         lineChart = new LineChart<>(xAxis, yAxis);
+        lineChart.setHorizontalGridLinesVisible(false);
+        lineChart.setVerticalGridLinesVisible(false);
         lineChart.setAnimated(false);
         lineChart.setLegendVisible(false);
 
