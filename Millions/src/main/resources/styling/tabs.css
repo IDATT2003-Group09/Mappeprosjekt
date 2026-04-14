@@ -1,3 +1,33 @@
+.game-tabs > .tab-header-area > .headers-region > .tab:last-child {
+	-fx-background-color: #c80020;
+	-fx-border-color: #ff3559;
+	-fx-border-width: 2;
+}
+.game-tabs > .tab-header-area > .headers-region > .tab:last-child:hover {
+	-fx-background-color: #df0024;
+}
+.game-tabs > .tab-header-area > .headers-region > .tab:last-child > .tab-container > .tab-label {
+	-fx-text-fill: #ffe9ed;
+	-fx-font-size: 21px;
+}
+.game-tabs > .tab-header-area > .headers-region > .tab:last-child:selected {
+	-fx-background-color: #ff3559;
+	-fx-border-color: #c80020;
+}
+.game-tabs > .tab-header-area > .headers-region > .tab:last-child:selected > .tab-container > .tab-label {
+	-fx-text-fill: #fff;
+	-fx-font-size: 22px;
+}
+.game-tabs > .tab-header-area > .headers-region > .tab.spacer-tab {
+	-fx-background-color: transparent;
+	-fx-border-color: transparent;
+	-fx-padding: 4 300 4 4;
+	-fx-max-width: 100;
+	-fx-min-width: 100;
+	-fx-opacity: 0;
+	-fx-focus-color: transparent;
+	-fx-faint-focus-color: transparent;
+}
 @font-face {
 	font-family: "ThaleahFat";
 	src: url("/ThaleahFat.ttf");

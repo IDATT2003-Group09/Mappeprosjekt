@@ -322,9 +322,14 @@ public class Main extends Application {
         settingsTab.setClosable(false);
 
 
+        Tab spacerTab = new Tab("");
+        spacerTab.setDisable(true);
+        spacerTab.setClosable(false);
+        spacerTab.getStyleClass().add("spacer-tab");
+
         Tab saveQuitTab = new Tab("Save & Quit");
         saveQuitTab.setClosable(false);
-        tabPane.getTabs().addAll(tradeTab, portfolioTab, newspaperTab, historyTab, settingsTab, saveQuitTab);
+        tabPane.getTabs().addAll(tradeTab, portfolioTab, newspaperTab, historyTab, settingsTab, spacerTab, saveQuitTab);
 
         tabPane.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldTab, newTab) -> {
