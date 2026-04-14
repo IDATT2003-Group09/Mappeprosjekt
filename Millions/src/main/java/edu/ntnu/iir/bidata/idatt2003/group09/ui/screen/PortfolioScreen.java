@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.base.PlayerStatus;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.PortfolioRow;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
@@ -28,6 +29,7 @@ public class PortfolioScreen extends BorderPane {
     private final Label totalValueLabel;
     private final Label changeLabel;
     private final Label cashLabel;
+    private final Label statusLabel;
 
 
         private final NumberFormat currencyFormat =
@@ -47,7 +49,7 @@ public class PortfolioScreen extends BorderPane {
         this.totalValueLabel = new Label();
         this.changeLabel = new Label();
         this.cashLabel = new Label();
-
+        this.statusLabel = new Label();
         javafx.scene.chart.NumberAxis xAxis = new javafx.scene.chart.NumberAxis();
         xAxis.setLabel("");
         xAxis.setTickLabelsVisible(false); 
@@ -74,8 +76,9 @@ public class PortfolioScreen extends BorderPane {
         totalValueLabel.getStyleClass().add("portfolio-total-value");
         changeLabel.getStyleClass().add("portfolio-change");
         cashLabel.getStyleClass().add("portfolio-cash");
+        statusLabel.getStyleClass().add("portfolio-status");
 
-        HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel);
+        HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel, statusLabel);
         topBox.getStyleClass().add("portfolio-top-box");
         topBox.setPadding(new Insets(10));
         
