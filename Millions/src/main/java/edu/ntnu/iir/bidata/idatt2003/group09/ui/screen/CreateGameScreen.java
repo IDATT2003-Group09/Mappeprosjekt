@@ -115,12 +115,12 @@ public class CreateGameScreen extends StackPane {
 						return;
 					}
 					if (playerName.length() > 20) {
-						boss.updateTalkingBubble("Your name is too long! Max 20 characters.");
+						boss.updateTalkingBubble("I am not remembering all that! Get a shorter name.");
 						fileNameField.requestFocus();
 						return;
 					}
 					if (SaveManager.doesSaveFileExist(playerName)) {
-						boss.updateTalkingBubble("A save with that name already exists! Please choose another name.");
+						boss.updateTalkingBubble("I have already met someone with that name! Choose another one.");
 						fileNameField.requestFocus();
 						return;
 					}
