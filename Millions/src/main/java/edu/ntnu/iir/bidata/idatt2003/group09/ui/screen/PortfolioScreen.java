@@ -32,7 +32,6 @@ public class PortfolioScreen extends BorderPane {
         private final NumberFormat currencyFormat =
             NumberFormat.getCurrencyInstance(Locale.US);
 
-        // Graph for portfolio value over time
         private final javafx.scene.chart.LineChart<Number, Number> portfolioChart;
 
 
@@ -48,20 +47,20 @@ public class PortfolioScreen extends BorderPane {
         this.changeLabel = new Label();
         this.cashLabel = new Label();
 
-        // Setup portfolio value chart
         javafx.scene.chart.NumberAxis xAxis = new javafx.scene.chart.NumberAxis();
-        xAxis.setLabel(""); // Hide x-axis label
-        xAxis.setTickLabelsVisible(false); // Hide week numbers
+        xAxis.setLabel("");
+        xAxis.setTickLabelsVisible(false); 
         xAxis.setTickMarkVisible(false);
         javafx.scene.chart.NumberAxis yAxis = new javafx.scene.chart.NumberAxis();
         yAxis.setLabel("Portfolio Value");
+        yAxis.setTickLabelsVisible(false); 
+        yAxis.setTickMarkVisible(false);
         this.portfolioChart = new javafx.scene.chart.LineChart<>(xAxis, yAxis);
         portfolioChart.setAnimated(true);
         portfolioChart.setLegendVisible(false);
         portfolioChart.setMinHeight(250);
         portfolioChart.setMaxHeight(250);
         portfolioChart.getStyleClass().add("trade-graph");
-        // Remove grid lines
         portfolioChart.setHorizontalGridLinesVisible(false);
         portfolioChart.setVerticalGridLinesVisible(false);
 
@@ -173,7 +172,6 @@ public class PortfolioScreen extends BorderPane {
                 + " (" + formatPercent(percentChange) + ")");
         cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
 
-        // Update portfolio value chart
         List<java.math.BigDecimal> values = controller.getPortfolio().getValues();
         javafx.scene.chart.XYChart.Series<Number, Number> series = new javafx.scene.chart.XYChart.Series<>();
         for (int i = 0; i < values.size(); i++) {
@@ -181,7 +179,7 @@ public class PortfolioScreen extends BorderPane {
         }
         portfolioChart.getData().clear();
         portfolioChart.getData().add(series);
-        portfolioChart.setTitle(""); // Remove the header/title
+        portfolioChart.setTitle("");
     }
 
 
