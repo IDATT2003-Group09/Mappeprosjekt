@@ -140,7 +140,6 @@ public class TradeScreen extends BorderPane {
         requirementOverlayLabel.setStyle("-fx-text-fill: white;");
         netWorthOverlayLabel.setStyle("-fx-text-fill: white;");
         progressBar = new ProgressBar(0);
-        progressBar.setMaxWidth(Double.MAX_VALUE);
         progressBar.getStyleClass().add("trade-progress-bar");
         progressBarStack = new StackPane();
         HBox progressOverlay = new HBox();
@@ -247,9 +246,18 @@ public class TradeScreen extends BorderPane {
         controls.getStyleClass().add("trade-controls");
         controls.setPadding(new Insets(10, 0, 0, 0));
 
+        // Make progress bar shorter and place next week button next to it
+        progressBar.setPrefHeight(18);
+        progressBar.setPrefWidth(900);
+        progressBar.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(progressBarStack, Priority.ALWAYS);
+        HBox progressAndNextWeek = new HBox(12, progressBarStack, nextWeekButton);
+        progressAndNextWeek.setAlignment(Pos.CENTER_LEFT);
+        progressAndNextWeek.setPadding(new Insets(0, 0, 0, 0));
+
         VBox headerBox = new VBox(
             8,
-            progressBarStack,
+            progressAndNextWeek,
             infoBox,
             controls,
             statusLabel,
