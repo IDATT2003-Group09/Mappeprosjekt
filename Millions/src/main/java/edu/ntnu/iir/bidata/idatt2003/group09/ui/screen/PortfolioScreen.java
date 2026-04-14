@@ -56,11 +56,14 @@ public class PortfolioScreen extends BorderPane {
         javafx.scene.chart.NumberAxis yAxis = new javafx.scene.chart.NumberAxis();
         yAxis.setLabel("Portfolio Value");
         this.portfolioChart = new javafx.scene.chart.LineChart<>(xAxis, yAxis);
-        portfolioChart.setAnimated(false);
+        portfolioChart.setAnimated(true);
         portfolioChart.setLegendVisible(false);
-        portfolioChart.setMinHeight(200);
+        portfolioChart.setMinHeight(250);
         portfolioChart.setMaxHeight(250);
         portfolioChart.getStyleClass().add("trade-graph");
+        // Remove grid lines
+        portfolioChart.setHorizontalGridLinesVisible(false);
+        portfolioChart.setVerticalGridLinesVisible(false);
 
         buildTable();
         buildLayout();
@@ -178,7 +181,7 @@ public class PortfolioScreen extends BorderPane {
         }
         portfolioChart.getData().clear();
         portfolioChart.getData().add(series);
-        portfolioChart.setTitle("Portfolio Value Over Time");
+        portfolioChart.setTitle(""); // Remove the header/title
     }
 
 
