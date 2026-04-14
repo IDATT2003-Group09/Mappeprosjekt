@@ -76,7 +76,7 @@ public class PortfolioScreen extends BorderPane {
         totalValueLabel.getStyleClass().add("portfolio-total-value");
         changeLabel.getStyleClass().add("portfolio-change");
         cashLabel.getStyleClass().add("portfolio-cash");
-        statusLabel.getStyleClass().add("portfolio-status");
+        statusLabel.getStyleClass().addAll("portfolio-status", "portfolio-cash");
 
         HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel, statusLabel);
         topBox.getStyleClass().add("portfolio-top-box");
@@ -175,7 +175,7 @@ public class PortfolioScreen extends BorderPane {
         }
 
         totalValueLabel.setText("Total: " + format(current));
-        changeLabel.setText("Weekly portfolio change: " + formatWithSign(change)
+        changeLabel.setText(formatWithSign(change)
                 + " (" + formatPercent(percentChange) + ")");
         cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
 
