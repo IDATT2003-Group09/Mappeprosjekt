@@ -47,7 +47,7 @@ public class LoadGameScreen extends VBox {
       saveSlotsContainer.getChildren().add(emptyLabel);
     } else {
       for (String fileName : saveFiles) {
-        Button saveFileButton = new Button(fileName);
+        Button saveFileButton = new Button(cleanName(fileName));
         saveFileButton.getStyleClass().add("start-button");
         saveFileButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
         saveFileButton.setPrefWidth(450);
@@ -86,6 +86,25 @@ public class LoadGameScreen extends VBox {
     }
 
     return Font.getDefault().getFamily();
+  }
+
+  public static String cleanName(String filename) {
+      if (filename == null || filename.isEmpty()) {
+          return "";
+      }
+
+      // Find the last dot for extension
+      int lastDotIndex = filename.lastIndexOf('.');
+      String nameWithoutExtension = (lastDotIndex != -1) ? 
+          filename.substring(0, lastDotIndex) : filename;
+
+      // Find the first dash after "savegame"
+      int dashIndex = nameWithoutExtension.indexOf('-');
+      if (dashIndex != -1) {
+          return nameWithoutExtension.substring(dashIndex + 1);
+      }
+
+      return "";
   }
 }
 

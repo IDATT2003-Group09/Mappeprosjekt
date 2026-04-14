@@ -79,4 +79,9 @@ public class SaveManager {
 
         return normalized;
     }
+
+    public static boolean doesSaveFileExist(String fileName) {
+        String targetFile = normalizeSaveFileName(fileName);
+        return new File(targetFile).exists();
+    } 
 }
