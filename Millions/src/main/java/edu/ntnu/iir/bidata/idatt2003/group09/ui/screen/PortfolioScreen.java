@@ -2,7 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.PortfolioRow;
-
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -28,8 +28,13 @@ public class PortfolioScreen extends BorderPane {
     private final Label changeLabel;
     private final Label cashLabel;
 
-    private final NumberFormat currencyFormat =
+
+        private final NumberFormat currencyFormat =
             NumberFormat.getCurrencyInstance(Locale.US);
+
+        // Graph for portfolio value over time
+        private final javafx.scene.chart.LineChart<Number, Number> portfolioChart;
+
 
     public PortfolioScreen(GameController controller) {
         this.controller = controller;
@@ -41,6 +46,17 @@ public class PortfolioScreen extends BorderPane {
         this.totalValueLabel = new Label();
         this.changeLabel = new Label();
         this.cashLabel = new Label();
+
+        // Setup portfolio value chart
+        javafx.scene.chart.NumberAxis xAxis = new javafx.scene.chart.NumberAxis();
+        xAxis.setLabel("Week");
+        javafx.scene.chart.NumberAxis yAxis = new javafx.scene.chart.NumberAxis();
+        yAxis.setLabel("Portfolio Value");
+        this.portfolioChart = new javafx.scene.chart.LineChart<>(xAxis, yAxis);
+        portfolioChart.setAnimated(false);
+        portfolioChart.setLegendVisible(false);
+        portfolioChart.setMinHeight(200);
+        portfolioChart.setMaxHeight(250);
 
         buildTable();
         buildLayout();
@@ -58,7 +74,10 @@ public class PortfolioScreen extends BorderPane {
 
         table.getStyleClass().add("portfolio-table");
 
-        setCenter(table);
+        VBox centerBox = new VBox(10, portfolioChart, table);
+        centerBox.setPadding(new Insets(0, 0, 0, 0));
+
+        setCenter(centerBox);
         setPadding(new Insets(10));
         setTop(topBox);
     }
@@ -111,7 +130,6 @@ public class PortfolioScreen extends BorderPane {
     }
 
     public void refresh() {
-
         List<PortfolioRow> rows = controller.getPortfolio().getShares().stream()
                 .map(PortfolioRow::new)
                 .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
@@ -145,8 +163,18 @@ public class PortfolioScreen extends BorderPane {
 
         totalValueLabel.setText("Total: " + format(current));
         changeLabel.setText("Weekly portfolio change: " + formatWithSign(change)
-        + " (" + formatPercent(percentChange) + ")");
+                + " (" + formatPercent(percentChange) + ")");
         cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
+
+        // Update portfolio value chart
+        List<java.math.BigDecimal> values = controller.getPortfolio().getValues();
+        javafx.scene.chart.XYChart.Series<Number, Number> series = new javafx.scene.chart.XYChart.Series<>();
+        for (int i = 0; i < values.size(); i++) {
+            series.getData().add(new javafx.scene.chart.XYChart.Data<>(i + 1, values.get(i)));
+        }
+        portfolioChart.getData().clear();
+        portfolioChart.getData().add(series);
+        portfolioChart.setTitle("Portfolio Value Over Time");
     }
 
 
@@ -197,5 +225,11 @@ public class PortfolioScreen extends BorderPane {
                 }
             }
         };
+    }
+
+    public StockGraph createStockGraph() {
+        return new StockGraph(controller.getPortfolio().getShares().stream()
+                .map(share -> share.getStock())
+                .toList());
     }
 }

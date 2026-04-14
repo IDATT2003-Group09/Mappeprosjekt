@@ -13,6 +13,7 @@ public class Portfolio implements Serializable {
 
   private final List<Share> shares;
   private final PortfolioValueCalculator valueCalculator;
+  private List<BigDecimal> values;
 
   /**
    * Initializes the shares list with the default sale-based value calculator
@@ -29,6 +30,7 @@ public class Portfolio implements Serializable {
   public Portfolio(PortfolioValueCalculator valueCalculator) {
     shares = new ArrayList<>();
     this.valueCalculator = valueCalculator;
+    this.values = new ArrayList<>();
   }
 
   /**
@@ -77,5 +79,24 @@ public class Portfolio implements Serializable {
           .map(valueCalculator::calculateShareValue)
           .reduce(BigDecimal.ZERO, BigDecimal::add);
   }
+
+  public void addThisWeekValues() {
+    for (Share share : shares) {
+      values.add(valueCalculator.calculateShareValue(share));
+    }
+  }
+
+  public List<BigDecimal> getValues() {
+    return Collections.unmodifiableList(values);
+  }
+
+  /**
+   * Appends a net worth value to the internal values list for graphing.
+   * @param value the net worth to add
+   */
+  public void addNetWorthValue(BigDecimal value) {
+    values.add(value);
+  }
+  
 
 }
