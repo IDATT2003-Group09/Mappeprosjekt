@@ -36,6 +36,7 @@ public class StockGraph extends BorderPane {
                 }
             }
         });
+        yAxis.setStyle("-fx-tick-label-font-family: 'ThaleahFat';");
         lineChart = new LineChart<>(xAxis, yAxis);
         lineChart.setAnimated(false);
         lineChart.setLegendVisible(false);
