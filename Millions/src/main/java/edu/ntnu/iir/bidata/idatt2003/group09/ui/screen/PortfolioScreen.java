@@ -40,6 +40,7 @@ public class PortfolioScreen extends BorderPane {
         this.controller = controller;
 
         getStylesheets().add(getClass().getResource("/styling/portfolio.css").toExternalForm());
+        getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
         getStyleClass().add("portfolio-screen");
 
         this.table = new TableView<>();
@@ -49,7 +50,9 @@ public class PortfolioScreen extends BorderPane {
 
         // Setup portfolio value chart
         javafx.scene.chart.NumberAxis xAxis = new javafx.scene.chart.NumberAxis();
-        xAxis.setLabel("Week");
+        xAxis.setLabel(""); // Hide x-axis label
+        xAxis.setTickLabelsVisible(false); // Hide week numbers
+        xAxis.setTickMarkVisible(false);
         javafx.scene.chart.NumberAxis yAxis = new javafx.scene.chart.NumberAxis();
         yAxis.setLabel("Portfolio Value");
         this.portfolioChart = new javafx.scene.chart.LineChart<>(xAxis, yAxis);
@@ -57,6 +60,7 @@ public class PortfolioScreen extends BorderPane {
         portfolioChart.setLegendVisible(false);
         portfolioChart.setMinHeight(200);
         portfolioChart.setMaxHeight(250);
+        portfolioChart.getStyleClass().add("trade-graph");
 
         buildTable();
         buildLayout();
