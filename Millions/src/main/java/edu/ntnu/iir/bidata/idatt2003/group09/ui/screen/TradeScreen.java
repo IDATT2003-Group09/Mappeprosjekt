@@ -238,7 +238,7 @@ public class TradeScreen extends BorderPane {
         buysell.getStyleClass().add("trade-buysell");
         buysell.setPadding(new Insets(10, 0, 0, 0));
 
-        HBox infoBox = new HBox(20, deadlineLabel, weekLabel, cashLabel, holdingsLabel, levelUpLabel);
+        HBox infoBox = new HBox(20, deadlineLabel, weekLabel, cashLabel, statusLabel, levelUpLabel);
         infoBox.getStyleClass().add("trade-info");
         infoBox.setPadding(new Insets(0, 0, 10, 0));
 
@@ -260,7 +260,6 @@ public class TradeScreen extends BorderPane {
             progressAndNextWeek,
             infoBox,
             controls,
-            statusLabel,
             searchField,
             sectorButtonContainer
         );
