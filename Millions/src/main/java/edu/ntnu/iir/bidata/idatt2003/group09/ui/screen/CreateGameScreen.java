@@ -102,12 +102,12 @@ public class CreateGameScreen extends StackPane {
 				inputBubble.setVisible(true);
 				inputBubble.setManaged(true);
 				fileNameField.requestFocus();
-				
+				boss.updateTalkingBubble("Hey there! What's your name?");
+
 				// Change the button action to validate the name
 				confirmNameButton.setOnAction(ev -> {
 					String playerName = fileNameField.getText() == null ? "" : fileNameField.getText().trim();
 
-					boss.updateTalkingBubble("Hey you! What's your name?");
 					
 					if (playerName.isBlank()) {
 						boss.updateTalkingBubble("Hey, I am talking to you! Enter your name.");
