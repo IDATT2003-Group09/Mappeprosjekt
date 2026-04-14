@@ -179,6 +179,9 @@ public class PortfolioScreen extends BorderPane {
                 + " (" + formatPercent(percentChange) + ")");
         cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
 
+        PlayerStatus status = controller.getStatus();
+        statusLabel.setText("Status: " + (status != null ? status.name() : "-"));
+
         List<java.math.BigDecimal> values = controller.getPortfolio().getValues();
         javafx.scene.chart.XYChart.Series<Number, Number> series = new javafx.scene.chart.XYChart.Series<>();
         for (int i = 0; i < values.size(); i++) {
