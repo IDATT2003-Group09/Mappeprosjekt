@@ -321,7 +321,10 @@ public class Main extends Application {
         historyTab.setClosable(false);
         settingsTab.setClosable(false);
 
-        tabPane.getTabs().addAll(tradeTab, portfolioTab, newspaperTab, historyTab, settingsTab);
+
+        Tab saveQuitTab = new Tab("Save & Quit");
+        saveQuitTab.setClosable(false);
+        tabPane.getTabs().addAll(tradeTab, portfolioTab, newspaperTab, historyTab, settingsTab, saveQuitTab);
 
         tabPane.getSelectionModel().selectedItemProperty()
                 .addListener((obs, oldTab, newTab) -> {
@@ -347,6 +350,10 @@ public class Main extends Application {
                     if (newTab == tradeTab && tutorialMode) {
                         tutorialOverlay.onReadyToBuy();
                         tutorialOverlay.onTradeScreenViewed();
+                    }
+                    if (newTab == saveQuitTab) {
+                        controller.saveGame();
+                        showStartScreen();
                     }
                 });
 
