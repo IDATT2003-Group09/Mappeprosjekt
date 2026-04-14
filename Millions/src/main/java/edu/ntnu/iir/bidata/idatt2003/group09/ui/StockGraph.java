@@ -18,11 +18,27 @@ public class StockGraph extends BorderPane {
 		setPadding(new Insets(10));
 
 		// Chart setup
-		NumberAxis xAxis = new NumberAxis();
-		NumberAxis yAxis = new NumberAxis();
-		lineChart = new LineChart<>(xAxis, yAxis);
-		lineChart.setAnimated(false);
-		lineChart.setLegendVisible(false);
+
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        // Round y-axis tick labels to nearest integer
+        yAxis.setTickLabelFormatter(new javafx.util.StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                return String.valueOf(Math.round(object.doubleValue()));
+            }
+            @Override
+            public Number fromString(String string) {
+                try {
+                    return Integer.parseInt(string);
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
+            }
+        });
+        lineChart = new LineChart<>(xAxis, yAxis);
+        lineChart.setAnimated(false);
+        lineChart.setLegendVisible(false);
 
 		setCenter(lineChart);
 
