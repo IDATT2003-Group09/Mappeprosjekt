@@ -209,6 +209,7 @@ public class TradeScreen extends BorderPane {
                 BigDecimal price = selectedStock.getSalesPrice();
                 BigDecimal cash = controller.getMoney();
                 if (price.compareTo(BigDecimal.ZERO) > 0 && cash.compareTo(BigDecimal.ZERO) > 0) {
+                    BigDecimal commissionRate = controller.getExchange().getCommissionRate();
                     BigDecimal low = BigDecimal.ZERO;
                     BigDecimal high = cash.divide(price, 0, RoundingMode.FLOOR).add(BigDecimal.ONE);
                     BigDecimal best = BigDecimal.ZERO;
@@ -220,7 +221,7 @@ public class TradeScreen extends BorderPane {
                         }
                         Share tempShare = new Share(selectedStock, mid, price);
                         PurchaseCalculator calc =
-                                new PurchaseCalculator(tempShare);
+                                new PurchaseCalculator(tempShare, commissionRate);
                         BigDecimal totalCost = calc.calculateTotal();
                         if (totalCost.compareTo(cash) <= 0) {
                             best = mid;

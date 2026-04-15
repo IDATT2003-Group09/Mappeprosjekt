@@ -1,3 +1,4 @@
+
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.*;
@@ -137,5 +138,9 @@ public class GameController {
 
     public NewsPaper getPendingNewsPaper() {
         return exchange.getPendingNewsPaper();
+    }
+    
+    public Exchange getExchange() {
+        return exchange;
     }
 }
