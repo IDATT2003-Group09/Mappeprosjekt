@@ -28,4 +28,8 @@
 	-fx-translate-y: 1px;
 }
 
+.start-button > .label {
+	-fx-font-color: #f5f5f5;
+}
+
 

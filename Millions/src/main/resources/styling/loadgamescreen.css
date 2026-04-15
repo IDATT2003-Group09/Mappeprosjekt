@@ -1,0 +1,24 @@
+.save-file-button .label {
+	-fx-text-fill: white;
+}
+
+.save-file-button {
+	-fx-background-color: linear-gradient(to bottom, #23272e, #3a3f47);
+	-fx-font-size: 16px;
+	-fx-font-weight: bold;
+	-fx-padding: 10 24;
+	-fx-background-radius: 8px;
+	-fx-border-radius: 8px;
+	-fx-border-color: #a3b1c6;
+	-fx-border-width: 2px;
+	-fx-cursor: hand;
+	-fx-effect: dropshadow(gaussian, rgba(60,60,60,0.08), 6, 0, 0, 2);
+	-fx-transition: background-color 0.2s;
+}
+.save-file-button:hover {
+	-fx-background-color: linear-gradient(to bottom, #3a3f47, #23272e);
+	-fx-border-color: #ffd700;
+}
+.save-file-button:pressed {
+	-fx-background-color: #23272e;
+}

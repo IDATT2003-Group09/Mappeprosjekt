@@ -108,22 +108,39 @@ public class LoadGameScreen extends VBox {
 
   private Button createSaveFileButton(String fileName, LoadGameHandler handler) {
     String displayName = cleanName(fileName);
-    String extraInfo = "";
+    String netWorth = "";
+    String weekInfo = "";
+    
     try {
         var state = SaveManager.load(fileName);
         if (state != null) {
-            extraInfo = String.format(" (Net Worth: %s, Week: %d)", state.getNetWorth(), state.getWeek());
+            netWorth = String.format("$%.2f", state.getNetWorth());
+            weekInfo = String.format("Week: %d", state.getWeek());
         }
     } catch (Exception e) {
-        extraInfo = " (Could not read save)";
+        weekInfo = "Could not read save";
     }
-    Button saveFileButton = new Button(displayName + extraInfo);
-   
+    
+    Button saveFileButton = new Button();
+
+    VBox buttonContent = new VBox(8);
+    buttonContent.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+    Label nameLabel = new Label(displayName);
+    Label valueLabel = new Label(netWorth);
+    Label weekLabel = new Label(weekInfo);
+
+    nameLabel.setStyle("-fx-text-fill: white;");
+    valueLabel.setStyle("-fx-text-fill: white;");
+    weekLabel.setStyle("-fx-text-fill: white;");
+
+    buttonContent.getChildren().addAll(nameLabel, valueLabel, weekLabel);
+    saveFileButton.setGraphic(buttonContent);
+
+    saveFileButton.setMinWidth(300);
+
     return saveFileButton;
   }
-
-
-
 
 }
 
