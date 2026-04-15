@@ -380,16 +380,14 @@ public class TradeScreen extends BorderPane {
         cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
         netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetWorth()));
         holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
-        weekLabel.setText("Week: " + controller.getWeek());
+        int week = controller.getWeek();
+        weekLabel.setText("Week: " + week);
 
         var progress = controller.getProgress();
         var player = controller.getPlayer();
 
-
-
-        int currentQuarter = (progress.getCurrentWeek() / 13) + 1;
+        int currentQuarter = (week / 13) + 1;
         deadlineLabel.setText("Deadline in: " + progress.getWeeksUntilDeadline() + " weeks");
-
 
         BigDecimal requirement = progress.getCurrentTarget();
         BigDecimal netWorth = player.getNetWorth();
