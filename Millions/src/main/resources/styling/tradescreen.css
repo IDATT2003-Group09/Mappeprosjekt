@@ -1,3 +1,21 @@
+.transaction-overview-root .transaction-overview-sign {
+	-fx-font-size: 30px;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-weight: bold;
+	-fx-text-fill: #23e88c;
+	-fx-alignment: center-right;
+	-fx-min-width: 32px;
+}
+.transaction-overview-root .transaction-overview-separator {
+	-fx-background-color: #ffffff;
+	-fx-border-color: transparent;
+	-fx-opacity: 1;
+	-fx-padding: 0 0 0 0;
+	-fx-pref-height: 1px;
+	-fx-max-width: 320px;
+	-fx-min-width: 120px;
+	margin: 0;
+}
 
 .trade-screen {
 	font-family: "ThaleahFat";

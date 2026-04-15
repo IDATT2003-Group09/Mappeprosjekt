@@ -8,6 +8,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Separator;
+import javafx.scene.layout.GridPane;
 import java.math.BigDecimal;
 
 public class TransactionOverview extends StackPane {
@@ -25,18 +27,35 @@ public class TransactionOverview extends StackPane {
 		box.setMinWidth(560);
 		box.setMaxHeight(400);
 		box.setMinHeight(400);
-		box.setAlignment(javafx.geometry.Pos.CENTER);
+		box.setAlignment(javafx.geometry.Pos.TOP_LEFT);
 
 		Label actionLabel = new Label(action + " " + quantity.toPlainString() + " x " + stockSymbol);
 		actionLabel.getStyleClass().add("transaction-overview-action");
 		Label priceLabel = new Label("Cost: " + quantity.multiply(price));
 		priceLabel.getStyleClass().add("transaction-overview-label");
-		Label commissionLabel = new Label("+ Commission: " + commission);
+		priceLabel.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+		priceLabel.setMaxWidth(Double.MAX_VALUE);
+
+		Label plusCommission = new Label("+");
+		plusCommission.getStyleClass().add("transaction-overview-sign");
+		Label commissionLabel = new Label("Commission: " + commission);
 		commissionLabel.getStyleClass().add("transaction-overview-label");
-		Label taxLabel = new Label("+ Tax: " + tax);
+		commissionLabel.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+		commissionLabel.setMaxWidth(Double.MAX_VALUE);
+
+		Label plusTax = new Label("+");
+		plusTax.getStyleClass().add("transaction-overview-sign");
+		Label taxLabel = new Label("Tax: " + tax);
 		taxLabel.getStyleClass().add("transaction-overview-label");
-		Label totalLabel = new Label("= Total: " + total);
+		taxLabel.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+		taxLabel.setMaxWidth(Double.MAX_VALUE);
+
+		Label eqTotal = new Label("=");
+		eqTotal.getStyleClass().add("transaction-overview-sign");
+		Label totalLabel = new Label("Total: " + total);
 		totalLabel.getStyleClass().add("transaction-overview-total");
+		totalLabel.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+		totalLabel.setMaxWidth(Double.MAX_VALUE);
 
 		Button confirmButton = new Button("Confirm");
 		confirmButton.getStyleClass().add("transaction-overview-confirm");
@@ -54,7 +73,32 @@ public class TransactionOverview extends StackPane {
 		buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
 		buttonBox.getStyleClass().add("transaction-overview-buttons");
 
-		box.getChildren().addAll(actionLabel, priceLabel, commissionLabel, taxLabel, totalLabel, buttonBox);
+		Separator sepBelowTotal1 = new Separator();
+		sepBelowTotal1.getStyleClass().add("transaction-overview-separator");
+		Separator sepBelowTotal2 = new Separator();
+		sepBelowTotal2.getStyleClass().add("transaction-overview-separator");
+
+		VBox doubleLineBox = new VBox(2, sepBelowTotal1, sepBelowTotal2); // tight spacing for double line
+		doubleLineBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+		GridPane breakdownGrid = new GridPane();
+		breakdownGrid.setHgap(8);
+		breakdownGrid.setVgap(4);
+		breakdownGrid.setMaxWidth(Double.MAX_VALUE);
+		breakdownGrid.add(priceLabel, 1, 0);
+		breakdownGrid.add(plusCommission, 0, 1);
+		breakdownGrid.add(commissionLabel, 1, 1);
+		breakdownGrid.add(plusTax, 0, 2);
+		breakdownGrid.add(taxLabel, 1, 2);
+		breakdownGrid.add(eqTotal, 0, 3);
+		breakdownGrid.add(totalLabel, 1, 3);
+
+		box.getChildren().addAll(
+			actionLabel,
+			breakdownGrid,
+			doubleLineBox,
+			buttonBox
+		);
 
 		setAlignment(box, javafx.geometry.Pos.CENTER);
 		getChildren().addAll(background, box);
