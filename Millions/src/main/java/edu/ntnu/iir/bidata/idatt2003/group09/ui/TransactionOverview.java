@@ -31,10 +31,14 @@ public class TransactionOverview extends StackPane {
 
 		Label actionLabel = new Label(action + " " + quantity.toPlainString() + " x " + stockSymbol);
 		actionLabel.getStyleClass().add("transaction-overview-action");
-		Label priceLabel = new Label("Cost: " + quantity.multiply(price));
-		priceLabel.getStyleClass().add("transaction-overview-label");
-		priceLabel.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-		priceLabel.setMaxWidth(Double.MAX_VALUE);
+		Label costText = new Label("COST:");
+		costText.getStyleClass().add("transaction-overview-label-text");
+		costText.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+		costText.setMaxWidth(Double.MAX_VALUE);
+		Label costValue = new Label(quantity.multiply(price).toString());
+		costValue.getStyleClass().add("transaction-overview-label-value");
+		costValue.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+		costValue.setMaxWidth(Double.MAX_VALUE);
 
 		Label plusCommission = new Label("+");
 		plusCommission.getStyleClass().add("transaction-overview-sign");
@@ -97,19 +101,23 @@ public class TransactionOverview extends StackPane {
 		breakdownGrid.setHgap(8);
 		breakdownGrid.setVgap(4);
 		breakdownGrid.setMaxWidth(Double.MAX_VALUE);
-		// Cost row (no sign, just label and value)
-		breakdownGrid.add(priceLabel, 2, 0);
-		// Commission row
-		breakdownGrid.add(plusCommission, 0, 1);
-		breakdownGrid.add(commissionText, 1, 1);
+
+		Label emptySign = new Label("");
+		emptySign.getStyleClass().add("transaction-overview-sign");
+		breakdownGrid.add(costText, 0, 0);
+		breakdownGrid.add(emptySign, 1, 0);
+		breakdownGrid.add(costValue, 2, 0);
+
+		breakdownGrid.add(commissionText, 0, 1);
+		breakdownGrid.add(plusCommission, 1, 1);
 		breakdownGrid.add(commissionValue, 2, 1);
-		// Tax row
-		breakdownGrid.add(plusTax, 0, 2);
-		breakdownGrid.add(taxText, 1, 2);
+
+		breakdownGrid.add(taxText, 0, 2);
+		breakdownGrid.add(plusTax, 1, 2);
 		breakdownGrid.add(taxValue, 2, 2);
-		// Total row
-		breakdownGrid.add(eqTotal, 0, 3);
-		breakdownGrid.add(totalText, 1, 3);
+
+		breakdownGrid.add(totalText, 0, 3);
+		breakdownGrid.add(eqTotal, 1, 3);
 		breakdownGrid.add(totalValue, 2, 3);
 
 		box.getChildren().addAll(
