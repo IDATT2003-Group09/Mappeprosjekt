@@ -1,22 +1,27 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import java.math.BigDecimal;
 
-public class TransactionOverview extends Stage {
-	public TransactionOverview(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total) {
-		setTitle("Transaction Overview");
-		initModality(Modality.APPLICATION_MODAL);
-		setResizable(false);
+public class TransactionOverview extends StackPane {
+	public TransactionOverview(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onClose) {
+		Rectangle background = new Rectangle();
+		background.setFill(Color.rgb(0, 0, 0, 0.6));
+		background.widthProperty().bind(widthProperty());
+		background.heightProperty().bind(heightProperty());
 
-		VBox root = new VBox(12);
-		root.setPadding(new Insets(20));
+		VBox box = new VBox(12);
+		box.setPadding(new Insets(32));
+		box.setStyle("-fx-background-color: white; -fx-background-radius: 12; -fx-effect: dropshadow(gaussian, #222, 16, 0.2, 0, 4);");
+		box.setMaxWidth(340);
+		box.setMinWidth(260);
+		box.setAlignment(javafx.geometry.Pos.CENTER);
 
 		Label actionLabel = new Label(action + " " + quantity.toPlainString() + " x " + stockSymbol);
 		actionLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
@@ -27,11 +32,12 @@ public class TransactionOverview extends Stage {
 		totalLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
 		Button closeButton = new Button("Close");
-		closeButton.setOnAction(e -> close());
+		closeButton.setOnAction(e -> onClose.run());
 		closeButton.setDefaultButton(true);
 
-		root.getChildren().addAll(actionLabel, priceLabel, commissionLabel, taxLabel, totalLabel, closeButton);
-		Scene scene = new Scene(root);
-		setScene(scene);
+		box.getChildren().addAll(actionLabel, priceLabel, commissionLabel, taxLabel, totalLabel, closeButton);
+
+		setAlignment(box, javafx.geometry.Pos.CENTER);
+		getChildren().addAll(background, box);
 	}
 }
