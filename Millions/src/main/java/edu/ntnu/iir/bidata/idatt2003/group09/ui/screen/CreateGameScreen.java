@@ -89,7 +89,7 @@ public class CreateGameScreen extends StackPane {
 
 		fileNameField.setEditable(false);
 
-		Boss boss = new Boss("...", fontFamily, BOSS_SIZE);
+		Boss boss = new Boss("What do you mean all our employees quit...", fontFamily, BOSS_SIZE);
 		final boolean[] introStarted = {false};
 
 		// Set up the initial button action
