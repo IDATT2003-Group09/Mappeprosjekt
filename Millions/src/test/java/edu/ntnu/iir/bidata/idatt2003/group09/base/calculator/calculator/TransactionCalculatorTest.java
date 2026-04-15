@@ -88,13 +88,13 @@ public class TransactionCalculatorTest {
     }
 
     @Test
-    void purchaseCalculatorShouldCalculateCommissionAsFivePercent() {
+    void purchaseCalculatorShouldCalculateCommissionAsZeroPointFivePercent() {
         Stock stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "tech", 4);
         Share share = new Share(stock, new BigDecimal("2"), new BigDecimal("100.00"));
         PurchaseCalculator calculator = new PurchaseCalculator(share);
         
         BigDecimal commission = calculator.calculateCommission();
-        assertEquals(0, new BigDecimal("10.00").compareTo(commission));
+        assertEquals(0, new BigDecimal("1.000000").compareTo(commission));
     }
 
     @Test

@@ -54,6 +54,6 @@ public class PurchaseTest {
   @Test
   void calculatorShouldComputeTotalWithCommission() {
     BigDecimal total = purchase.getCalculator().calculateTotal();
-    assertEquals(new BigDecimal("26.25000"), total);
+    assertEquals(new BigDecimal("25.125000"), total);
   }
 }
