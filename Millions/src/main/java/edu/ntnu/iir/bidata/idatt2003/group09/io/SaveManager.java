@@ -84,4 +84,12 @@ public class SaveManager {
         String targetFile = normalizeSaveFileName(fileName);
         return new File(targetFile).exists();
     } 
+
+    public static void deleteSaveFile(String fileName) {
+        String targetFile = normalizeSaveFileName(fileName);
+        File file = new File(targetFile);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
 }

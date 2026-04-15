@@ -111,6 +111,15 @@ public class LoadGameScreen extends VBox {
     String displayName = cleanName(fileName);
     String netWorth = "";
     String weekInfo = "";
+
+    Button deleteButton = new Button("Delete");
+    deleteButton.setOnAction(e -> {
+        SaveManager.deleteSaveFile(fileName);
+        handler.onLoadSelected(null); // Refresh the screen
+    });
+    deleteButton.getStyleClass().add("start-button");
+    UiSoundEffects.installHoverSound(deleteButton);
+    UiSoundEffects.installClickSound(deleteButton);
     
     try {
         var state = SaveManager.load(fileName);
@@ -141,7 +150,17 @@ public class LoadGameScreen extends VBox {
     nameLabel.setMaxWidth(Double.MAX_VALUE);
     weekLabel.setAlignment(Pos.CENTER_RIGHT);
     titleBox.getChildren().addAll(nameLabel, weekLabel);
-    buttonContent.getChildren().addAll(titleBox, valueLabel);
+
+    HBox bottomBox = new HBox();
+    bottomBox.setAlignment(Pos.CENTER_LEFT);
+    HBox.setHgrow(valueLabel, Priority.ALWAYS);
+    valueLabel.setMaxWidth(Double.MAX_VALUE);
+    deleteButton.setAlignment(Pos.CENTER_RIGHT);
+    bottomBox.getChildren().addAll(valueLabel, deleteButton);
+
+
+    buttonContent.getChildren().addAll(titleBox, bottomBox);
+
     saveFileButton.setGraphic(buttonContent);
 
     saveFileButton.setMinWidth(600);
