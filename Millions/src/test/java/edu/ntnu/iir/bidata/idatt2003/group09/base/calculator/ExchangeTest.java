@@ -163,7 +163,7 @@ public class ExchangeTest {
 
     @Test
     void sellByQuantity_shouldSellRequestedAmountAcrossLots() {
-      Player player = new Player("Alice", new BigDecimal("10000.00"));
+      Player player = new Player("Alice", new BigDecimal("10000.00"), "Easy");
 
       exchange.buy("AAPL", player, new BigDecimal("2"));
       exchange.buy("AAPL", player, new BigDecimal("3"));
@@ -179,7 +179,7 @@ public class ExchangeTest {
 
     @Test
     void sellByQuantity_shouldThrowWhenTryingToSellMoreThanOwned() {
-      Player player = new Player("Alice", new BigDecimal("10000.00"));
+      Player player = new Player("Alice", new BigDecimal("10000.00"), "Easy");
       exchange.buy("AAPL", player, new BigDecimal("1"));
 
       assertThrows(IllegalStateException.class,
