@@ -3,6 +3,8 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -47,15 +49,12 @@ public class LoadGameScreen extends VBox {
       saveSlotsContainer.getChildren().add(emptyLabel);
     } else {
       for (String fileName : saveFiles) {
-        Button saveFileButton = new Button(cleanName(fileName));
-        saveFileButton.getStyleClass().add("start-button");
-        saveFileButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
-        saveFileButton.setPrefWidth(450);
-        saveFileButton.setPrefHeight(55);
-        saveFileButton.setOnAction(e -> handler.onLoadSelected(fileName));
-        UiSoundEffects.installHoverSound(saveFileButton);
+        Button saveFileButton = createSaveFileButton(fileName, handler);
         UiSoundEffects.installClickSound(saveFileButton);
+        UiSoundEffects.installHoverSound(saveFileButton);
         saveSlotsContainer.getChildren().add(saveFileButton);
+        saveFileButton.getStyleClass().add("start-button");
+        saveFileButton.setOnAction(e -> handler.onLoadSelected(fileName));
       }
     }
 
@@ -106,5 +105,25 @@ public class LoadGameScreen extends VBox {
 
       return "";
   }
+
+  private Button createSaveFileButton(String fileName, LoadGameHandler handler) {
+    String displayName = cleanName(fileName);
+    String extraInfo = "";
+    try {
+        var state = SaveManager.load(fileName);
+        if (state != null) {
+            extraInfo = String.format(" (Net Worth: %s, Week: %d)", state.getNetWorth(), state.getWeek());
+        }
+    } catch (Exception e) {
+        extraInfo = " (Could not read save)";
+    }
+    Button saveFileButton = new Button(displayName + extraInfo);
+   
+    return saveFileButton;
+  }
+
+
+
+
 }
 
