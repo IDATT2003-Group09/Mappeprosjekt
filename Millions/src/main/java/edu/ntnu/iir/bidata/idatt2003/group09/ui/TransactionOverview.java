@@ -20,8 +20,10 @@ public class TransactionOverview extends StackPane {
 		VBox box = new VBox(12);
 		box.setPadding(new Insets(32));
 		box.getStyleClass().add("transaction-overview-box");
-		box.setMaxWidth(340);
-		box.setMinWidth(260);
+		box.setMaxWidth(560);
+		box.setMinWidth(560);
+    box.setMaxHeight(400);
+    box.setMinHeight(400);
 		box.setAlignment(javafx.geometry.Pos.CENTER);
 
 		Label actionLabel = new Label(action + " " + quantity.toPlainString() + " x " + stockSymbol);
@@ -43,7 +45,6 @@ public class TransactionOverview extends StackPane {
 		Button closeButton = new Button("Cancel");
 		closeButton.getStyleClass().add("transaction-overview-cancel");
 		closeButton.setOnAction(e -> {
-			// Just remove overlay, do not confirm
 			StackPane parent = (StackPane) getParent();
 			if (parent != null) parent.getChildren().remove(this);
 		});

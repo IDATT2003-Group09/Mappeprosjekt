@@ -1,15 +1,14 @@
 /* Transaction Overview Overlay Styles */
 .transaction-overview-box {
 	-fx-background-color: #101b36;
-	-fx-background-radius: 16;
 	-fx-effect: dropshadow(gaussian, #00e4ff44, 16, 0.2, 0, 4);
-	-fx-padding: 32px;
+	-fx-padding: 52px;
 	-fx-border-color: #05d8ff;
 	-fx-border-width: 2px;
 }
 
 .transaction-overview-action {
-	-fx-font-size: 22px;
+	-fx-font-size: 32px;
 	-fx-font-family: "ThaleahFat";
 	-fx-font-weight: bold;
 	-fx-text-fill: #05d8ff;
@@ -18,14 +17,14 @@
 }
 
 .transaction-overview-label {
-	-fx-font-size: 18px;
+	-fx-font-size: 28px;
 	-fx-font-family: "ThaleahFat";
 	-fx-text-fill: #b6d6ff;
 	-fx-padding: 2 0 2 0;
 }
 
 .transaction-overview-total {
-	-fx-font-size: 20px;
+	-fx-font-size: 30px;
 	-fx-font-family: "ThaleahFat";
 	-fx-font-weight: bold;
 	-fx-text-fill: #23e88c;
@@ -40,7 +39,7 @@
 	-fx-background-color: #23e88c;
 	-fx-text-fill: #101b36;
 	-fx-font-family: "ThaleahFat";
-	-fx-font-size: 18px;
+	-fx-font-size: 28px;
 	-fx-font-weight: bold;
 	-fx-padding: 6 24 6 24;
 	-fx-cursor: hand;
@@ -51,7 +50,7 @@
 	-fx-background-color: #17345f;
 	-fx-text-fill: #b6d6ff;
 	-fx-font-family: "ThaleahFat";
-	-fx-font-size: 18px;
+	-fx-font-size: 28px;
 	-fx-padding: 6 24 6 24;
 	-fx-cursor: hand;
 	-fx-effect: dropshadow(gaussian, #00e4ff22, 2, 0.1, 0, 1);
