@@ -1,3 +1,4 @@
+
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
@@ -9,7 +10,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.TutorialOverlay;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.PurchaseCalculator;
 import javafx.collections.FXCollections;
-
+import edu.ntnu.iir.bidata.idatt2003.group09.ui.TransactionOverview;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -302,23 +303,31 @@ public class TradeScreen extends BorderPane {
 
     private void buySelectedStock() {
         Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
-
         if (selectedStock == null) {
             statusLabel.setText("Please select a stock first.");
             return;
         }
-
         try {
             BigDecimal quantity = parseQuantity();
+            // Calculate breakdown before buying
+            BigDecimal price = selectedStock.getSalesPrice();
+            BigDecimal commissionRate = controller.getExchange().getCommissionRate();
+            Share tempShare = new Share(selectedStock, quantity, price);
+            PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate);
+            BigDecimal commission = calc.calculateCommission();
+            BigDecimal tax = calc.calculateTax();
+            BigDecimal total = calc.calculateTotal();
+
+            // Show overlay
+            TransactionOverview overview = new TransactionOverview(
+                "Buy", selectedStock.getSymbol(), quantity, price, commission, tax, total);
+            overview.showAndWait();
 
             controller.buy(selectedStock.getSymbol(), quantity);
-
             statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
             onTutorialBuySuccess();
-
             stockList.refresh();
             refreshInfo();
-
         } catch (Exception e) {
             statusLabel.setText("Buy failed: " + e.getMessage());
         }
@@ -326,30 +335,37 @@ public class TradeScreen extends BorderPane {
 
     private void sellSelectedStock() {
         Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
-
         if (selectedStock == null) {
             statusLabel.setText("Please select a stock first.");
             return;
         }
-
         List<Share> shares = controller.getPortfolio().getShares(selectedStock.getSymbol());
-
         if (shares.isEmpty()) {
             statusLabel.setText("You do not own this stock.");
             return;
         }
-
         try {
             BigDecimal quantity = parseQuantity();
-            controller.sell(selectedStock.getSymbol(), quantity);
+            // Calculate breakdown before selling
+            BigDecimal price = selectedStock.getSalesPrice();
+            BigDecimal commissionRate = controller.getExchange().getCommissionRate();
+            Share tempShare = new Share(selectedStock, quantity, price);
+            PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate);
+            BigDecimal commission = calc.calculateCommission();
+            BigDecimal tax = calc.calculateTax();
+            BigDecimal total = calc.calculateTotal();
 
+            // Show overlay
+            TransactionOverview overview = new TransactionOverview(
+                "Sell", selectedStock.getSymbol(), quantity, price, commission, tax, total);
+            overview.showAndWait();
+
+            controller.sell(selectedStock.getSymbol(), quantity);
             statusLabel.setText("Sold " + quantity.stripTrailingZeros().toPlainString()
                 + " of " + selectedStock.getSymbol());
             onTutorialSellSuccess();
-
             stockList.refresh();
             refreshInfo();
-
         } catch (Exception e) {
             statusLabel.setText("Sell failed: " + e.getMessage());
         }
