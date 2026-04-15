@@ -21,7 +21,7 @@ public class PurchaseCalculator implements TransactionCalculator {
   @Override
   public BigDecimal calculateCommission() {
     BigDecimal gross = calculateGross();
-    BigDecimal commissionRate = new BigDecimal("0.05");
+    BigDecimal commissionRate = new BigDecimal("0.005");
     return gross.multiply(commissionRate);
   }
 

@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.base.PlayerStatus;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.PortfolioRow;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
@@ -12,6 +13,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,6 +29,7 @@ public class PortfolioScreen extends BorderPane {
     private final Label totalValueLabel;
     private final Label changeLabel;
     private final Label cashLabel;
+    private final Label statusLabel;
 
 
         private final NumberFormat currencyFormat =
@@ -46,7 +49,7 @@ public class PortfolioScreen extends BorderPane {
         this.totalValueLabel = new Label();
         this.changeLabel = new Label();
         this.cashLabel = new Label();
-
+        this.statusLabel = new Label();
         javafx.scene.chart.NumberAxis xAxis = new javafx.scene.chart.NumberAxis();
         xAxis.setLabel("");
         xAxis.setTickLabelsVisible(false); 
@@ -73,8 +76,12 @@ public class PortfolioScreen extends BorderPane {
         totalValueLabel.getStyleClass().add("portfolio-total-value");
         changeLabel.getStyleClass().add("portfolio-change");
         cashLabel.getStyleClass().add("portfolio-cash");
+        statusLabel.getStyleClass().addAll("portfolio-status", "portfolio-cash");
 
-        VBox topBox = new VBox(5, totalValueLabel, changeLabel, cashLabel);
+        HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel, statusLabel);
+        topBox.getStyleClass().add("portfolio-top-box");
+        topBox.setPadding(new Insets(10));
+        
         topBox.getStyleClass().add("portfolio-top-box");
         topBox.setPadding(new Insets(10));
 
@@ -168,9 +175,12 @@ public class PortfolioScreen extends BorderPane {
         }
 
         totalValueLabel.setText("Total: " + format(current));
-        changeLabel.setText("Weekly portfolio change: " + formatWithSign(change)
+        changeLabel.setText(formatWithSign(change)
                 + " (" + formatPercent(percentChange) + ")");
         cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
+
+        PlayerStatus status = controller.getStatus();
+        statusLabel.setText("Status: " + (status != null ? status.name() : "-"));
 
         List<java.math.BigDecimal> values = controller.getPortfolio().getValues();
         javafx.scene.chart.XYChart.Series<Number, Number> series = new javafx.scene.chart.XYChart.Series<>();

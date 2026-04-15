@@ -28,8 +28,8 @@ public class PurchaseCalculatorTest {
   }
 
   @Test
-  void calculateCommissionShouldReturnFivePercentOfGross() {
-    assertEquals(new BigDecimal("1.25000"), calculator.calculateCommission());
+  void calculateCommissionShouldReturnZeroPointFivePercentOfGross() {
+    assertEquals(new BigDecimal("0.125000"), calculator.calculateCommission());
   }
 
   @Test
@@ -39,6 +39,6 @@ public class PurchaseCalculatorTest {
 
   @Test
   void calculateTotalShouldReturnGrossPlusCommission() {
-    assertEquals(new BigDecimal("26.25000"), calculator.calculateTotal());
+    assertEquals(new BigDecimal("25.125000"), calculator.calculateTotal());
   }
 }
