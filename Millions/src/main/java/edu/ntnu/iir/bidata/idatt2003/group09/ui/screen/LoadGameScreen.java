@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import javafx.scene.layout.HBox;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
@@ -131,10 +132,14 @@ public class LoadGameScreen extends VBox {
     Label weekLabel = new Label(weekInfo);
 
     nameLabel.setStyle("-fx-text-fill: white;");
-    valueLabel.setStyle("-fx-text-fill: white;");
+    valueLabel.setStyle("-fx-text-fill: green;");
     weekLabel.setStyle("-fx-text-fill: white;");
 
-    buttonContent.getChildren().addAll(nameLabel, valueLabel, weekLabel);
+    HBox titleBox = new HBox();
+    titleBox.setAlignment(Pos.CENTER_LEFT);
+
+    titleBox.getChildren().addAll(nameLabel, weekLabel);
+    buttonContent.getChildren().addAll(titleBox, valueLabel);
     saveFileButton.setGraphic(buttonContent);
 
     saveFileButton.setMinWidth(300);
