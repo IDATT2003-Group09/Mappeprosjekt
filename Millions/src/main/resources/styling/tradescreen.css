@@ -6,7 +6,6 @@
 	-fx-padding: 32px;
 	-fx-border-color: #05d8ff;
 	-fx-border-width: 2px;
-	-fx-border-radius: 16;
 }
 
 .transaction-overview-action {
@@ -43,7 +42,6 @@
 	-fx-font-family: "ThaleahFat";
 	-fx-font-size: 18px;
 	-fx-font-weight: bold;
-	-fx-background-radius: 8;
 	-fx-padding: 6 24 6 24;
 	-fx-cursor: hand;
 	-fx-effect: dropshadow(gaussian, #23e88c44, 2, 0.2, 0, 1);
@@ -54,7 +52,6 @@
 	-fx-text-fill: #b6d6ff;
 	-fx-font-family: "ThaleahFat";
 	-fx-font-size: 18px;
-	-fx-background-radius: 8;
 	-fx-padding: 6 24 6 24;
 	-fx-cursor: hand;
 	-fx-effect: dropshadow(gaussian, #00e4ff22, 2, 0.1, 0, 1);
