@@ -29,13 +29,13 @@ public class TransactionOverview extends StackPane {
 
 		Label actionLabel = new Label(action + " " + quantity.toPlainString() + " x " + stockSymbol);
 		actionLabel.getStyleClass().add("transaction-overview-action");
-		Label priceLabel = new Label("Price per share: " + price);
+		Label priceLabel = new Label("Cost: " + quantity.multiply(price));
 		priceLabel.getStyleClass().add("transaction-overview-label");
-		Label commissionLabel = new Label("Commission: " + commission);
+		Label commissionLabel = new Label("+ Commission: " + commission);
 		commissionLabel.getStyleClass().add("transaction-overview-label");
-		Label taxLabel = new Label("Tax: " + tax);
+		Label taxLabel = new Label("+ Tax: " + tax);
 		taxLabel.getStyleClass().add("transaction-overview-label");
-		Label totalLabel = new Label("Total: " + total);
+		Label totalLabel = new Label("= Total: " + total);
 		totalLabel.getStyleClass().add("transaction-overview-total");
 
 		Button confirmButton = new Button("Confirm");
