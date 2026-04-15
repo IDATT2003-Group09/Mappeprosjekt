@@ -20,16 +20,18 @@ public class Player implements Serializable {
     private BigDecimal lastWeekNetWorth;
     private final Portfolio portfolio;
     private final TransactionArchive transactionArchive;
+    private final String difficulty;
 
     /**
      * Creates a new player
      * @param name the name of the player
      * @param startingMoney the amount of money the player starts with
+     * @param difficulty the difficulty level of the player
      * @throws NullPointerException if name or starting money is null
      * @throws IllegalArgumentException if name is blank or starting money is less
      *                                  or equal to zero
      */
-    public Player(String name, BigDecimal startingMoney) {
+    public Player(String name, BigDecimal startingMoney, String difficulty) {
         this.name = Objects.requireNonNull(name, "Name cannot be null");
         if (name.isBlank()) {
             throw new IllegalArgumentException("Name cannot be blank");
@@ -40,6 +42,8 @@ public class Player implements Serializable {
         if (startingMoney.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Starting money cant be negative or zero");
         }
+
+        this.difficulty = Objects.requireNonNull(difficulty, "Difficulty cannot be null");
 
         this.money = this.startingMoney;
         this.portfolio = new Portfolio();
@@ -146,6 +150,10 @@ public class Player implements Serializable {
      */
     public BigDecimal getNetWorth() {
         return money.add(portfolio.getNetWorth());
+    }
+
+    public String getDifficulty() {
+        return difficulty;
     }
 
     /**

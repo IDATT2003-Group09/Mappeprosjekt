@@ -68,7 +68,7 @@ public class GameController {
     }
 
     public void saveGame() {
-        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek()), saveFileName);
+        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty()), saveFileName);
     }
 
     public int getWeek() {

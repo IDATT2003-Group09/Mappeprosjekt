@@ -180,7 +180,7 @@ public class Main extends Application {
             String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName + "-tutorial");
             List<Stock> stocks = StockCsvReader.readFromResource("/csv/output/sp500.csv");
 
-            Player player = new Player(playerName, new BigDecimal("100000"));
+            Player player = new Player(playerName, new BigDecimal("100000"), "Easy");
             Exchange exchange = new Exchange("S&P 500 Tutorial", stocks);
 
             // Determine commission rate based on player status
@@ -214,7 +214,7 @@ public class Main extends Application {
             if (stocks == null) {
                 return;
             }
-            Player player = new Player(playerName, new BigDecimal("100000"));
+            Player player = new Player(playerName, new BigDecimal("100000"), experienceLevel);
             Exchange exchange = new Exchange(getExchangeName(exchangeChoice), stocks);
 
             // Set commission rate based on difficulty
