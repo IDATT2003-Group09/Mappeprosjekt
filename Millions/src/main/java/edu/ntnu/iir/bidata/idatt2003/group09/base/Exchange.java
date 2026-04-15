@@ -14,6 +14,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.news.StockSpecificEvent;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.Transaction;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.transaction.TransactionFactory;
 
+
 public class Exchange implements Serializable {
 
   private String name;
@@ -23,6 +24,7 @@ public class Exchange implements Serializable {
   private NewsPaper pendingNewsPaper;
   private final EventFactory eventFactory = new EventFactory();
   private final Random random = new Random();
+  private BigDecimal commissionRate = new BigDecimal("0.005");
 
   /**
    * uses setters to validate input
@@ -34,6 +36,16 @@ public class Exchange implements Serializable {
     stockMap = new HashMap<>();
     setStockMap(stocks);
     generatePendingNews();
+  }
+
+  public void setCommissionRate(BigDecimal commissionRate) {
+    if (commissionRate != null) {
+      this.commissionRate = commissionRate;
+    }
+  }
+
+  public BigDecimal getCommissionRate() {
+    return commissionRate;
   }
 
   /**
@@ -174,13 +186,18 @@ public class Exchange implements Serializable {
    * @return
    */
   public Transaction buy(String symbol,
-      Player player, BigDecimal quantity) {
+      Player player, BigDecimal quantity, BigDecimal commissionRate) {
     Stock stock = getStock(symbol);
     BigDecimal salesPrice = stock.getSalesPrice();
     Share share = new Share(stock, quantity, salesPrice);
-    Transaction purchase = TransactionFactory.createPurchase(share, week);
+    Transaction purchase = TransactionFactory.createPurchase(share, week, commissionRate);
     purchase.commit(player);
     return purchase;
+  }
+
+  // Overload for backward compatibility
+  public Transaction buy(String symbol, Player player, BigDecimal quantity) {
+    return buy(symbol, player, quantity, this.commissionRate);
   }
 
   /**
