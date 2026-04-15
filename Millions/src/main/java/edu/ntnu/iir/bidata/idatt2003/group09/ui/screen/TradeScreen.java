@@ -7,6 +7,9 @@ import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.StockListView;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.TutorialOverlay;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.PurchaseCalculator;
+import javafx.collections.FXCollections;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
@@ -137,7 +140,6 @@ public class TradeScreen extends BorderPane {
         requirementOverlayLabel.setStyle("-fx-text-fill: white;");
         netWorthOverlayLabel.setStyle("-fx-text-fill: white;");
         progressBar = new ProgressBar(0);
-        progressBar.setMaxWidth(Double.MAX_VALUE);
         progressBar.getStyleClass().add("trade-progress-bar");
         progressBarStack = new StackPane();
         HBox progressOverlay = new HBox();
@@ -175,23 +177,12 @@ public class TradeScreen extends BorderPane {
         Button nextWeekButton = new Button("Next Week");
         nextWeekButton.getStyleClass().addAll("trade-button", "trade-next-button");
 
-        Button saveButton = new Button("Save and Quit");
-        saveButton.getStyleClass().addAll("trade-button", "trade-save-button");
-        saveButton.setOnAction(e -> {
-            controller.saveGame();
-            if (onSaveAndQuit != null) {
-                onSaveAndQuit.run();
-            }
-        });
-
         UiSoundEffects.installHoverSound(buyButton);
         UiSoundEffects.installHoverSound(sellButton);
         UiSoundEffects.installHoverSound(nextWeekButton);
-        UiSoundEffects.installHoverSound(saveButton);
         UiSoundEffects.installClickSound(buyButton);
         UiSoundEffects.installClickSound(sellButton);
         UiSoundEffects.installClickSound(nextWeekButton);
-        UiSoundEffects.installClickSound(saveButton);
 
         buyButton.setOnAction(e -> buySelectedStock());
         sellButton.setOnAction(e -> sellSelectedStock());
@@ -209,24 +200,69 @@ public class TradeScreen extends BorderPane {
         searchField.getStyleClass().add("trade-search-field");
         setupSearchFilter();
 
-        HBox controls = new HBox(10, quantityLabel, quantityField, buyButton, sellButton, nextWeekButton, saveButton);
-        controls.getStyleClass().add("trade-controls");
-        controls.setPadding(new Insets(0, 0, 10, 0));
 
-        HBox infoBox = new HBox(20,deadlineLabel, weekLabel, cashLabel, holdingsLabel, levelUpLabel);
+        Button maxButton = new Button("Max");
+        maxButton.getStyleClass().addAll("trade-button", "trade-max-button");
+        maxButton.setOnAction(e -> {
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
+            if (selectedStock != null) {
+                BigDecimal price = selectedStock.getSalesPrice();
+                BigDecimal cash = controller.getMoney();
+                if (price.compareTo(BigDecimal.ZERO) > 0 && cash.compareTo(BigDecimal.ZERO) > 0) {
+                    BigDecimal low = BigDecimal.ZERO;
+                    BigDecimal high = cash.divide(price, 0, RoundingMode.FLOOR).add(BigDecimal.ONE);
+                    BigDecimal best = BigDecimal.ZERO;
+                    while (low.compareTo(high) < 0) {
+                        BigDecimal mid = low.add(high).divide(new BigDecimal("2"), 0, RoundingMode.FLOOR);
+                        if (mid.compareTo(BigDecimal.ZERO) <= 0) {
+                            low = mid.add(BigDecimal.ONE);
+                            continue;
+                        }
+                        Share tempShare = new Share(selectedStock, mid, price);
+                        PurchaseCalculator calc =
+                                new PurchaseCalculator(tempShare);
+                        BigDecimal totalCost = calc.calculateTotal();
+                        if (totalCost.compareTo(cash) <= 0) {
+                            best = mid;
+                            low = mid.add(BigDecimal.ONE);
+                        } else {
+                            high = mid;
+                        }
+                    }
+                    quantityField.setText(best.toPlainString());
+                }
+            }
+        });
+
+        HBox buysell = new HBox(10, quantityLabel, quantityField, maxButton, buyButton, sellButton);
+        buysell.getStyleClass().add("trade-buysell");
+        buysell.setPadding(new Insets(10, 0, 0, 0));
+
+        HBox infoBox = new HBox(20, deadlineLabel, weekLabel, cashLabel, statusLabel, levelUpLabel);
         infoBox.getStyleClass().add("trade-info");
         infoBox.setPadding(new Insets(0, 0, 10, 0));
 
+        HBox controls = new HBox(10, nextWeekButton);
+        controls.getStyleClass().add("trade-controls");
+        controls.setPadding(new Insets(10, 0, 0, 0));
+
+        // Make progress bar shorter and place next week button next to it
+        progressBar.setPrefHeight(18);
+        progressBar.setPrefWidth(900);
+        progressBar.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(progressBarStack, Priority.ALWAYS);
+        HBox progressAndNextWeek = new HBox(12, progressBarStack, nextWeekButton);
+        progressAndNextWeek.setAlignment(Pos.CENTER_LEFT);
+        progressAndNextWeek.setPadding(new Insets(0, 0, 0, 0));
+
         VBox headerBox = new VBox(
             8,
-            progressBarStack,
+            progressAndNextWeek,
             infoBox,
             controls,
-            statusLabel,
             searchField,
             sectorButtonContainer
         );
-
         headerBox.getStyleClass().add("trade-header");
         headerBox.setPadding(new Insets(10));
         setTop(headerBox);
@@ -254,7 +290,11 @@ public class TradeScreen extends BorderPane {
         graph.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         contentGrid.add(stockList, 0, 0);
-        contentGrid.add(graph, 1, 0);
+        // Add graph and controls in a VBox in the right cell
+        VBox graphAndControls = new VBox(10, graph, buysell);
+        graphAndControls.setFillWidth(true);
+        graphAndControls.setPadding(new Insets(0));
+        contentGrid.add(graphAndControls, 1, 0);
 
         setCenter(contentGrid);
     }

@@ -1,3 +1,51 @@
+/* Portfolio graph styling similar to tradescreen */
+.portfolio-screen .portfolio-graph {
+	-fx-background-color: #070f24;
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 1;
+}
+
+.portfolio-screen .chart {
+	-fx-background-color: #070f24;
+	-fx-padding: 12;
+}
+
+.portfolio-screen .chart-plot-background {
+	-fx-background-color: #0d1834;
+}
+
+.portfolio-screen .chart-title {
+	-fx-text-fill: #00e4ff;
+	-fx-font-size: 26px;
+}
+
+.portfolio-screen .axis-label {
+	-fx-text-fill: #9cb6db;
+	-fx-font-size: 20px;
+}
+
+.portfolio-screen .axis {
+	-fx-tick-label-fill: #8ea9d2;
+}
+
+.portfolio-screen .axis-tick-mark,
+.portfolio-screen .axis-minor-tick-mark {
+	-fx-stroke: #335078;
+}
+
+.portfolio-screen .chart-vertical-grid-lines,
+.portfolio-screen .chart-horizontal-grid-lines {
+	-fx-stroke: #223a60;
+}
+
+.portfolio-screen .chart-series-line {
+	-fx-stroke: #23e88c;
+	-fx-stroke-width: 2px;
+}
+
+.portfolio-screen .default-color0.chart-line-symbol {
+	-fx-background-color: #23e88c, #0d1834;
+}
 @font-face {
 	font-family: "ThaleahFat";
 	src: url("/ThaleahFat.ttf");

@@ -40,6 +40,8 @@ public class GameController {
     //game flow
     public void nextWeek() {
         player.setLastWeekNetWorth(player.getNetWorth());
+        // Add current net worth to portfolio value history for graph
+        player.getPortfolio().addNetWorthValue(player.getNetWorth());
         progress.nextWeek();
 
         boolean deadlineReached = progress.isQuarterComplete();

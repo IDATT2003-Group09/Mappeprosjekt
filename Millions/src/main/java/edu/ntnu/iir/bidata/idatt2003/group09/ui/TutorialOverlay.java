@@ -30,18 +30,18 @@ public class TutorialOverlay {
   private static final double STOCK_LIST_W = 524;
   private static final double STOCK_LIST_H = 448;
 
-  private static final double BUY_BUTTON_X = 220;
-  private static final double BUY_BUTTON_Y = 150;
+  private static final double BUY_BUTTON_X = 820;
+  private static final double BUY_BUTTON_Y = 650;
   private static final double BUY_BUTTON_W = 70;
   private static final double BUY_BUTTON_H = 36;
 
-  private static final double SELL_BUTTON_X = 270;
-  private static final double SELL_BUTTON_Y = 150;
+  private static final double SELL_BUTTON_X = 870;
+  private static final double SELL_BUTTON_Y = 650;
   private static final double SELL_BUTTON_W = 90;
   private static final double SELL_BUTTON_H = 46;
 
-  private static final double NEXT_WEEK_BUTTON_X = 354;
-  private static final double NEXT_WEEK_BUTTON_Y = 150;
+  private static final double NEXT_WEEK_BUTTON_X = 980;
+  private static final double NEXT_WEEK_BUTTON_Y = 65;
   private static final double NEXT_WEEK_BUTTON_W = 132;
   private static final double NEXT_WEEK_BUTTON_H = 46;
 
@@ -164,12 +164,16 @@ public class TutorialOverlay {
 
   public void onReadyToBuy() {
     onTradeScreenViewed();
+    if (tutorialStep == 5) {
+    }
   }
 
   public void onStockSelected() {
     if (!isActive() || tutorialStep != 5) {
       return;
     }
+
+    boss.invisibleBoss(false);
 
     tutorialStep = 6;
     spotlight(BUY_BUTTON_X, BUY_BUTTON_Y, BUY_BUTTON_W, BUY_BUTTON_H);
@@ -180,6 +184,9 @@ public class TutorialOverlay {
     if (!isActive() || tutorialStep != 6) {
       return;
     }
+
+    // Restore boss visibility after buy step
+    boss.invisibleBoss(true);
 
     tutorialStep = 7;
     spotlight(HISTORY_TAB_X, TAB_Y, HISTORY_TAB_W, TAB_H);
@@ -224,6 +231,7 @@ public class TutorialOverlay {
       return;
     }
 
+    boss.invisibleBoss(true);
     tutorialStep = 15;
     clearSpotlight();
     boss.updateTalkingBubble("You better start earning more money before the next Q or you are out of here!");
@@ -270,6 +278,7 @@ public class TutorialOverlay {
       boss.updateTalkingBubble("Now go back to the trade screen.");
     } else if (tutorialStep == 13) {
       tutorialStep = 14;
+      boss.invisibleBoss(false);
       spotlight(SELL_BUTTON_X, SELL_BUTTON_Y, SELL_BUTTON_W, SELL_BUTTON_H);
       boss.updateTalkingBubble("Sell that stock.");
     } else if (tutorialStep == 15) {

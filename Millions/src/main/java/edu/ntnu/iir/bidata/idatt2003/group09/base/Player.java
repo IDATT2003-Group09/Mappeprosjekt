@@ -45,6 +45,9 @@ public class Player implements Serializable {
         this.portfolio = new Portfolio();
         this.transactionArchive = new TransactionArchive();
         this.lastWeekNetWorth = this.startingMoney;
+
+        // Add initial net worth to portfolio values for graph (week 1)
+        this.portfolio.addNetWorthValue(getNetWorth());
     }
 
 

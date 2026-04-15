@@ -18,13 +18,34 @@ public class StockGraph extends BorderPane {
 		setPadding(new Insets(10));
 
 		// Chart setup
-		NumberAxis xAxis = new NumberAxis();
-		xAxis.setLabel("Week");
-		NumberAxis yAxis = new NumberAxis();
-		yAxis.setLabel("Price");
-		lineChart = new LineChart<>(xAxis, yAxis);
-		lineChart.setAnimated(false);
-		lineChart.setLegendVisible(false);
+
+        NumberAxis xAxis = new NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
+        // Round y-axis tick labels to nearest integer
+        yAxis.setTickLabelFormatter(new javafx.util.StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                return String.valueOf(Math.round(object.doubleValue()));
+            }
+            @Override
+            public Number fromString(String string) {
+                try {
+                    return Integer.parseInt(string);
+                } catch (NumberFormatException e) {
+                    return 0;
+                }
+            }
+        });
+        getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
+
+        xAxis.setTickLabelsVisible(false);
+        xAxis.setTickMarkVisible(false);
+
+        lineChart = new LineChart<>(xAxis, yAxis);
+        lineChart.setHorizontalGridLinesVisible(false);
+        lineChart.setVerticalGridLinesVisible(false);
+        lineChart.setAnimated(false);
+        lineChart.setLegendVisible(false);
 
 		setCenter(lineChart);
 
@@ -51,7 +72,7 @@ public class StockGraph extends BorderPane {
         lineChart.getData().clear();
         lineChart.getData().add(series);
 
-        lineChart.setTitle(stock.getCompany() + " (" + stock.getSymbol() + ")");
+        lineChart.setTitle("");
 
         NumberAxis xAxis = (NumberAxis) lineChart.getXAxis();
         xAxis.setAutoRanging(false);
