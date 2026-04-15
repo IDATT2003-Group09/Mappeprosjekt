@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 
 public class TransactionOverview extends StackPane {
 	public TransactionOverview(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm) {
+		getStyleClass().addAll("trade-screen", "transaction-overview-root");
 		Rectangle background = new Rectangle();
 		background.setFill(Color.rgb(0, 0, 0, 0.6));
 		background.widthProperty().bind(widthProperty());
@@ -19,18 +20,18 @@ public class TransactionOverview extends StackPane {
 
 		VBox box = new VBox(12);
 		box.setPadding(new Insets(32));
-		box.getStyleClass().add("transaction-overview-box");
+		box.getStyleClass().addAll("transaction-overview-box", "transaction-overview-content");
 		box.setMaxWidth(560);
 		box.setMinWidth(560);
-    box.setMaxHeight(400);
-    box.setMinHeight(400);
+		box.setMaxHeight(400);
+		box.setMinHeight(400);
 		box.setAlignment(javafx.geometry.Pos.CENTER);
 
 		Label actionLabel = new Label(action + " " + quantity.toPlainString() + " x " + stockSymbol);
 		actionLabel.getStyleClass().add("transaction-overview-action");
 		Label priceLabel = new Label("Price per share: " + price);
 		priceLabel.getStyleClass().add("transaction-overview-label");
-		Label commissionLabel = new Label("Commission (fee): " + commission);
+		Label commissionLabel = new Label("Commission: " + commission);
 		commissionLabel.getStyleClass().add("transaction-overview-label");
 		Label taxLabel = new Label("Tax: " + tax);
 		taxLabel.getStyleClass().add("transaction-overview-label");

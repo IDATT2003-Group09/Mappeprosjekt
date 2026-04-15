@@ -1,60 +1,4 @@
-/* Transaction Overview Overlay Styles */
-.transaction-overview-box {
-	-fx-background-color: #101b36;
-	-fx-effect: dropshadow(gaussian, #00e4ff44, 16, 0.2, 0, 4);
-	-fx-padding: 52px;
-	-fx-border-color: #05d8ff;
-	-fx-border-width: 2px;
-}
 
-.transaction-overview-action {
-	-fx-font-size: 32px;
-	-fx-font-family: "ThaleahFat";
-	-fx-font-weight: bold;
-	-fx-text-fill: #05d8ff;
-	-fx-effect: dropshadow(gaussian, #00e4ff88, 2, 0.2, 0, 1);
-	-fx-padding: 0 0 8 0;
-}
-
-.transaction-overview-label {
-	-fx-font-size: 28px;
-	-fx-font-family: "ThaleahFat";
-	-fx-text-fill: #b6d6ff;
-	-fx-padding: 2 0 2 0;
-}
-
-.transaction-overview-total {
-	-fx-font-size: 30px;
-	-fx-font-family: "ThaleahFat";
-	-fx-font-weight: bold;
-	-fx-text-fill: #23e88c;
-	-fx-padding: 8 0 12 0;
-}
-
-.transaction-overview-buttons {
-	-fx-padding: 12 0 0 0;
-}
-
-.transaction-overview-confirm {
-	-fx-background-color: #23e88c;
-	-fx-text-fill: #101b36;
-	-fx-font-family: "ThaleahFat";
-	-fx-font-size: 28px;
-	-fx-font-weight: bold;
-	-fx-padding: 6 24 6 24;
-	-fx-cursor: hand;
-	-fx-effect: dropshadow(gaussian, #23e88c44, 2, 0.2, 0, 1);
-}
-
-.transaction-overview-cancel {
-	-fx-background-color: #17345f;
-	-fx-text-fill: #b6d6ff;
-	-fx-font-family: "ThaleahFat";
-	-fx-font-size: 28px;
-	-fx-padding: 6 24 6 24;
-	-fx-cursor: hand;
-	-fx-effect: dropshadow(gaussian, #00e4ff22, 2, 0.1, 0, 1);
-}
 .trade-screen {
 	font-family: "ThaleahFat";
 	font-size: 22px;
@@ -407,4 +351,61 @@
 
 .trade-screen .default-color0.chart-line-symbol {
 	-fx-background-color: #23e88c, #0d1834;
+}
+/* Transaction Overview Overlay Styles */
+.transaction-overview-box {
+	-fx-background-color: #101b36;
+	-fx-effect: dropshadow(gaussian, #00e4ff44, 16, 0.2, 0, 4);
+	-fx-padding: 52px;
+	-fx-border-color: #05d8ff;
+	-fx-border-width: 2px;
+}
+
+
+.transaction-overview-root .transaction-overview-action {
+	-fx-font-size: 32px;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-weight: bold;
+	-fx-text-fill: #05d8ff;
+	-fx-padding: 0 0 8 0;
+}
+
+.transaction-overview-root .transaction-overview-label {
+	-fx-font-size: 28px;
+	-fx-font-family: "ThaleahFat";
+	-fx-text-fill: #b6d6ff;
+	-fx-padding: 2 0 2 0;
+}
+
+.transaction-overview-root .transaction-overview-total {
+	-fx-font-size: 30px;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-weight: bold;
+	-fx-text-fill: #23e88c;
+	-fx-padding: 8 0 12 0;
+}
+
+.transaction-overview-buttons {
+	-fx-padding: 12 0 0 0;
+}
+
+.transaction-overview-confirm {
+	-fx-background-color: #23e88c;
+	-fx-text-fill: #101b36;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-size: 28px;
+	-fx-font-weight: bold;
+	-fx-padding: 6 24 6 24;
+	-fx-cursor: hand;
+	-fx-effect: dropshadow(gaussian, #23e88c44, 2, 0.2, 0, 1);
+}
+
+.transaction-overview-cancel {
+	-fx-background-color: #17345f;
+	-fx-text-fill: #b6d6ff;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-size: 28px;
+	-fx-padding: 6 24 6 24;
+	-fx-cursor: hand;
+	-fx-effect: dropshadow(gaussian, #00e4ff22, 2, 0.1, 0, 1);
 }
