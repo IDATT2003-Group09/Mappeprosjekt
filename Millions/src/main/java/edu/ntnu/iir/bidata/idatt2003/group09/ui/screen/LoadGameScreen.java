@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import javafx.scene.layout.HBox;
-
+import javafx.scene.layout.Priority;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 import javafx.geometry.Insets;
@@ -137,12 +137,14 @@ public class LoadGameScreen extends VBox {
 
     HBox titleBox = new HBox();
     titleBox.setAlignment(Pos.CENTER_LEFT);
-
+    HBox.setHgrow(nameLabel, Priority.ALWAYS);
+    nameLabel.setMaxWidth(Double.MAX_VALUE);
+    weekLabel.setAlignment(Pos.CENTER_RIGHT);
     titleBox.getChildren().addAll(nameLabel, weekLabel);
     buttonContent.getChildren().addAll(titleBox, valueLabel);
     saveFileButton.setGraphic(buttonContent);
 
-    saveFileButton.setMinWidth(300);
+    saveFileButton.setMinWidth(600);
 
     return saveFileButton;
   }
