@@ -117,7 +117,7 @@ public class LoadGameScreen extends VBox {
         SaveManager.deleteSaveFile(fileName);
         handler.onLoadSelected(null); // Refresh the screen
     });
-    deleteButton.getStyleClass().add("start-button");
+    deleteButton.getStyleClass().add("delete-button");
     UiSoundEffects.installHoverSound(deleteButton);
     UiSoundEffects.installClickSound(deleteButton);
     
