@@ -38,24 +38,36 @@ public class TransactionOverview extends StackPane {
 
 		Label plusCommission = new Label("+");
 		plusCommission.getStyleClass().add("transaction-overview-sign");
-		Label commissionLabel = new Label("Commission: " + commission);
-		commissionLabel.getStyleClass().add("transaction-overview-label");
-		commissionLabel.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-		commissionLabel.setMaxWidth(Double.MAX_VALUE);
+		Label commissionText = new Label("COMMISSION:");
+		commissionText.getStyleClass().add("transaction-overview-label-text");
+		commissionText.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+		commissionText.setMaxWidth(Double.MAX_VALUE);
+		Label commissionValue = new Label(commission.toString());
+		commissionValue.getStyleClass().add("transaction-overview-label-value");
+		commissionValue.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+		commissionValue.setMaxWidth(Double.MAX_VALUE);
 
 		Label plusTax = new Label("+");
 		plusTax.getStyleClass().add("transaction-overview-sign");
-		Label taxLabel = new Label("Tax: " + tax);
-		taxLabel.getStyleClass().add("transaction-overview-label");
-		taxLabel.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-		taxLabel.setMaxWidth(Double.MAX_VALUE);
+		Label taxText = new Label("TAX:");
+		taxText.getStyleClass().add("transaction-overview-label-text");
+		taxText.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+		taxText.setMaxWidth(Double.MAX_VALUE);
+		Label taxValue = new Label(tax.toString());
+		taxValue.getStyleClass().add("transaction-overview-label-value");
+		taxValue.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+		taxValue.setMaxWidth(Double.MAX_VALUE);
 
 		Label eqTotal = new Label("=");
 		eqTotal.getStyleClass().add("transaction-overview-sign");
-		Label totalLabel = new Label("Total: " + total);
-		totalLabel.getStyleClass().add("transaction-overview-total");
-		totalLabel.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-		totalLabel.setMaxWidth(Double.MAX_VALUE);
+		Label totalText = new Label("TOTAL:");
+		totalText.getStyleClass().add("transaction-overview-label-text");
+		totalText.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
+		totalText.setMaxWidth(Double.MAX_VALUE);
+		Label totalValue = new Label(total.toString());
+		totalValue.getStyleClass().add("transaction-overview-total");
+		totalValue.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+		totalValue.setMaxWidth(Double.MAX_VALUE);
 
 		Button confirmButton = new Button("Confirm");
 		confirmButton.getStyleClass().add("transaction-overview-confirm");
@@ -85,13 +97,20 @@ public class TransactionOverview extends StackPane {
 		breakdownGrid.setHgap(8);
 		breakdownGrid.setVgap(4);
 		breakdownGrid.setMaxWidth(Double.MAX_VALUE);
-		breakdownGrid.add(priceLabel, 1, 0);
+		// Cost row (no sign, just label and value)
+		breakdownGrid.add(priceLabel, 2, 0);
+		// Commission row
 		breakdownGrid.add(plusCommission, 0, 1);
-		breakdownGrid.add(commissionLabel, 1, 1);
+		breakdownGrid.add(commissionText, 1, 1);
+		breakdownGrid.add(commissionValue, 2, 1);
+		// Tax row
 		breakdownGrid.add(plusTax, 0, 2);
-		breakdownGrid.add(taxLabel, 1, 2);
+		breakdownGrid.add(taxText, 1, 2);
+		breakdownGrid.add(taxValue, 2, 2);
+		// Total row
 		breakdownGrid.add(eqTotal, 0, 3);
-		breakdownGrid.add(totalLabel, 1, 3);
+		breakdownGrid.add(totalText, 1, 3);
+		breakdownGrid.add(totalValue, 2, 3);
 
 		box.getChildren().addAll(
 			actionLabel,

@@ -1,3 +1,19 @@
+.transaction-overview-root .transaction-overview-label-text {
+	-fx-font-size: 28px;
+	-fx-font-family: "ThaleahFat";
+	-fx-text-fill: #b6d6ff;
+	-fx-font-weight: bold;
+	-fx-alignment: center-right;
+	-fx-max-width: 160px;
+}
+
+.transaction-overview-root .transaction-overview-label-value {
+	-fx-font-size: 28px;
+	-fx-font-family: "ThaleahFat";
+	-fx-text-fill: #b6d6ff;
+	-fx-alignment: center-left;
+	-fx-max-width: 180px;
+}
 .transaction-overview-root .transaction-overview-sign {
 	-fx-font-size: 30px;
 	-fx-font-family: "ThaleahFat";
