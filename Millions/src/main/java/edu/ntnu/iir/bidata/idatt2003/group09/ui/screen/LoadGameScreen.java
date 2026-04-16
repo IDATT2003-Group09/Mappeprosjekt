@@ -111,6 +111,7 @@ public class LoadGameScreen extends VBox {
     String displayName = cleanName(fileName);
     String netWorth = "";
     String weekInfo = "";
+    String difficulty = "";
 
     Button deleteButton = new Button("Delete");
     deleteButton.setOnAction(e -> {
@@ -126,6 +127,7 @@ public class LoadGameScreen extends VBox {
         if (state != null) {
             netWorth = String.format("$%.2f", state.getNetWorth());
             weekInfo = String.format("Week: %d", state.getWeek());
+            difficulty = state.getDifficulty();
         }
     } catch (Exception e) {
         weekInfo = "Could not read save";
@@ -136,7 +138,7 @@ public class LoadGameScreen extends VBox {
     VBox buttonContent = new VBox(8);
     buttonContent.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
 
-    Label nameLabel = new Label(displayName);
+    Label nameLabel = new Label(displayName + " (" + difficulty + ")");
     Label valueLabel = new Label(netWorth);
     Label weekLabel = new Label(weekInfo);
 

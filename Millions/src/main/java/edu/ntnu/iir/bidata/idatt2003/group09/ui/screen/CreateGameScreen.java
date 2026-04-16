@@ -89,7 +89,7 @@ public class CreateGameScreen extends StackPane {
 
 		fileNameField.setEditable(false);
 
-		Boss boss = new Boss("...", fontFamily, BOSS_SIZE);
+		Boss boss = new Boss("What do you mean all our employees quit...", fontFamily, BOSS_SIZE);
 		final boolean[] introStarted = {false};
 
 		// Set up the initial button action
@@ -136,7 +136,7 @@ public class CreateGameScreen extends StackPane {
 							showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Hard"));
 					
 					contentBox.getChildren().setAll(tutorialButton, easyButton, mediumButton, hardButton);
-					boss.updateTalkingBubble("Are you any good at this?");
+					boss.updateTalkingBubble("Are you any good at this? If you are, you don't mind a higher commission, right?");
 					
 					// Disable name editing after confirmation
 					fileNameField.setEditable(false);

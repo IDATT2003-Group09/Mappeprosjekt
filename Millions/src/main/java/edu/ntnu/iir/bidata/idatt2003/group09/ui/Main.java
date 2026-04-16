@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.base.PlayerStatus;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
@@ -140,7 +141,7 @@ public class Main extends Application {
                 if ("tutorial".equalsIgnoreCase(experienceLevel)) {
                     startTutorialGame(playerName);
                 } else {
-                    startNewGame(playerName, exchangeChoice);
+                    startNewGame(playerName, experienceLevel, exchangeChoice);
                 }
             }
 
@@ -179,8 +180,19 @@ public class Main extends Application {
             String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName + "-tutorial");
             List<Stock> stocks = StockCsvReader.readFromResource("/csv/output/sp500.csv");
 
-            Player player = new Player(playerName, new BigDecimal("100000"));
+            Player player = new Player(playerName, new BigDecimal("100000"), "Easy");
             Exchange exchange = new Exchange("S&P 500 Tutorial", stocks);
+
+            // Determine commission rate based on player status
+
+            PlayerStatus status = player.getStatus(0); // week 0 at game start
+            BigDecimal commissionRate = switch (status) {
+                case NOVICE -> new BigDecimal("0.005");
+                case INVESTOR -> new BigDecimal("0.003");
+                case SPECULATOR -> new BigDecimal("0.001");
+            };
+            exchange.setCommissionRate(commissionRate);
+
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
 
@@ -195,15 +207,29 @@ public class Main extends Application {
         }
     }
 
-    private void startNewGame(String playerName, String exchangeChoice) {
+    private void startNewGame(String playerName, String experienceLevel, String exchangeChoice) {
         try {
             String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName);
             List<Stock> stocks = loadStocksForExchange(exchangeChoice);
             if (stocks == null) {
                 return;
             }
-            Player player = new Player(playerName, new BigDecimal("100000"));
+            Player player = new Player(playerName, new BigDecimal("100000"), experienceLevel);
             Exchange exchange = new Exchange(getExchangeName(exchangeChoice), stocks);
+
+            // Set commission rate based on difficulty
+            java.math.BigDecimal commissionRate;
+            if ("Easy".equalsIgnoreCase(experienceLevel)) {
+                commissionRate = new java.math.BigDecimal("0.005");
+            } else if ("Medium".equalsIgnoreCase(experienceLevel)) {
+                commissionRate = new java.math.BigDecimal("0.01");
+            } else if ("Hard".equalsIgnoreCase(experienceLevel)) {
+                commissionRate = new java.math.BigDecimal("0.02");
+            } else {
+                commissionRate = new java.math.BigDecimal("0.005"); // fallback
+            }
+            exchange.setCommissionRate(commissionRate);
+
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
 

@@ -24,7 +24,7 @@ public class SaleTest {
 		stock = new Stock("AAPL", "Apple", new BigDecimal("150.00"), "Technology", 4);
 		share = new Share(stock, new BigDecimal("2"), new BigDecimal("10.00"));
 		sale = new Sale(share, 1);
-		player = new Player("Alice", new BigDecimal("1000.00"));
+		player = new Player("Alice", new BigDecimal("1000.00"), "Easy");
 	}
 
 	@Test

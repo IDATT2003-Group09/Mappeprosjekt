@@ -12,16 +12,22 @@ public class GameState implements Serializable {
     private final Exchange exchange;
     private final BigDecimal netWorth;
     private final int week;
+    private final String difficulty;
 
-    public GameState(Player player, Exchange exchange, BigDecimal netWorth, int week) {
+    public GameState(Player player, Exchange exchange, BigDecimal netWorth, int week, String difficulty) {
         this.player = player;
         this.exchange = exchange;
         this.netWorth = netWorth;
         this.week = week;
+        this.difficulty = difficulty;
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
     }
 
     public Exchange getExchange() {

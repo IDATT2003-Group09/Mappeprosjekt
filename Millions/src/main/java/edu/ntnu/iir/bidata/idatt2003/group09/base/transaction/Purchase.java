@@ -6,9 +6,14 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.PurchaseCalculator;
 
 import java.math.BigDecimal;
 
+
 public class Purchase extends Transaction {
     public Purchase(Share share, int week) {
         super(share, week, new PurchaseCalculator(share));
+    }
+
+    public Purchase(Share share, int week, java.math.BigDecimal commissionRate) {
+        super(share, week, new PurchaseCalculator(share, commissionRate));
     }
 
     @Override

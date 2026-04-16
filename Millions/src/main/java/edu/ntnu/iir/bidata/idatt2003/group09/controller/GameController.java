@@ -1,3 +1,4 @@
+
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.*;
@@ -67,7 +68,7 @@ public class GameController {
     }
 
     public void saveGame() {
-        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek()), saveFileName);
+        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty()), saveFileName);
     }
 
     public int getWeek() {
@@ -137,5 +138,9 @@ public class GameController {
 
     public NewsPaper getPendingNewsPaper() {
         return exchange.getPendingNewsPaper();
+    }
+    
+    public Exchange getExchange() {
+        return exchange;
     }
 }

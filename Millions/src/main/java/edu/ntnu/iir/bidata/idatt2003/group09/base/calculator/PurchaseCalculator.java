@@ -4,13 +4,20 @@ import java.math.BigDecimal;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
 
+
 public class PurchaseCalculator implements TransactionCalculator {
   private BigDecimal purchasePrice;
   private BigDecimal quantity;
+  private BigDecimal commissionRate;
 
   public PurchaseCalculator(Share share) {
-    purchasePrice = share.getPurchasePrice();
-    quantity = share.getQuantity();
+    this(share, new BigDecimal("0.005"));
+  }
+
+  public PurchaseCalculator(Share share, BigDecimal commissionRate) {
+    this.purchasePrice = share.getPurchasePrice();
+    this.quantity = share.getQuantity();
+    this.commissionRate = commissionRate != null ? commissionRate : new BigDecimal("0.005");
   }
 
   @Override
@@ -21,7 +28,6 @@ public class PurchaseCalculator implements TransactionCalculator {
   @Override
   public BigDecimal calculateCommission() {
     BigDecimal gross = calculateGross();
-    BigDecimal commissionRate = new BigDecimal("0.005");
     return gross.multiply(commissionRate);
   }
 

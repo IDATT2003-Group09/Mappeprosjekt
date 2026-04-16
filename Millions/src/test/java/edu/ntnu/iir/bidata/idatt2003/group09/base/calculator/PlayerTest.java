@@ -15,7 +15,7 @@ class PlayerTest {
 
     @BeforeEach
     void setUp() {
-        player = new Player("Alice", BigDecimal.valueOf(1000));
+        player = new Player("Alice", BigDecimal.valueOf(1000), "Easy");
     }
 
     @Test
@@ -29,28 +29,28 @@ class PlayerTest {
     @Test
     void constructor_throwsException_whenNameIsNull() {
         assertThrows(NullPointerException.class,
-                () -> new Player(null, BigDecimal.valueOf(1000)));
+                () -> new Player(null, BigDecimal.valueOf(1000), "Easy"));
     }
 
     @Test
     void constructor_throwsException_whenNameIsBlank() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Player("   ", BigDecimal.valueOf(1000)));
+                () -> new Player("   ", BigDecimal.valueOf(1000), "Easy"));
     }
 
     @Test
     void constructor_throwsException_whenStartingMoneyIsNull() {
         assertThrows(NullPointerException.class,
-                () -> new Player("Alice", null));
+                () -> new Player("Alice", null, "Easy"));
     }
 
     @Test
     void constructor_throwsException_whenStartingMoneyIsZeroOrNegative() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Player("Alice", BigDecimal.ZERO));
+                () -> new Player("Alice", BigDecimal.ZERO, "Easy"));
 
         assertThrows(IllegalArgumentException.class,
-                () -> new Player("Alice", BigDecimal.valueOf(-100)));
+                () -> new Player("Alice", BigDecimal.valueOf(-100), "Easy"));
     }
 
     @Test
