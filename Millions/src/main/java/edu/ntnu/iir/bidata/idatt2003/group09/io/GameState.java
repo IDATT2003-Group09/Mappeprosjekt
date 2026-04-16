@@ -4,15 +4,20 @@ import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class GameState implements Serializable {
 
     private final Player player;
     private final Exchange exchange;
+    private final BigDecimal netWorth;
+    private final int week;
 
-    public GameState(Player player, Exchange exchange) {
+    public GameState(Player player, Exchange exchange, BigDecimal netWorth, int week) {
         this.player = player;
         this.exchange = exchange;
+        this.netWorth = netWorth;
+        this.week = week;
     }
 
     public Player getPlayer() {
@@ -21,5 +26,13 @@ public class GameState implements Serializable {
 
     public Exchange getExchange() {
         return exchange;
+    }
+
+    public BigDecimal getNetWorth() {
+        return netWorth;
+    }
+
+    public int getWeek() {
+        return week;
     }
 }

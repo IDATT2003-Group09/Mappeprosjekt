@@ -3,6 +3,9 @@ package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.ui.UiSoundEffects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -47,15 +50,12 @@ public class LoadGameScreen extends VBox {
       saveSlotsContainer.getChildren().add(emptyLabel);
     } else {
       for (String fileName : saveFiles) {
-        Button saveFileButton = new Button(cleanName(fileName));
-        saveFileButton.getStyleClass().add("start-button");
-        saveFileButton.setFont(Font.font(fontFamily, BUTTON_FONT_SIZE));
-        saveFileButton.setPrefWidth(450);
-        saveFileButton.setPrefHeight(55);
-        saveFileButton.setOnAction(e -> handler.onLoadSelected(fileName));
-        UiSoundEffects.installHoverSound(saveFileButton);
+        Button saveFileButton = createSaveFileButton(fileName, handler);
         UiSoundEffects.installClickSound(saveFileButton);
+        UiSoundEffects.installHoverSound(saveFileButton);
         saveSlotsContainer.getChildren().add(saveFileButton);
+        saveFileButton.getStyleClass().add("start-button");
+        saveFileButton.setOnAction(e -> handler.onLoadSelected(fileName));
       }
     }
 
@@ -106,5 +106,67 @@ public class LoadGameScreen extends VBox {
 
       return "";
   }
+
+  private Button createSaveFileButton(String fileName, LoadGameHandler handler) {
+    String displayName = cleanName(fileName);
+    String netWorth = "";
+    String weekInfo = "";
+
+    Button deleteButton = new Button("Delete");
+    deleteButton.setOnAction(e -> {
+        SaveManager.deleteSaveFile(fileName);
+        handler.onLoadSelected(null); // Refresh the screen
+    });
+    deleteButton.getStyleClass().add("delete-button");
+    UiSoundEffects.installHoverSound(deleteButton);
+    UiSoundEffects.installClickSound(deleteButton);
+    
+    try {
+        var state = SaveManager.load(fileName);
+        if (state != null) {
+            netWorth = String.format("$%.2f", state.getNetWorth());
+            weekInfo = String.format("Week: %d", state.getWeek());
+        }
+    } catch (Exception e) {
+        weekInfo = "Could not read save";
+    }
+    
+    Button saveFileButton = new Button();
+
+    VBox buttonContent = new VBox(8);
+    buttonContent.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+    Label nameLabel = new Label(displayName);
+    Label valueLabel = new Label(netWorth);
+    Label weekLabel = new Label(weekInfo);
+
+    nameLabel.setStyle("-fx-text-fill: white;");
+    valueLabel.setStyle("-fx-text-fill: green;");
+    weekLabel.setStyle("-fx-text-fill: white;");
+
+    HBox titleBox = new HBox();
+    titleBox.setAlignment(Pos.CENTER_LEFT);
+    HBox.setHgrow(nameLabel, Priority.ALWAYS);
+    nameLabel.setMaxWidth(Double.MAX_VALUE);
+    weekLabel.setAlignment(Pos.CENTER_RIGHT);
+    titleBox.getChildren().addAll(nameLabel, weekLabel);
+
+    HBox bottomBox = new HBox();
+    bottomBox.setAlignment(Pos.CENTER_LEFT);
+    HBox.setHgrow(valueLabel, Priority.ALWAYS);
+    valueLabel.setMaxWidth(Double.MAX_VALUE);
+    deleteButton.setAlignment(Pos.CENTER_RIGHT);
+    bottomBox.getChildren().addAll(valueLabel, deleteButton);
+
+
+    buttonContent.getChildren().addAll(titleBox, bottomBox);
+
+    saveFileButton.setGraphic(buttonContent);
+
+    saveFileButton.setMinWidth(600);
+
+    return saveFileButton;
+  }
+
 }
 
