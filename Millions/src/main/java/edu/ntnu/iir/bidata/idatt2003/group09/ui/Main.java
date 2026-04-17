@@ -320,7 +320,7 @@ public class Main extends Application {
         if (!tutorialMode) {
             tutorialOverlay.stopTutorial();
             controller.setOnGameOver(() -> {
-                contentRoot.setCenter(new GameOverScreen(this::showStartScreen));
+                contentRoot.setCenter(new GameOverScreen(controller, this::showStartScreen));
             });
         }
         TabPane tabPane = new TabPane();
