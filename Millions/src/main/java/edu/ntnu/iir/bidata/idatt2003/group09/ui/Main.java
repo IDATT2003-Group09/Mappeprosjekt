@@ -361,7 +361,6 @@ public class Main extends Application {
                     if (newTab == portfolioTab) {
                         portfolioScreen.refresh();
                         if (tutorialMode) {
-                            tutorialOverlay.onPortfolioViewed();
                         }
                     }
                     if (newTab == newspaperTab) {

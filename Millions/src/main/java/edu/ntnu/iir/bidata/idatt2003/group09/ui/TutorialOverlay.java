@@ -245,17 +245,6 @@ public class TutorialOverlay {
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
-  public void onPortfolioViewed() {
-    if (!isActive() || tutorialStep != 10) {
-      return;
-    }
-
-    tutorialStep = 11;
-    spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
-    boss.updateTalkingBubble("Check your portfolio to see what you own.");
-    boss.getChatBubble().addContinueButton(this::onContinuePressed);
-  }
-
   public void onNextWeek() {
     if (!isActive() || tutorialStep != 13) {
       return;
@@ -313,6 +302,11 @@ public class TutorialOverlay {
       tutorialStep = 9;
       spotlight(PORTFOLIO_TAB_X, TAB_Y, PORTFOLIO_TAB_W, TAB_H);
       boss.updateTalkingBubble("Or look at your portfolio to see what you own.");
+    } else if (tutorialStep == 10) {
+      tutorialStep = 11;
+      spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
+      boss.updateTalkingBubble("Check your portfolio to see what you own.");
+      boss.getChatBubble().addContinueButton(this::onContinuePressed);
     } else if (tutorialStep == 11) {
       tutorialStep = 12;
       spotlight(TRADE_TAB_X, TAB_Y, TRADE_TAB_W, TAB_H);
