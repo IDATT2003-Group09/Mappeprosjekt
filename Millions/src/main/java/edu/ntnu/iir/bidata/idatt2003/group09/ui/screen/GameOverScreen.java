@@ -94,4 +94,62 @@ public class GameOverScreen extends StackPane {
         Platform.runLater(backButton::requestFocus);
     }
 
+    private VBox createMetricCard(String labelText, String valueText, boolean accent) {
+        VBox metricCard = new VBox(6);
+        metricCard.getStyleClass().add("game-over-metric-card");
+        if (accent) {
+            metricCard.getStyleClass().add("game-over-metric-card-accent");
+        }
+
+        Label label = new Label(labelText);
+        label.getStyleClass().add("game-over-metric-label");
+
+        Label value = new Label(valueText);
+        value.getStyleClass().add("game-over-metric-value");
+
+        metricCard.getChildren().addAll(label, value);
+        return metricCard;
+    }
+
+    private Label createChip(String text) {
+        Label chip = new Label(text);
+        chip.getStyleClass().add("game-over-chip");
+        return chip;
+    }
+
+    private ColumnConstraints createMetricColumn() {
+        ColumnConstraints column = new ColumnConstraints();
+        column.setPercentWidth(33.33);
+        column.setHgrow(Priority.ALWAYS);
+        return column;
+    }
+
+    private BigDecimal calculateShortfall(BigDecimal netWorth, BigDecimal target) {
+        if (target == null || netWorth == null) {
+            return BigDecimal.ZERO;
+        }
+        if (target.compareTo(netWorth) <= 0) {
+            return BigDecimal.ZERO;
+        }
+        return target.subtract(netWorth);
+    }
+
+    private String buildSubtitle(
+            GameController controller,
+            int quarter,
+            int week,
+            BigDecimal netWorth,
+            BigDecimal target
+    ) {
+        return "%s, the board wanted %s by the end of quarter %d. You reached %s at week %d, so the office just ran out of patience."
+                .formatted(
+                        controller.getPlayer().getName(),
+                        currencyFormat.format(target),
+                        quarter,
+                        currencyFormat.format(netWorth),
+                        week
+                );
+    }
+
+
 }
