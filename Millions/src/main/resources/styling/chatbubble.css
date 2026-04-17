@@ -28,14 +28,15 @@
     -fx-text-fill: #111111;
     -fx-wrap-text: true;
     -fx-max-width: 320;
-    -fx-font-size: 32px;
+    -fx-font-size: 22px;
     -fx-font-family: "ThaleahFat";
 }
 
 /* Continue button styling */
 .chat-bubble-continue-button {
     -fx-background-color: transparent;
-    -fx-text-fill: #111111;
+    -fx-font-family: "ThaleahFat";
+    -fx-text-fill: #00626b;
     -fx-font-size: 18;
     -fx-padding: 2 0 0 0;
     -fx-border-color: transparent;
