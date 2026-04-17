@@ -89,64 +89,52 @@ public class CreateGameScreen extends StackPane {
 		fileNameField.setEditable(false);
 
 		Boss boss = new Boss("What do you mean all our employees quit...", BOSS_SIZE);
-		final boolean[] introStarted = {false};
+		// User can immediately enter their name and confirm
+		fileNameField.setEditable(true);
+		inputBubble.setVisible(true);
+		inputBubble.setManaged(true);
+		boss.updateTalkingBubble("Hey there! What's your name?");
 
-		// Set up the initial button action
-		confirmNameButton.setOnAction(e -> {
-			if (!introStarted[0]) {
-				// First click - start the intro and name entry
-				introStarted[0] = true;
-				confirmNameButton.setText("Confirm");
-				fileNameField.setEditable(true);
-				inputBubble.setVisible(true);
-				inputBubble.setManaged(true);
+		confirmNameButton.setOnAction(ev -> {
+			String playerName = fileNameField.getText() == null ? "" : fileNameField.getText().trim();
+
+			if (playerName.isBlank()) {
+				boss.updateTalkingBubble("Hey, I am talking to you! Enter your name.");
 				fileNameField.requestFocus();
-				boss.updateTalkingBubble("Hey there! What's your name?");
-
-				// Change the button action to validate the name
-				confirmNameButton.setOnAction(ev -> {
-					String playerName = fileNameField.getText() == null ? "" : fileNameField.getText().trim();
-
-					
-					if (playerName.isBlank()) {
-						boss.updateTalkingBubble("Hey, I am talking to you! Enter your name.");
-						fileNameField.requestFocus();
-						return;
-					}
-					if (playerName.length() > 20) {
-						boss.updateTalkingBubble("I am not remembering all that! Get a shorter name.");
-						fileNameField.requestFocus();
-						return;
-					}
-					if (SaveManager.doesSaveFileExist(playerName)) {
-						boss.updateTalkingBubble("I have already met someone with that name! Choose another one.");
-						fileNameField.requestFocus();
-						return;
-					}
-					
-					// Name is valid - show experience options
-					Button tutorialButton = createOptionButton("Tutorial", fontFamily, () ->
-							handler.onCreateGame(playerName, "Tutorial", "sp500"));
-					Button easyButton = createOptionButton("Easy", fontFamily, () ->
-							showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Easy"));
-					Button mediumButton = createOptionButton("Medium", fontFamily, () ->
-							showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Medium"));
-					Button hardButton = createOptionButton("Hard", fontFamily, () ->
-							showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Hard"));
-					
-					contentBox.getChildren().setAll(tutorialButton, easyButton, mediumButton, hardButton);
-					boss.updateTalkingBubble("Are you any good at this? If you are, you don't mind a higher commission, right?");
-					
-					// Disable name editing after confirmation
-					fileNameField.setEditable(false);
-					inputBubble.setVisible(false);
-					inputBubble.setManaged(false);
-				});
-				
-				// Handle Enter key press
-				fileNameField.setOnAction(ev -> confirmNameButton.getOnAction().handle(null));
+				return;
 			}
+			if (playerName.length() > 20) {
+				boss.updateTalkingBubble("I am not remembering all that! Get a shorter name.");
+				fileNameField.requestFocus();
+				return;
+			}
+			if (SaveManager.doesSaveFileExist(playerName)) {
+				boss.updateTalkingBubble("I have already met someone with that name! Choose another one.");
+				fileNameField.requestFocus();
+				return;
+			}
+
+			// Name is valid - show experience options
+			Button tutorialButton = createOptionButton("Tutorial", fontFamily, () ->
+					handler.onCreateGame(playerName, "Tutorial", "sp500"));
+			Button easyButton = createOptionButton("Easy", fontFamily, () ->
+					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Easy"));
+			Button mediumButton = createOptionButton("Medium", fontFamily, () ->
+					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Medium"));
+			Button hardButton = createOptionButton("Hard", fontFamily, () ->
+					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Hard"));
+
+			contentBox.getChildren().setAll(tutorialButton, easyButton, mediumButton, hardButton);
+			boss.updateTalkingBubble("Are you any good at this? If you are, you don't mind a higher commission, right?");
+
+			// Disable name editing after confirmation
+			fileNameField.setEditable(false);
+			inputBubble.setVisible(false);
+			inputBubble.setManaged(false);
 		});
+
+		// Handle Enter key press
+		fileNameField.setOnAction(ev -> confirmNameButton.getOnAction().handle(null));
 
 		ImageView exitRedImage = createExitImageView(EXIT_RED_PATH);
 		ImageView exitGreenImage = createExitImageView(EXIT_GREEN_PATH);
@@ -181,7 +169,7 @@ public class CreateGameScreen extends StackPane {
 
 		getChildren().add(boss);
 		StackPane.setAlignment(boss, Pos.BOTTOM_LEFT);
-		StackPane.setMargin(boss, new Insets(120, 0, -40, -70));
+		StackPane.setMargin(boss, new Insets(120, 0, 0, -70));
 	}
 
 	private ImageView createExitImageView(String path) {
