@@ -105,5 +105,90 @@ public class QuarterLevelUpOverlay extends StackPane {
         Platform.runLater(continueButton::requestFocus);
     }
 
+    private VBox createMetricCard(String labelText, String valueText, boolean accent) {
+        VBox card = new VBox(6);
+        card.getStyleClass().add("quarter-level-metric-card");
+        if (accent) {
+            card.getStyleClass().add("quarter-level-metric-card-accent");
+        }
+
+        Label label = new Label(labelText);
+        label.getStyleClass().add("quarter-level-metric-label");
+
+        Label value = new Label(valueText);
+        value.getStyleClass().add("quarter-level-metric-value");
+
+        card.getChildren().addAll(label, value);
+        return card;
+    }
+
+    private ColumnConstraints createMetricColumn() {
+        ColumnConstraints column = new ColumnConstraints();
+        column.setHgrow(Priority.ALWAYS);
+        column.setPercentWidth(33.33);
+        return column;
+    }
+
+    private Label createChip(String text) {
+        Label chip = new Label(text);
+        chip.getStyleClass().add("quarter-level-chip");
+        return chip;
+    }
+
+    private void playEntrance(VBox card, Region aura, HBox rewardChips) {
+        setOpacity(0);
+        aura.setScaleX(0.7);
+        aura.setScaleY(0.7);
+        card.setScaleX(0.92);
+        card.setScaleY(0.92);
+        card.setTranslateY(20);
+
+        FadeTransition overlayFade = new FadeTransition(Duration.millis(220), this);
+        overlayFade.setFromValue(0);
+        overlayFade.setToValue(1);
+
+        ScaleTransition auraScale = new ScaleTransition(Duration.millis(420), aura);
+        auraScale.setFromX(0.7);
+        auraScale.setFromY(0.7);
+        auraScale.setToX(1.0);
+        auraScale.setToY(1.0);
+
+        FadeTransition auraFade = new FadeTransition(Duration.millis(420), aura);
+        auraFade.setFromValue(0.2);
+        auraFade.setToValue(1.0);
+
+        ScaleTransition cardScale = new ScaleTransition(Duration.millis(360), card);
+        cardScale.setFromX(0.92);
+        cardScale.setFromY(0.92);
+        cardScale.setToX(1.0);
+        cardScale.setToY(1.0);
+
+        TranslateTransition cardLift = new TranslateTransition(Duration.millis(360), card);
+        cardLift.setFromY(20);
+        cardLift.setToY(0);
+
+        ParallelTransition entrance = new ParallelTransition(
+                overlayFade,
+                auraScale,
+                auraFade,
+                cardScale,
+                cardLift
+        );
+        entrance.play();
+
+        int index = 0;
+        for (Node chip : rewardChips.getChildren()) {
+            TranslateTransition floatTransition = new TranslateTransition(
+                    Duration.seconds(1.8 + (index * 0.25)),
+                    chip
+            );
+            floatTransition.setFromY(0);
+            floatTransition.setToY(-7);
+            floatTransition.setAutoReverse(true);
+            floatTransition.setCycleCount(Animation.INDEFINITE);
+            floatTransition.play();
+            index++;
+        }
+    }
 
 }
