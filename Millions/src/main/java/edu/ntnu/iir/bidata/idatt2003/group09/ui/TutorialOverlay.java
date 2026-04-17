@@ -25,11 +25,6 @@ public class TutorialOverlay {
   private static final double TAB_Y = 0;
   private static final double TAB_H = 46;
 
-  private static final double TRANSACTION_OVERVIEW_X = 270;
-  private static final double TRANSACTION_OVERVIEW_Y = 80;
-  private static final double TRANSACTION_OVERVIEW_W = 300;
-  private static final double TRANSACTION_OVERVIEW_H = 40;
-
   private static final double STOCK_LIST_X = 16;
   private static final double STOCK_LIST_Y = 250;
   private static final double STOCK_LIST_W = 524;
@@ -44,16 +39,6 @@ public class TutorialOverlay {
   private static final double SELL_BUTTON_Y = 650;
   private static final double SELL_BUTTON_W = 90;
   private static final double SELL_BUTTON_H = 46;
-  
-  private static final double CONFIRM_BUTTON_X = 820;
-  private static final double CONFIRM_BUTTON_Y = 700;
-  private static final double CONFIRM_BUTTON_W = 70;
-  private static final double CONFIRM_BUTTON_H = 36;
-  
-  private static final double CANCEL_BUTTON_X = 895;
-  private static final double CANCEL_BUTTON_Y = 700;
-  private static final double CANCEL_BUTTON_W = 70;
-  private static final double CANCEL_BUTTON_H = 36;
 
   private static final double NEXT_WEEK_BUTTON_X = 980;
   private static final double NEXT_WEEK_BUTTON_Y = 65;
@@ -190,7 +175,7 @@ public class TutorialOverlay {
       return;
     }
 
-    boss.invisibleBoss(false);
+    boss.visibleBoss(false);
 
     tutorialStep = 6;
     spotlight(BUY_BUTTON_X, BUY_BUTTON_Y, BUY_BUTTON_W, BUY_BUTTON_H);
@@ -202,8 +187,9 @@ public class TutorialOverlay {
       return;
     }
 
+    boss.visibleBoss(true);
     tutorialStep = 7; 
-    spotlight(CONFIRM_BUTTON_X, CONFIRM_BUTTON_Y, CONFIRM_BUTTON_W, CONFIRM_BUTTON_H);
+    spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
     boss.updateTalkingBubble("Review your purchase in the overview and click confirm to complete the transaction.");
     boss.getChatBubble().addContinueButton(() -> onConfirmOverviewSeen(false));
   }
@@ -214,7 +200,7 @@ public class TutorialOverlay {
     }
     
     tutorialStep = 15; 
-    spotlight(CONFIRM_BUTTON_X, CONFIRM_BUTTON_Y, CONFIRM_BUTTON_W, CONFIRM_BUTTON_H);
+    spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
     boss.updateTalkingBubble("Review your sale in the overview and click confirm to complete the transaction.");
     boss.getChatBubble().addContinueButton(() -> onConfirmOverviewSeen(true));
   }
@@ -230,8 +216,8 @@ public class TutorialOverlay {
       boss.updateTalkingBubble("Now go ahead and confirm the sale.");
     } else if (!isSellStep && tutorialStep == 7) {
       tutorialStep = 8;
-      clearSpotlight();
-      boss.updateTalkingBubble("Now go ahead and confirm your purchase.");
+
+      boss.visibleChatBubble(false);
     }
   }
 
@@ -240,7 +226,8 @@ public class TutorialOverlay {
       return;
     }
 
-    boss.invisibleBoss(true);
+    boss.visibleBoss(true);
+    boss.visibleChatBubble(spotlightActive);
 
     tutorialStep = 9;
     spotlight(HISTORY_TAB_X, TAB_Y, HISTORY_TAB_W, TAB_H);
@@ -285,7 +272,7 @@ public class TutorialOverlay {
       return;
     }
 
-    boss.invisibleBoss(true);
+    boss.visibleBoss(true);
     tutorialStep = 15;
     clearSpotlight();
     boss.updateTalkingBubble("You better start earning more money before the next Q or you are out of here!");
@@ -332,7 +319,7 @@ public class TutorialOverlay {
       boss.updateTalkingBubble("Now go back to the trade screen.");
     } else if (tutorialStep == 14) {
       tutorialStep = 15;
-      boss.invisibleBoss(false);
+      boss.visibleBoss(false);
       spotlight(SELL_BUTTON_X, SELL_BUTTON_Y, SELL_BUTTON_W, SELL_BUTTON_H);
       boss.updateTalkingBubble("Click the sell button.");
     } else if (tutorialStep == 15) {

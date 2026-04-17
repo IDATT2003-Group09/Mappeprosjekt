@@ -202,7 +202,12 @@ public class TradeScreen extends StackPane {
             }   
             buySelectedStock();
         });
-        sellButton.setOnAction(e -> sellSelectedStock());
+        sellButton.setOnAction(e -> {
+            if (tutorialMode && tutorialOverlay != null) {
+                tutorialOverlay.onSellButtonClicked();
+            }
+            sellSelectedStock();
+        });
 
         nextWeekButton.setOnAction(e -> {
             controller.nextWeek();
