@@ -24,8 +24,8 @@ public class ChatBubble extends VBox {
 		textLabel.getStyleClass().add("chat-bubble-label");
 		textLabel.setWrapText(true);
 		textLabel.setMaxWidth(320);
-		textLabel.setMinHeight(Region.USE_PREF_SIZE);
-		textLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
+		textLabel.setMinHeight(100);
+		textLabel.setPrefHeight(700);
 
 		bubbleBody = new StackPane(textLabel);
 		bubbleBody.getStyleClass().add("chat-bubble-body");
