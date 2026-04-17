@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.Boss;
 
 public class StartScreen extends VBox {
 
@@ -33,6 +34,7 @@ public class StartScreen extends VBox {
         Button settingsBtn = new Button("Settings");
         Button exitBtn = new Button("Exit");
 
+        Boss boss = new Boss("What?! All out employess quit?",500);
         newGameBtn.getStyleClass().add("start-button");
         loadGameBtn.getStyleClass().add("start-button");
         settingsBtn.getStyleClass().add("start-button");

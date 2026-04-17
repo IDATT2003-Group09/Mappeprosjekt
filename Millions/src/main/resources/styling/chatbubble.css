@@ -1,0 +1,47 @@
+/* ChatBubble main container */
+.chat-bubble {
+    -fx-alignment: top-left;
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+    font-family: TaleahFat;
+}
+
+/* Bubble body styling */
+.chat-bubble-body {
+    -fx-padding: 14 20 14 20;
+    -fx-min-width: 280;
+    -fx-pref-width: 360;
+    -fx-max-width: 360;
+    -fx-min-height: USE_PREF_SIZE;
+    -fx-pref-height: USE_COMPUTED_SIZE;
+    -fx-background-color: #f5f5f5;
+    -fx-border-color: #111111;
+    -fx-border-width: 3px;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+/* Label inside the bubble */
+.chat-bubble-label {
+    -fx-text-fill: #111111;
+    -fx-font-family: 'TaleahFat', 'System';
+    -fx-font-size: 22;
+    -fx-wrap-text: true;
+    -fx-max-width: 320;
+    -fx-min-height: USE_PREF_SIZE;
+    -fx-pref-height: USE_COMPUTED_SIZE;
+}
+
+/* Continue button styling */
+.chat-bubble-continue-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #111111;
+    -fx-font-family: 'TaleahFat', 'System';
+    -fx-font-size: 18;
+    -fx-padding: 2 0 0 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+}

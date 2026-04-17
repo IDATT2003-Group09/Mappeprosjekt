@@ -46,7 +46,7 @@ public class Boss extends StackPane {
   private boolean talkingSoundEnabled;
   private int talkingLoops;
 
-  public Boss(String initialText, String fontFamily, double imageSize) {
+  public Boss(String initialText, double imageSize) {
     this.idleImage = loadImage(IDLE_PATH, imageSize);
     this.talkingImage = loadImage(TALKING_PATH, imageSize);
     this.hairImage = loadImage(HAIR_PATH, imageSize);
@@ -57,7 +57,7 @@ public class Boss extends StackPane {
     this.imageView.setSmooth(false);
     this.imageView.setCache(false);
 
-    this.chatBubble = new ChatBubble(initialText, fontFamily);
+    this.chatBubble = new ChatBubble(initialText);
     this.talkingLoops = DEFAULT_TALKING_LOOPS;
     this.talkingSoundClip = createTalkingSoundClip();
     this.talkingSoundEnabled = this.talkingSoundClip != null;
