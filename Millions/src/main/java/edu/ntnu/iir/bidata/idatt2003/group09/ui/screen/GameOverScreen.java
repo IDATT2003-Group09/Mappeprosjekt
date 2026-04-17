@@ -150,6 +150,4 @@ public class GameOverScreen extends StackPane {
                         week
                 );
     }
-
-
 }
