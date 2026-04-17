@@ -3,11 +3,15 @@ package edu.ntnu.iir.bidata.idatt2003.group09.controller.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import java.math.BigDecimal;
 import java.util.List;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 
 public class TradeScreenController {
 	private final GameController controller;
@@ -16,7 +20,12 @@ public class TradeScreenController {
 		this.controller = controller;
 	}
 
-	public void handleBuy(ListView<Stock> stockList, TextField quantityField, Label statusLabel, Runnable onSuccess, Runnable refreshInfo) {
+
+	public interface ShowTransactionOverlay {
+		void show(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm);
+	}
+
+	public void handleBuy(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay, Runnable onSuccess, Runnable refreshInfo) {
 		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
 		if (selectedStock == null) {
 			statusLabel.setText("Please select a stock first.");
@@ -24,24 +33,32 @@ public class TradeScreenController {
 		}
 		try {
 			BigDecimal quantity = parseQuantity(quantityField);
-			// Calculate breakdown before buying
-			// price can be used for overlays if needed
-			// commissionRate and tempShare can be used for overlays if needed
-			// PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate); // For overlays if needed
-			// Calculation for commission, tax, and total can be used for overlays if needed
+			BigDecimal price = selectedStock.getSalesPrice();
+			BigDecimal commissionRate = controller.getExchange().getCommissionRate();
+			Share tempShare = new Share(selectedStock, quantity, price);
+			PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate);
+			BigDecimal commission = calc.calculateCommission();
+			BigDecimal tax = calc.calculateTax();
+			BigDecimal total = calc.calculateTotal();
 
-			// Perform buy
-			controller.getExchange().buy(selectedStock.getSymbol(), controller.getPlayer(), quantity);
-			statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
-			onSuccess.run();
-			stockList.refresh();
-			refreshInfo.run();
+			showOverlay.show("Buy", selectedStock.getSymbol(), quantity, price, commission, tax, total, () -> {
+				try {
+					controller.getExchange().buy(selectedStock.getSymbol(), controller.getPlayer(), quantity);
+					statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
+					onSuccess.run();
+					stockList.refresh();
+					refreshInfo.run();
+				} catch (Exception e) {
+					statusLabel.setText("Buy failed: " + e.getMessage());
+				}
+			});
 		} catch (Exception e) {
 			statusLabel.setText("Buy failed: " + e.getMessage());
 		}
 	}
 
-	public void handleSell(ListView<Stock> stockList, TextField quantityField, Label statusLabel, Runnable onSuccess, Runnable refreshInfo) {
+
+	public void handleSell(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay, Runnable onSuccess, Runnable refreshInfo) {
 		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
 		if (selectedStock == null) {
 			statusLabel.setText("Please select a stock first.");
@@ -54,19 +71,26 @@ public class TradeScreenController {
 		}
 		try {
 			BigDecimal quantity = parseQuantity(quantityField);
-			// Calculate breakdown before selling
-			// price can be used for overlays if needed
-			// commissionRate and tempShare can be used for overlays if needed
-			// PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate); // For overlays if needed
-			// Calculation for commission, tax, and total can be used for overlays if needed
+			BigDecimal price = selectedStock.getSalesPrice();
+			BigDecimal commissionRate = controller.getExchange().getCommissionRate();
+			Share tempShare = new Share(selectedStock, quantity, price);
+			PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate);
+			BigDecimal commission = calc.calculateCommission();
+			BigDecimal tax = calc.calculateTax();
+			BigDecimal total = calc.calculateTotal();
 
-			// Perform sell
-			controller.getExchange().sell(selectedStock.getSymbol(), controller.getPlayer(), quantity);
-			statusLabel.setText("Sold " + quantity.stripTrailingZeros().toPlainString()
-				+ " of " + selectedStock.getSymbol());
-			onSuccess.run();
-			stockList.refresh();
-			refreshInfo.run();
+			showOverlay.show("Sell", selectedStock.getSymbol(), quantity, price, commission, tax, total, () -> {
+				try {
+					controller.getExchange().sell(selectedStock.getSymbol(), controller.getPlayer(), quantity);
+					statusLabel.setText("Sold " + quantity.stripTrailingZeros().toPlainString()
+						+ " of " + selectedStock.getSymbol());
+					onSuccess.run();
+					stockList.refresh();
+					refreshInfo.run();
+				} catch (Exception e) {
+					statusLabel.setText("Sell failed: " + e.getMessage());
+				}
+			});
 		} catch (Exception e) {
 			statusLabel.setText("Sell failed: " + e.getMessage());
 		}

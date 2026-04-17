@@ -201,13 +201,29 @@ public class TradeScreenView extends StackPane {
             if (tutorialMode && tutorialOverlay != null) {
                 tutorialOverlay.onBuyButtonClicked();
             }
-            tradeScreenController.handleBuy(stockList, quantityField, statusLabel, this::onTutorialBuySuccess, this::refreshInfo);
+            tradeScreenController.handleBuy(
+                stockList,
+                quantityField,
+                statusLabel,
+                (action, stockSymbol, quantity, price, commission, tax, total, onConfirm) ->
+                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm),
+                this::onTutorialBuySuccess,
+                this::refreshInfo
+            );
         });
         sellButton.setOnAction(e -> {
             if (tutorialMode && tutorialOverlay != null) {
                 tutorialOverlay.onSellButtonClicked();
             }
-            tradeScreenController.handleSell(stockList, quantityField, statusLabel, this::onTutorialSellSuccess, this::refreshInfo);
+            tradeScreenController.handleSell(
+                stockList,
+                quantityField,
+                statusLabel,
+                (action, stockSymbol, quantity, price, commission, tax, total, onConfirm) ->
+                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm),
+                this::onTutorialSellSuccess,
+                this::refreshInfo
+            );
         });
 
         nextWeekButton.setOnAction(e -> {
