@@ -35,7 +35,6 @@ public class CreateGameScreen extends StackPane {
 	public CreateGameScreen(CreateGameHandler handler) {
 		getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
 
-		setPadding(new Insets(40));
 		setStyle("""
 		-fx-background-image: url('/images/office.png');
 		-fx-background-size: cover;
@@ -182,7 +181,7 @@ public class CreateGameScreen extends StackPane {
 
 		getChildren().add(boss);
 		StackPane.setAlignment(boss, Pos.BOTTOM_LEFT);
-		StackPane.setMargin(boss, new Insets(120, 0, -90, -70));
+		StackPane.setMargin(boss, new Insets(120, 0, -40, -70));
 	}
 
 	private ImageView createExitImageView(String path) {

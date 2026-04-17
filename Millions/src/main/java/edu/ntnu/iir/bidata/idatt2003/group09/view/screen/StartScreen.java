@@ -36,7 +36,7 @@ public class StartScreen extends StackPane {
         Button settingsBtn = new Button("Settings");
         Button exitBtn = new Button("Exit");
 
-        Boss boss = new Boss("What?! All out employess quit?", 500);
+        Boss boss = new Boss("What?! All our employess quit?", 500);
         newGameBtn.getStyleClass().add("start-button");
         loadGameBtn.getStyleClass().add("start-button");
         settingsBtn.getStyleClass().add("start-button");
@@ -75,7 +75,7 @@ public class StartScreen extends StackPane {
         getChildren().addAll(buttonBox, boss);
         StackPane.setAlignment(buttonBox, Pos.BOTTOM_CENTER);
         StackPane.setAlignment(boss, Pos.BOTTOM_LEFT);
-        StackPane.setMargin(boss, new Insets(120, 0, -90, -70));
+        StackPane.setMargin(boss, new Insets(120, 0, 0, -70));
     }
 
     private void syncMouseFocus(Button button) {
