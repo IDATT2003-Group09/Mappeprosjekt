@@ -78,7 +78,7 @@ public class TutorialOverlay {
   private final Rectangle bottomDim;
   private final Rectangle spotlightBorder;
   private final Boss boss;
-  private int tutorialStep;
+  private double tutorialStep;
   private boolean spotlightActive;
   private double spotlightX;
   private double spotlightY;
