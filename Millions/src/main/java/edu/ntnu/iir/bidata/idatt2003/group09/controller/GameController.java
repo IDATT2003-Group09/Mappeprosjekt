@@ -150,18 +150,8 @@ public class GameController {
         return player.getPortfolio();
     }
 
-    //trading
-    public void buy(String symbol, BigDecimal quantity) {
-        exchange.buy(symbol, player, quantity);
-    }
 
-    public void sell(Share share) {
-        exchange.sell(share, player);
-    }
-
-    public void sell(String symbol, BigDecimal quantity) {
-        exchange.sell(symbol, player, quantity);
-    }
+    // Trading logic is now handled by TradeScreenModel and TradeScreenController (MVC separation)
 
     public String getLatestNews() {
         MarketNews news = exchange.getPendingNews();

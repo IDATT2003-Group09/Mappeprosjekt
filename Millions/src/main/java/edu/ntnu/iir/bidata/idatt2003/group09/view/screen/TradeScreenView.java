@@ -32,9 +32,12 @@ import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
 import javafx.collections.ObservableList;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeScreenController;
+
 public class TradeScreenView extends StackPane {
 
     private final GameController controller;
+    private final TradeScreenController tradeScreenController;
     private final Runnable onSaveAndQuit;
     private final boolean tutorialMode;
     private final TutorialOverlay tutorialOverlay;
@@ -65,6 +68,7 @@ public class TradeScreenView extends StackPane {
     private final HBox sectorButtonContainer;
     private Set<String> selectedSectors;
 
+
     public TradeScreenView(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
         this(controller, stocks, onSaveAndQuit, false, null);
     }
@@ -87,6 +91,7 @@ public class TradeScreenView extends StackPane {
         TutorialOverlay tutorialOverlay
     ) {
         this.controller = controller;
+        this.tradeScreenController = new TradeScreenController(controller); // Pass controller for now
         this.onSaveAndQuit = onSaveAndQuit;
         this.tutorialMode = tutorialMode;
         this.tutorialOverlay = tutorialOverlay;
@@ -191,17 +196,18 @@ public class TradeScreenView extends StackPane {
         UiSoundEffects.installClickSound(sellButton);
         UiSoundEffects.installClickSound(nextWeekButton);
 
+
         buyButton.setOnAction(e -> {
             if (tutorialMode && tutorialOverlay != null) {
                 tutorialOverlay.onBuyButtonClicked();
-            }   
-            buySelectedStock();
+            }
+            tradeScreenController.handleBuy(stockList, quantityField, statusLabel, this::onTutorialBuySuccess, this::refreshInfo);
         });
         sellButton.setOnAction(e -> {
             if (tutorialMode && tutorialOverlay != null) {
                 tutorialOverlay.onSellButtonClicked();
             }
-            sellSelectedStock();
+            tradeScreenController.handleSell(stockList, quantityField, statusLabel, this::onTutorialSellSuccess, this::refreshInfo);
         });
 
         nextWeekButton.setOnAction(e -> {
@@ -359,77 +365,7 @@ public class TradeScreenView extends StackPane {
         overlayPane.setMouseTransparent(!hasOverlay);
     }
 
-    private void buySelectedStock() {
-        Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
-        if (selectedStock == null) {
-            statusLabel.setText("Please select a stock first.");
-            return;
-        }
-        try {
-            BigDecimal quantity = parseQuantity();
-            // Calculate breakdown before buying
-            BigDecimal price = selectedStock.getSalesPrice();
-            BigDecimal commissionRate = controller.getExchange().getCommissionRate();
-            Share tempShare = new Share(selectedStock, quantity, price);
-            PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate);
-            BigDecimal commission = calc.calculateCommission();
-            BigDecimal tax = calc.calculateTax();
-            BigDecimal total = calc.calculateTotal();
-
-            // Show overlay as in-pane overlay
-            showTransactionOverlay(
-                "Buy", selectedStock.getSymbol(), quantity, price, commission, tax, total,
-                () -> {
-                    controller.buy(selectedStock.getSymbol(), quantity);
-                    statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
-                    onTutorialBuySuccess();
-                    stockList.refresh();
-                    refreshInfo();
-                }
-            );
-        } catch (Exception e) {
-            statusLabel.setText("Buy failed: " + e.getMessage());
-        }
-    }
-
-    private void sellSelectedStock() {
-        Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
-        if (selectedStock == null) {
-            statusLabel.setText("Please select a stock first.");
-            return;
-        }
-        List<Share> shares = controller.getPortfolio().getShares(selectedStock.getSymbol());
-        if (shares.isEmpty()) {
-            statusLabel.setText("You do not own this stock.");
-            return;
-        }
-        try {
-            BigDecimal quantity = parseQuantity();
-            // Calculate breakdown before selling
-            BigDecimal price = selectedStock.getSalesPrice();
-            BigDecimal commissionRate = controller.getExchange().getCommissionRate();
-            Share tempShare = new Share(selectedStock, quantity, price);
-            PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate);
-            BigDecimal commission = calc.calculateCommission();
-            BigDecimal tax = calc.calculateTax();
-            BigDecimal total = calc.calculateTotal();
-
-            // Show overlay as in-pane overlay
-            showTransactionOverlay(
-                "Sell", selectedStock.getSymbol(), quantity, price, commission, tax, total,
-                () -> {
-                    controller.sell(selectedStock.getSymbol(), quantity);
-                    statusLabel.setText("Sold " + quantity.stripTrailingZeros().toPlainString()
-                        + " of " + selectedStock.getSymbol());
-                    onTutorialSellSuccess();
-                    stockList.refresh();
-                    refreshInfo();
-                }
-            );
-        } catch (Exception e) {
-            statusLabel.setText("Sell failed: " + e.getMessage());
-        }
-    }
+    // Trading actions are now handled by TradeScreenController. View only handles UI and delegates actions.
 
     private BigDecimal parseQuantity() {
         try {

@@ -326,6 +326,7 @@ public class Main extends Application {
         Tab newspaperTab = new Tab("Newspaper", newspaperContainer);
         newspaperTab.setClosable(false);
 
+        // TradeScreenModel and TradeScreenController are now used internally by TradeScreenView
         TradeScreenView tradeScreen = new TradeScreenView(controller, stocks, this::showStartScreen, tutorialMode, tutorialOverlay);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
