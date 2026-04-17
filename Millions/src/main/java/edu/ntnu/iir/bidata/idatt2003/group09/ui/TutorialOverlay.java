@@ -26,7 +26,10 @@ public class TutorialOverlay {
   private static final double TAB_H = 46;
 
   private static final double TRANSACTION_OVERVIEW_X = 270;
-  private static final double TRANSACTION_OVERVIEW_W = 80;
+  private static final double TRANSACTION_OVERVIEW_y = 80;
+  private static final double TRANSACTION_OVERVIEW_W = 300;
+  private static final double TRANSACTION_OVERVIEW_H = 40;
+
 
   private static final double STOCK_LIST_X = 16;
   private static final double STOCK_LIST_Y = 250;
