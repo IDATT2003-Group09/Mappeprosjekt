@@ -7,7 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.Boss;
-
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.util.Duration;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
 
@@ -76,6 +78,13 @@ public class StartScreen extends StackPane {
         StackPane.setAlignment(buttonBox, Pos.BOTTOM_CENTER);
         StackPane.setAlignment(boss, Pos.BOTTOM_LEFT);
         StackPane.setMargin(boss, new Insets(120, 0, 0, -70));
+
+        // Play hair.gif every 10 seconds
+        Timeline hairTimeline = new Timeline(
+            new KeyFrame(Duration.seconds(10), e -> boss.playHairAnimation())
+        );
+        hairTimeline.setCycleCount(Timeline.INDEFINITE);
+        hairTimeline.play();
     }
 
     private void syncMouseFocus(Button button) {

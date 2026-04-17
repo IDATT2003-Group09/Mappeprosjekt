@@ -1,3 +1,4 @@
+
 package edu.ntnu.iir.bidata.idatt2003.group09.view.elements;
 
 import java.io.IOException;
@@ -264,5 +265,17 @@ public class Boss extends StackPane {
     getChildren().stream()
       .filter(n -> n != chatBubble && n != imageView)
       .forEach(n -> n.setVisible(value));
+  }
+  /**
+   * Plays the hair.gif animation, then returns to idle after the animation duration.
+   * If the duration cannot be determined, defaults to 2 seconds.
+   */
+  public void playHairAnimation() {
+    setHair();
+    // Try to get the duration of the hair.gif, fallback to 2 seconds
+    Duration hairDuration = loadGifCycleDuration(HAIR_PATH);
+    PauseTransition hairTransition = new PauseTransition(hairDuration);
+    hairTransition.setOnFinished(e -> setIdle());
+    hairTransition.play();
   }
 }
