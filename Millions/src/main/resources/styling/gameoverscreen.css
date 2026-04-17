@@ -1,0 +1,88 @@
+@font-face {
+    font-family: "ThaleahFat";
+    src: url("/ThaleahFat.ttf");
+}
+
+.game-over-screen {
+    -fx-font-family: "ThaleahFat";
+}
+
+.game-over-backdrop {
+    -fx-background-image: url('/images/office4.png');
+    -fx-background-size: cover;
+    -fx-background-position: center;
+}
+
+.game-over-dim {
+    -fx-background-color: linear-gradient(to bottom right, rgba(5, 11, 28, 0.82), rgba(4, 8, 20, 0.94));
+}
+
+.game-over-card {
+    -fx-background-color: linear-gradient(to bottom right, rgba(16, 33, 65, 0.96), rgba(10, 21, 48, 0.96));
+    -fx-border-color: #ff5d73;
+    -fx-border-width: 2px;
+    -fx-effect: dropshadow(gaussian, rgba(255, 93, 115, 0.24), 28, 0.2, 0, 8);
+}
+
+.game-over-eyebrow {
+    -fx-text-fill: #ff8b9b;
+    -fx-font-size: 24px;
+}
+
+.game-over-title {
+    -fx-text-fill: #f4fbff;
+    -fx-font-size: 58px;
+}
+
+.game-over-subtitle {
+    -fx-text-fill: #bfd5ef;
+    -fx-font-size: 26px;
+}
+
+.game-over-chip {
+    -fx-background-color: rgba(255, 93, 115, 0.16);
+    -fx-border-color: rgba(255, 150, 166, 0.8);
+    -fx-border-width: 1px;
+    -fx-text-fill: #fff1f4;
+    -fx-font-size: 18px;
+    -fx-padding: 6 12 6 12;
+}
+
+.game-over-metrics {
+    -fx-padding: 6 0 4 0;
+}
+
+.game-over-metric-card {
+    -fx-background-color: rgba(7, 15, 36, 0.82);
+    -fx-border-color: #1b4b81;
+    -fx-border-width: 1px;
+    -fx-padding: 16 18 16 18;
+    -fx-min-height: 102px;
+}
+
+.game-over-metric-card-accent {
+    -fx-background-color: rgba(91, 24, 36, 0.92);
+    -fx-border-color: #ff5d73;
+    -fx-effect: dropshadow(gaussian, rgba(255, 93, 115, 0.18), 14, 0.2, 0, 2);
+}
+
+.game-over-metric-label {
+    -fx-text-fill: #8aa4c9;
+    -fx-font-size: 21px;
+}
+
+.game-over-metric-value {
+    -fx-text-fill: #f4fbff;
+    -fx-font-size: 34px;
+}
+
+.game-over-button {
+    -fx-font-size: 32px;
+    -fx-background-color: rgba(23, 23, 28, 0.92);
+    -fx-border-color: #ff8b9b;
+}
+
+.game-over-button:hover,
+.game-over-button:focused {
+    -fx-border-color: #ffd447;
+}

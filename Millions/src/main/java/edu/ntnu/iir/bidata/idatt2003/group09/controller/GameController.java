@@ -15,6 +15,24 @@ import java.util.List;
 
 public class GameController {
 
+    public record WeekAdvanceResult(
+        boolean gameOver,
+        boolean quarterAdvanced,
+        int completedQuarter,
+        int unlockedQuarter,
+        BigDecimal clearedNetWorth,
+        BigDecimal clearedTarget,
+        BigDecimal nextTarget
+    ) {
+        public static WeekAdvanceResult noChange() {
+            return new WeekAdvanceResult(false, false, 0, 0, null, null, null);
+        }
+
+        public static WeekAdvanceResult gameOverResult() {
+            return new WeekAdvanceResult(true, false, 0, 0, null, null, null);
+        }
+    }
+
     private final Exchange exchange;
     private final Player player;
     private final String saveFileName;
@@ -31,7 +49,7 @@ public class GameController {
         this.exchange = exchange;
         this.player = player;
         this.saveFileName = saveFileName;
-        this.progress = new GameProgress(baseRequirement, player.getStartingMoney());
+        this.progress = new GameProgress(baseRequirement, player.getStartingMoney(), exchange.getWeek());
     }
 
     public void setOnGameOver(Runnable onGameOver) {
@@ -39,7 +57,7 @@ public class GameController {
     }
 
     //game flow
-    public void nextWeek() {
+    public WeekAdvanceResult nextWeek() {
         player.setLastWeekNetWorth(player.getNetWorth());
         // Add current net worth to portfolio value history for graph
         player.getPortfolio().addNetWorthValue(player.getNetWorth());
@@ -47,20 +65,34 @@ public class GameController {
 
         boolean deadlineReached = progress.isQuarterComplete();
         boolean requirementMet = progress.meetsRequirement(player.getNetWorth());
+        WeekAdvanceResult result = WeekAdvanceResult.noChange();
 
         if (deadlineReached) {
             if (requirementMet) {
+                int completedQuarter = progress.getCheckpointLevel();
+                BigDecimal clearedNetWorth = player.getNetWorth();
+                BigDecimal clearedTarget = progress.getCurrentTarget();
                 progress.advanceCheckpoint();
+                result = new WeekAdvanceResult(
+                    false,
+                    true,
+                    completedQuarter,
+                    progress.getCheckpointLevel(),
+                    clearedNetWorth,
+                    clearedTarget,
+                    progress.getCurrentTarget()
+                );
             } else {
                 if (onGameOver != null) {
                     onGameOver.run();
                 }
-                return;
+                return WeekAdvanceResult.gameOverResult();
             }
         }
 
         exchange.advance();
         saveGame();
+        return result;
     }
 
     public GameProgress getProgress() {

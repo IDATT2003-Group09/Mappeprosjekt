@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 // import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import javafx.application.Platform;
 // import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -34,7 +35,7 @@ import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
 import javafx.collections.ObservableList;
 
-public class TradeScreen extends StackPane {
+public class TradeScreenView extends StackPane {
 
     private final GameController controller;
     private final Runnable onSaveAndQuit;
@@ -53,35 +54,38 @@ public class TradeScreen extends StackPane {
     private final TextField quantityField;
     private final NumberFormat currencyFormat;
 
+    // Removed levelLabel; Quartal label will reflect current quarter
     private final Label quarterLabel;
     private final Label requirementOverlayLabel;
     private final Label netWorthOverlayLabel;
     private final StackPane progressBarStack;
     private final ProgressBar progressBar;
+    private final Label levelUpLabel;
     private final Label deadlineLabel;
+    private int lastLevel = 1;
 
     private TextField searchField;
     private ObservableList<Stock> allStocks;
     private ObservableList<Stock> filteredStocks;
 
+    // private ToggleGroup sectorToggleGroup;
     private final HBox sectorButtonContainer;
     private Set<String> selectedSectors;
 
-    public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
+    public TradeScreenView(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
         this(controller, stocks, onSaveAndQuit, false, null);
     }
 
-    public TradeScreen(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit, boolean tutorialMode) {
+    public TradeScreenView(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit, boolean tutorialMode) {
         this(controller, stocks, onSaveAndQuit, tutorialMode, null);
     }
 
     private final StackPane overlayPane = new StackPane();
     private TransactionOverview transactionOverviewOverlay = null;
-    private QuarterLevelUpOverlay quarterLevelUpOverlay = null;
     private VBox headerBox;
     private GridPane contentGrid;
 
-    public TradeScreen(
+    public TradeScreenView(
         GameController controller,
         List<Stock> stocks,
         Runnable onSaveAndQuit,
@@ -160,6 +164,7 @@ public class TradeScreen extends StackPane {
         requirementOverlayLabel.setAlignment(Pos.CENTER_RIGHT);
         progressOverlay.getChildren().addAll(quarterLabel, netWorthOverlayLabel, requirementOverlayLabel);
         progressBarStack.getChildren().addAll(progressBar, progressOverlay);
+        levelUpLabel = new Label();
         deadlineLabel = new Label();
 
         buildLayout();
@@ -167,7 +172,6 @@ public class TradeScreen extends StackPane {
 
         // Overlay logic
         overlayPane.setPickOnBounds(false);
-        overlayPane.setMouseTransparent(true);
         BorderPane mainPane = new BorderPane();
         mainPane.setTop(headerBox);
         mainPane.setCenter(contentGrid);
@@ -207,17 +211,11 @@ public class TradeScreen extends StackPane {
         });
 
         nextWeekButton.setOnAction(e -> {
-            GameController.WeekAdvanceResult result = controller.nextWeek();
-            if (result.gameOver()) {
-                return;
-            }
+            controller.nextWeek();
             stockList.refresh();
             refreshInfo();
             updateSelectedStockGraph();
             onTutorialNextWeek();
-            if (result.quarterAdvanced()) {
-                showQuarterLevelUpOverlay(result);
-            }
         });
 
         searchField = new TextField();
@@ -264,9 +262,13 @@ public class TradeScreen extends StackPane {
         buysell.getStyleClass().add("trade-buysell");
         buysell.setPadding(new Insets(10, 0, 0, 0));
 
-        HBox infoBox = new HBox(20, deadlineLabel, weekLabel, cashLabel, statusLabel);
+        HBox infoBox = new HBox(20, deadlineLabel, weekLabel, cashLabel, statusLabel, levelUpLabel);
         infoBox.getStyleClass().add("trade-info");
         infoBox.setPadding(new Insets(0, 0, 10, 0));
+
+        HBox controls = new HBox(10, nextWeekButton);
+        controls.getStyleClass().add("trade-controls");
+        controls.setPadding(new Insets(10, 0, 0, 0));
 
         // Make progress bar shorter and place next week button next to it
         progressBar.setPrefHeight(18);
@@ -281,6 +283,7 @@ public class TradeScreen extends StackPane {
             8,
             progressAndNextWeek,
             infoBox,
+            controls,
             searchField,
             sectorButtonContainer
         );
@@ -321,44 +324,9 @@ public class TradeScreen extends StackPane {
         transactionOverviewOverlay = new TransactionOverview(action, stockSymbol, quantity, price, commission, tax, total, () -> {
             overlayPane.getChildren().remove(transactionOverviewOverlay);
             transactionOverviewOverlay = null;
-            updateOverlayInterception();
             onConfirm.run();
         });
         overlayPane.getChildren().add(transactionOverviewOverlay);
-        updateOverlayInterception();
-    }
-
-    private void showQuarterLevelUpOverlay(GameController.WeekAdvanceResult result) {
-        if (quarterLevelUpOverlay != null) {
-            overlayPane.getChildren().remove(quarterLevelUpOverlay);
-        }
-
-        quarterLevelUpOverlay = new QuarterLevelUpOverlay(
-            result.completedQuarter(),
-            result.unlockedQuarter(),
-            result.clearedNetWorth(),
-            result.clearedTarget(),
-            result.nextTarget(),
-            this::hideQuarterLevelUpOverlay
-        );
-        overlayPane.getChildren().add(quarterLevelUpOverlay);
-        updateOverlayInterception();
-    }
-
-    private void hideQuarterLevelUpOverlay() {
-        if (quarterLevelUpOverlay == null) {
-            return;
-        }
-
-        overlayPane.getChildren().remove(quarterLevelUpOverlay);
-        quarterLevelUpOverlay = null;
-        updateOverlayInterception();
-    }
-
-    private void updateOverlayInterception() {
-        boolean hasOverlay = !overlayPane.getChildren().isEmpty();
-        overlayPane.setPickOnBounds(hasOverlay);
-        overlayPane.setMouseTransparent(!hasOverlay);
     }
 
     private void buySelectedStock() {
@@ -465,7 +433,7 @@ public class TradeScreen extends StackPane {
         var progress = controller.getProgress();
         var player = controller.getPlayer();
 
-        int currentQuarter = progress.getCheckpointLevel();
+        int currentQuarter = (week / 13) + 1;
         deadlineLabel.setText("Deadline in: " + progress.getWeeksUntilDeadline() + " weeks");
 
         BigDecimal requirement = progress.getCurrentTarget();
@@ -482,6 +450,21 @@ public class TradeScreen extends StackPane {
                 .doubleValue();
         }
         progressBar.setProgress(Math.max(0, Math.min(progressValue, 1.0)));
+
+        int checkpointLevel = progress.getCheckpointLevel();
+        if (checkpointLevel > lastLevel) {
+            levelUpLabel.setText("Quarter Up! Now Q" + checkpointLevel);
+
+            new Thread(() -> {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ignored) {}
+
+                Platform.runLater(() -> levelUpLabel.setText(""));
+            }).start();
+
+            lastLevel = checkpointLevel;
+        }
     }
 
     private void onTutorialStockSelected() {

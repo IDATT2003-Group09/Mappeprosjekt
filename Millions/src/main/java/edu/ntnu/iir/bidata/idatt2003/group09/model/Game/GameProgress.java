@@ -19,8 +19,20 @@ public class GameProgress {
     private BigDecimal currentTarget;
 
     public GameProgress(BigDecimal baseRequirement, BigDecimal startingMoney) {
+        this(baseRequirement, startingMoney, 0);
+    }
+
+    public GameProgress(BigDecimal baseRequirement, BigDecimal startingMoney, int currentWeek) {
         this.baseRequirement = baseRequirement;
-        this.currentTarget = startingMoney.multiply(BigDecimal.ONE.add(baseRequirement));
+        this.currentWeek = Math.max(0, currentWeek);
+
+        int completedQuarters = this.currentWeek / weeksPerQuarter;
+        this.checkpointLevel = completedQuarters + 1;
+        this.checkpointWeek = this.checkpointLevel * weeksPerQuarter;
+        this.lastCalculatedLevel = this.checkpointLevel;
+        this.currentTarget = startingMoney.multiply(
+            BigDecimal.ONE.add(baseRequirement).pow(this.checkpointLevel)
+        );
     }
 
     public BigDecimal getBaseRequirement() {
@@ -52,11 +64,10 @@ public class GameProgress {
     }
 
     public void advanceCheckpoint() {
-
         currentTarget = currentTarget.multiply(
                 BigDecimal.ONE.add(baseRequirement)
         );
-
+        checkpointLevel++;
         checkpointWeek += weeksPerQuarter;
     }
 

@@ -443,3 +443,100 @@
 	-fx-cursor: hand;
 	-fx-effect: dropshadow(gaussian, #00e4ff22, 2, 0.1, 0, 1);
 }
+
+.quarter-level-overlay {
+	-fx-alignment: center;
+}
+
+.quarter-level-backdrop {
+	-fx-background-color: rgba(2, 8, 24, 0.82);
+}
+
+.quarter-level-aura {
+	-fx-pref-width: 780px;
+	-fx-pref-height: 780px;
+	-fx-background-color: radial-gradient(center 50% 50%, radius 60%, rgba(35, 232, 140, 0.26), rgba(5, 216, 255, 0.12) 45%, rgba(5, 216, 255, 0.0) 75%);
+}
+
+.quarter-level-card {
+	-fx-background-color: linear-gradient(to bottom right, #102141, #0a1530);
+	-fx-border-color: #1cf0c0;
+	-fx-border-width: 2px;
+	-fx-effect: dropshadow(gaussian, rgba(5, 216, 255, 0.3), 26, 0.25, 0, 8);
+}
+
+.quarter-level-eyebrow {
+	-fx-text-fill: #7df5d3;
+	-fx-font-size: 24px;
+	-fx-font-family: "ThaleahFat";
+}
+
+.quarter-level-title {
+	-fx-text-fill: #f4fbff;
+	-fx-font-size: 58px;
+	-fx-font-family: "ThaleahFat";
+}
+
+.quarter-level-subtitle {
+	-fx-text-fill: #bfd5ef;
+	-fx-font-size: 26px;
+	-fx-font-family: "ThaleahFat";
+}
+
+.quarter-level-chip {
+	-fx-background-color: rgba(5, 216, 255, 0.16);
+	-fx-border-color: rgba(125, 245, 211, 0.8);
+	-fx-border-width: 1px;
+	-fx-text-fill: #eafcff;
+	-fx-font-size: 18px;
+	-fx-font-family: "ThaleahFat";
+	-fx-padding: 6 12 6 12;
+}
+
+.quarter-level-metrics {
+	-fx-padding: 6 0 4 0;
+}
+
+.quarter-level-metric-card {
+	-fx-background-color: rgba(7, 15, 36, 0.82);
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 1px;
+	-fx-padding: 16 18 16 18;
+	-fx-min-height: 102px;
+}
+
+.quarter-level-metric-card-accent {
+	-fx-background-color: rgba(20, 70, 56, 0.92);
+	-fx-border-color: #23e88c;
+	-fx-effect: dropshadow(gaussian, rgba(35, 232, 140, 0.22), 14, 0.2, 0, 2);
+}
+
+.quarter-level-metric-label {
+	-fx-text-fill: #8aa4c9;
+	-fx-font-size: 21px;
+	-fx-font-family: "ThaleahFat";
+}
+
+.quarter-level-metric-value {
+	-fx-text-fill: #f4fbff;
+	-fx-font-size: 34px;
+	-fx-font-family: "ThaleahFat";
+}
+
+.quarter-level-button {
+	-fx-background-color: #23e88c;
+	-fx-text-fill: #0d1834;
+	-fx-font-size: 28px;
+	-fx-font-family: "ThaleahFat";
+	-fx-font-weight: bold;
+	-fx-padding: 8 22 8 22;
+	-fx-border-color: #b8ffe1;
+	-fx-border-width: 1px;
+	-fx-cursor: hand;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+}
+
+.quarter-level-button:hover {
+	-fx-background-color: #59f3ad;
+}
