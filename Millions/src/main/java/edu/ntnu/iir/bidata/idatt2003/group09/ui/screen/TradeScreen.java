@@ -196,7 +196,12 @@ public class TradeScreen extends StackPane {
         UiSoundEffects.installClickSound(sellButton);
         UiSoundEffects.installClickSound(nextWeekButton);
 
-        buyButton.setOnAction(e -> buySelectedStock());
+        buyButton.setOnAction(e -> {
+            if (tutorialMode && tutorialOverlay != null) {
+                tutorialOverlay.onBuyButtonClicked();
+            }   
+            buySelectedStock();
+        });
         sellButton.setOnAction(e -> sellSelectedStock());
 
         nextWeekButton.setOnAction(e -> {
