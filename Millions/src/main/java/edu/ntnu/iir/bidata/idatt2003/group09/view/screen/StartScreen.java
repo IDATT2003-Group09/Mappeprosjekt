@@ -8,7 +8,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.Boss;
 
-public class StartScreen extends VBox {
+import javafx.scene.layout.StackPane;
+import javafx.scene.Node;
+
+public class StartScreen extends StackPane {
 
     public interface StartHandler {
         void onNewGame();
@@ -17,24 +20,23 @@ public class StartScreen extends VBox {
     }
 
     public StartScreen(StartHandler handler) {
-
         getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
-
-        setSpacing(15);
-        setAlignment(Pos.BOTTOM_CENTER);
-        setPadding(new Insets(0, 0, 90, 0));
         setStyle("""
     -fx-background-image: url('/images/Millions_background.png');
     -fx-background-size: cover;
     -fx-background-position: center;
 """);
 
+        VBox buttonBox = new VBox(15);
+        buttonBox.setAlignment(Pos.BOTTOM_CENTER);
+        buttonBox.setPadding(new Insets(0, 0, 90, 0));
+
         Button newGameBtn = new Button("New Game");
         Button loadGameBtn = new Button("Load Game");
         Button settingsBtn = new Button("Settings");
         Button exitBtn = new Button("Exit");
 
-        Boss boss = new Boss("What?! All out employess quit?",500);
+        Boss boss = new Boss("What?! All out employess quit?", 500);
         newGameBtn.getStyleClass().add("start-button");
         loadGameBtn.getStyleClass().add("start-button");
         settingsBtn.getStyleClass().add("start-button");
@@ -69,7 +71,11 @@ public class StartScreen extends VBox {
         syncMouseFocus(settingsBtn);
         syncMouseFocus(exitBtn);
 
-        getChildren().addAll(newGameBtn, loadGameBtn, settingsBtn, exitBtn);
+        buttonBox.getChildren().addAll(newGameBtn, loadGameBtn, settingsBtn, exitBtn);
+        getChildren().addAll(buttonBox, boss);
+        StackPane.setAlignment(buttonBox, Pos.BOTTOM_CENTER);
+        StackPane.setAlignment(boss, Pos.BOTTOM_LEFT);
+        StackPane.setMargin(boss, new Insets(120, 0, -90, -70));
     }
 
     private void syncMouseFocus(Button button) {
