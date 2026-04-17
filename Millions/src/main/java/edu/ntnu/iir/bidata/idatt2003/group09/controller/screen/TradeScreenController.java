@@ -58,6 +58,9 @@ public class TradeScreenController {
 	}
 
 
+  /**
+   * Handles selling a stock. Validates selection and quantity, calculates costs, and shows a confirmation overlay before executing the sell action.
+   */
 	public void handleSell(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay, Runnable onSuccess, Runnable refreshInfo) {
 		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
 		if (selectedStock == null) {
@@ -96,6 +99,10 @@ public class TradeScreenController {
 		}
 	}
 
+  /*
+   * Parses the quantity from the text field.
+    * Throws IllegalArgumentException if the input is invalid (non-numeric, negative, or zero).
+    */
 	private BigDecimal parseQuantity(TextField quantityField) {
 		try {
 			BigDecimal quantity = new BigDecimal(quantityField.getText().trim());

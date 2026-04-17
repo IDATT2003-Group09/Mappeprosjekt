@@ -58,8 +58,12 @@ public class TradeScreenModel {
 		selectedSectors.addAll(getAllSectors());
 	}
 
+  /**
+   * Filters the list of stocks based on the search text and selected sectors.
+   * If search text is empty, it only filters by sector. If no sectors are selected, it only filters by search text.
+   * If both are empty, it returns all stocks.
+   */
 	public List<Stock> filterStocks(String searchText) {
-		// First filter by sectors if any are selected
 		List<Stock> filteredBySector = allStocks.stream()
 			.filter(stock -> {
 				if (selectedSectors == null || selectedSectors.isEmpty()) {
@@ -70,7 +74,6 @@ public class TradeScreenModel {
 			})
 			.collect(Collectors.toList());
 
-		// Then filter by search text
 		if (searchText == null || searchText.trim().isEmpty()) {
 			return filteredBySector;
 		}

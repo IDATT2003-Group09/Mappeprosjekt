@@ -165,7 +165,6 @@ public class TradeScreenView extends StackPane {
         buildLayout();
         refreshInfo();
 
-        // Overlay logic
         overlayPane.setPickOnBounds(false);
         overlayPane.setMouseTransparent(true);
         BorderPane mainPane = new BorderPane();
@@ -263,7 +262,6 @@ public class TradeScreenView extends StackPane {
         infoBox.getStyleClass().add("trade-info");
         infoBox.setPadding(new Insets(0, 0, 10, 0));
 
-        // Make progress bar shorter and place next week button next to it
         progressBar.setPrefHeight(18);
         progressBar.setPrefWidth(900);
         progressBar.setMaxWidth(Double.MAX_VALUE);
@@ -304,7 +302,6 @@ public class TradeScreenView extends StackPane {
         graph.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 
         contentGrid.add(stockList, 0, 0);
-        // Add graph and controls in a VBox in the right cell
         VBox graphAndControls = new VBox(10, graph, buysell);
         graphAndControls.setFillWidth(true);
         graphAndControls.setPadding(new Insets(0));
@@ -354,23 +351,6 @@ public class TradeScreenView extends StackPane {
         boolean hasOverlay = !overlayPane.getChildren().isEmpty();
         overlayPane.setPickOnBounds(hasOverlay);
         overlayPane.setMouseTransparent(!hasOverlay);
-    }
-
-    // Trading actions are now handled by TradeScreenController. View only handles UI and delegates actions.
-
-    private BigDecimal parseQuantity() {
-        try {
-            BigDecimal quantity = new BigDecimal(quantityField.getText().trim());
-
-            if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
-                throw new IllegalArgumentException("Quantity must be > 0");
-            }
-
-            return quantity;
-
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Invalid number");
-        }
     }
 
     private void updateSelectedStockGraph() {
@@ -448,8 +428,6 @@ public class TradeScreenView extends StackPane {
         filteredStocks.setAll(tradeScreenModel.filterStocks(searchText));
     }
 
-    // Sectors are now managed by the model
-
     private void filterBySectors() {
         filterStockList(searchField.getText());
     }
@@ -490,7 +468,6 @@ public class TradeScreenView extends StackPane {
     }
 
     private void updateSectorButtonStyles(Button allButton) {
-        // Update All button style
         if (tradeScreenModel.getSelectedSectors().isEmpty()) {
             allButton.getStyleClass().add("trade-sector-active");
         } else {
