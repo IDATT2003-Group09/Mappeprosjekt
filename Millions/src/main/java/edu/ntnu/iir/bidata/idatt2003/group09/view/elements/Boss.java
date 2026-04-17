@@ -271,8 +271,8 @@ public class Boss extends StackPane {
    * If the duration cannot be determined, defaults to 2 seconds.
    */
   public void playHairAnimation() {
-    setHair();
-    // Try to get the duration of the hair.gif, fallback to 2 seconds
+    Image freshHairImage = loadImage(HAIR_PATH, imageView.getFitWidth() > 0 ? imageView.getFitWidth() : 500);
+    imageView.setImage(freshHairImage != null ? freshHairImage : hairImage);
     Duration hairDuration = loadGifCycleDuration(HAIR_PATH);
     PauseTransition hairTransition = new PauseTransition(hairDuration);
     hairTransition.setOnFinished(e -> setIdle());
