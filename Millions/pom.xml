@@ -59,7 +59,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>edu.ntnu.iir.bidata.idatt2003.group09.ui.Main</mainClass>
+                    <mainClass>edu.ntnu.iir.bidata.idatt2003.group09.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>
