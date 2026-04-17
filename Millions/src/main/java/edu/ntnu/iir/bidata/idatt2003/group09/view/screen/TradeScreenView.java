@@ -132,7 +132,6 @@ public class TradeScreenView extends StackPane {
         netWorthLabel = new Label();
         weekLabel = new Label();
 
-        // Removed levelLabel initialization
         quarterLabel = new Label();
         requirementOverlayLabel = new Label();
         netWorthOverlayLabel = new Label();
@@ -249,32 +248,10 @@ public class TradeScreenView extends StackPane {
         maxButton.setOnAction(e -> {
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             if (selectedStock != null) {
-                BigDecimal price = selectedStock.getSalesPrice();
                 BigDecimal cash = controller.getMoney();
-                if (price.compareTo(BigDecimal.ZERO) > 0 && cash.compareTo(BigDecimal.ZERO) > 0) {
-                    BigDecimal commissionRate = controller.getExchange().getCommissionRate();
-                    BigDecimal low = BigDecimal.ZERO;
-                    BigDecimal high = cash.divide(price, 0, RoundingMode.FLOOR).add(BigDecimal.ONE);
-                    BigDecimal best = BigDecimal.ZERO;
-                    while (low.compareTo(high) < 0) {
-                        BigDecimal mid = low.add(high).divide(new BigDecimal("2"), 0, RoundingMode.FLOOR);
-                        if (mid.compareTo(BigDecimal.ZERO) <= 0) {
-                            low = mid.add(BigDecimal.ONE);
-                            continue;
-                        }
-                        Share tempShare = new Share(selectedStock, mid, price);
-                        PurchaseCalculator calc =
-                                new PurchaseCalculator(tempShare, commissionRate);
-                        BigDecimal totalCost = calc.calculateTotal();
-                        if (totalCost.compareTo(cash) <= 0) {
-                            best = mid;
-                            low = mid.add(BigDecimal.ONE);
-                        } else {
-                            high = mid;
-                        }
-                    }
-                    quantityField.setText(best.toPlainString());
-                }
+                BigDecimal commissionRate = controller.getExchange().getCommissionRate();
+                String maxQty = tradeScreenModel.calculateMaxBuyQuantity(selectedStock, cash, commissionRate);
+                quantityField.setText(maxQty);
             }
         });
 

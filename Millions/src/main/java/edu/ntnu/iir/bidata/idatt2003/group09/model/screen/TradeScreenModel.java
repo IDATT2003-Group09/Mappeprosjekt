@@ -1,3 +1,4 @@
+
 package edu.ntnu.iir.bidata.idatt2003.group09.model.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
@@ -81,6 +82,36 @@ public class TradeScreenModel {
 				stock.getCompany().toLowerCase().contains(lowerCaseSearch)
 			)
 			.collect(Collectors.toList());
+	}
+
+	/**
+	 * Calculates the maximum quantity of a stock that can be bought with the given cash, price, and commission rate.
+	 */
+	public String calculateMaxBuyQuantity(edu.ntnu.iir.bidata.idatt2003.group09.model.Stock selectedStock, java.math.BigDecimal cash, java.math.BigDecimal commissionRate) {
+		if (selectedStock == null || cash == null || commissionRate == null) return "0";
+		java.math.BigDecimal price = selectedStock.getSalesPrice();
+		if (price.compareTo(java.math.BigDecimal.ZERO) <= 0 || cash.compareTo(java.math.BigDecimal.ZERO) <= 0) return "0";
+		java.math.BigDecimal low = java.math.BigDecimal.ZERO;
+		java.math.BigDecimal high = cash.divide(price, 0, java.math.RoundingMode.FLOOR).add(java.math.BigDecimal.ONE);
+		java.math.BigDecimal best = java.math.BigDecimal.ZERO;
+		while (low.compareTo(high) < 0) {
+			java.math.BigDecimal mid = low.add(high).divide(new java.math.BigDecimal("2"), 0, java.math.RoundingMode.FLOOR);
+			if (mid.compareTo(java.math.BigDecimal.ZERO) <= 0) {
+				low = mid.add(java.math.BigDecimal.ONE);
+				continue;
+			}
+			edu.ntnu.iir.bidata.idatt2003.group09.model.Share tempShare = new edu.ntnu.iir.bidata.idatt2003.group09.model.Share(selectedStock, mid, price);
+			edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator calc =
+					new edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator(tempShare, commissionRate);
+			java.math.BigDecimal totalCost = calc.calculateTotal();
+			if (totalCost.compareTo(cash) <= 0) {
+				best = mid;
+				low = mid.add(java.math.BigDecimal.ONE);
+			} else {
+				high = mid;
+			}
+		}
+		return best.toPlainString();
 	}
 
 }
