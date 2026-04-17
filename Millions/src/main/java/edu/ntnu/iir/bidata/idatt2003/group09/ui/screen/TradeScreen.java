@@ -1,4 +1,3 @@
-
 package edu.ntnu.iir.bidata.idatt2003.group09.ui.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
@@ -193,8 +192,18 @@ public class TradeScreen extends StackPane {
         UiSoundEffects.installClickSound(sellButton);
         UiSoundEffects.installClickSound(nextWeekButton);
 
-        buyButton.setOnAction(e -> buySelectedStock());
-        sellButton.setOnAction(e -> sellSelectedStock());
+        buyButton.setOnAction(e -> {
+            if (tutorialMode && tutorialOverlay != null) {
+                tutorialOverlay.onBuyButtonClicked();
+            }   
+            buySelectedStock();
+        });
+        sellButton.setOnAction(e -> {
+            if (tutorialMode && tutorialOverlay != null) {
+                tutorialOverlay.onSellButtonClicked();
+            }
+            sellSelectedStock();
+        });
 
         nextWeekButton.setOnAction(e -> {
             GameController.WeekAdvanceResult result = controller.nextWeek();

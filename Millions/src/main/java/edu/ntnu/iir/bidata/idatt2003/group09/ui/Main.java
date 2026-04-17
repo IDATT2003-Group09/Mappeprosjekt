@@ -347,7 +347,6 @@ public class Main extends Application {
         historyTab.setClosable(false);
         settingsTab.setClosable(false);
 
-
         Tab spacerTab = new Tab("");
         spacerTab.setDisable(true);
         spacerTab.setClosable(false);
@@ -362,7 +361,6 @@ public class Main extends Application {
                     if (newTab == portfolioTab) {
                         portfolioScreen.refresh();
                         if (tutorialMode) {
-                            tutorialOverlay.onPortfolioViewed();
                         }
                     }
                     if (newTab == newspaperTab) {
@@ -379,8 +377,11 @@ public class Main extends Application {
                         }
                     }
                     if (newTab == tradeTab && tutorialMode) {
-                        tutorialOverlay.onReadyToBuy();
-                        tutorialOverlay.onTradeScreenViewed();
+                        if (tutorialOverlay.isActive()) {
+                            tutorialOverlay.onStockSelected();
+                            tutorialOverlay.onBuyButtonClicked();
+                            tutorialOverlay.onTradeScreenViewed();
+                        }
                     }
                     if (newTab == saveQuitTab) {
                         controller.saveGame();
@@ -391,7 +392,7 @@ public class Main extends Application {
         Platform.runLater(() -> UiSoundEffects.installHoverSound(tabPane));
 
         contentRoot.setCenter(tabPane);
-    }
+    } 
 
     /**
      * write mvn javafx:run to run this method that starts the application

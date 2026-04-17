@@ -253,7 +253,11 @@ public class Boss extends StackPane {
     return imageView;
   }
 
-  public void invisibleBoss(boolean value) {
+  public void visibleChatBubble(boolean value) {
+    chatBubble.setVisible(value);
+  }
+
+  public void visibleBoss(boolean value) {
     imageView.setVisible(value);
     getChildren().stream()
       .filter(n -> n != chatBubble && n != imageView)

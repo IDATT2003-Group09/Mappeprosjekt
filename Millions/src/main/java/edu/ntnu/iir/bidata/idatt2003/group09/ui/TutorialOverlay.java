@@ -131,6 +131,14 @@ public class TutorialOverlay {
     layer.setVisible(false);
   }
 
+  public int getCurrentStep() {
+      return tutorialStep;
+  }
+
+  public boolean isAtConfirmationStep() {
+      return tutorialStep == 7 || tutorialStep == 16;
+  }
+
   public boolean isActive() {
     return layer.isVisible();
   }
@@ -147,7 +155,7 @@ public class TutorialOverlay {
   }
 
   public void onTradeScreenViewed() {
-    if (!isActive() || tutorialStep != 4 && tutorialStep != 11) {
+    if (!isActive() || tutorialStep != 4 && tutorialStep != 12) {
       return;
     }
 
@@ -156,15 +164,9 @@ public class TutorialOverlay {
       spotlight(STOCK_LIST_X, STOCK_LIST_Y, STOCK_LIST_W, STOCK_LIST_H);
       boss.updateTalkingBubble("Now select a stock that you think will make me money.");
     } else {
-      tutorialStep = 12;
+      tutorialStep = 13;
       spotlight(NEXT_WEEK_BUTTON_X, NEXT_WEEK_BUTTON_Y, NEXT_WEEK_BUTTON_W, NEXT_WEEK_BUTTON_H);
       boss.updateTalkingBubble("Great! Now advance to the next week.");
-    }
-  }
-
-  public void onReadyToBuy() {
-    onTradeScreenViewed();
-    if (tutorialStep == 5) {
     }
   }
 
@@ -173,66 +175,96 @@ public class TutorialOverlay {
       return;
     }
 
-    boss.invisibleBoss(false);
+    boss.visibleBoss(false);
 
     tutorialStep = 6;
     spotlight(BUY_BUTTON_X, BUY_BUTTON_Y, BUY_BUTTON_W, BUY_BUTTON_H);
-    boss.updateTalkingBubble("Now buy it.");
+    boss.updateTalkingBubble("Now click the buy button.");
   }
 
-  public void onBuySuccess() {
+  public void onBuyButtonClicked() {
     if (!isActive() || tutorialStep != 6) {
       return;
     }
 
-    // Restore boss visibility after buy step
-    boss.invisibleBoss(true);
+    boss.visibleBoss(true);
+    tutorialStep = 7; 
+    clearSpotlight();
+    boss.updateTalkingBubble("Review your purchase in the overview and click confirm to complete the transaction.");
+    boss.getChatBubble().addContinueButton(() -> onConfirmOverviewSeen(false));
+  }
+  
+  public void onSellButtonClicked() {
+    if (!isActive() || tutorialStep != 15) {
+      return;
+    }
+    
+    tutorialStep = 16; 
+    clearSpotlight();
+    boss.visibleBoss(true);
+    boss.updateTalkingBubble("Review your sale in the overview and click confirm to complete the transaction.");
+    boss.getChatBubble().addContinueButton(() -> onConfirmOverviewSeen(true));
+  }
+  
+  private void onConfirmOverviewSeen(boolean isSellStep) {
+    if (!isActive()) {
+      return;
+    }
+    
+    if (isSellStep && tutorialStep == 16) {
+      tutorialStep = 17;
+      spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
+      boss.visibleChatBubble(false);
+    } else if (!isSellStep && tutorialStep == 7) {
+      tutorialStep = 8;
+      spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
+      boss.visibleChatBubble(false);
+    }
+  }
 
-    tutorialStep = 7;
+  public void onBuySuccess() {
+    if (!isActive() || tutorialStep != 8) {
+      return;
+    }
+
+    boss.visibleBoss(true);
+    boss.visibleChatBubble(spotlightActive);
+
+    tutorialStep = 9;
     spotlight(HISTORY_TAB_X, TAB_Y, HISTORY_TAB_W, TAB_H);
     boss.updateTalkingBubble("If you want more information about your stocks, go to the transaction history.");
   }
 
   public void onTransactionHistoryViewed() {
-    if (!isActive() || tutorialStep != 7) {
-      return;
-    }
-
-    tutorialStep = 8;
-    spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
-    boss.updateTalkingBubble("Look through your transaction history.");
-    boss.getChatBubble().addContinueButton(this::onContinuePressed);
-  }
-
-  public void onPortfolioViewed() {
     if (!isActive() || tutorialStep != 9) {
       return;
     }
 
     tutorialStep = 10;
     spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
-    boss.updateTalkingBubble("Check your portfolio to see what you own.");
+    boss.updateTalkingBubble("Look through your transaction history.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void onNextWeek() {
-    if (!isActive() || tutorialStep != 12) {
+    if (!isActive() || tutorialStep != 13) {
       return;
     }
 
-    tutorialStep = 13;
+    tutorialStep = 14;
     clearSpotlight();
     boss.updateTalkingBubble("What!? You didn't earn nearly enough money for me.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void onSellSuccess() {
-    if (!isActive() || tutorialStep != 14) {
+    if (!isActive() || tutorialStep != 17) {
       return;
     }
 
-    boss.invisibleBoss(true);
-    tutorialStep = 15;
+    boss.visibleBoss(true);
+    boss.visibleChatBubble(true);
+    tutorialStep = 18;
     clearSpotlight();
     boss.updateTalkingBubble("You better start earning more money before the next Q or you are out of here!");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
@@ -274,14 +306,19 @@ public class TutorialOverlay {
       boss.updateTalkingBubble("Or look at your portfolio to see what you own.");
     } else if (tutorialStep == 10) {
       tutorialStep = 11;
+      spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
+      boss.updateTalkingBubble("Check your portfolio to see what you own.");
+      boss.getChatBubble().addContinueButton(this::onContinuePressed);
+    } else if (tutorialStep == 11) {
+      tutorialStep = 12;
       spotlight(TRADE_TAB_X, TAB_Y, TRADE_TAB_W, TAB_H);
       boss.updateTalkingBubble("Now go back to the trade screen.");
-    } else if (tutorialStep == 13) {
-      tutorialStep = 14;
-      boss.invisibleBoss(false);
+    } else if (tutorialStep == 14) {
+      tutorialStep = 15;
+      boss.visibleBoss(false);
       spotlight(SELL_BUTTON_X, SELL_BUTTON_Y, SELL_BUTTON_W, SELL_BUTTON_H);
-      boss.updateTalkingBubble("Sell that stock.");
-    } else if (tutorialStep == 15) {
+      boss.updateTalkingBubble("Click the sell button.");
+    } else if (tutorialStep == 18) {
       stopTutorial();
     }
   }
