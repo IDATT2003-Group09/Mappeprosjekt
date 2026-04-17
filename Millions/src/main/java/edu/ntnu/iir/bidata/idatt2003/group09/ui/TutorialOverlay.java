@@ -26,7 +26,7 @@ public class TutorialOverlay {
   private static final double TAB_H = 46;
 
   private static final double TRANSACTION_OVERVIEW_X = 270;
-  private static final double TRANSACTION_OVERVIEW_y = 80;
+  private static final double TRANSACTION_OVERVIEW_Y = 80;
   private static final double TRANSACTION_OVERVIEW_W = 300;
   private static final double TRANSACTION_OVERVIEW_H = 40;
 
@@ -44,6 +44,16 @@ public class TutorialOverlay {
   private static final double SELL_BUTTON_Y = 650;
   private static final double SELL_BUTTON_W = 90;
   private static final double SELL_BUTTON_H = 46;
+  
+  private static final double CONFIRM_BUTTON_X = 820;
+  private static final double CONFIRM_BUTTON_Y = 700;
+  private static final double CONFIRM_BUTTON_W = 70;
+  private static final double CONFIRM_BUTTON_H = 36;
+  
+  private static final double CANCEL_BUTTON_X = 895;
+  private static final double CANCEL_BUTTON_Y = 700;
+  private static final double CANCEL_BUTTON_W = 70;
+  private static final double CANCEL_BUTTON_H = 36;
 
   private static final double NEXT_WEEK_BUTTON_X = 980;
   private static final double NEXT_WEEK_BUTTON_Y = 65;
@@ -182,7 +192,45 @@ public class TutorialOverlay {
 
     tutorialStep = 6;
     spotlight(BUY_BUTTON_X, BUY_BUTTON_Y, BUY_BUTTON_W, BUY_BUTTON_H);
-    boss.updateTalkingBubble("Now buy it.");
+    boss.updateTalkingBubble("Now click the buy button.");
+  }
+
+  public void onBuyButtonClicked() {
+    if (!isActive() || tutorialStep != 6) {
+      return;
+    }
+
+    tutorialStep = 6.5; // Using a half-step for the confirmation screen
+    spotlight(CONFIRM_BUTTON_X, CONFIRM_BUTTON_Y, CONFIRM_BUTTON_W, CONFIRM_BUTTON_H);
+    boss.updateTalkingBubble("Review your purchase in the overview and click confirm to complete the transaction.");
+    boss.getChatBubble().addContinueButton(() -> onConfirmOverviewSeen(false));
+  }
+  
+  public void onSellButtonClicked() {
+    if (!isActive() || tutorialStep != 14) {
+      return;
+    }
+    
+    tutorialStep = 14.5; // Using a half-step for the confirmation screen
+    spotlight(CONFIRM_BUTTON_X, CONFIRM_BUTTON_Y, CONFIRM_BUTTON_W, CONFIRM_BUTTON_H);
+    boss.updateTalkingBubble("Review your sale in the overview and click confirm to complete the transaction.");
+    boss.getChatBubble().addContinueButton(() -> onConfirmOverviewSeen(true));
+  }
+  
+  private void onConfirmOverviewSeen(boolean isSellStep) {
+    if (!isActive()) {
+      return;
+    }
+    
+    if (isSellStep && tutorialStep == 14.5) {
+      tutorialStep = 14;
+      clearSpotlight();
+      boss.updateTalkingBubble("Now go ahead and confirm the sale.");
+    } else if (!isSellStep && tutorialStep == 6.5) {
+      tutorialStep = 6;
+      clearSpotlight();
+      boss.updateTalkingBubble("Now go ahead and confirm your purchase.");
+    }
   }
 
   public void onBuySuccess() {
@@ -285,7 +333,7 @@ public class TutorialOverlay {
       tutorialStep = 14;
       boss.invisibleBoss(false);
       spotlight(SELL_BUTTON_X, SELL_BUTTON_Y, SELL_BUTTON_W, SELL_BUTTON_H);
-      boss.updateTalkingBubble("Sell that stock.");
+      boss.updateTalkingBubble("Click the sell button.");
     } else if (tutorialStep == 15) {
       stopTutorial();
     }
