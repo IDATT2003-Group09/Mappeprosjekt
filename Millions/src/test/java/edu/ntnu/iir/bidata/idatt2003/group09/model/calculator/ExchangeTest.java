@@ -1,4 +1,4 @@
-package edu.ntnu.iir.bidata.idatt2003.group09.base.calculator;
+package edu.ntnu.iir.bidata.idatt2003.group09.model.calculator;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
