@@ -326,7 +326,7 @@ public class Main extends Application {
         Tab newspaperTab = new Tab("Newspaper", newspaperContainer);
         newspaperTab.setClosable(false);
 
-        TradeScreen tradeScreen = new TradeScreen(controller, stocks, this::showStartScreen, tutorialMode, tutorialOverlay);
+        TradeScreenView tradeScreen = new TradeScreenView(controller, stocks, this::showStartScreen, tutorialMode, tutorialOverlay);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
 

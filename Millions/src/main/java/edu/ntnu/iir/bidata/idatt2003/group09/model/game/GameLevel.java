@@ -1,4 +1,4 @@
-package edu.ntnu.iir.bidata.idatt2003.group09.model.Game;
+package edu.ntnu.iir.bidata.idatt2003.group09.model.game;
 
 import java.math.BigDecimal;
 
