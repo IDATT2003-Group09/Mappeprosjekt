@@ -3,13 +3,13 @@ package edu.ntnu.iir.bidata.idatt2003.group09.base.calculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.news.GlobalEvent;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.news.StockSpecificEvent;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Player;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.news.GlobalEvent;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.news.NewsPaper;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.news.StockSpecificEvent;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;

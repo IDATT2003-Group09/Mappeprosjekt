@@ -1,11 +1,11 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.calculator;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.PurchaseCalculator;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
 
 import java.math.BigDecimal;
 

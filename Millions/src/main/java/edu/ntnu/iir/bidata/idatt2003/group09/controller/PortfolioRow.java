@@ -1,10 +1,10 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 
 public class PortfolioRow {
 

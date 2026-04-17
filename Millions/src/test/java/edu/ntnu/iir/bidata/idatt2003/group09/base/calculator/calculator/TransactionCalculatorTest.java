@@ -1,14 +1,14 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.calculator;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Stock;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.PurchaseCalculator;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.SaleCalculator;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.calculator.TransactionCalculator;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.SaleCalculator;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.TransactionCalculator;
 
 import java.math.BigDecimal;
 import java.util.stream.Stream;

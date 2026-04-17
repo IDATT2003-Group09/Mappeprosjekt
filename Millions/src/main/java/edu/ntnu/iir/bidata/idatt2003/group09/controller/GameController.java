@@ -1,11 +1,11 @@
 
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.*;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Game.GameProgress;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.news.NewsPaper;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.*;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Game.GameProgress;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.news.NewsPaper;
 
 import java.math.BigDecimal;
 import java.util.List;
