@@ -14,7 +14,8 @@ public class ChatBubble extends VBox {
 	private final Label textLabel;
 	private final StackPane bubbleBody;
 
-	public ChatBubble(String text, String fontFamily) {
+	public ChatBubble(String text) {
+    this.getStylesheets().add(getClass().getResource("/styling/chatbubble.css").toExternalForm());
 		getStyleClass().add("chat-bubble");
 		setAlignment(Pos.TOP_LEFT);
 		setPickOnBounds(false);
@@ -25,23 +26,9 @@ public class ChatBubble extends VBox {
 		textLabel.setMaxWidth(320);
 		textLabel.setMinHeight(Region.USE_PREF_SIZE);
 		textLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
-		textLabel.setTextFill(javafx.scene.paint.Color.web("#111111"));
-		textLabel.setFont(Font.font(fontFamily, 22));
 
 		bubbleBody = new StackPane(textLabel);
-		bubbleBody.setPadding(new Insets(14, 20, 14, 20));
-		bubbleBody.setMinWidth(280);
-		bubbleBody.setPrefWidth(360);
-		bubbleBody.setMaxWidth(360);
-		bubbleBody.setMinHeight(Region.USE_PREF_SIZE);
-		bubbleBody.setPrefHeight(Region.USE_COMPUTED_SIZE);
-		bubbleBody.setStyle("""
-			-fx-background-color: #f5f5f5;
-			-fx-border-color: #111111;
-			-fx-border-width: 3px;
-			-fx-background-radius: 0;
-			-fx-border-radius: 0;
-		""");
+		bubbleBody.getStyleClass().add("chat-bubble-body");
 
 		getChildren().addAll(bubbleBody);
 	}
@@ -66,18 +53,7 @@ public class ChatBubble extends VBox {
 		String buttonFontFamily = textLabel.getFont() != null
 			? textLabel.getFont().getFamily()
 			: "System";
-		continueButton.setStyle("""
-			-fx-background-color: transparent;
-			-fx-text-fill: #111111;
-			-fx-font-family: '%s';
-			-fx-font-size: 18;
-			-fx-padding: 2 0 0 0;
-			-fx-border-color: transparent;
-			-fx-border-width: 0;
-			-fx-border-radius: 0;
-			-fx-background-radius: 0;
-			-fx-cursor: hand;
-		""".formatted(buttonFontFamily));
+		continueButton.getStyleClass().add("chat-bubble-continue-button");
 		continueButton.setOnAction(e -> onContinue.run());
 		continueButton.setMouseTransparent(false);
 

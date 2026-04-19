@@ -1,3 +1,4 @@
+
 package edu.ntnu.iir.bidata.idatt2003.group09.view.elements;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class Boss extends StackPane {
   private boolean talkingSoundEnabled;
   private int talkingLoops;
 
-  public Boss(String initialText, String fontFamily, double imageSize) {
+  public Boss(String initialText, double imageSize) {
     this.idleImage = loadImage(IDLE_PATH, imageSize);
     this.talkingImage = loadImage(TALKING_PATH, imageSize);
     this.hairImage = loadImage(HAIR_PATH, imageSize);
@@ -57,7 +58,7 @@ public class Boss extends StackPane {
     this.imageView.setSmooth(false);
     this.imageView.setCache(false);
 
-    this.chatBubble = new ChatBubble(initialText, fontFamily);
+    this.chatBubble = new ChatBubble(initialText);
     this.talkingLoops = DEFAULT_TALKING_LOOPS;
     this.talkingSoundClip = createTalkingSoundClip();
     this.talkingSoundEnabled = this.talkingSoundClip != null;
@@ -264,5 +265,17 @@ public class Boss extends StackPane {
     getChildren().stream()
       .filter(n -> n != chatBubble && n != imageView)
       .forEach(n -> n.setVisible(value));
+  }
+  /**
+   * Plays the hair.gif animation, then returns to idle after the animation duration.
+   * If the duration cannot be determined, defaults to 2 seconds.
+   */
+  public void playHairAnimation() {
+    Image freshHairImage = loadImage(HAIR_PATH, imageView.getFitWidth() > 0 ? imageView.getFitWidth() : 500);
+    imageView.setImage(freshHairImage != null ? freshHairImage : hairImage);
+    Duration hairDuration = loadGifCycleDuration(HAIR_PATH);
+    PauseTransition hairTransition = new PauseTransition(hairDuration);
+    hairTransition.setOnFinished(e -> setIdle());
+    hairTransition.play();
   }
 }

@@ -73,7 +73,7 @@ public class TutorialOverlay {
   private double spotlightHeight;
 
   public TutorialOverlay() {
-    this.boss = new Boss("Welcome! Select a stock on the left to begin.", loadFontFamily(), BOSS_SIZE);
+    this.boss = new Boss("Welcome! Select a stock on the left to begin.", BOSS_SIZE);
     this.boss.setTalkingLoops(1);
     this.boss.getImageView().setScaleX(-1);
     this.boss.getChatBubble().setTranslateX(-185);
