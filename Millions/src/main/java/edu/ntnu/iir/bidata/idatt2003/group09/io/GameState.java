@@ -1,10 +1,10 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.io;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Exchange;
-import edu.ntnu.iir.bidata.idatt2003.group09.base.Player;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
+
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Player;
 
 public class GameState implements Serializable {
 
