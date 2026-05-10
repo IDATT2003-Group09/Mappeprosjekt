@@ -12,7 +12,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.GridPane;
 import java.math.BigDecimal;
 
-public class TransactionOverview extends StackPane {
+public abstract class TransactionOverview extends StackPane {
 	public TransactionOverview(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm) {
 		getStyleClass().addAll("trade-screen", "transaction-overview-root");
 		Rectangle background = new Rectangle();
@@ -29,59 +29,10 @@ public class TransactionOverview extends StackPane {
 		box.setMinHeight(400);
 		box.setAlignment(javafx.geometry.Pos.TOP_LEFT);
 
-
 		Label actionLabel = new Label(action + " " + quantity.toPlainString() + " x " + stockSymbol);
 		actionLabel.getStyleClass().add("transaction-overview-action");
 
-		// Determine labels and signs based on action
-		boolean isBuy = action.equalsIgnoreCase("buy");
-		String mainLabel = isBuy ? "COST:" : "PROCEEDS:";
-		String commissionSign = isBuy ? "+" : "-";
-		String taxSign = isBuy ? "+" : "-";
-		String totalLabel = "TOTAL:";
-		String totalSign = isBuy ? "=" : "=";
-
-		Label mainText = new Label(mainLabel);
-		mainText.getStyleClass().add("transaction-overview-label-text");
-		mainText.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-		mainText.setMaxWidth(Double.MAX_VALUE);
-		Label mainValue = new Label(quantity.multiply(price).toString());
-		mainValue.getStyleClass().add("transaction-overview-label-value");
-		mainValue.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-		mainValue.setMaxWidth(Double.MAX_VALUE);
-
-		Label commissionSignLabel = new Label(commissionSign);
-		commissionSignLabel.getStyleClass().add("transaction-overview-sign");
-		Label commissionText = new Label("COMMISSION:");
-		commissionText.getStyleClass().add("transaction-overview-label-text");
-		commissionText.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-		commissionText.setMaxWidth(Double.MAX_VALUE);
-		Label commissionValue = new Label(commission.toString());
-		commissionValue.getStyleClass().add("transaction-overview-label-value");
-		commissionValue.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-		commissionValue.setMaxWidth(Double.MAX_VALUE);
-
-		Label taxSignLabel = new Label(taxSign);
-		taxSignLabel.getStyleClass().add("transaction-overview-sign");
-		Label taxText = new Label("TAX:");
-		taxText.getStyleClass().add("transaction-overview-label-text");
-		taxText.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-		taxText.setMaxWidth(Double.MAX_VALUE);
-		Label taxValue = new Label(tax.toString());
-		taxValue.getStyleClass().add("transaction-overview-label-value");
-		taxValue.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-		taxValue.setMaxWidth(Double.MAX_VALUE);
-
-		Label eqTotal = new Label(totalSign);
-		eqTotal.getStyleClass().add("transaction-overview-sign");
-		Label totalText = new Label(totalLabel);
-		totalText.getStyleClass().add("transaction-overview-label-text");
-		totalText.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
-		totalText.setMaxWidth(Double.MAX_VALUE);
-		Label totalValue = new Label(total.toString());
-		totalValue.getStyleClass().add("transaction-overview-total");
-		totalValue.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-		totalValue.setMaxWidth(Double.MAX_VALUE);
+		GridPane breakdownGrid = createBreakdownGrid(quantity, price, commission, tax, total);
 
 		Button confirmButton = new Button("Confirm");
 		confirmButton.getStyleClass().add("transaction-overview-confirm");
@@ -104,32 +55,8 @@ public class TransactionOverview extends StackPane {
 		Separator sepBelowTotal2 = new Separator();
 		sepBelowTotal2.getStyleClass().add("transaction-overview-separator");
 
-		VBox doubleLineBox = new VBox(2, sepBelowTotal1, sepBelowTotal2); // tight spacing for double line
+		VBox doubleLineBox = new VBox(2, sepBelowTotal1, sepBelowTotal2);
 		doubleLineBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-
-		GridPane breakdownGrid = new GridPane();
-		breakdownGrid.setHgap(8);
-		breakdownGrid.setVgap(4);
-		breakdownGrid.setMaxWidth(Double.MAX_VALUE);
-
-
-		Label emptySign = new Label("");
-		emptySign.getStyleClass().add("transaction-overview-sign");
-		breakdownGrid.add(mainText, 0, 0);
-		breakdownGrid.add(emptySign, 1, 0);
-		breakdownGrid.add(mainValue, 2, 0);
-
-		breakdownGrid.add(commissionText, 0, 1);
-		breakdownGrid.add(commissionSignLabel, 1, 1);
-		breakdownGrid.add(commissionValue, 2, 1);
-
-		breakdownGrid.add(taxText, 0, 2);
-		breakdownGrid.add(taxSignLabel, 1, 2);
-		breakdownGrid.add(taxValue, 2, 2);
-
-		breakdownGrid.add(totalText, 0, 3);
-		breakdownGrid.add(eqTotal, 1, 3);
-		breakdownGrid.add(totalValue, 2, 3);
 
 		box.getChildren().addAll(
 			actionLabel,
@@ -141,4 +68,6 @@ public class TransactionOverview extends StackPane {
 		setAlignment(box, javafx.geometry.Pos.CENTER);
 		getChildren().addAll(background, box);
 	}
+
+	protected abstract GridPane createBreakdownGrid(BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total);
 }
