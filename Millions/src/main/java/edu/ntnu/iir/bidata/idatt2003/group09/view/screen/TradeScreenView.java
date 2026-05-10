@@ -310,12 +310,23 @@ public class TradeScreenView extends StackPane {
 
     private void showTransactionOverlay(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm) {
         if (transactionOverviewOverlay != null) overlayPane.getChildren().remove(transactionOverviewOverlay);
-        transactionOverviewOverlay = new TransactionOverview(action, stockSymbol, quantity, price, commission, tax, total, () -> {
-            overlayPane.getChildren().remove(transactionOverviewOverlay);
-            transactionOverviewOverlay = null;
-            updateOverlayInterception();
-            onConfirm.run();
-        });
+        if (action.equalsIgnoreCase("buy")) {
+            transactionOverviewOverlay = new edu.ntnu.iir.bidata.idatt2003.group09.view.elements.BuyOverview(stockSymbol, quantity, price, commission, tax, total, () -> {
+                overlayPane.getChildren().remove(transactionOverviewOverlay);
+                transactionOverviewOverlay = null;
+                updateOverlayInterception();
+                onConfirm.run();
+            });
+        } else if (action.equalsIgnoreCase("sell")) {
+            transactionOverviewOverlay = new edu.ntnu.iir.bidata.idatt2003.group09.view.elements.SellOverview(stockSymbol, quantity, price, commission, tax, total, () -> {
+                overlayPane.getChildren().remove(transactionOverviewOverlay);
+                transactionOverviewOverlay = null;
+                updateOverlayInterception();
+                onConfirm.run();
+            });
+        } else {
+            throw new IllegalArgumentException("Unknown transaction action: " + action);
+        }
         overlayPane.getChildren().add(transactionOverviewOverlay);
         updateOverlayInterception();
     }
