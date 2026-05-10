@@ -8,6 +8,8 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.TradeScreenModel;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockListView;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.TransactionOverview;
+import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.BuyOverview;
+import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.SellOverview;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.tutorial.TutorialOverlay;
 import javafx.collections.FXCollections;
@@ -311,14 +313,14 @@ public class TradeScreenView extends StackPane {
     private void showTransactionOverlay(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm) {
         if (transactionOverviewOverlay != null) overlayPane.getChildren().remove(transactionOverviewOverlay);
         if (action.equalsIgnoreCase("buy")) {
-            transactionOverviewOverlay = new edu.ntnu.iir.bidata.idatt2003.group09.view.elements.BuyOverview(stockSymbol, quantity, price, commission, tax, total, () -> {
+            transactionOverviewOverlay = new BuyOverview(stockSymbol, quantity, price, commission, tax, total, () -> {
                 overlayPane.getChildren().remove(transactionOverviewOverlay);
                 transactionOverviewOverlay = null;
                 updateOverlayInterception();
                 onConfirm.run();
             });
         } else if (action.equalsIgnoreCase("sell")) {
-            transactionOverviewOverlay = new edu.ntnu.iir.bidata.idatt2003.group09.view.elements.SellOverview(stockSymbol, quantity, price, commission, tax, total, () -> {
+            transactionOverviewOverlay = new SellOverview(stockSymbol, quantity, price, commission, tax, total, () -> {
                 overlayPane.getChildren().remove(transactionOverviewOverlay);
                 transactionOverviewOverlay = null;
                 updateOverlayInterception();
