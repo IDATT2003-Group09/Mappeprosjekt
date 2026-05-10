@@ -15,14 +15,17 @@ public class SellOverview extends TransactionOverview {
         breakdownGrid.setVgap(4);
         breakdownGrid.setMaxWidth(Double.MAX_VALUE);
 
-        // Sell: PROCEEDS - COMMISSION - TAX = TOTAL
+        // Calculate proceeds and total
+        BigDecimal proceeds = quantity.multiply(price);
+        BigDecimal calculatedTotal = proceeds.subtract(commission).subtract(tax);
+
         javafx.scene.control.Label emptySign = new javafx.scene.control.Label("");
         emptySign.getStyleClass().add("transaction-overview-sign");
         javafx.scene.control.Label proceedsText = new javafx.scene.control.Label("PROCEEDS:");
         proceedsText.getStyleClass().add("transaction-overview-label-text");
         proceedsText.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
         proceedsText.setMaxWidth(Double.MAX_VALUE);
-        javafx.scene.control.Label proceedsValue = new javafx.scene.control.Label(quantity.multiply(price).toString());
+        javafx.scene.control.Label proceedsValue = new javafx.scene.control.Label(proceeds.toString());
         proceedsValue.getStyleClass().add("transaction-overview-label-value");
         proceedsValue.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         proceedsValue.setMaxWidth(Double.MAX_VALUE);
@@ -55,7 +58,7 @@ public class SellOverview extends TransactionOverview {
         totalText.getStyleClass().add("transaction-overview-label-text");
         totalText.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
         totalText.setMaxWidth(Double.MAX_VALUE);
-        javafx.scene.control.Label totalValue = new javafx.scene.control.Label(total.toString());
+        javafx.scene.control.Label totalValue = new javafx.scene.control.Label(calculatedTotal.toString());
         totalValue.getStyleClass().add("transaction-overview-total");
         totalValue.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
         totalValue.setMaxWidth(Double.MAX_VALUE);
