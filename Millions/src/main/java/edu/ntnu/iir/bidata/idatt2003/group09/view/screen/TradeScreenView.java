@@ -8,6 +8,8 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.TradeScreenModel;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockListView;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.TransactionOverview;
+import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.BuyOverview;
+import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.SellOverview;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.tutorial.TutorialOverlay;
 import javafx.collections.FXCollections;
@@ -185,13 +187,44 @@ public class TradeScreenView extends StackPane {
         Button nextWeekButton = new Button("Next Week");
         nextWeekButton.getStyleClass().addAll("trade-button", "trade-next-button");
 
+        // Max Buy Button
+        Button maxBuyButton = new Button("Max Buy");
+        maxBuyButton.getStyleClass().addAll("trade-button", "trade-max-button");
+        maxBuyButton.setOnAction(e -> {
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
+            if (selectedStock != null) {
+                BigDecimal cash = controller.getMoney();
+                BigDecimal commissionRate = controller.getExchange().getCommissionRate();
+                String maxQty = tradeScreenModel.calculateMaxBuyQuantity(selectedStock, cash, commissionRate);
+                quantityField.setText(maxQty);
+            }
+        });
+
+        // Max Sell Button
+        Button maxSellButton = new Button("Max Sell");
+        maxSellButton.getStyleClass().addAll("trade-button", "trade-max-button");
+        maxSellButton.setOnAction(e -> {
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
+            if (selectedStock != null) {
+                // Sum the quantity of all shares owned for the selected stock
+                List<Share> shares = controller.getPortfolio().getShares(selectedStock.getSymbol());
+                BigDecimal total = shares.stream()
+                    .map(Share::getQuantity)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                quantityField.setText(total.stripTrailingZeros().toPlainString());
+            }
+        });
+
         UiSoundEffects.installHoverSound(buyButton);
         UiSoundEffects.installHoverSound(sellButton);
         UiSoundEffects.installHoverSound(nextWeekButton);
+        UiSoundEffects.installHoverSound(maxBuyButton);
+        UiSoundEffects.installHoverSound(maxSellButton);
         UiSoundEffects.installClickSound(buyButton);
         UiSoundEffects.installClickSound(sellButton);
         UiSoundEffects.installClickSound(nextWeekButton);
-
+        UiSoundEffects.installClickSound(maxBuyButton);
+        UiSoundEffects.installClickSound(maxSellButton);
 
         buyButton.setOnAction(e -> {
             if (tutorialMode && tutorialOverlay != null) {
@@ -241,20 +274,7 @@ public class TradeScreenView extends StackPane {
         searchField.getStyleClass().add("trade-search-field");
         setupSearchFilter();
 
-
-        Button maxButton = new Button("Max");
-        maxButton.getStyleClass().addAll("trade-button", "trade-max-button");
-        maxButton.setOnAction(e -> {
-            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
-            if (selectedStock != null) {
-                BigDecimal cash = controller.getMoney();
-                BigDecimal commissionRate = controller.getExchange().getCommissionRate();
-                String maxQty = tradeScreenModel.calculateMaxBuyQuantity(selectedStock, cash, commissionRate);
-                quantityField.setText(maxQty);
-            }
-        });
-
-        HBox buysell = new HBox(10, quantityLabel, quantityField, maxButton, buyButton, sellButton);
+        HBox buysell = new HBox(5, quantityLabel, quantityField, maxBuyButton, buyButton, sellButton, maxSellButton);
         buysell.getStyleClass().add("trade-buysell");
         buysell.setPadding(new Insets(10, 0, 0, 0));
 
@@ -310,12 +330,23 @@ public class TradeScreenView extends StackPane {
 
     private void showTransactionOverlay(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm) {
         if (transactionOverviewOverlay != null) overlayPane.getChildren().remove(transactionOverviewOverlay);
-        transactionOverviewOverlay = new TransactionOverview(action, stockSymbol, quantity, price, commission, tax, total, () -> {
-            overlayPane.getChildren().remove(transactionOverviewOverlay);
-            transactionOverviewOverlay = null;
-            updateOverlayInterception();
-            onConfirm.run();
-        });
+        if (action.equalsIgnoreCase("buy")) {
+            transactionOverviewOverlay = new BuyOverview(stockSymbol, quantity, price, commission, tax, total, () -> {
+                overlayPane.getChildren().remove(transactionOverviewOverlay);
+                transactionOverviewOverlay = null;
+                updateOverlayInterception();
+                onConfirm.run();
+            });
+        } else if (action.equalsIgnoreCase("sell")) {
+            transactionOverviewOverlay = new SellOverview(stockSymbol, quantity, price, commission, tax, total, () -> {
+                overlayPane.getChildren().remove(transactionOverviewOverlay);
+                transactionOverviewOverlay = null;
+                updateOverlayInterception();
+                onConfirm.run();
+            });
+        } else {
+            throw new IllegalArgumentException("Unknown transaction action: " + action);
+        }
         overlayPane.getChildren().add(transactionOverviewOverlay);
         updateOverlayInterception();
     }
@@ -434,20 +465,15 @@ public class TradeScreenView extends StackPane {
 
     private void createSectorFilters() {
         Set<String> sectors = tradeScreenModel.getAllSectors();
-        Set<String> allSectorNames = new HashSet<>(sectors);
 
-        Button allButton = new Button("Switch");
-        allButton.getStyleClass().addAll("trade-sector-button", "trade-sector-all");
-        allButton.setOnAction(e -> {
-            if (tradeScreenModel.getSelectedSectors().size() < allSectorNames.size()) {
-                tradeScreenModel.selectAllSectors();
-            } else {
-                tradeScreenModel.clearSelectedSectors();
-            }
-            updateSectorButtonStyles(allButton);
-            filterBySectors();
+        // Owned toggle button
+        ownedToggleButton = new ToggleButton("Owned");
+        ownedToggleButton.getStyleClass().add("trade-owned-toggle");
+        ownedToggleButton.setOnAction(e -> {
+            filterOwned = ownedToggleButton.isSelected();
+            filterBySectorsAndOwned();
         });
-        sectorButtonContainer.getChildren().add(allButton);
+        sectorButtonContainer.getChildren().add(ownedToggleButton);
 
         for (String sector : sectors) {
             Button sectorButton = new Button(sector);
@@ -460,19 +486,27 @@ public class TradeScreenView extends StackPane {
                     tradeScreenModel.selectSector(sector);
                     sectorButton.getStyleClass().add("trade-sector-active");
                 }
-                updateSectorButtonStyles(allButton);
-                filterBySectors();
+                filterBySectorsAndOwned();
             });
             sectorButtonContainer.getChildren().add(sectorButton);
         }
     }
 
-    private void updateSectorButtonStyles(Button allButton) {
-        if (tradeScreenModel.getSelectedSectors().isEmpty()) {
-            allButton.getStyleClass().add("trade-sector-active");
-        } else {
-            allButton.getStyleClass().remove("trade-sector-active");
-        }
-    }
+    private boolean filterOwned = false;
+    private ToggleButton ownedToggleButton;
 
+    private void filterBySectorsAndOwned() {
+        String searchText = searchField != null ? searchField.getText() : "";
+        List<Stock> stocks = tradeScreenModel.filterStocks(searchText);
+        if (filterOwned) {
+            // Only show stocks the player owns (has shares for)
+            Set<String> ownedSymbols = controller.getPortfolio().getShares().stream()
+                .map(share -> share.getStock().getSymbol())
+                .collect(Collectors.toSet());
+            stocks = stocks.stream()
+                .filter(stock -> ownedSymbols.contains(stock.getSymbol()))
+                .collect(Collectors.toList());
+        }
+        filteredStocks.setAll(stocks);
+    }
 }

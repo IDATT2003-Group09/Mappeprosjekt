@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller.screen;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.SaleCalculator;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
@@ -36,10 +37,11 @@ public class TradeScreenController {
 			BigDecimal price = selectedStock.getSalesPrice();
 			BigDecimal commissionRate = controller.getExchange().getCommissionRate();
 			Share tempShare = new Share(selectedStock, quantity, price);
-			PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate);
-			BigDecimal commission = calc.calculateCommission();
-			BigDecimal tax = calc.calculateTax();
-			BigDecimal total = calc.calculateTotal();
+
+			SaleCalculator saleCalc = new SaleCalculator(tempShare);
+			BigDecimal commission = saleCalc.calculateCommission();
+			BigDecimal tax = saleCalc.calculateTax();
+			BigDecimal total = saleCalc.calculateTotal();
 
 			showOverlay.show("Buy", selectedStock.getSymbol(), quantity, price, commission, tax, total, () -> {
 				try {
