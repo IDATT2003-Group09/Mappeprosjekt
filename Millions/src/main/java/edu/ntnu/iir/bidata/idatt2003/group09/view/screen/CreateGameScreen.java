@@ -227,10 +227,61 @@ public class CreateGameScreen extends StackPane {
 				handler.onCreateGame(playerName, experienceLevel, "sp500"));
 		Button randomButton = createOptionButton("Random", fontFamily, () ->
 				handler.onCreateGame(playerName, experienceLevel, "random"));
-		Button customButton = createOptionButton("Custom", fontFamily, () ->
-				handler.onCreateGame(playerName, experienceLevel, "custom"));
 
-		contentBox.getChildren().setAll(spButton, randomButton, customButton);
-		boss.updateTalkingBubble("Which exchange do you play?");
-	}
+		   Button customButton = createOptionButton("Custom", fontFamily, () -> {
+			   javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+			   fileChooser.setTitle("Select CSV File");
+			   fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+			   java.io.File selectedFile = fileChooser.showOpenDialog(this.getScene().getWindow());
+			   if (selectedFile != null) {
+				   try {
+					   if (validateCSVStructure(selectedFile)) {
+						   handler.onCreateGame(playerName, experienceLevel, selectedFile.getAbsolutePath());
+					   } else {
+						   boss.updateTalkingBubble("CSV is invalid! Please select a file matching the template.");
+					   }
+				   } catch (Exception e) {
+					   boss.updateTalkingBubble("Error reading CSV. Please try again.");
+				   }
+			   } else {
+				   boss.updateTalkingBubble("No file selected. Please choose a CSV file.");
+			   }
+		   });
+
+		   contentBox.getChildren().setAll(spButton, randomButton, customButton);
+		   boss.updateTalkingBubble("Which exchange do you play?");
+	   }
+
+	   /**
+		* Validates that the CSV file matches the structure of sp500Standard.csv (header and column count).
+		*/
+	   private boolean validateCSVStructure(java.io.File csvFile) {
+		   // Path to the reference CSV in resources
+		   String referencePath = "/csv/input/sp500Standard.csv";
+		   try (
+			   java.io.BufferedReader userReader = new java.io.BufferedReader(new java.io.FileReader(csvFile));
+			   java.io.InputStream refStream = getClass().getResourceAsStream(referencePath);
+			   java.io.BufferedReader refReader = refStream != null ? new java.io.BufferedReader(new java.io.InputStreamReader(refStream)) : null
+		   ) {
+			   if (refReader == null) return false;
+			   String refHeader = refReader.readLine();
+			   String userHeader = userReader.readLine();
+			   if (refHeader == null || userHeader == null) return false;
+			   // Compare headers (ignoring whitespace)
+			   if (!refHeader.replaceAll("\\s+", "").equalsIgnoreCase(userHeader.replaceAll("\\s+", ""))) {
+				   return false;
+			   }
+			   // Optionally, check column count for first data row
+			   String refFirstData = refReader.readLine();
+			   String userFirstData = userReader.readLine();
+			   if (refFirstData != null && userFirstData != null) {
+				   int refCols = refFirstData.split(",").length;
+				   int userCols = userFirstData.split(",").length;
+				   if (refCols != userCols) return false;
+			   }
+			   return true;
+		   } catch (Exception e) {
+			   return false;
+		   }
+	   }
 }
