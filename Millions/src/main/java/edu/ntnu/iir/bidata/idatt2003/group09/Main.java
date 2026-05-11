@@ -246,19 +246,19 @@ public class Main extends Application {
             return StockCsvReader.readDefaultResource();
         }
 
-        return switch (exchangeChoice.trim().toLowerCase()) {
-            case "random" -> StockCsvReader.readFromResource("/csv/output/random.csv");
-            case "sp500" -> StockCsvReader.readFromResource("/csv/output/sp500.csv");
-            case "custom" -> {
-                Path selectedCsvFile = promptCustomCsvFile();
-                if (selectedCsvFile == null) {
-                    yield null;
-                }
-                Path enhancedCsv = enhanceCustomCsv(selectedCsvFile);
-                yield StockCsvReader.readFromFile(enhancedCsv);
-            }
-            default -> StockCsvReader.readDefaultResource();
-        };
+        String trimmed = exchangeChoice.trim();
+        if (trimmed.toLowerCase().equals("random")) {
+            return StockCsvReader.readFromResource("/csv/output/random.csv");
+        } else if (trimmed.toLowerCase().equals("sp500")) {
+            return StockCsvReader.readFromResource("/csv/output/sp500.csv");
+        } else if (trimmed.toLowerCase().startsWith("custom:")) {
+            String filePath = trimmed.substring("custom:".length());
+            Path selectedCsvFile = Path.of(filePath);
+            Path enhancedCsv = enhanceCustomCsv(selectedCsvFile);
+            return StockCsvReader.readFromFile(enhancedCsv);
+        } else {
+            return StockCsvReader.readDefaultResource();
+        }
     }
 
     private String getExchangeName(String exchangeChoice) {

@@ -236,7 +236,7 @@ public class CreateGameScreen extends StackPane {
 			   if (selectedFile != null) {
 				   try {
 					   if (validateCSVStructure(selectedFile)) {
-						   handler.onCreateGame(playerName, experienceLevel, selectedFile.getAbsolutePath());
+						   handler.onCreateGame(playerName, experienceLevel, "custom:" + selectedFile.getAbsolutePath());
 					   } else {
 						   boss.updateTalkingBubble("CSV is invalid! Please select a file matching the template.");
 					   }
