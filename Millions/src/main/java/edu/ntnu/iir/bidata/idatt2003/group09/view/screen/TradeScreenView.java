@@ -468,7 +468,7 @@ public class TradeScreenView extends StackPane {
 
         // Owned toggle button
         ownedToggleButton = new ToggleButton("Owned");
-        ownedToggleButton.getStyleClass().add("trade-sector-button");
+        ownedToggleButton.getStyleClass().add("trade-owned-toggle");
         ownedToggleButton.setOnAction(e -> {
             filterOwned = ownedToggleButton.isSelected();
             filterBySectorsAndOwned();
