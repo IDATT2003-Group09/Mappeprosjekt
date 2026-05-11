@@ -31,7 +31,7 @@ public class PortfolioScreen extends BorderPane {
     private final Label changeLabel;
     private final Label cashLabel;
     private final Label statusLabel;
-    private final Button sellAll;
+    // Removed unused sellAll button field
     private final NumberFormat currencyFormat =
         NumberFormat.getCurrencyInstance(Locale.US);
 
@@ -50,11 +50,6 @@ public class PortfolioScreen extends BorderPane {
         this.changeLabel = new Label();
         this.cashLabel = new Label();
         this.statusLabel = new Label();
-        this.sellAll = new Button();
-
-        sellAll.setOnAction(e -> {
-            System.out.println("selling..");
-        });
         javafx.scene.chart.NumberAxis xAxis = new javafx.scene.chart.NumberAxis();
         xAxis.setLabel("");
         xAxis.setTickLabelsVisible(false); 
@@ -83,7 +78,14 @@ public class PortfolioScreen extends BorderPane {
         cashLabel.getStyleClass().add("portfolio-cash");
         statusLabel.getStyleClass().addAll("portfolio-status", "portfolio-cash");
 
-        HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel, statusLabel, sellAll);
+        Button sellAllButton = new Button("Sell All");
+        sellAllButton.getStyleClass().add("portfolio-sell-all-button");
+        sellAllButton.setOnAction(e -> {
+            controller.sellAllShares();
+            refresh();
+        });
+
+        HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel, statusLabel, sellAllButton);
         topBox.getStyleClass().add("portfolio-top-box");
         topBox.setPadding(new Insets(10));
         

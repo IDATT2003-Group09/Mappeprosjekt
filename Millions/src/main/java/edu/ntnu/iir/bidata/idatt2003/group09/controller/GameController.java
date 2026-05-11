@@ -1,4 +1,6 @@
 
+
+
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
@@ -164,5 +166,19 @@ public class GameController {
     
     public Exchange getExchange() {
         return exchange;
+    }
+
+    /**
+     * Sells all shares in the player's portfolio, credits their value to cash.
+     */
+    public void sellAllShares() {
+        Portfolio portfolio = getPortfolio();
+        List<Share> sharesToSell = new java.util.ArrayList<>(portfolio.getShares());
+        for (Share share : sharesToSell) {
+            BigDecimal value = share.getStock().getSalesPrice().multiply(share.getQuantity());
+            player.addMoney(value);
+            portfolio.removeShare(share);
+        }
+        saveGame();
     }
 }
