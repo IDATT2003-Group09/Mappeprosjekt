@@ -130,6 +130,10 @@ public class Main extends Application {
     }
 
     private void showCreateGameScreen() {
+        showCreateGameScreen(null);
+    }
+
+    private void showCreateGameScreen(String bossMessage) {
         CreateGameScreen createGameScreen = new CreateGameScreen(new CreateGameScreen.CreateGameHandler() {
             @Override
             public void onCreateGame(String playerName, String experienceLevel, String exchangeChoice) {
@@ -144,7 +148,7 @@ public class Main extends Application {
             public void onBack() {
                 showStartScreen();
             }
-        });
+        }, bossMessage);
 
         tutorialOverlay.stopTutorial();
         contentRoot.setCenter(createGameScreen);
@@ -233,11 +237,14 @@ public class Main extends Application {
 
         } catch (IOException e) {
             e.printStackTrace();
-
-            Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
-            errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
-
-            contentRoot.setCenter(new VBox(errorLabel));
+            // If the error is from a custom CSV, show the boss error and let user pick again
+            if (exchangeChoice != null && exchangeChoice.startsWith("custom:")) {
+                showCreateGameScreen("That CSV was invalid! Please pick a valid file, or choose sp500 or random.");
+            } else {
+                Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
+                errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
+                contentRoot.setCenter(new VBox(errorLabel));
+            }
         }
     }
 

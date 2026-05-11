@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
 public class CreateGameScreen extends StackPane {
+	private Boss boss;
 
 	private static final String FONT_PATH = "/ThaleahFat.ttf";
 	private static final String EXIT_RED_PATH = "/images/util/exit/pixilart-frames/exitred.png";
@@ -33,6 +34,10 @@ public class CreateGameScreen extends StackPane {
 	}
 
 	public CreateGameScreen(CreateGameHandler handler) {
+		this(handler, null);
+	}
+
+	public CreateGameScreen(CreateGameHandler handler, String bossMessage) {
 		getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
 
 		setStyle("""
@@ -88,12 +93,16 @@ public class CreateGameScreen extends StackPane {
 
 		fileNameField.setEditable(false);
 
-		Boss boss = new Boss("What do you mean all our employees quit...", BOSS_SIZE);
+		boss = new Boss("What do you mean all our employees quit...", BOSS_SIZE);
 		// User can immediately enter their name and confirm
 		fileNameField.setEditable(true);
 		inputBubble.setVisible(true);
 		inputBubble.setManaged(true);
-		boss.updateTalkingBubble("Hey there! What's your name?");
+		if (bossMessage != null && !bossMessage.isBlank()) {
+			boss.updateTalkingBubble(bossMessage);
+		} else {
+			boss.updateTalkingBubble("Hey there! What's your name?");
+		}
 
 		confirmNameButton.setOnAction(ev -> {
 			String playerName = fileNameField.getText() == null ? "" : fileNameField.getText().trim();

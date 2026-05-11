@@ -1,7 +1,7 @@
 # S&P 500 Companies by Market Cap
 # Ticker,Name,Price
 
-TEST,Test, 200.00
+TEST,Test
 AAPL,Apple Inc.,276.43
 MSFT,Microsoft,404.68
 AMZN,Amazon,204.62
