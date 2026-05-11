@@ -187,13 +187,44 @@ public class TradeScreenView extends StackPane {
         Button nextWeekButton = new Button("Next Week");
         nextWeekButton.getStyleClass().addAll("trade-button", "trade-next-button");
 
+        // Max Buy Button
+        Button maxBuyButton = new Button("Max Buy");
+        maxBuyButton.getStyleClass().addAll("trade-button", "trade-max-button");
+        maxBuyButton.setOnAction(e -> {
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
+            if (selectedStock != null) {
+                BigDecimal cash = controller.getMoney();
+                BigDecimal commissionRate = controller.getExchange().getCommissionRate();
+                String maxQty = tradeScreenModel.calculateMaxBuyQuantity(selectedStock, cash, commissionRate);
+                quantityField.setText(maxQty);
+            }
+        });
+
+        // Max Sell Button
+        Button maxSellButton = new Button("Max Sell");
+        maxSellButton.getStyleClass().addAll("trade-button", "trade-max-button");
+        maxSellButton.setOnAction(e -> {
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
+            if (selectedStock != null) {
+                // Sum the quantity of all shares owned for the selected stock
+                List<Share> shares = controller.getPortfolio().getShares(selectedStock.getSymbol());
+                BigDecimal total = shares.stream()
+                    .map(Share::getQuantity)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+                quantityField.setText(total.stripTrailingZeros().toPlainString());
+            }
+        });
+
         UiSoundEffects.installHoverSound(buyButton);
         UiSoundEffects.installHoverSound(sellButton);
         UiSoundEffects.installHoverSound(nextWeekButton);
+        UiSoundEffects.installHoverSound(maxBuyButton);
+        UiSoundEffects.installHoverSound(maxSellButton);
         UiSoundEffects.installClickSound(buyButton);
         UiSoundEffects.installClickSound(sellButton);
         UiSoundEffects.installClickSound(nextWeekButton);
-
+        UiSoundEffects.installClickSound(maxBuyButton);
+        UiSoundEffects.installClickSound(maxSellButton);
 
         buyButton.setOnAction(e -> {
             if (tutorialMode && tutorialOverlay != null) {
@@ -243,20 +274,7 @@ public class TradeScreenView extends StackPane {
         searchField.getStyleClass().add("trade-search-field");
         setupSearchFilter();
 
-
-        Button maxButton = new Button("Max");
-        maxButton.getStyleClass().addAll("trade-button", "trade-max-button");
-        maxButton.setOnAction(e -> {
-            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
-            if (selectedStock != null) {
-                BigDecimal cash = controller.getMoney();
-                BigDecimal commissionRate = controller.getExchange().getCommissionRate();
-                String maxQty = tradeScreenModel.calculateMaxBuyQuantity(selectedStock, cash, commissionRate);
-                quantityField.setText(maxQty);
-            }
-        });
-
-        HBox buysell = new HBox(10, quantityLabel, quantityField, maxButton, buyButton, sellButton);
+        HBox buysell = new HBox(10, quantityLabel, quantityField, maxBuyButton, maxSellButton, buyButton, sellButton);
         buysell.getStyleClass().add("trade-buysell");
         buysell.setPadding(new Insets(10, 0, 0, 0));
 
