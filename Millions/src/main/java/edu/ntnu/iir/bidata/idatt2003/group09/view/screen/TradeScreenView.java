@@ -476,9 +476,18 @@ public class TradeScreenView extends StackPane {
                 tradeScreenModel.clearSelectedSectors();
             }
             updateSectorButtonStyles(allButton);
-            filterBySectors();
+            filterBySectorsAndOwned();
         });
         sectorButtonContainer.getChildren().add(allButton);
+
+        // Owned toggle button
+        ownedToggleButton = new ToggleButton("Owned");
+        ownedToggleButton.getStyleClass().add("trade-sector-button");
+        ownedToggleButton.setOnAction(e -> {
+            filterOwned = ownedToggleButton.isSelected();
+            filterBySectorsAndOwned();
+        });
+        sectorButtonContainer.getChildren().add(ownedToggleButton);
 
         for (String sector : sectors) {
             Button sectorButton = new Button(sector);
@@ -492,7 +501,7 @@ public class TradeScreenView extends StackPane {
                     sectorButton.getStyleClass().add("trade-sector-active");
                 }
                 updateSectorButtonStyles(allButton);
-                filterBySectors();
+                filterBySectorsAndOwned();
             });
             sectorButtonContainer.getChildren().add(sectorButton);
         }
@@ -506,4 +515,21 @@ public class TradeScreenView extends StackPane {
         }
     }
 
+    private boolean filterOwned = false;
+    private ToggleButton ownedToggleButton;
+
+    private void filterBySectorsAndOwned() {
+        String searchText = searchField != null ? searchField.getText() : "";
+        List<Stock> stocks = tradeScreenModel.filterStocks(searchText);
+        if (filterOwned) {
+            // Only show stocks the player owns (has shares for)
+            Set<String> ownedSymbols = controller.getPortfolio().getShares().stream()
+                .map(share -> share.getStock().getSymbol())
+                .collect(Collectors.toSet());
+            stocks = stocks.stream()
+                .filter(stock -> ownedSymbols.contains(stock.getSymbol()))
+                .collect(Collectors.toList());
+        }
+        filteredStocks.setAll(stocks);
+    }
 }
