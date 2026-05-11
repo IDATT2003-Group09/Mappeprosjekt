@@ -30,12 +30,11 @@ public class PortfolioScreen extends BorderPane {
     private final Label changeLabel;
     private final Label cashLabel;
     private final Label statusLabel;
+    private final Button sellAll;
+    private final NumberFormat currencyFormat =
+        NumberFormat.getCurrencyInstance(Locale.US);
 
-
-        private final NumberFormat currencyFormat =
-            NumberFormat.getCurrencyInstance(Locale.US);
-
-        private final javafx.scene.chart.LineChart<Number, Number> portfolioChart;
+    private final javafx.scene.chart.LineChart<Number, Number> portfolioChart;
 
 
     public PortfolioScreen(GameController controller) {
