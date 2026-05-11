@@ -1,3 +1,49 @@
+/* Winners and Losers Toggle Styling */
+.trade-winners-toggle {
+	-fx-background-color: #1a3d1a;
+	-fx-text-fill: #23e88c;
+	-fx-font-size: 14px;
+	-fx-font-family: "ThaleahFat";
+	-fx-padding: 0 16 0 16;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+	-fx-border-color: #23e88c;
+	-fx-border-width: 2;
+	-fx-cursor: hand;
+	-fx-font-weight: bold;
+	-fx-effect: dropshadow(gaussian, #23e88c44, 2, 0.1, 0, 1);
+	-fx-transition: background-color 0.2s, color 0.2s;
+	margin-left: 8px;
+	margin-right: 8px;
+}
+.trade-winners-toggle:selected, .trade-winners-toggle:pressed {
+	-fx-background-color: #23e88c;
+	-fx-text-fill: #1a3d1a;
+	-fx-border-color: #23e88c;
+}
+
+.trade-losers-toggle {
+	-fx-background-color: #3d1a1a;
+	-fx-text-fill: #ff6b78;
+	-fx-font-size: 14px;
+	-fx-font-family: "ThaleahFat";
+	-fx-padding: 0 16 0 16;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+	-fx-border-color: #ff6b78;
+	-fx-border-width: 2;
+	-fx-cursor: hand;
+	-fx-font-weight: bold;
+	-fx-effect: dropshadow(gaussian, #ff6b7844, 2, 0.1, 0, 1);
+	-fx-transition: background-color 0.2s, color 0.2s;
+	margin-left: 8px;
+	margin-right: 8px;
+}
+.trade-losers-toggle:selected, .trade-losers-toggle:pressed {
+	-fx-background-color: #ff6b78;
+	-fx-text-fill: #3d1a1a;
+	-fx-border-color: #ff6b78;
+}
 /* Owned Toggle Styling */
 .trade-screen .trade-owned-toggle {
 	-fx-background-color: #ff9800;
