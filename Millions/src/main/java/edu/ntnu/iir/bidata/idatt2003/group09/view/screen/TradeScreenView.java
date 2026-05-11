@@ -465,20 +465,6 @@ public class TradeScreenView extends StackPane {
 
     private void createSectorFilters() {
         Set<String> sectors = tradeScreenModel.getAllSectors();
-        Set<String> allSectorNames = new HashSet<>(sectors);
-
-        Button allButton = new Button("Switch");
-        allButton.getStyleClass().addAll("trade-sector-button", "trade-sector-all");
-        allButton.setOnAction(e -> {
-            if (tradeScreenModel.getSelectedSectors().size() < allSectorNames.size()) {
-                tradeScreenModel.selectAllSectors();
-            } else {
-                tradeScreenModel.clearSelectedSectors();
-            }
-            updateSectorButtonStyles(allButton);
-            filterBySectorsAndOwned();
-        });
-        sectorButtonContainer.getChildren().add(allButton);
 
         // Owned toggle button
         ownedToggleButton = new ToggleButton("Owned");
@@ -500,18 +486,9 @@ public class TradeScreenView extends StackPane {
                     tradeScreenModel.selectSector(sector);
                     sectorButton.getStyleClass().add("trade-sector-active");
                 }
-                updateSectorButtonStyles(allButton);
                 filterBySectorsAndOwned();
             });
             sectorButtonContainer.getChildren().add(sectorButton);
-        }
-    }
-
-    private void updateSectorButtonStyles(Button allButton) {
-        if (tradeScreenModel.getSelectedSectors().isEmpty()) {
-            allButton.getStyleClass().add("trade-sector-active");
-        } else {
-            allButton.getStyleClass().remove("trade-sector-active");
         }
     }
 
