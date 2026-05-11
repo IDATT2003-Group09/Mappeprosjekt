@@ -14,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.control.Button;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -49,6 +50,11 @@ public class PortfolioScreen extends BorderPane {
         this.changeLabel = new Label();
         this.cashLabel = new Label();
         this.statusLabel = new Label();
+        this.sellAll = new Button();
+
+        sellAll.setOnAction(e -> {
+            System.out.println("selling..");
+        });
         javafx.scene.chart.NumberAxis xAxis = new javafx.scene.chart.NumberAxis();
         xAxis.setLabel("");
         xAxis.setTickLabelsVisible(false); 
@@ -77,7 +83,7 @@ public class PortfolioScreen extends BorderPane {
         cashLabel.getStyleClass().add("portfolio-cash");
         statusLabel.getStyleClass().addAll("portfolio-status", "portfolio-cash");
 
-        HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel, statusLabel);
+        HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel, statusLabel, sellAll);
         topBox.getStyleClass().add("portfolio-top-box");
         topBox.setPadding(new Insets(10));
         
