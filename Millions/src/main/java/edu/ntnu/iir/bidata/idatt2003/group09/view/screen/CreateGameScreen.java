@@ -29,7 +29,7 @@ public class CreateGameScreen extends StackPane {
 	private static final double EXIT_BUTTON_SIZE = 50;
 
 	public interface CreateGameHandler {
-		void onCreateGame(String playerName, String experienceLevel, String exchangeChoice);
+		void onCreateGame(String playerName, String experienceLevel, String exchangeChoice, String startingMoney);
 		void onBack();
 	}
 
@@ -69,6 +69,23 @@ public class CreateGameScreen extends StackPane {
 			-fx-highlight-text-fill: #111111;
 		""");
 
+		TextField moneyField = new TextField();
+		moneyField.setPromptText("Starting money (e.g. 100000)");
+		moneyField.setMaxWidth(250);
+		moneyField.setPrefHeight(38);
+		moneyField.setFont(Font.font(fontFamily, 22));
+		moneyField.setAlignment(Pos.CENTER);
+		moneyField.setStyle("""
+			-fx-background-color: transparent;
+			-fx-background-insets: 0;
+			-fx-background-radius: 0;
+			-fx-border-color: transparent;
+			-fx-border-width: 0;
+			-fx-text-fill: #111111;
+			-fx-highlight-fill: #ffd447;
+			-fx-highlight-text-fill: #111111;
+		""");
+
 		StackPane inputBubble = new StackPane(fileNameField);
 		inputBubble.setPadding(new Insets(12, 16, 12, 16));
 		inputBubble.setMinWidth(300);
@@ -82,6 +99,20 @@ public class CreateGameScreen extends StackPane {
 		""");
 		inputBubble.setVisible(false);
 		inputBubble.setManaged(false);
+
+		StackPane moneyBubble = new StackPane(moneyField);
+		moneyBubble.setPadding(new Insets(12, 16, 12, 16));
+		moneyBubble.setMinWidth(300);
+		moneyBubble.setMaxWidth(380);
+		moneyBubble.setStyle("""
+			-fx-background-color: #f5f5f5;
+			-fx-border-color: #111111;
+			-fx-border-width: 3px;
+			-fx-background-radius: 0;
+			-fx-border-radius: 0;
+		""");
+		moneyBubble.setVisible(false);
+		moneyBubble.setManaged(false);
 
 		Button confirmNameButton = new Button("Start");
 		confirmNameButton.getStyleClass().add("start-button");
@@ -104,6 +135,7 @@ public class CreateGameScreen extends StackPane {
 			boss.updateTalkingBubble("Hey there! What's your name?");
 		}
 
+
 		confirmNameButton.setOnAction(ev -> {
 			String playerName = fileNameField.getText() == null ? "" : fileNameField.getText().trim();
 
@@ -123,27 +155,59 @@ public class CreateGameScreen extends StackPane {
 				return;
 			}
 
-			// Name is valid - show experience options
-			Button tutorialButton = createOptionButton("Tutorial", fontFamily, () ->
-					handler.onCreateGame(playerName, "Tutorial", "sp500"));
-			Button easyButton = createOptionButton("Easy", fontFamily, () ->
-					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Easy"));
-			Button mediumButton = createOptionButton("Medium", fontFamily, () ->
-					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Medium"));
-			Button hardButton = createOptionButton("Hard", fontFamily, () ->
-					showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Hard"));
-
-			contentBox.getChildren().setAll(tutorialButton, easyButton, mediumButton, hardButton);
-			boss.updateTalkingBubble("Are you any good at this? If you are, you don't mind a higher commission, right?");
-
-			// Disable name editing after confirmation
+			// Name is valid - ask for starting money
 			fileNameField.setEditable(false);
 			inputBubble.setVisible(false);
 			inputBubble.setManaged(false);
+			moneyField.setText("");
+			moneyField.setEditable(true);
+			moneyBubble.setVisible(true);
+			moneyBubble.setManaged(true);
+			contentBox.getChildren().setAll(moneyBubble, confirmNameButton);
+			boss.updateTalkingBubble("How much money do you want to start with?");
+
+			confirmNameButton.setOnAction(ev2 -> {
+				String moneyText = moneyField.getText() == null ? "" : moneyField.getText().trim();
+				if (moneyText.isBlank()) {
+					boss.updateTalkingBubble("Enter a starting amount!");
+					moneyField.requestFocus();
+					return;
+				}
+				try {
+					double money = Double.parseDouble(moneyText);
+					if (money < 1000 || money > 100000000) {
+						boss.updateTalkingBubble("Pick an amount between 1,000 and 100,000,000.");
+						moneyField.requestFocus();
+						return;
+					}
+				} catch (NumberFormatException ex) {
+					boss.updateTalkingBubble("That's not a valid number!");
+					moneyField.requestFocus();
+					return;
+				}
+
+				// Show experience options
+				Button tutorialButton = createOptionButton("Tutorial", fontFamily, () ->
+						handler.onCreateGame(playerName, "Tutorial", "sp500", moneyText));
+				Button easyButton = createOptionButton("Easy", fontFamily, () ->
+						showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Easy", moneyText));
+				Button mediumButton = createOptionButton("Medium", fontFamily, () ->
+						showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Medium", moneyText));
+				Button hardButton = createOptionButton("Hard", fontFamily, () ->
+						showExchangeOptions(contentBox, boss, fontFamily, handler, playerName, "Hard", moneyText));
+
+				contentBox.getChildren().setAll(tutorialButton, easyButton, mediumButton, hardButton);
+				boss.updateTalkingBubble("Are you any good at this? If you are, you don't mind a higher commission, right?");
+
+				moneyField.setEditable(false);
+				moneyBubble.setVisible(false);
+				moneyBubble.setManaged(false);
+			});
 		});
 
 		// Handle Enter key press
 		fileNameField.setOnAction(ev -> confirmNameButton.getOnAction().handle(null));
+		moneyField.setOnAction(ev -> confirmNameButton.getOnAction().handle(null));
 
 		ImageView exitRedImage = createExitImageView(EXIT_RED_PATH);
 		ImageView exitGreenImage = createExitImageView(EXIT_GREEN_PATH);
@@ -230,36 +294,37 @@ public class CreateGameScreen extends StackPane {
 			String fontFamily,
 			CreateGameHandler handler,
 			String playerName,
-			String experienceLevel
+			String experienceLevel,
+			String startingMoney
 	) {
 		Button spButton = createOptionButton("sp500", fontFamily, () ->
-				handler.onCreateGame(playerName, experienceLevel, "sp500"));
+				handler.onCreateGame(playerName, experienceLevel, "sp500", startingMoney));
 		Button randomButton = createOptionButton("Random", fontFamily, () ->
-				handler.onCreateGame(playerName, experienceLevel, "random"));
+				handler.onCreateGame(playerName, experienceLevel, "random", startingMoney));
 
-		   Button customButton = createOptionButton("Custom", fontFamily, () -> {
-			   javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
-			   fileChooser.setTitle("Select CSV File");
-			   fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-			   java.io.File selectedFile = fileChooser.showOpenDialog(this.getScene().getWindow());
-			   if (selectedFile != null) {
-				   try {
-					   if (validateCSVStructure(selectedFile)) {
-						   handler.onCreateGame(playerName, experienceLevel, "custom:" + selectedFile.getAbsolutePath());
-					   } else {
-						   boss.updateTalkingBubble("CSV is invalid! Please select a file matching the template.");
-					   }
-				   } catch (Exception e) {
-					   boss.updateTalkingBubble("Error reading CSV. Please try again.");
-				   }
-			   } else {
-				   boss.updateTalkingBubble("No file selected. Please choose a CSV file.");
-			   }
-		   });
+		Button customButton = createOptionButton("Custom", fontFamily, () -> {
+			javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+			fileChooser.setTitle("Select CSV File");
+			fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+			java.io.File selectedFile = fileChooser.showOpenDialog(this.getScene().getWindow());
+			if (selectedFile != null) {
+				try {
+					if (validateCSVStructure(selectedFile)) {
+						handler.onCreateGame(playerName, experienceLevel, "custom:" + selectedFile.getAbsolutePath(), startingMoney);
+					} else {
+						boss.updateTalkingBubble("CSV is invalid! Please select a file matching the template.");
+					}
+				} catch (Exception e) {
+					boss.updateTalkingBubble("Error reading CSV. Please try again.");
+				}
+			} else {
+				boss.updateTalkingBubble("No file selected. Please choose a CSV file.");
+			}
+		});
 
-		   contentBox.getChildren().setAll(spButton, randomButton, customButton);
-		   boss.updateTalkingBubble("Which exchange do you play?");
-	   }
+		contentBox.getChildren().setAll(spButton, randomButton, customButton);
+		boss.updateTalkingBubble("Which exchange do you play?");
+	}
 
 	   /**
 		* Validates that the CSV file matches the structure of sp500Standard.csv (header and column count).
