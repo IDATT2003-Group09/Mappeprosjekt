@@ -274,7 +274,7 @@ public class TradeScreenView extends StackPane {
         searchField.getStyleClass().add("trade-search-field");
         setupSearchFilter();
 
-        HBox buysell = new HBox(10, quantityLabel, quantityField, maxBuyButton, maxSellButton, buyButton, sellButton);
+        HBox buysell = new HBox(5, quantityLabel, quantityField, maxBuyButton, buyButton, sellButton, maxSellButton);
         buysell.getStyleClass().add("trade-buysell");
         buysell.setPadding(new Insets(10, 0, 0, 0));
 
