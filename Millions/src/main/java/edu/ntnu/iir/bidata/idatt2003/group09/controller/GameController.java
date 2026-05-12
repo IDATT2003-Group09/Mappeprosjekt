@@ -141,7 +141,7 @@ public class GameController {
      * Saves the current game state to file.
      */
     public void saveGame() {
-        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty(),lost), saveFileName);
+        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty(),lost, progress), saveFileName);
     }
     
     public boolean isLost(){
