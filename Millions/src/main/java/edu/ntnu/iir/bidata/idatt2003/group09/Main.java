@@ -130,13 +130,17 @@ public class Main extends Application {
     }
 
     private void showCreateGameScreen() {
+        showCreateGameScreen(null);
+    }
+
+    private void showCreateGameScreen(String bossMessage) {
         CreateGameScreen createGameScreen = new CreateGameScreen(new CreateGameScreen.CreateGameHandler() {
             @Override
-            public void onCreateGame(String playerName, String experienceLevel, String exchangeChoice) {
+            public void onCreateGame(String playerName, String experienceLevel, String exchangeChoice, String startingMoney) {
                 if ("tutorial".equalsIgnoreCase(experienceLevel)) {
-                    startTutorialGame(playerName);
+                    startTutorialGame(playerName, startingMoney);
                 } else {
-                    startNewGame(playerName, experienceLevel, exchangeChoice);
+                    startNewGame(playerName, experienceLevel, exchangeChoice, startingMoney);
                 }
             }
 
@@ -144,7 +148,7 @@ public class Main extends Application {
             public void onBack() {
                 showStartScreen();
             }
-        });
+        }, bossMessage);
 
         tutorialOverlay.stopTutorial();
         contentRoot.setCenter(createGameScreen);
@@ -170,12 +174,13 @@ public class Main extends Application {
         contentRoot.setCenter(loadGameScreen);
     }
 
-    private void startTutorialGame(String playerName) {
+    private void startTutorialGame(String playerName, String startingMoney) {
         try {
             String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName + "-tutorial");
             List<Stock> stocks = StockCsvReader.readFromResource("/csv/output/sp500.csv");
 
-            Player player = new Player(playerName, new BigDecimal("100000"), "Easy");
+            BigDecimal startMoney = parseStartingMoney(startingMoney);
+            Player player = new Player(playerName, startMoney, "Easy");
             Exchange exchange = new Exchange("S&P 500 Tutorial", stocks);
 
             // Determine commission rate based on player status
@@ -202,14 +207,15 @@ public class Main extends Application {
         }
     }
 
-    private void startNewGame(String playerName, String experienceLevel, String exchangeChoice) {
+    private void startNewGame(String playerName, String experienceLevel, String exchangeChoice, String startingMoney) {
         try {
             String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName);
             List<Stock> stocks = loadStocksForExchange(exchangeChoice);
             if (stocks == null) {
                 return;
             }
-            Player player = new Player(playerName, new BigDecimal("100000"), experienceLevel);
+            BigDecimal startMoney = parseStartingMoney(startingMoney);
+            Player player = new Player(playerName, startMoney, experienceLevel);
             Exchange exchange = new Exchange(getExchangeName(exchangeChoice), stocks);
 
             // Set commission rate based on difficulty
@@ -233,11 +239,22 @@ public class Main extends Application {
 
         } catch (IOException e) {
             e.printStackTrace();
+            // If the error is from a custom CSV, show the boss error and let user pick again
+            if (exchangeChoice != null && exchangeChoice.startsWith("custom:")) {
+                showCreateGameScreen("That CSV was invalid! Please pick a valid file, or choose sp500 or random.");
+            } else {
+                Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
+                errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
+                contentRoot.setCenter(new VBox(errorLabel));
+            }
+        }
+    }
 
-            Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
-            errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
-
-            contentRoot.setCenter(new VBox(errorLabel));
+    private BigDecimal parseStartingMoney(String money) {
+        try {
+            return new BigDecimal(money);
+        } catch (Exception e) {
+            return new BigDecimal("100000");
         }
     }
 
@@ -246,19 +263,19 @@ public class Main extends Application {
             return StockCsvReader.readDefaultResource();
         }
 
-        return switch (exchangeChoice.trim().toLowerCase()) {
-            case "random" -> StockCsvReader.readFromResource("/csv/output/random.csv");
-            case "sp500" -> StockCsvReader.readFromResource("/csv/output/sp500.csv");
-            case "custom" -> {
-                Path selectedCsvFile = promptCustomCsvFile();
-                if (selectedCsvFile == null) {
-                    yield null;
-                }
-                Path enhancedCsv = enhanceCustomCsv(selectedCsvFile);
-                yield StockCsvReader.readFromFile(enhancedCsv);
-            }
-            default -> StockCsvReader.readDefaultResource();
-        };
+        String trimmed = exchangeChoice.trim();
+        if (trimmed.toLowerCase().equals("random")) {
+            return StockCsvReader.readFromResource("/csv/output/random.csv");
+        } else if (trimmed.toLowerCase().equals("sp500")) {
+            return StockCsvReader.readFromResource("/csv/output/sp500.csv");
+        } else if (trimmed.toLowerCase().startsWith("custom:")) {
+            String filePath = trimmed.substring("custom:".length());
+            Path selectedCsvFile = Path.of(filePath);
+            Path enhancedCsv = enhanceCustomCsv(selectedCsvFile);
+            return StockCsvReader.readFromFile(enhancedCsv);
+        } else {
+            return StockCsvReader.readDefaultResource();
+        }
     }
 
     private String getExchangeName(String exchangeChoice) {

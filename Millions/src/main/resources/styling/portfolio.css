@@ -1,3 +1,28 @@
+/* Sell All button styling */
+.portfolio-sell-all-button {
+	-fx-background-color: #bd0505;
+	-fx-text-fill: #fff;
+	-fx-font-size: 12px;
+	-fx-font-family: "ThaleahFat";
+	-fx-padding: 0 24;
+	-fx-background-radius: 0px;
+	-fx-border-radius: 0px;
+	-fx-border-color: #fff;
+	-fx-border-width: 2px;
+	-fx-cursor: hand;
+	-fx-font-weight: bold;
+	-fx-margin-left: 16px;
+	-fx-margin-right: 8px;
+	-fx-min-width: 120px;
+	-fx-min-height: 25px;
+	-fx-max-height: 25px;
+	-fx-alignment: center;
+	-fx-translate-y: 2px;
+	transition: background 0.2s;
+}
+.portfolio-sell-all-button:hover {
+	-fx-background-color: #f11010
+}
 /* Portfolio graph styling similar to tradescreen */
 .portfolio-screen .portfolio-graph {
 	-fx-background-color: #070f24;
@@ -77,7 +102,7 @@
 
 .portfolio-screen .portfolio-change,
 .portfolio-screen .portfolio-cash {
-	-fx-font-size: 20px;
+	-fx-font-size: 28px;
 	-fx-text-fill: #9cb6db;
 }
 

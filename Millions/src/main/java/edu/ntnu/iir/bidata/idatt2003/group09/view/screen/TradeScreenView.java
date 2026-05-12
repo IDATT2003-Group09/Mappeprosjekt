@@ -269,10 +269,21 @@ public class TradeScreenView extends StackPane {
             }
         });
 
+
         searchField = new TextField();
         searchField.setPromptText("Search stocks by symbol or name...");
         searchField.getStyleClass().add("trade-search-field");
+        searchField.setPrefWidth(350);
+        searchField.setMinWidth(250);
+        searchField.setMaxWidth(Double.MAX_VALUE);
+        HBox.setHgrow(searchField, Priority.ALWAYS);
         setupSearchFilter();
+
+        // Move Owned, Winners, Losers toggles next to search bar
+        HBox filterBar = new HBox(10, searchField, ownedToggleButton, winnersToggleButton, losersToggleButton);
+        filterBar.setAlignment(Pos.CENTER_LEFT);
+        filterBar.setPadding(new Insets(0, 0, 0, 0));
+        filterBar.getStyleClass().add("trade-filter-bar");
 
         HBox buysell = new HBox(5, quantityLabel, quantityField, maxBuyButton, buyButton, sellButton, maxSellButton);
         buysell.getStyleClass().add("trade-buysell");
@@ -294,7 +305,7 @@ public class TradeScreenView extends StackPane {
             8,
             progressAndNextWeek,
             infoBox,
-            searchField,
+            filterBar,
             sectorButtonContainer
         );
         headerBox.getStyleClass().add("trade-header");
@@ -463,6 +474,9 @@ public class TradeScreenView extends StackPane {
         filterStockList(searchField.getText());
     }
 
+    private ToggleButton winnersToggleButton;
+    private ToggleButton losersToggleButton;
+
     private void createSectorFilters() {
         Set<String> sectors = tradeScreenModel.getAllSectors();
 
@@ -474,6 +488,28 @@ public class TradeScreenView extends StackPane {
             filterBySectorsAndOwned();
         });
         sectorButtonContainer.getChildren().add(ownedToggleButton);
+
+        // Winners toggle button
+        winnersToggleButton = new ToggleButton("Winners");
+        winnersToggleButton.getStyleClass().add("trade-winners-toggle");
+        winnersToggleButton.setOnAction(e -> {
+            if (winnersToggleButton.isSelected()) {
+                losersToggleButton.setSelected(false);
+            }
+            filterBySectorsAndOwned();
+        });
+        sectorButtonContainer.getChildren().add(winnersToggleButton);
+
+        // Losers toggle button
+        losersToggleButton = new ToggleButton("Losers");
+        losersToggleButton.getStyleClass().add("trade-losers-toggle");
+        losersToggleButton.setOnAction(e -> {
+            if (losersToggleButton.isSelected()) {
+                winnersToggleButton.setSelected(false);
+            }
+            filterBySectorsAndOwned();
+        });
+        sectorButtonContainer.getChildren().add(losersToggleButton);
 
         for (String sector : sectors) {
             Button sectorButton = new Button(sector);
@@ -505,6 +541,16 @@ public class TradeScreenView extends StackPane {
                 .collect(Collectors.toSet());
             stocks = stocks.stream()
                 .filter(stock -> ownedSymbols.contains(stock.getSymbol()))
+                .collect(Collectors.toList());
+        }
+        // Winners/Losers filter
+        if (winnersToggleButton != null && winnersToggleButton.isSelected()) {
+            stocks = stocks.stream()
+                .filter(stock -> stock.getLatestPriceChange().signum() > 0)
+                .collect(Collectors.toList());
+        } else if (losersToggleButton != null && losersToggleButton.isSelected()) {
+            stocks = stocks.stream()
+                .filter(stock -> stock.getLatestPriceChange().signum() < 0)
                 .collect(Collectors.toList());
         }
         filteredStocks.setAll(stocks);

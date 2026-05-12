@@ -14,6 +14,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.control.Button;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -30,12 +31,11 @@ public class PortfolioScreen extends BorderPane {
     private final Label changeLabel;
     private final Label cashLabel;
     private final Label statusLabel;
+    // Removed unused sellAll button field
+    private final NumberFormat currencyFormat =
+        NumberFormat.getCurrencyInstance(Locale.US);
 
-
-        private final NumberFormat currencyFormat =
-            NumberFormat.getCurrencyInstance(Locale.US);
-
-        private final javafx.scene.chart.LineChart<Number, Number> portfolioChart;
+    private final javafx.scene.chart.LineChart<Number, Number> portfolioChart;
 
 
     public PortfolioScreen(GameController controller) {
@@ -78,7 +78,14 @@ public class PortfolioScreen extends BorderPane {
         cashLabel.getStyleClass().add("portfolio-cash");
         statusLabel.getStyleClass().addAll("portfolio-status", "portfolio-cash");
 
-        HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel, statusLabel);
+        Button sellAllButton = new Button("Sell All");
+        sellAllButton.getStyleClass().add("portfolio-sell-all-button");
+        sellAllButton.setOnAction(e -> {
+            controller.sellAllShares();
+            refresh();
+        });
+
+        HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel, statusLabel, sellAllButton);
         topBox.getStyleClass().add("portfolio-top-box");
         topBox.setPadding(new Insets(10));
         
