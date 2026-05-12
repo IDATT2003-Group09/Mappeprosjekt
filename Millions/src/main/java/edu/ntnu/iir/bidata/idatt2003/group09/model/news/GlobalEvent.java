@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.model.news;
 import java.util.HashMap;
 import java.util.Locale;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class GlobalEvent extends Event {
   
@@ -50,6 +51,6 @@ public class GlobalEvent extends Event {
       total = total.add(value);
     }
 
-    return total.divide(BigDecimal.valueOf(eventData.size()), 6, java.math.RoundingMode.HALF_UP);
+    return total.divide(BigDecimal.valueOf(eventData.size()), 6, RoundingMode.HALF_UP);
   }
 }

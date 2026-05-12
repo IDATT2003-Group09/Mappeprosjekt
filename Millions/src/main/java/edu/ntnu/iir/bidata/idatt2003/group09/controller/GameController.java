@@ -1,6 +1,3 @@
-
-
-
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
@@ -11,6 +8,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.news.NewsPaper;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.ArrayList;
 
 //Extend this class anywhere if needed for more game logic,
 //maybe split into multiple classes later if needed
@@ -173,7 +171,7 @@ public class GameController {
      */
     public void sellAllShares() {
         Portfolio portfolio = getPortfolio();
-        List<Share> sharesToSell = new java.util.ArrayList<>(portfolio.getShares());
+        List<Share> sharesToSell = new ArrayList<>(portfolio.getShares());
         for (Share share : sharesToSell) {
             BigDecimal value = share.getStock().getSalesPrice().multiply(share.getQuantity());
             player.addMoney(value);
