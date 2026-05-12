@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 
+import javafx.scene.control.ContentDisplay;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -171,13 +172,14 @@ public class LoadGameScreen extends VBox {
       Image trashNormal = new Image(getClass().getResourceAsStream("/images/trashcan/pixil-frame-0.png"));
       Image trashHover = new Image(getClass().getResourceAsStream("/images/trashcan/pixil-frame-2.png"));
       ImageView trashIcon = new ImageView(trashNormal);
-      trashIcon.setFitWidth(25);
-      trashIcon.setFitHeight(25);
+      trashIcon.setFitWidth(50);
+      trashIcon.setFitHeight(50);
       trashIcon.setPreserveRatio(true);
       deleteButton.getStyleClass().add("delete-button");
 
       deleteButton.setMinWidth(80);
       deleteButton.setGraphic(trashIcon);
+      deleteButton.setContentDisplay(ContentDisplay.TOP);
       deleteButton.setOnAction(e -> {
           SaveManager.deleteSaveFile(fileName);
           handler.onLoadSelected(null); 
