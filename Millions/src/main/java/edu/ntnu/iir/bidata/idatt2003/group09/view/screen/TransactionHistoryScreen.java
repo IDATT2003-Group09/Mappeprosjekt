@@ -1,5 +1,5 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
-
+import edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Sale;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Transaction;
 import javafx.collections.FXCollections;
@@ -99,7 +99,7 @@ public class TransactionHistoryScreen extends BorderPane {
             var transaction = data.getValue();
             var share = transaction.getShare();
 
-            if (transaction instanceof edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Sale) {
+            if (transaction instanceof Sale) {
                 return new SimpleStringProperty(
                         currencyFormat.format(share.getStock().getSalesPrice())
                 );
