@@ -2,6 +2,9 @@ package edu.ntnu.iir.bidata.idatt2003.group09.model.game;
 
 import java.math.BigDecimal;
 
+/**
+ * 
+ */
 public class GameLevel {
 
     private final int levelNumber;
@@ -20,7 +23,5 @@ public class GameLevel {
         return baseRequirement;
     }
 
-    public BigDecimal getRequiredGrowth() {
-        return baseRequirement.multiply(BigDecimal.valueOf(levelNumber*levelNumber/2));
-    }
+
 }
