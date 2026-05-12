@@ -15,6 +15,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class LoadGameScreen extends VBox {
 
@@ -166,15 +168,25 @@ public class LoadGameScreen extends VBox {
       loadButton.setGraphic(buttonContent);
 
       Button deleteButton = new Button("Delete");
+      Image trashNormal = new Image(getClass().getResourceAsStream("/images/trashcan/pixil-frame-0.png"));
+      Image trashHover = new Image(getClass().getResourceAsStream("/images/trashcan/pixil-frame-2.png"));
+      ImageView trashIcon = new ImageView(trashNormal);
+      trashIcon.setFitWidth(25);
+      trashIcon.setFitHeight(25);
+      trashIcon.setPreserveRatio(true);
       deleteButton.getStyleClass().add("delete-button");
+
       deleteButton.setMinWidth(80);
+      deleteButton.setGraphic(trashIcon);
       deleteButton.setOnAction(e -> {
           SaveManager.deleteSaveFile(fileName);
-          handler.onLoadSelected(null); // Refresh screen
+          handler.onLoadSelected(null); 
       });
       UiSoundEffects.installHoverSound(deleteButton);
       UiSoundEffects.installClickSound(deleteButton);
 
+      deleteButton.setOnMouseEntered(e -> trashIcon.setImage(trashHover));
+      deleteButton.setOnMouseExited(e -> trashIcon.setImage(trashNormal));
       HBox slotContainer = new HBox(10);
       slotContainer.setAlignment(Pos.CENTER);
       slotContainer.getChildren().addAll(loadButton, deleteButton);
