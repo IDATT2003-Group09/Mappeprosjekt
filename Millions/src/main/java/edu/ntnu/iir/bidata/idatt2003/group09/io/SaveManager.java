@@ -144,4 +144,13 @@ public class SaveManager {
             file.delete();
         }
     }
+
+    /**
+     * Returns the number of existing save files.
+     *
+     * @return the count of save files
+     */
+    public static int numberOfSaveFiles() {
+        return listSaveFiles().size();
+    }
 }
