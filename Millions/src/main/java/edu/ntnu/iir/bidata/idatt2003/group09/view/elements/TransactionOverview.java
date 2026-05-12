@@ -13,7 +13,7 @@ import javafx.scene.layout.GridPane;
 import java.math.BigDecimal;
 
 public abstract class TransactionOverview extends StackPane {
-	public TransactionOverview(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm) {
+	public TransactionOverview(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm, Runnable onCancel) {
 		getStyleClass().addAll("trade-screen", "transaction-overview-root");
 		Rectangle background = new Rectangle();
 		background.setFill(Color.rgb(0, 0, 0, 0.6));
@@ -42,8 +42,12 @@ public abstract class TransactionOverview extends StackPane {
 		Button closeButton = new Button("Cancel");
 		closeButton.getStyleClass().add("transaction-overview-cancel");
 		closeButton.setOnAction(e -> {
-			StackPane parent = (StackPane) getParent();
-			if (parent != null) parent.getChildren().remove(this);
+			if (onCancel != null) {
+				onCancel.run();
+			} else {
+				StackPane parent = (StackPane) getParent();
+				if (parent != null) parent.getChildren().remove(this);
+			}
 		});
 
 		HBox buttonBox = new HBox(10, confirmButton, closeButton);

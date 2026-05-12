@@ -4,8 +4,8 @@ import javafx.scene.layout.GridPane;
 import java.math.BigDecimal;
 
 public class SellOverview extends TransactionOverview {
-    public SellOverview(String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm) {
-        super("Sell", stockSymbol, quantity, price, commission, tax, total, onConfirm);
+    public SellOverview(String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm, Runnable onCancel) {
+        super("Sell", stockSymbol, quantity, price, commission, tax, total, onConfirm, onCancel);
     }
 
     @Override
