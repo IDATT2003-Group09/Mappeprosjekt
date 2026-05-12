@@ -11,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.GridPane;
 import java.math.BigDecimal;
+import javafx.geometry.Pos;
 
 public abstract class TransactionOverview extends StackPane {
 	public TransactionOverview(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm, Runnable onCancel) {
@@ -27,7 +28,7 @@ public abstract class TransactionOverview extends StackPane {
 		box.setMinWidth(560);
 		box.setMaxHeight(400);
 		box.setMinHeight(400);
-		box.setAlignment(javafx.geometry.Pos.TOP_LEFT);
+		box.setAlignment(Pos.TOP_LEFT);
 
 		Label actionLabel = new Label(action + " " + quantity.toPlainString() + " x " + stockSymbol);
 		actionLabel.getStyleClass().add("transaction-overview-action");
@@ -51,7 +52,7 @@ public abstract class TransactionOverview extends StackPane {
 		});
 
 		HBox buttonBox = new HBox(10, confirmButton, closeButton);
-		buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
+		buttonBox.setAlignment(Pos.CENTER);
 		buttonBox.getStyleClass().add("transaction-overview-buttons");
 
 		Separator sepBelowTotal1 = new Separator();
@@ -60,7 +61,7 @@ public abstract class TransactionOverview extends StackPane {
 		sepBelowTotal2.getStyleClass().add("transaction-overview-separator");
 
 		VBox doubleLineBox = new VBox(2, sepBelowTotal1, sepBelowTotal2);
-		doubleLineBox.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+		doubleLineBox.setAlignment(Pos.CENTER_LEFT);
 
 		box.getChildren().addAll(
 			actionLabel,
@@ -69,7 +70,7 @@ public abstract class TransactionOverview extends StackPane {
 			buttonBox
 		);
 
-		setAlignment(box, javafx.geometry.Pos.CENTER);
+		setAlignment(box, Pos.CENTER);
 		getChildren().addAll(background, box);
 	}
 
