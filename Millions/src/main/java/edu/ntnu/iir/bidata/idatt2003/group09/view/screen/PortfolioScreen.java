@@ -175,7 +175,7 @@ public class PortfolioScreen extends BorderPane {
                 existing.setPurchasePrice(avgPurchasePrice);
             } else {
                 // Clone the share to avoid mutating the original
-                mergedShares.put(symbol, Share(
+                mergedShares.put(symbol, new Share(
                         share.getStock(), share.getQuantity(), share.getPurchasePrice()
                 ));
             }
