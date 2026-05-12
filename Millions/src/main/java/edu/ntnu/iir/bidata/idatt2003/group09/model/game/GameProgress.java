@@ -10,7 +10,7 @@ public class GameProgress {
     }
 
     private int checkpointLevel = 1;
-    private final BigDecimal baseRequirement;
+    private BigDecimal baseRequirement;
     private int currentWeek = 0;
     private final int weeksPerQuarter = 13;
 
@@ -64,6 +64,7 @@ public class GameProgress {
     }
 
     public void advanceCheckpoint() {
+        baseRequirement = baseRequirement.multiply(BigDecimal.valueOf(2));
         currentTarget = currentTarget.multiply(
                 BigDecimal.ONE.add(baseRequirement)
         );

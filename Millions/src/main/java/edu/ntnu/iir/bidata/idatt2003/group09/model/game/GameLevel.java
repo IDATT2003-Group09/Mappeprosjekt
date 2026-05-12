@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 public class GameLevel {
 
     private final int levelNumber;
-    private final BigDecimal baseRequirment;
+    private final BigDecimal baseRequirement;
 
-    public GameLevel(int levelNumber, BigDecimal baseRequirment) {
+    public GameLevel(int levelNumber, BigDecimal baseRequirement) {
         this.levelNumber = levelNumber;
-        this.baseRequirment = baseRequirment;
+        this.baseRequirement = baseRequirement;
     }
 
     public int getLevelNumber() {
@@ -17,10 +17,10 @@ public class GameLevel {
     }
 
     public BigDecimal getBaseRequirment() {
-        return baseRequirment;
+        return baseRequirement;
     }
 
     public BigDecimal getRequiredGrowth() {
-        return baseRequirment.multiply(BigDecimal.valueOf(levelNumber));
+        return baseRequirement.multiply(BigDecimal.valueOf(levelNumber*levelNumber/2));
     }
 }

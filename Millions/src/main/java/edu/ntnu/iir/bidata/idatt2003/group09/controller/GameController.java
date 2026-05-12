@@ -42,7 +42,7 @@ public class GameController {
     private final String saveFileName;
     private final GameProgress progress;
     private Runnable onGameOver;
-    private static final BigDecimal baseRequirement = new BigDecimal("0.1");
+    private static final BigDecimal baseRequirement = new BigDecimal("0.01");
 
 
     /**
