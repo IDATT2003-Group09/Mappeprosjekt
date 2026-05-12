@@ -327,7 +327,7 @@ public class Main extends Application {
         String normalizedSaveFileName = SaveManager.normalizeSaveFileName(fileName);
 
         GameController controller =
-                new GameController(state.getExchange(), state.getPlayer(), normalizedSaveFileName);
+                new GameController(state.getExchange(), state.getPlayer(), normalizedSaveFileName, state.getProgress());
 
         setupGameUI(controller, state.getExchange().getStocks(), false);
     }

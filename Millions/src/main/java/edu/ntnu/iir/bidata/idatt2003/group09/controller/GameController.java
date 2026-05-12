@@ -64,11 +64,16 @@ public class GameController {
      * @param player 
      * @param saveFileName
      */
-    public GameController(Exchange exchange, Player player, String saveFileName) {
+    public GameController(Exchange exchange, Player player, String saveFileName, GameProgress progress) {
         this.exchange = exchange;
         this.player = player;
         this.saveFileName = saveFileName;
-        this.progress = new GameProgress(baseRequirement, player.getStartingMoney(), exchange.getWeek());
+        this.progress = progress != null
+            ? progress
+            : new GameProgress(baseRequirement, player.getStartingMoney(), exchange.getWeek());
+    }
+    public GameController(Exchange exchange, Player player, String saveFileName) {
+        this(exchange, player, saveFileName, null);
     }
 
     /**

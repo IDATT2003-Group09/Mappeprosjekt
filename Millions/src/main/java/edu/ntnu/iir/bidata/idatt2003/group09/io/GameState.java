@@ -100,7 +100,7 @@ public class GameState implements Serializable {
      * 
      * @return the gameprogress object
      */
-    public GameProgress getGameProgress(){
+    public GameProgress getProgress(){
         return gameProgress;
     }
 }
