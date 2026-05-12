@@ -15,7 +15,7 @@ import java.util.Objects;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 
 /**
- * Reads stock data from a CSV file and converts each row into a {@link Stock}.
+ * Reads stock data from a CSV file and converts each row into a stock.
  */
 public final class StockCsvReader {
 
@@ -76,6 +76,16 @@ public final class StockCsvReader {
     }
   }
 
+
+  /**
+   * Parses stock data from a CSV-formatted BufferedReader.
+   * Each line should contain: symbol, company, price, sector, risk. Lines starting with '#' or empty lines are ignored.
+   * The first line may be a header and is skipped if it starts with 'ticker,'.
+   *
+   * @param reader the BufferedReader to read CSV lines from
+   * @return a list of parsed Stock objects
+   * @throws IOException if a line is malformed, contains invalid data, or an I/O error occurs
+   */
   private static List<Stock> parse(BufferedReader reader) throws IOException {
     List<Stock> stocks = new ArrayList<>();
     String line;
