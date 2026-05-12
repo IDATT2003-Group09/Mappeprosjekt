@@ -87,7 +87,7 @@ public class GameState implements Serializable {
      * 
      * @return the lso state
      */
-    public boolean getLost(){
+    public boolean isLost(){
         return lost;
     }
 }
