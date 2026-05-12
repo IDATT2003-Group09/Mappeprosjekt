@@ -41,6 +41,7 @@ public class GameController {
     private final Player player;
     private final String saveFileName;
     private final GameProgress progress;
+    private boolean lost = false;
     private Runnable onGameOver;
     private static final BigDecimal baseRequirement = new BigDecimal("0.01");
 
@@ -86,6 +87,9 @@ public class GameController {
      * @return the result of the week advancement
      */
     public WeekAdvanceResult nextWeek() {
+        if (lost) {
+            return WeekAdvanceResult.gameOverResult();
+        }
         player.setLastWeekNetWorth(player.getNetWorth());
         player.getPortfolio().addNetWorthValue(player.getNetWorth());
         progress.nextWeek();
@@ -110,6 +114,8 @@ public class GameController {
                     progress.getCurrentTarget()
                 );
             } else {
+                lost = true;
+                saveGame();
                 if (onGameOver != null) {
                     onGameOver.run();
                 }
@@ -135,7 +141,11 @@ public class GameController {
      * Saves the current game state to file.
      */
     public void saveGame() {
-        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty()), saveFileName);
+        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty(),lost), saveFileName);
+    }
+    
+    public boolean isLost(){
+        return lost;
     }
 
     /**

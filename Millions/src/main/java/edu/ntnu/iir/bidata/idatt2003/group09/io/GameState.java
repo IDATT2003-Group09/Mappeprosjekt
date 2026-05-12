@@ -16,7 +16,7 @@ public class GameState implements Serializable {
     private final BigDecimal netWorth;
     private final int week;
     private final String difficulty;
-    private final lost;
+    private final boolean lost;
 
     /**
      * Constructs a GameState with the given parameters.
