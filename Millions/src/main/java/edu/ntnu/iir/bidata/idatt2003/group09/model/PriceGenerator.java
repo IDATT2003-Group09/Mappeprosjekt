@@ -2,6 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.model;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.concurrent.ThreadLocalRandom;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.model.news.NewsPaper;
 
@@ -23,7 +24,7 @@ public class PriceGenerator {
         double baseNoise = 0.01;
         double scaledNoise = baseNoise * (stock.getRisk() / 5.0);
 
-        double rand = java.util.concurrent.ThreadLocalRandom.current()
+        double rand = ThreadLocalRandom.current()
                 .nextDouble(-scaledNoise * 0.7, scaledNoise);
 
         eventImpact = eventImpact.add(BigDecimal.valueOf(rand));

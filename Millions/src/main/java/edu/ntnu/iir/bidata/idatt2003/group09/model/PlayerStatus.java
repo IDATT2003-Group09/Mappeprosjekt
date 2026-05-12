@@ -1,5 +1,7 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.model;
 
+import java.math.BigDecimal;
+
 public enum PlayerStatus {
     NOVICE("Novice"),
     INVESTOR("Investor"),
@@ -20,11 +22,11 @@ public enum PlayerStatus {
     }
 
     public boolean isInvestor(Player player, int weeksPlayed) {
-        return player.getNetWorth().compareTo(new java.math.BigDecimal("120000")) >= 0 || weeksPlayed >= 10;
+        return player.getNetWorth().compareTo(new BigDecimal("120000")) >= 0 || weeksPlayed >= 10;
     }
 
     public boolean isSpeculator(Player player, int weeksPlayed) {
-        return player.getNetWorth().compareTo(new java.math.BigDecimal("200000")) >= 0 || weeksPlayed >= 20;
+        return player.getNetWorth().compareTo(new BigDecimal("200000")) >= 0 || weeksPlayed >= 20;
     }
 
     public static String determineStatus(Player player, int weeksPlayed) {

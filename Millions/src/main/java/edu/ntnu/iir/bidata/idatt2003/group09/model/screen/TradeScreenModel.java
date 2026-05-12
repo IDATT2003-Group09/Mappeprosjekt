@@ -2,8 +2,12 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.model.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * Model for the Trade Screen (MVC).
@@ -90,26 +94,26 @@ public class TradeScreenModel {
 	/**
 	 * Calculates the maximum quantity of a stock that can be bought with the given cash, price, and commission rate.
 	 */
-	public String calculateMaxBuyQuantity(edu.ntnu.iir.bidata.idatt2003.group09.model.Stock selectedStock, java.math.BigDecimal cash, java.math.BigDecimal commissionRate) {
+	public String calculateMaxBuyQuantity(Stock selectedStock, BigDecimal cash, BigDecimal commissionRate) {
 		if (selectedStock == null || cash == null || commissionRate == null) return "0";
-		java.math.BigDecimal price = selectedStock.getSalesPrice();
-		if (price.compareTo(java.math.BigDecimal.ZERO) <= 0 || cash.compareTo(java.math.BigDecimal.ZERO) <= 0) return "0";
-		java.math.BigDecimal low = java.math.BigDecimal.ZERO;
-		java.math.BigDecimal high = cash.divide(price, 0, java.math.RoundingMode.FLOOR).add(java.math.BigDecimal.ONE);
-		java.math.BigDecimal best = java.math.BigDecimal.ZERO;
+		BigDecimal price = selectedStock.getSalesPrice();
+		if (price.compareTo(BigDecimal.ZERO) <= 0 || cash.compareTo(BigDecimal.ZERO) <= 0) return "0";
+		BigDecimal low = BigDecimal.ZERO;
+		BigDecimal high = cash.divide(price, 0, RoundingMode.FLOOR).add(BigDecimal.ONE);
+		BigDecimal best = BigDecimal.ZERO;
 		while (low.compareTo(high) < 0) {
-			java.math.BigDecimal mid = low.add(high).divide(new java.math.BigDecimal("2"), 0, java.math.RoundingMode.FLOOR);
-			if (mid.compareTo(java.math.BigDecimal.ZERO) <= 0) {
-				low = mid.add(java.math.BigDecimal.ONE);
+			BigDecimal mid = low.add(high).divide(new BigDecimal("2"), 0, RoundingMode.FLOOR);
+			if (mid.compareTo(BigDecimal.ZERO) <= 0) {
+				low = mid.add(BigDecimal.ONE);
 				continue;
 			}
-			edu.ntnu.iir.bidata.idatt2003.group09.model.Share tempShare = new edu.ntnu.iir.bidata.idatt2003.group09.model.Share(selectedStock, mid, price);
-			edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator calc =
-					new edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator(tempShare, commissionRate);
-			java.math.BigDecimal totalCost = calc.calculateTotal();
+			Share tempShare = new Share(selectedStock, mid, price);
+			PurchaseCalculator calc =
+					new PurchaseCalculator(tempShare, commissionRate);
+			BigDecimal totalCost = calc.calculateTotal();
 			if (totalCost.compareTo(cash) <= 0) {
 				best = mid;
-				low = mid.add(java.math.BigDecimal.ONE);
+				low = mid.add(BigDecimal.ONE);
 			} else {
 				high = mid;
 			}

@@ -279,7 +279,6 @@ public class TradeScreenView extends StackPane {
         HBox.setHgrow(searchField, Priority.ALWAYS);
         setupSearchFilter();
 
-        // Move Owned, Winners, Losers toggles next to search bar
         HBox filterBar = new HBox(10, searchField, ownedToggleButton, winnersToggleButton, losersToggleButton);
         filterBar.setAlignment(Pos.CENTER_LEFT);
         filterBar.setPadding(new Insets(0, 0, 0, 0));
