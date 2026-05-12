@@ -39,7 +39,6 @@ public class PortfolioScreen extends BorderPane {
     private final Label changeLabel;
     private final Label cashLabel;
     private final Label statusLabel;
-    // Removed unused sellAll button field
     private final NumberFormat currencyFormat =
         NumberFormat.getCurrencyInstance(Locale.US);
 
