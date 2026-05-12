@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 
 public class LoadGameScreen extends VBox {
 
@@ -51,12 +52,8 @@ public class LoadGameScreen extends VBox {
       saveSlotsContainer.getChildren().add(emptyLabel);
     } else {
       for (String fileName : saveFiles) {
-        Button saveFileButton = createSaveFileButton(fileName, handler);
-        UiSoundEffects.installClickSound(saveFileButton);
-        UiSoundEffects.installHoverSound(saveFileButton);
-        saveSlotsContainer.getChildren().add(saveFileButton);
-        saveFileButton.getStyleClass().add("start-button");
-        saveFileButton.setOnAction(e -> handler.onLoadSelected(fileName));
+          Node slotContainer = createSaveFileButton(fileName, handler);
+          saveSlotsContainer.getChildren().add(slotContainer);
       }
     }
 
@@ -108,21 +105,12 @@ public class LoadGameScreen extends VBox {
       return "";
   }
 
-  private Button createSaveFileButton(String fileName, LoadGameHandler handler) {
+  private Node createSaveFileButton(String fileName, LoadGameHandler handler) {
       String displayName = cleanName(fileName);
       String netWorth = "";
       String weekInfo = "";
       String difficulty = "";
       boolean isLost = false;
-
-      Button deleteButton = new Button("Delete");
-      deleteButton.setOnAction(e -> {
-          SaveManager.deleteSaveFile(fileName);
-          handler.onLoadSelected(null); // Refresh the screen
-      });
-      deleteButton.getStyleClass().add("delete-button");
-      UiSoundEffects.installHoverSound(deleteButton);
-      UiSoundEffects.installClickSound(deleteButton);
 
       try {
           var state = SaveManager.load(fileName);
@@ -136,7 +124,9 @@ public class LoadGameScreen extends VBox {
           weekInfo = "Could not read save";
       }
 
-      Button saveFileButton = new Button();
+      Button loadButton = new Button();
+      loadButton.setMinWidth(500); 
+      loadButton.getStyleClass().add("start-button");
 
       VBox buttonContent = new VBox(8);
       buttonContent.setAlignment(Pos.CENTER_LEFT);
@@ -151,10 +141,12 @@ public class LoadGameScreen extends VBox {
 
       if (isLost) {
           nameLabel.setText(nameLabel.getText() + " [LOST]");
-          saveFileButton.setDisable(true);
-          saveFileButton.setStyle("-fx-opacity: 0.8;");
+          loadButton.setDisable(true);
+          loadButton.setStyle("-fx-opacity: 0.9;");
       } else {
-          saveFileButton.setOnAction(e -> handler.onLoadSelected(fileName));
+          loadButton.setOnAction(e -> handler.onLoadSelected(fileName));
+          UiSoundEffects.installHoverSound(loadButton);
+          UiSoundEffects.installClickSound(loadButton);
       }
 
       HBox titleBox = new HBox();
@@ -168,19 +160,27 @@ public class LoadGameScreen extends VBox {
       bottomBox.setAlignment(Pos.CENTER_LEFT);
       HBox.setHgrow(valueLabel, Priority.ALWAYS);
       valueLabel.setMaxWidth(Double.MAX_VALUE);
-      deleteButton.setAlignment(Pos.CENTER_RIGHT);
-      bottomBox.getChildren().addAll(valueLabel, deleteButton);
+      bottomBox.getChildren().add(valueLabel);
 
       buttonContent.getChildren().addAll(titleBox, bottomBox);
-      saveFileButton.setGraphic(buttonContent);
-      saveFileButton.setMinWidth(600);
+      loadButton.setGraphic(buttonContent);
 
-      if (!isLost) {
-          UiSoundEffects.installHoverSound(saveFileButton);
-          UiSoundEffects.installClickSound(saveFileButton);
-      }
+      Button deleteButton = new Button("Delete");
+      deleteButton.getStyleClass().add("delete-button");
+      deleteButton.setMinWidth(80);
+      deleteButton.setOnAction(e -> {
+          SaveManager.deleteSaveFile(fileName);
+          handler.onLoadSelected(null); // Refresh screen
+      });
+      UiSoundEffects.installHoverSound(deleteButton);
+      UiSoundEffects.installClickSound(deleteButton);
 
-      return saveFileButton;
+      HBox slotContainer = new HBox(10);
+      slotContainer.setAlignment(Pos.CENTER);
+      slotContainer.getChildren().addAll(loadButton, deleteButton);
+      HBox.setHgrow(loadButton, Priority.ALWAYS);
+
+      return slotContainer;
   }
 
 }
