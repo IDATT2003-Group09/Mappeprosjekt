@@ -22,6 +22,14 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
+import java.util.Map;
+import java.util.HashMap;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart.Series;
+import javafx.scene.chart.XYChart.Data;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
+
 public class PortfolioScreen extends BorderPane {
 
     private final GameController controller;
@@ -35,7 +43,7 @@ public class PortfolioScreen extends BorderPane {
     private final NumberFormat currencyFormat =
         NumberFormat.getCurrencyInstance(Locale.US);
 
-    private final javafx.scene.chart.LineChart<Number, Number> portfolioChart;
+    private final LineChart<Number, Number> portfolioChart;
 
 
     public PortfolioScreen(GameController controller) {
@@ -50,15 +58,15 @@ public class PortfolioScreen extends BorderPane {
         this.changeLabel = new Label();
         this.cashLabel = new Label();
         this.statusLabel = new Label();
-        javafx.scene.chart.NumberAxis xAxis = new javafx.scene.chart.NumberAxis();
+        NumberAxis xAxis = new NumberAxis();
         xAxis.setLabel("");
         xAxis.setTickLabelsVisible(false); 
         xAxis.setTickMarkVisible(false);
-        javafx.scene.chart.NumberAxis yAxis = new javafx.scene.chart.NumberAxis();
+        NumberAxis yAxis = new NumberAxis();
         yAxis.setLabel("Portfolio Value");
         yAxis.setTickLabelsVisible(false); 
         yAxis.setTickMarkVisible(false);
-        this.portfolioChart = new javafx.scene.chart.LineChart<>(xAxis, yAxis);
+        this.portfolioChart = new LineChart<>(xAxis, yAxis);
         portfolioChart.setAnimated(true);
         portfolioChart.setLegendVisible(false);
         portfolioChart.setMinHeight(250);
@@ -150,7 +158,30 @@ public class PortfolioScreen extends BorderPane {
     }
 
     public void refresh() {
-        List<PortfolioRow> rows = controller.getPortfolio().getShares().stream()
+        // Merge shares by stock symbol
+        List<Share> shares = controller.getPortfolio().getShares();
+        Map<String, Share> mergedShares = new HashMap<>();
+
+        for (Share share : shares) {
+            String symbol = share.getStock().getSymbol();
+            if (mergedShares.containsKey(symbol)) {
+                Share existing = mergedShares.get(symbol);
+                BigDecimal totalQuantity = existing.getQuantity().add(share.getQuantity());
+                BigDecimal totalCost = existing.getPurchasePrice().multiply(existing.getQuantity())
+                        .add(share.getPurchasePrice().multiply(share.getQuantity()));
+                BigDecimal avgPurchasePrice = totalCost.divide(totalQuantity, RoundingMode.HALF_UP);
+                // Update existing share
+                existing.setQuantity(totalQuantity);
+                existing.setPurchasePrice(avgPurchasePrice);
+            } else {
+                // Clone the share to avoid mutating the original
+                mergedShares.put(symbol, Share(
+                        share.getStock(), share.getQuantity(), share.getPurchasePrice()
+                ));
+            }
+        }
+
+        List<PortfolioRow> rows = mergedShares.values().stream()
                 .map(PortfolioRow::new)
                 .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
                 .toList();
@@ -189,10 +220,10 @@ public class PortfolioScreen extends BorderPane {
         PlayerStatus status = controller.getStatus();
         statusLabel.setText("Status: " + (status != null ? status.name() : "-"));
 
-        List<java.math.BigDecimal> values = controller.getPortfolio().getValues();
-        javafx.scene.chart.XYChart.Series<Number, Number> series = new javafx.scene.chart.XYChart.Series<>();
+        List<BigDecimal> values = controller.getPortfolio().getValues();
+        Series<Number, Number> series = new Series<>();
         for (int i = 0; i < values.size(); i++) {
-            series.getData().add(new javafx.scene.chart.XYChart.Data<>(i + 1, values.get(i)));
+            series.getData().add(new Data<>(i + 1, values.get(i)));
         }
         portfolioChart.getData().clear();
         portfolioChart.getData().add(series);
