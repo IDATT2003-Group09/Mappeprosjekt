@@ -69,10 +69,10 @@ public class TradeScreenController {
 			BigDecimal commissionRate = controller.getExchange().getCommissionRate();
 			Share tempShare = new Share(selectedStock, quantity, price);
 
-			SaleCalculator saleCalc = new SaleCalculator(tempShare);
-			BigDecimal commission = saleCalc.calculateCommission();
-			BigDecimal tax = saleCalc.calculateTax();
-			BigDecimal total = saleCalc.calculateTotal();
+			PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate);
+			BigDecimal commission = calc.calculateCommission();
+			BigDecimal tax = calc.calculateTax();
+			BigDecimal total = calc.calculateTotal();
 
 			showOverlay.show("Buy", selectedStock.getSymbol(), quantity, price, commission, tax, total, () -> {
 				try {
@@ -115,8 +115,10 @@ public class TradeScreenController {
 			BigDecimal quantity = parseQuantity(quantityField);
 			BigDecimal price = selectedStock.getSalesPrice();
 			BigDecimal commissionRate = controller.getExchange().getCommissionRate();
-			Share tempShare = new Share(selectedStock, quantity, price);
-			PurchaseCalculator calc = new PurchaseCalculator(tempShare, commissionRate);
+			BigDecimal avgPurchasePrice = controller.getPortfolio()
+				.getAveragePurchasePrice(selectedStock.getSymbol());
+			Share tempShare = new Share(selectedStock, quantity, avgPurchasePrice);
+			SaleCalculator calc = new SaleCalculator(tempShare);
 			BigDecimal commission = calc.calculateCommission();
 			BigDecimal tax = calc.calculateTax();
 			BigDecimal total = calc.calculateTotal();

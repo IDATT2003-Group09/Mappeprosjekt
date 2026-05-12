@@ -97,6 +97,23 @@ public class Portfolio implements Serializable {
   public void addNetWorthValue(BigDecimal value) {
     values.add(value);
   }
+
+  public BigDecimal getAveragePurchasePrice(String symbol){
+    List<Share> matchingShares = getShares(symbol);
+    if (matchingShares.isEmpty()) {
+        return BigDecimal.ZERO;
+    }
+    BigDecimal totalCost = BigDecimal.ZERO;
+    BigDecimal totalQty = BigDecimal.ZERO;
+    for (Share share : matchingShares) {
+        totalCost = totalCost.add(share.getPurchasePrice().multiply(share.getQuantity()));
+        totalQty = totalQty.add(share.getQuantity());
+    }
+    if (totalQty.compareTo(BigDecimal.ZERO) == 0) {
+        return BigDecimal.ZERO;
+    }
+    return totalCost.divide(totalQty, BigDecimal.ROUND_HALF_UP);
+  }
   
 
 }
