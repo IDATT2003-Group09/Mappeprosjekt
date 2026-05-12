@@ -152,7 +152,7 @@ public class LoadGameScreen extends VBox {
       if (isLost) {
           nameLabel.setText(nameLabel.getText() + " [LOST]");
           saveFileButton.setDisable(true);
-          saveFileButton.setStyle("-fx-opacity: 0.6;");
+          saveFileButton.setStyle("-fx-opacity: 0.8;");
       } else {
           saveFileButton.setOnAction(e -> handler.onLoadSelected(fileName));
       }
