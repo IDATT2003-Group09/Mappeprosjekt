@@ -172,8 +172,8 @@ public class LoadGameScreen extends VBox {
       Image trashNormal = new Image(getClass().getResourceAsStream("/images/trashcan/pixil-frame-0.png"));
       Image trashHover = new Image(getClass().getResourceAsStream("/images/trashcan/pixil-frame-2.png"));
       ImageView trashIcon = new ImageView(trashNormal);
-      trashIcon.setFitWidth(50);
-      trashIcon.setFitHeight(50);
+      trashIcon.setFitWidth(58);
+      trashIcon.setFitHeight(58);
       trashIcon.setPreserveRatio(true);
       deleteButton.getStyleClass().add("delete-button");
 
