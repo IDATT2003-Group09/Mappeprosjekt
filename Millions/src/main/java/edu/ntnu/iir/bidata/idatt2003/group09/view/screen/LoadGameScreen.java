@@ -36,11 +36,12 @@ public class LoadGameScreen extends VBox {
     setSpacing(18);
     setAlignment(Pos.CENTER);
     setPadding(new Insets(40));
+    String imageUrl = getClass().getResource("/images/Millions_background.png").toExternalForm();
     setStyle("""
-    -fx-background-image: url('/images/Millions_background.png');
-    -fx-background-size: cover;
-    -fx-background-position: center;
-""");
+        -fx-background-image: url('%s');
+        -fx-background-size: cover;
+        -fx-background-position: center;
+    """.formatted(imageUrl));
 
     String fontFamily = loadFontFamily();
 
