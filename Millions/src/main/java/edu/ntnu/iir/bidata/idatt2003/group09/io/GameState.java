@@ -6,6 +6,9 @@ import java.math.BigDecimal;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Player;
 
+/**
+ * Represents the serializable state of the game for saving and loading.
+ */
 public class GameState implements Serializable {
 
     private final Player player;
@@ -14,6 +17,15 @@ public class GameState implements Serializable {
     private final int week;
     private final String difficulty;
 
+    /**
+     * Constructs a GameState with the given parameters.
+     *
+     * @param player
+     * @param exchange
+     * @param netWorth
+     * @param week
+     * @param difficulty
+     */
     public GameState(Player player, Exchange exchange, BigDecimal netWorth, int week, String difficulty) {
         this.player = player;
         this.exchange = exchange;
@@ -22,22 +34,47 @@ public class GameState implements Serializable {
         this.difficulty = difficulty;
     }
 
+    /**
+     * Gets the saved Player.
+     *
+     * @return the Player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Gets the saved game difficulty.
+     *
+     * @return the difficulty string
+     */
     public String getDifficulty() {
         return difficulty;
     }
 
+    /**
+     * Gets the saved Exchange.
+     *
+     * @return the Exchange
+     */
     public Exchange getExchange() {
         return exchange;
     }
 
+    /**
+     * Gets the saved net worth.
+     *
+     * @return the net worth
+     */
     public BigDecimal getNetWorth() {
         return netWorth;
     }
 
+    /**
+     * Gets the saved week number.
+     *
+     * @return the week number
+     */
     public int getWeek() {
         return week;
     }

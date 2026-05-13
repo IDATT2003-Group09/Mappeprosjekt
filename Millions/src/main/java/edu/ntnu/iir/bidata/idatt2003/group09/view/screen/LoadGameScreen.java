@@ -13,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.geometry.Pos;
 
 public class LoadGameScreen extends VBox {
 
@@ -136,7 +137,7 @@ public class LoadGameScreen extends VBox {
     Button saveFileButton = new Button();
 
     VBox buttonContent = new VBox(8);
-    buttonContent.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+    buttonContent.setAlignment(Pos.CENTER_LEFT);
 
     Label nameLabel = new Label(displayName + " (" + difficulty + ")");
     Label valueLabel = new Label(netWorth);

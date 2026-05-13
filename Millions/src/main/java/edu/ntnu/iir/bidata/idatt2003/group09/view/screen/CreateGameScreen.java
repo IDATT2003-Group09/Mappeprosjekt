@@ -15,6 +15,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class CreateGameScreen extends StackPane {
 	private Boss boss;
@@ -303,10 +309,10 @@ public class CreateGameScreen extends StackPane {
 				handler.onCreateGame(playerName, experienceLevel, "random", startingMoney));
 
 		Button customButton = createOptionButton("Custom", fontFamily, () -> {
-			javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Select CSV File");
-			fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("CSV Files", "*.csv"));
-			java.io.File selectedFile = fileChooser.showOpenDialog(this.getScene().getWindow());
+			fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+			File selectedFile = fileChooser.showOpenDialog(this.getScene().getWindow());
 			if (selectedFile != null) {
 				try {
 					if (validateCSVStructure(selectedFile)) {
@@ -329,13 +335,13 @@ public class CreateGameScreen extends StackPane {
 	   /**
 		* Validates that the CSV file matches the structure of sp500Standard.csv (header and column count).
 		*/
-	   private boolean validateCSVStructure(java.io.File csvFile) {
+	   private boolean validateCSVStructure(File csvFile) {
 		   // Path to the reference CSV in resources
 		   String referencePath = "/csv/input/sp500Standard.csv";
 		   try (
-			   java.io.BufferedReader userReader = new java.io.BufferedReader(new java.io.FileReader(csvFile));
-			   java.io.InputStream refStream = getClass().getResourceAsStream(referencePath);
-			   java.io.BufferedReader refReader = refStream != null ? new java.io.BufferedReader(new java.io.InputStreamReader(refStream)) : null
+			   BufferedReader userReader = new BufferedReader(new FileReader(csvFile));
+			   InputStream refStream = getClass().getResourceAsStream(referencePath);
+			   BufferedReader refReader = refStream != null ? new BufferedReader(new InputStreamReader(refStream)) : null
 		   ) {
 			   if (refReader == null) return false;
 			   String refHeader = refReader.readLine();

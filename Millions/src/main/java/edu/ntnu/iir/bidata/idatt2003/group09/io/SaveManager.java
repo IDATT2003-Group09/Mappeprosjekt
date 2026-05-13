@@ -4,16 +4,30 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Utility class for saving, loading, listing, and deleting game save files.
+ */
 public class SaveManager {
 
     private static final String DEFAULT_FILE = "savegame.dat";
     private static final String SAVE_FILE_PREFIX = "savegame";
     private static final String SAVE_FILE_SUFFIX = ".dat";
 
+    /**
+     * Saves the given GameState to the default save file.
+     *
+     * @param state the GameState to save
+     */
     public static void save(GameState state) {
         save(state, DEFAULT_FILE);
     }
 
+    /**
+     * Saves the given GameState to the specified file name.
+     *
+     * @param state    the GameState to save
+     * @param fileName the file name to save to
+     */
     public static void save(GameState state, String fileName) {
         String targetFile = normalizeSaveFileName(fileName);
         try (ObjectOutputStream out =
@@ -25,10 +39,21 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Loads the GameState from the default save file.
+     *
+     * @return the loaded GameState, or null if loading fails
+     */
     public static GameState load() {
         return load(DEFAULT_FILE);
     }
 
+    /**
+     * Loads the GameState from the specified file name.
+     *
+     * @param fileName the file name to load from
+     * @return the loaded GameState, or null if loading fails
+     */
     public static GameState load(String fileName) {
         String sourceFile = normalizeSaveFileName(fileName);
         try (ObjectInputStream in =
@@ -43,6 +68,11 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Lists all available save files in the current directory.
+     *
+     * @return a sorted list of save file names
+     */
     public static List<String> listSaveFiles() {
         File currentDirectory = new File(".");
         String[] fileNames = currentDirectory.list((dir, name) ->
@@ -57,10 +87,21 @@ public class SaveManager {
                 .toList();
     }
 
+    /**
+     * Checks if the default save file exists.
+     *
+     * @return true if the default save file exists, false otherwise
+     */
     public static boolean saveExists() {
         return new File(DEFAULT_FILE).exists();
     }
 
+    /**
+     * Normalizes the save file name to ensure it has the correct prefix and suffix, and is safe for file systems.
+     *
+     * @param fileName the input file name
+     * @return the normalized file name
+     */
     public static String normalizeSaveFileName(String fileName) {
         if (fileName == null || fileName.isBlank()) {
             return DEFAULT_FILE;
@@ -80,11 +121,22 @@ public class SaveManager {
         return normalized;
     }
 
+    /**
+     * Checks if a save file with the given name exists.
+     *
+     * @param fileName the file name to check
+     * @return true if the file exists, false otherwise
+     */
     public static boolean doesSaveFileExist(String fileName) {
         String targetFile = normalizeSaveFileName(fileName);
         return new File(targetFile).exists();
     } 
 
+    /**
+     * Deletes the save file with the given name, if it exists.
+     *
+     * @param fileName the file name to delete
+     */
     public static void deleteSaveFile(String fileName) {
         String targetFile = normalizeSaveFileName(fileName);
         File file = new File(targetFile);

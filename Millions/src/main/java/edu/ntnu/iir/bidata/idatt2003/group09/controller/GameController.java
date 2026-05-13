@@ -1,6 +1,3 @@
-
-
-
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
@@ -11,12 +8,17 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.news.NewsPaper;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.ArrayList;
 
-//Extend this class anywhere if needed for more game logic,
-//maybe split into multiple classes later if needed
-
+/**
+ * Main controller for managing the game state, player, exchange, and game progress.
+ */
 public class GameController {
 
+    /**
+     * Record representing the result of advancing a week in the game.
+     * Indicates if the game is over, if a quarter advanced, and checkpoint/target info.
+     */
     public record WeekAdvanceResult(
         boolean gameOver,
         boolean quarterAdvanced,
@@ -39,14 +41,28 @@ public class GameController {
     private final Player player;
     private final String saveFileName;
     private final GameProgress progress;
-
     private Runnable onGameOver;
-    private static final BigDecimal baseRequirement = new BigDecimal("0.1");
+    private static final BigDecimal baseRequirement = new BigDecimal("0.01");
 
+
+    /**
+     * Constructs a GameController with the given exchange and player.
+     *
+     * @param exchange 
+     * @param player 
+     */
     public GameController(Exchange exchange, Player player) {
         this(exchange, player, null);
     }
 
+
+    /**
+     * Constructs a GameController with the given exchange, player, and save file name.
+     *
+     * @param exchange
+     * @param player 
+     * @param saveFileName
+     */
     public GameController(Exchange exchange, Player player, String saveFileName) {
         this.exchange = exchange;
         this.player = player;
@@ -54,14 +70,23 @@ public class GameController {
         this.progress = new GameProgress(baseRequirement, player.getStartingMoney(), exchange.getWeek());
     }
 
+    /**
+     * Sets a callback to be run when the game is over.
+     *
+     * @param onGameOver the Runnable to execute on game over
+     */
     public void setOnGameOver(Runnable onGameOver) {
         this.onGameOver = onGameOver;
     }
 
-    //game flow
+    /**
+     * Advances the game by one week, updating player and progress state.
+     * Handles quarter advancement, requirements, and game over logic.
+     *
+     * @return the result of the week advancement
+     */
     public WeekAdvanceResult nextWeek() {
         player.setLastWeekNetWorth(player.getNetWorth());
-        // Add current net worth to portfolio value history for graph
         player.getPortfolio().addNetWorthValue(player.getNetWorth());
         progress.nextWeek();
 
@@ -97,83 +122,157 @@ public class GameController {
         return result;
     }
 
+    /**
+     * Gets the current game progress.
+     *
+     * @return the GameProgress instance
+     */
     public GameProgress getProgress() {
         return progress;
     }
 
+    /**
+     * Saves the current game state to file.
+     */
     public void saveGame() {
         SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty()), saveFileName);
     }
 
+    /**
+     * Gets the current week number.
+     *
+     * @return the current week
+     */
     public int getWeek() {
         return exchange.getWeek();
     }
 
-    //player info
+    /**
+     * Gets the player's current cash balance.
+     *
+     * @return the player's money
+     */
     public BigDecimal getMoney() {
         return player.getMoney();
     }
 
+    /**
+     * Gets the player's current net worth.
+     *
+     * @return the player's net worth
+     */
     public BigDecimal getNetWorth() {
         return player.getNetWorth();
     }
 
+    /**
+     * Gets the player's net worth from the previous week.
+     *
+     * @return the last week's net worth
+     */
     public BigDecimal getLastWeekNetWorth() {
         return player.getLastWeekNetWorth();
     }
 
+    /**
+     * Gets the player's status for the current week.
+     *
+     * @return the PlayerStatus
+     */
     public PlayerStatus getStatus() {
         return player.getStatus(exchange.getWeek());
     }
 
+    /**
+     * Gets the player instance.
+     *
+     * @return the Player
+     */
     public Player getPlayer() {
         return player;
     }
 
-    //stock info
+    /**
+     * Gets a list of all stocks in the exchange.
+     *
+     * @return a list of all Stock objects
+     */
     public List<Stock> getAllStocks() {
         return exchange.getStockMap().values().stream().toList();
     }
 
+    /**
+     * Gets a stock by its symbol.
+     *
+     * @param symbol the stock symbol
+     * @return the Stock object, or null if not found
+     */
     public Stock getStock(String symbol) {
         return exchange.getStock(symbol);
     }
 
+    /**
+     * Gets a list of stocks that have gained value.
+     *
+     * @return a list of gaining Stock objects
+     */
     public List<Stock> getGainers() {
         return exchange.getGainers();
     }
 
+    /**
+     * Gets a list of stocks that have lost value.
+     *
+     * @return a list of losing Stock objects
+     */
     public List<Stock> getLosers() {
         return exchange.getLosers();
     }
 
-    //portfolio
+    /**
+     * Gets the player's portfolio.
+     *
+     * @return the Portfolio
+     */
     public Portfolio getPortfolio() {
         return player.getPortfolio();
     }
 
-
-    // Trading logic is now handled by TradeScreenModel and TradeScreenController (MVC separation)
-
+    /**
+     * Gets the latest market news headline, or "No news" if none is available.
+     *
+     * @return the latest news headline
+     */
     public String getLatestNews() {
         MarketNews news = exchange.getPendingNews();
         return news != null ? news.getHeadline() : "No news";
     }
 
+    /**
+     * Gets the pending newspaper with market news.
+     *
+     * @return the NewsPaper object
+     */
     public NewsPaper getPendingNewsPaper() {
         return exchange.getPendingNewsPaper();
     }
     
+    /**
+     * Gets the exchange instance.
+     *
+     * @return the Exchange
+     */
     public Exchange getExchange() {
         return exchange;
     }
 
     /**
-     * Sells all shares in the player's portfolio, credits their value to cash.
+     * Sells all shares in the player's portfolio and credits their value to cash.
+     * Also saves the game state after selling.
      */
     public void sellAllShares() {
         Portfolio portfolio = getPortfolio();
-        List<Share> sharesToSell = new java.util.ArrayList<>(portfolio.getShares());
+        List<Share> sharesToSell = new ArrayList<>(portfolio.getShares());
         for (Share share : sharesToSell) {
             BigDecimal value = share.getStock().getSalesPrice().multiply(share.getQuantity());
             player.addMoney(value);

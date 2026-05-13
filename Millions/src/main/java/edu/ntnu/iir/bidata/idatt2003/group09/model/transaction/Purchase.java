@@ -12,7 +12,7 @@ public class Purchase extends Transaction {
         super(share, week, new PurchaseCalculator(share));
     }
 
-    public Purchase(Share share, int week, java.math.BigDecimal commissionRate) {
+    public Purchase(Share share, int week, BigDecimal commissionRate) {
         super(share, week, new PurchaseCalculator(share, commissionRate));
     }
 

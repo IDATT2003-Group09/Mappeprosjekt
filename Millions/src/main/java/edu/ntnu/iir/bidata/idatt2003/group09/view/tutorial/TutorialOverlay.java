@@ -32,18 +32,18 @@ public class TutorialOverlay {
   private static final double STOCK_LIST_W = 524;
   private static final double STOCK_LIST_H = 448;
 
-  private static final double BUY_BUTTON_X = 820;
+  private static final double BUY_BUTTON_X = 840;
   private static final double BUY_BUTTON_Y = 650;
   private static final double BUY_BUTTON_W = 70;
   private static final double BUY_BUTTON_H = 36;
 
-  private static final double SELL_BUTTON_X = 870;
+  private static final double SELL_BUTTON_X = 890;
   private static final double SELL_BUTTON_Y = 650;
   private static final double SELL_BUTTON_W = 90;
   private static final double SELL_BUTTON_H = 46;
 
   private static final double NEXT_WEEK_BUTTON_X = 980;
-  private static final double NEXT_WEEK_BUTTON_Y = 65;
+  private static final double NEXT_WEEK_BUTTON_Y = 55;
   private static final double NEXT_WEEK_BUTTON_W = 132;
   private static final double NEXT_WEEK_BUTTON_H = 46;
 

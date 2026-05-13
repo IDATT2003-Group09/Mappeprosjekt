@@ -7,6 +7,8 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -37,12 +39,12 @@ public class TransactionHistoryScreen extends BorderPane {
 
         TableColumn<Transaction, Integer> weekCol = new TableColumn<>("Week");
         weekCol.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleIntegerProperty(data.getValue().getWeek()).asObject()
+                new SimpleIntegerProperty(data.getValue().getWeek()).asObject()
         );
 
         TableColumn<Transaction, String> typeCol = new TableColumn<>("Type");
         typeCol.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(
+                new SimpleStringProperty(
                         data.getValue().getClass().getSimpleName().replace("Purchase", "Buy").replace("Sale", "Sell")
                 )
         );
@@ -80,14 +82,14 @@ public class TransactionHistoryScreen extends BorderPane {
 
         TableColumn<Transaction, String> tickerCol = new TableColumn<>("Ticker");
         tickerCol.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(
+                new SimpleStringProperty(
                         data.getValue().getShare().getStock().getSymbol()
                 )
         );
 
         TableColumn<Transaction, String> qtyCol = new TableColumn<>("Qty");
         qtyCol.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(
+                new SimpleStringProperty(
                         data.getValue().getShare().getQuantity().toString()
                 )
         );
@@ -98,11 +100,11 @@ public class TransactionHistoryScreen extends BorderPane {
             var share = transaction.getShare();
 
             if (transaction instanceof edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Sale) {
-                return new javafx.beans.property.SimpleStringProperty(
+                return new SimpleStringProperty(
                         currencyFormat.format(share.getStock().getSalesPrice())
                 );
             } else {
-                return new javafx.beans.property.SimpleStringProperty(
+                return new SimpleStringProperty(
                         currencyFormat.format(share.getPurchasePrice())
                 );
             }
@@ -111,13 +113,13 @@ public class TransactionHistoryScreen extends BorderPane {
         TableColumn<Transaction, String> feesCol = new TableColumn<>("Total Fees");
 
         feesCol.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(
+                new SimpleStringProperty(
                         currencyFormat.format(data.getValue().getFees()))
         );
 
         TableColumn<Transaction, String> totalCol = new TableColumn<>("Total");
         totalCol.setCellValueFactory(data ->
-                new javafx.beans.property.SimpleStringProperty(
+                new SimpleStringProperty(
                         currencyFormat.format(
                                 data.getValue().getCalculator().calculateTotal()
                         )
