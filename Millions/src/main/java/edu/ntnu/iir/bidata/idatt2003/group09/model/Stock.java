@@ -2,6 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
@@ -148,5 +149,24 @@ public class Stock implements Serializable {
       BigDecimal previousPrice = prices.get(prices.size() -2);
 
       return latestPrice.subtract(previousPrice);
+  }
+
+  public BigDecimal getLatestPriceChangeAsPercentage(){
+    if (prices.size() < 2){
+      return BigDecimal.ZERO;
+    }
+
+    BigDecimal latestPrice = prices.get(prices.size() - 1);
+    BigDecimal previousPrice = prices.get(prices.size() - 2);
+
+    if (previousPrice.compareTo(BigDecimal.ZERO) == 0) {
+        return BigDecimal.ZERO;
+    }
+
+    BigDecimal change = latestPrice.subtract(previousPrice);
+    BigDecimal percentage = change.multiply(BigDecimal.valueOf(100))
+            .divide(previousPrice, 2, RoundingMode.HALF_UP); // 2 decimal places, e.g., 5.25%
+
+    return percentage;
   }
 }
