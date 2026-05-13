@@ -1,0 +1,7 @@
+module edu.ntnu.iir.bidata.idatt2003.group09 {
+    requires javafx.controls;
+    requires javafx.media;
+    requires java.desktop;
+    requires java.xml;
+    exports edu.ntnu.iir.bidata.idatt2003.group09;
+}
