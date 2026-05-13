@@ -27,11 +27,12 @@ public class StartScreen extends StackPane {
 
     public StartScreen(StartHandler handler) {
         getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
+        String imageUrl = getClass().getResource("/images/Millions_background.png").toExternalForm();
         setStyle("""
-    -fx-background-image: url('/images/Millions_background.png');
-    -fx-background-size: cover;
-    -fx-background-position: center;
-""");
+            -fx-background-image: url('%s');
+            -fx-background-size: cover;
+            -fx-background-position: center;
+        """.formatted(imageUrl));
 
         VBox buttonBox = new VBox(15);
         buttonBox.setAlignment(Pos.BOTTOM_CENTER);
