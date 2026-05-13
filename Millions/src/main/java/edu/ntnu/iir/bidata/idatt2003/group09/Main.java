@@ -32,6 +32,7 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.io.File;
 
 
 /**
@@ -223,15 +224,15 @@ public class Main extends Application {
             Exchange exchange = new Exchange(getExchangeName(exchangeChoice), stocks);
 
             // Set commission rate based on difficulty
-            java.math.BigDecimal commissionRate;
+            BigDecimal commissionRate;
             if ("Easy".equalsIgnoreCase(experienceLevel)) {
-                commissionRate = new java.math.BigDecimal("0.005");
+                commissionRate = new BigDecimal("0.005");
             } else if ("Medium".equalsIgnoreCase(experienceLevel)) {
-                commissionRate = new java.math.BigDecimal("0.01");
+                commissionRate = new BigDecimal("0.01");
             } else if ("Hard".equalsIgnoreCase(experienceLevel)) {
-                commissionRate = new java.math.BigDecimal("0.02");
+                commissionRate = new BigDecimal("0.02");
             } else {
-                commissionRate = new java.math.BigDecimal("0.005"); // fallback
+                commissionRate = new BigDecimal("0.005"); // fallback
             }
             exchange.setCommissionRate(commissionRate);
 
@@ -302,7 +303,7 @@ public class Main extends Application {
                 new FileChooser.ExtensionFilter("CSV files", "*.csv")
         );
 
-        java.io.File selectedFile = fileChooser.showOpenDialog(root.getScene().getWindow());
+        File selectedFile = fileChooser.showOpenDialog(root.getScene().getWindow());
         return selectedFile == null ? null : selectedFile.toPath();
     }
 
@@ -326,7 +327,7 @@ public class Main extends Application {
         String normalizedSaveFileName = SaveManager.normalizeSaveFileName(fileName);
 
         GameController controller =
-                new GameController(state.getExchange(), state.getPlayer(), normalizedSaveFileName);
+                new GameController(state.getExchange(), state.getPlayer(), normalizedSaveFileName, state.getProgress());
 
         setupGameUI(controller, state.getExchange().getStocks(), false);
     }

@@ -1,27 +1,37 @@
-
 package edu.ntnu.iir.bidata.idatt2003.group09.model.game;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.io.Serializable;
+/**
+ * class responible for level generation and requirement checking
+ */
+public class GameProgress implements Serializable {
 
-public class GameProgress {
-
-    public int getCheckpointLevel() {
-        return checkpointLevel;
-    }
 
     private int checkpointLevel = 1;
     private BigDecimal baseRequirement;
     private int currentWeek = 0;
     private final int weeksPerQuarter = 13;
-
     private int checkpointWeek = 13;
     private int lastCalculatedLevel = 1;
     private BigDecimal currentTarget;
 
+    /**
+     * sets the starting percentage the player must meet every quarter and their startingmoney
+     * @param baseRequirement percentage increase per q
+     * @param startingMoney the money you start with
+     */
     public GameProgress(BigDecimal baseRequirement, BigDecimal startingMoney) {
         this(baseRequirement, startingMoney, 0);
     }
 
+    /**
+     * calculates gameprogress for input values
+     * @param baseRequirement percentage increse per q
+     * @param startingMoney starting money
+     * @param currentWeek what week you are in
+     */
     public GameProgress(BigDecimal baseRequirement, BigDecimal startingMoney, int currentWeek) {
         this.baseRequirement = baseRequirement;
         this.currentWeek = Math.max(0, currentWeek);
@@ -39,10 +49,6 @@ public class GameProgress {
         return baseRequirement;
     }
 
-    public int getCurrentLevelNumber(BigDecimal netWorth, BigDecimal startingMoney) {
-        return calculateLevel(netWorth, startingMoney);
-    }
-
     public void nextWeek() {
         currentWeek++;
     }
@@ -55,6 +61,10 @@ public class GameProgress {
         return currentWeek;
     }
 
+    public int getCheckpointLevel() {
+        return checkpointLevel;
+    }
+
     public boolean meetsRequirement(BigDecimal netWorth) {
         return netWorth.compareTo(currentTarget) >= 0;
     }
@@ -63,6 +73,9 @@ public class GameProgress {
         return Math.max(0, checkpointWeek - currentWeek);
     }
 
+    /**
+     * move the goalpost
+     */
     public void advanceCheckpoint() {
         baseRequirement = baseRequirement.multiply(BigDecimal.valueOf(2));
         currentTarget = currentTarget.multiply(
@@ -75,19 +88,6 @@ public class GameProgress {
     public BigDecimal getCurrentTarget() {
         return currentTarget;
     }
-
-    public int calculateLevel(BigDecimal netWorth, BigDecimal startingMoney) {
-
-        BigDecimal growth = netWorth.subtract(startingMoney)
-                .divide(startingMoney, 4, RoundingMode.HALF_UP);
-
-        if (growth.compareTo(BigDecimal.ZERO) <= 0) {
-            return 1;
-        }
-
-        return growth.divide(baseRequirement, 0, RoundingMode.DOWN).intValue() + 1;
-    }
-
     public int getLastCalculatedLevel() {
         return lastCalculatedLevel;
     }
