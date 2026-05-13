@@ -160,7 +160,11 @@ public class Main extends Application {
                 new LoadGameScreen.LoadGameHandler() {
                     @Override
                     public void onLoadSelected(String fileName) {
-                        loadGame(fileName);
+                        if (fileName != null) {
+                            loadGame(fileName);
+                        } else {
+                            showLoadGameScreen();
+                        }
                     }
 
                     @Override

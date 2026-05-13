@@ -1,6 +1,7 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -12,9 +13,12 @@ import javafx.animation.Timeline;
 import javafx.util.Duration;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
+import javafx.scene.control.Tooltip;
+
 
 public class StartScreen extends StackPane {
 
+    private Boss boss;
     public interface StartHandler {
         void onNewGame();
         void onLoadGame();
@@ -38,7 +42,25 @@ public class StartScreen extends StackPane {
         Button settingsBtn = new Button("Settings");
         Button exitBtn = new Button("Exit");
 
-        Boss boss = new Boss("What?! All our employess quit?", 500);
+        int saveFileCount = SaveManager.listSaveFiles().size();
+
+        if (saveFileCount == 0){
+            boss = new Boss("What?! All our employess quit?", 500);
+        }
+        else if (saveFileCount == 1){
+            boss = new Boss("Where is everyone? One might think we only have one employee", 500);
+        }
+        else if (saveFileCount == 2){
+            boss = new Boss("Do you want to earn me some money kid? Welcome aboard!", 500);
+        }
+        else if (saveFileCount == 3){
+            boss = new Boss("Business is booming. So many talented traders!",500);
+        }
+        else {
+            boss = new Boss("We are not hiring. Delete some savefiles to make room",500);
+            newGameBtn.setDisable(true);
+        }
+
         newGameBtn.getStyleClass().add("start-button");
         loadGameBtn.getStyleClass().add("start-button");
         settingsBtn.getStyleClass().add("start-button");
