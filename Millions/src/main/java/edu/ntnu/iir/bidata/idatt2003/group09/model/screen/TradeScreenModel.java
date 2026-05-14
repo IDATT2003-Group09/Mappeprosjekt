@@ -10,6 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.function.Consumer;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -26,6 +27,11 @@ import javafx.collections.ObservableList;
  * Holds trade-related data and business logic for the trade screen.
  */
 public class TradeScreenModel {
+	public enum TradeEvent {
+		BUY_SUCCESS,
+		SELL_SUCCESS
+	}
+
 	private List<Stock> allStocks;
 	private Set<String> selectedSectors;
 
@@ -41,6 +47,7 @@ public class TradeScreenModel {
 	private final StringProperty deadlineLabel = new SimpleStringProperty("");
 
 	private final ObservableList<Stock> filteredStocks = FXCollections.observableArrayList();
+	private final List<Consumer<TradeEvent>> tradeEventListeners = new ArrayList<>();
 
 	public TradeScreenModel(List<Stock> stocks) {
 		this.allStocks = new ArrayList<>(stocks);
@@ -247,5 +254,21 @@ public class TradeScreenModel {
 	public ObjectProperty<BigDecimal> netWorthOverlayValueProperty() { return netWorthOverlayValue; }
 	public DoubleProperty progressProperty() { return progress; }
 	public StringProperty deadlineLabelProperty() { return deadlineLabel; }
+
+	public void addTradeEventListener(Consumer<TradeEvent> listener) {
+		if (listener != null) {
+			tradeEventListeners.add(listener);
+		}
+	}
+
+	public void removeTradeEventListener(Consumer<TradeEvent> listener) {
+		tradeEventListeners.remove(listener);
+	}
+
+	public void fireTradeEvent(TradeEvent event) {
+		for (Consumer<TradeEvent> listener : List.copyOf(tradeEventListeners)) {
+			listener.accept(event);
+		}
+	}
 
 }

@@ -60,7 +60,7 @@ public class TradeScreenController {
 	 * @param showOverlay  the overlay to show transaction confirmation
 	* @param onSuccess    callback to run on successful buy
 	 */
-    public void handleBuy(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay, Runnable onSuccess) {
+	public void handleBuy(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay) {
 		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
 		if (selectedStock == null) {
 			statusLabel.setText("Please select a stock first.");
@@ -81,9 +81,9 @@ public class TradeScreenController {
 				try {
 					controller.getExchange().buy(selectedStock.getSymbol(), controller.getPlayer(), quantity);
 					statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
-					onSuccess.run();
 					stockList.refresh();
 					model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
+					model.fireTradeEvent(TradeScreenModel.TradeEvent.BUY_SUCCESS);
 				} catch (Exception e) {
 					statusLabel.setText("Buy failed: " + e.getMessage());
 				}
@@ -102,7 +102,7 @@ public class TradeScreenController {
 	 * @param showOverlay  the overlay to show transaction confirmation
 	* @param onSuccess    callback to run on successful sell
 	 */
-    public void handleSell(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay, Runnable onSuccess) {
+	public void handleSell(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay) {
 		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
 		if (selectedStock == null) {
 			statusLabel.setText("Please select a stock first.");
@@ -130,9 +130,9 @@ public class TradeScreenController {
 					controller.getExchange().sell(selectedStock.getSymbol(), controller.getPlayer(), quantity);
 					statusLabel.setText("Sold " + quantity.stripTrailingZeros().toPlainString()
 						+ " of " + selectedStock.getSymbol());
-					onSuccess.run();
 					stockList.refresh();
 					model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
+					model.fireTradeEvent(TradeScreenModel.TradeEvent.SELL_SUCCESS);
 				} catch (Exception e) {
 					statusLabel.setText("Sell failed: " + e.getMessage());
 				}

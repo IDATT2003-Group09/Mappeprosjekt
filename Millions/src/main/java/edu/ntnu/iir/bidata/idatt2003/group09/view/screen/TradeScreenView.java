@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -66,6 +67,7 @@ public class TradeScreenView extends StackPane {
     private TextField searchField;
     private final HBox sectorButtonContainer;
     private final TradeScreenModel tradeScreenModel;
+    private final Consumer<TradeScreenModel.TradeEvent> tradeEventListener;
 
 
     public TradeScreenView(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
@@ -96,6 +98,13 @@ public class TradeScreenView extends StackPane {
         this.tutorialMode = tutorialMode;
         this.tutorialOverlay = tutorialOverlay;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        this.tradeEventListener = event -> {
+            if (event == TradeScreenModel.TradeEvent.BUY_SUCCESS) {
+                onTutorialBuySuccess();
+            } else if (event == TradeScreenModel.TradeEvent.SELL_SUCCESS) {
+                onTutorialSellSuccess();
+            }
+        };
 
         getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
         getStyleClass().add("trade-screen");
@@ -106,6 +115,7 @@ public class TradeScreenView extends StackPane {
         createSectorFilters();
 
         stockList.setItems(tradeScreenModel.getFilteredStocks());
+        tradeScreenModel.addTradeEventListener(tradeEventListener);
 
         graph = new StockGraph(stocks);
         graph.getStyleClass().add("trade-graph");
@@ -162,7 +172,6 @@ public class TradeScreenView extends StackPane {
         deadlineLabel = new Label();
 
         buildLayout();
-        // Bind model properties to UI after controls (like progressBar) are created
         bindModelToView();
 
         overlayPane.setPickOnBounds(false);
@@ -228,8 +237,7 @@ public class TradeScreenView extends StackPane {
                 quantityField,
                 statusLabel,
                 (action, stockSymbol, quantity, price, commission, tax, total, onConfirm) ->
-                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm),
-                this::onTutorialBuySuccess
+                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm)
             );
         });
         sellButton.setOnAction(e -> {
@@ -241,8 +249,7 @@ public class TradeScreenView extends StackPane {
                 quantityField,
                 statusLabel,
                 (action, stockSymbol, quantity, price, commission, tax, total, onConfirm) ->
-                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm),
-                this::onTutorialSellSuccess
+                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm)
             );
         });
 
