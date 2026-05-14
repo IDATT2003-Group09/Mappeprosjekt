@@ -2,6 +2,8 @@ package edu.ntnu.iir.bidata.idatt2003.group09.view.elements;
 
 import javafx.scene.layout.GridPane;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 
@@ -26,7 +28,7 @@ public class SellOverview extends TransactionOverview {
         proceedsText.getStyleClass().add("transaction-overview-label-text");
         proceedsText.setAlignment(Pos.CENTER_RIGHT);
         proceedsText.setMaxWidth(Double.MAX_VALUE);
-        Label proceedsValue = new Label(proceeds.toString());
+        Label proceedsValue = new Label(proceeds.setScale(2, RoundingMode.HALF_UP).toString());
         proceedsValue.getStyleClass().add("transaction-overview-label-value");
         proceedsValue.setAlignment(Pos.CENTER_LEFT);
         proceedsValue.setMaxWidth(Double.MAX_VALUE);
@@ -37,7 +39,7 @@ public class SellOverview extends TransactionOverview {
         commissionText.getStyleClass().add("transaction-overview-label-text");
         commissionText.setAlignment(Pos.CENTER_RIGHT);
         commissionText.setMaxWidth(Double.MAX_VALUE);
-        Label commissionValue = new Label(commission.toString());
+        Label commissionValue = new Label(commission.setScale(2, RoundingMode.HALF_UP).toString());
         commissionValue.getStyleClass().add("transaction-overview-label-value");
         commissionValue.setAlignment(Pos.CENTER_LEFT);
         commissionValue.setMaxWidth(Double.MAX_VALUE);
@@ -48,7 +50,7 @@ public class SellOverview extends TransactionOverview {
         taxText.getStyleClass().add("transaction-overview-label-text");
         taxText.setAlignment(Pos.CENTER_RIGHT);
         taxText.setMaxWidth(Double.MAX_VALUE);
-        Label taxValue = new Label(tax.toString());
+        Label taxValue = new Label(tax.setScale(2, RoundingMode.HALF_UP).toString());
         taxValue.getStyleClass().add("transaction-overview-label-value");
         taxValue.setAlignment(Pos.CENTER_LEFT);
         taxValue.setMaxWidth(Double.MAX_VALUE);
@@ -59,7 +61,7 @@ public class SellOverview extends TransactionOverview {
         totalText.getStyleClass().add("transaction-overview-label-text");
         totalText.setAlignment(Pos.CENTER_RIGHT);
         totalText.setMaxWidth(Double.MAX_VALUE);
-        Label totalValue = new Label(calculatedTotal.toString());
+        Label totalValue = new Label(calculatedTotal.setScale(2, RoundingMode.HALF_UP).toString());
         totalValue.getStyleClass().add("transaction-overview-total");
         totalValue.setAlignment(Pos.CENTER_LEFT);
         totalValue.setMaxWidth(Double.MAX_VALUE);
