@@ -1,6 +1,7 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.model.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -187,6 +189,73 @@ class TradeScreenModelTest {
         @DisplayName("Returns 0 when cash is less than price of one share plus commission")
         void calculateMaxBuyQuantity_insufficientCash_returnsZero() {
             assertEquals("0", model.calculateMaxBuyQuantity(techStock, new BigDecimal("1.00"), new BigDecimal("0.01")));
+        }
+    }
+
+    @Nested
+    @DisplayName("calculateMaxSellQuantity")
+    class CalculateMaxSellQuantityTests {
+
+        @Test
+        @DisplayName("Returns 0 for null share list")
+        void calculateMaxSellQuantity_nullList_returnsZero() {
+            assertEquals("0", model.calculateMaxSellQuantity(null));
+        }
+
+        @Test
+        @DisplayName("Returns 0 for empty share list")
+        void calculateMaxSellQuantity_emptyList_returnsZero() {
+            assertEquals("0", model.calculateMaxSellQuantity(Collections.emptyList()));
+        }
+
+        @Test
+        @DisplayName("Returns summed quantity for owned shares")
+        void calculateMaxSellQuantity_sumsQuantities() {
+            Share first = new Share(techStock, new BigDecimal("1.5"), techStock.getSalesPrice());
+            Share second = new Share(techStock, new BigDecimal("2.0"), techStock.getSalesPrice());
+
+            assertEquals("3.5", model.calculateMaxSellQuantity(List.of(first, second)));
+        }
+    }
+
+    @Nested
+    @DisplayName("filterStocksAdvanced")
+    class FilterStocksAdvancedTests {
+
+        @Test
+        @DisplayName("Owned filter keeps only owned symbols")
+        void filterStocksAdvanced_ownedOnly_filtersByOwnership() {
+            List<Stock> result = model.filterStocksAdvanced("", true, Set.of("AAPL"), false, false);
+
+            assertEquals(1, result.size());
+            assertEquals("AAPL", result.get(0).getSymbol());
+        }
+
+        @Test
+        @DisplayName("Winners filter keeps and sorts positive movers descending")
+        void filterStocksAdvanced_winners_filtersAndSortsDescending() {
+            techStock.addNewSalesPrice(new BigDecimal("165.00"));
+            financeStock.addNewSalesPrice(new BigDecimal("210.00"));
+            healthStock.addNewSalesPrice(new BigDecimal("90.00"));
+
+            List<Stock> result = model.filterStocksAdvanced("", false, Set.of(), true, false);
+
+            assertEquals(2, result.size());
+            assertEquals("AAPL", result.get(0).getSymbol());
+            assertEquals("JPM", result.get(1).getSymbol());
+        }
+
+        @Test
+        @DisplayName("Losers filter keeps and sorts negative movers ascending")
+        void filterStocksAdvanced_losers_filtersAndSortsAscending() {
+            techStock.addNewSalesPrice(new BigDecimal("165.00"));
+            financeStock.addNewSalesPrice(new BigDecimal("210.00"));
+            healthStock.addNewSalesPrice(new BigDecimal("90.00"));
+
+            List<Stock> result = model.filterStocksAdvanced("", false, Set.of(), false, true);
+
+            assertEquals(1, result.size());
+            assertEquals("JNJ", result.get(0).getSymbol());
         }
     }
 }

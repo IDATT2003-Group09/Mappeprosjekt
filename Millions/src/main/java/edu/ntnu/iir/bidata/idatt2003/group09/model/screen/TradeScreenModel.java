@@ -121,4 +121,55 @@ public class TradeScreenModel {
 		return best.toPlainString();
 	}
 
+	/**
+	 * Calculates the total quantity owned for a stock and returns it as plain string.
+	 */
+	public String calculateMaxSellQuantity(List<Share> ownedShares) {
+		if (ownedShares == null || ownedShares.isEmpty()) {
+			return "0";
+		}
+
+		BigDecimal total = ownedShares.stream()
+			.map(Share::getQuantity)
+			.reduce(BigDecimal.ZERO, BigDecimal::add);
+
+		return total.stripTrailingZeros().toPlainString();
+	}
+
+	/**
+	 * Applies all trade-screen filters in one place.
+	 */
+	public List<Stock> filterStocksAdvanced(
+		String searchText,
+		boolean ownedOnly,
+		Set<String> ownedSymbols,
+		boolean winnersOnly,
+		boolean losersOnly
+	) {
+		List<Stock> stocks = new ArrayList<>(filterStocks(searchText));
+
+		if (ownedOnly) {
+			Set<String> safeOwnedSymbols = ownedSymbols == null ? Set.of() : ownedSymbols;
+			stocks = stocks.stream()
+				.filter(stock -> safeOwnedSymbols.contains(stock.getSymbol()))
+				.collect(Collectors.toList());
+		}
+
+		if (winnersOnly) {
+			return stocks.stream()
+				.filter(stock -> stock.getLatestPriceChangeAsPercentage().signum() > 0)
+				.sorted(Comparator.comparing(Stock::getLatestPriceChangeAsPercentage).reversed())
+				.collect(Collectors.toList());
+		}
+
+		if (losersOnly) {
+			return stocks.stream()
+				.filter(stock -> stock.getLatestPriceChangeAsPercentage().signum() < 0)
+				.sorted(Comparator.comparing(Stock::getLatestPriceChangeAsPercentage))
+				.collect(Collectors.toList());
+		}
+
+		return stocks;
+	}
+
 }

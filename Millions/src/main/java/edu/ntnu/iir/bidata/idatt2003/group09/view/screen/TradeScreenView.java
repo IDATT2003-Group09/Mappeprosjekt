@@ -3,7 +3,6 @@ package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
-import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.TradeScreenModel;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockListView;
@@ -19,9 +18,6 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -207,12 +203,9 @@ public class TradeScreenView extends StackPane {
         maxSellButton.setOnAction(e -> {
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             if (selectedStock != null) {
-                // Sum the quantity of all shares owned for the selected stock
                 List<Share> shares = controller.getPortfolio().getShares(selectedStock.getSymbol());
-                BigDecimal total = shares.stream()
-                    .map(Share::getQuantity)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-                quantityField.setText(total.stripTrailingZeros().toPlainString());
+                String maxQty = tradeScreenModel.calculateMaxSellQuantity(shares);
+                quantityField.setText(maxQty);
             }
         });
 
@@ -538,28 +531,16 @@ public class TradeScreenView extends StackPane {
 
     private void filterBySectorsAndOwned() {
         String searchText = searchField != null ? searchField.getText() : "";
-        List<Stock> stocks = tradeScreenModel.filterStocks(searchText);
-        if (filterOwned) {
-            // Only show stocks the player owns (has shares for)
-            Set<String> ownedSymbols = controller.getPortfolio().getShares().stream()
-                .map(share -> share.getStock().getSymbol())
-                .collect(Collectors.toSet());
-            stocks = stocks.stream()
-                .filter(stock -> ownedSymbols.contains(stock.getSymbol()))
-                .collect(Collectors.toList());
-        }
-        // Winners/Losers filter and sort
-        if (winnersToggleButton != null && winnersToggleButton.isSelected()) {
-            stocks = stocks.stream()
-                .filter(stock -> stock.getLatestPriceChangeAsPercentage().signum() > 0)
-                .sorted(Comparator.comparing(Stock::getLatestPriceChangeAsPercentage).reversed())
-                .collect(Collectors.toList());
-        } else if (losersToggleButton != null && losersToggleButton.isSelected()) {
-            stocks = stocks.stream()
-                .filter(stock -> stock.getLatestPriceChangeAsPercentage().signum() < 0)
-                .sorted(Comparator.comparing(Stock::getLatestPriceChangeAsPercentage))
-                .collect(Collectors.toList());
-        }
+        Set<String> ownedSymbols = controller.getPortfolio().getShares().stream()
+            .map(share -> share.getStock().getSymbol())
+            .collect(java.util.stream.Collectors.toSet());
+        List<Stock> stocks = tradeScreenModel.filterStocksAdvanced(
+            searchText,
+            filterOwned,
+            ownedSymbols,
+            winnersToggleButton != null && winnersToggleButton.isSelected(),
+            losersToggleButton != null && losersToggleButton.isSelected()
+        );
         filteredStocks.setAll(stocks);
     }
 }
