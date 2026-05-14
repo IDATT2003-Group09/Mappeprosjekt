@@ -45,6 +45,15 @@ public class GameProgress implements Serializable {
         );
     }
 
+    private BigDecimal calculateRequirement() {
+
+        double requirement =
+                0.035 * Math.pow(checkpointLevel, 1.65);
+
+        return BigDecimal.valueOf(requirement)
+                .setScale(4, RoundingMode.HALF_UP);
+    }
+
     public BigDecimal getBaseRequirement() {
         return baseRequirement;
     }
