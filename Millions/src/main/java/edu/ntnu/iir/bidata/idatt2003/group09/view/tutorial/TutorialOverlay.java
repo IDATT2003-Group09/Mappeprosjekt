@@ -32,19 +32,16 @@ public class TutorialOverlay {
   private static final double STOCK_LIST_W = 544;
   private static final double STOCK_LIST_H = 478;
 
-  // Search bar (sits in the filter bar row above the stock list)
   private static final double SEARCH_BAR_X = 16;
   private static final double SEARCH_BAR_Y = 130;
   private static final double SEARCH_BAR_W = 700;
   private static final double SEARCH_BAR_H = 36;
 
-  // Sector button container (row below the filter bar)
   private static final double SECTOR_BUTTONS_X = 0;
   private static final double SECTOR_BUTTONS_Y = 170;
   private static final double SECTOR_BUTTONS_W = 1100;
   private static final double SECTOR_BUTTONS_H = 35;
 
-  // Max Buy button
   private static final double MAX_BUY_BUTTON_X = 746;
   private static final double MAX_BUY_BUTTON_Y = 650;
   private static final double MAX_BUY_BUTTON_W = 90;
@@ -314,7 +311,7 @@ public class TutorialOverlay {
     boss.visibleChatBubble(true);
     tutorialStep = STEP_SELL_SUCCESS;
     clearSpotlight();
-    boss.updateTalkingBubble("You better start earning more money before the next Q or you are out of here!");
+    boss.updateTalkingBubble("At the end of the quarter we will have a performance review. Earn enough money to not get fired!");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
