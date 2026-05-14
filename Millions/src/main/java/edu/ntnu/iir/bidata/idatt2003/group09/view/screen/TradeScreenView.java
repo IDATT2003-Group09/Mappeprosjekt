@@ -20,6 +20,7 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import javafx.geometry.Insets;
@@ -547,14 +548,16 @@ public class TradeScreenView extends StackPane {
                 .filter(stock -> ownedSymbols.contains(stock.getSymbol()))
                 .collect(Collectors.toList());
         }
-        // Winners/Losers filter
+        // Winners/Losers filter and sort
         if (winnersToggleButton != null && winnersToggleButton.isSelected()) {
             stocks = stocks.stream()
-                .filter(stock -> stock.getLatestPriceChange().signum() > 0)
+                .filter(stock -> stock.getLatestPriceChangeAsPercentage().signum() > 0)
+                .sorted(Comparator.comparing(Stock::getLatestPriceChangeAsPercentage).reversed())
                 .collect(Collectors.toList());
         } else if (losersToggleButton != null && losersToggleButton.isSelected()) {
             stocks = stocks.stream()
-                .filter(stock -> stock.getLatestPriceChange().signum() < 0)
+                .filter(stock -> stock.getLatestPriceChangeAsPercentage().signum() < 0)
+                .sorted(Comparator.comparing(Stock::getLatestPriceChangeAsPercentage))
                 .collect(Collectors.toList());
         }
         filteredStocks.setAll(stocks);

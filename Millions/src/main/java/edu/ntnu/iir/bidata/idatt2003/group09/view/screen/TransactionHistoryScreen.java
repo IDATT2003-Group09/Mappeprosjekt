@@ -134,7 +134,7 @@ public class TransactionHistoryScreen extends BorderPane {
 
     public void refresh() {
         table.setItems(FXCollections.observableArrayList(
-                controller.getPlayer().getTransactionArchive().getAllTransactions()
+                controller.getPlayer().getTransactionArchive().getAllTransactions().reversed()
         ));
     }
 }

@@ -113,4 +113,5 @@ public class StockListView {
 
         return stockList;
     }
+
 }
