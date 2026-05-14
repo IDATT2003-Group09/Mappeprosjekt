@@ -45,6 +45,15 @@ public class GameProgress implements Serializable {
         );
     }
 
+    private BigDecimal calculateRequirement() {
+
+        double requirement =
+                0.03 * Math.pow(checkpointLevel, 1.3);
+
+        return BigDecimal.valueOf(requirement)
+                .setScale(4, RoundingMode.HALF_UP);
+    }
+
     public BigDecimal getBaseRequirement() {
         return baseRequirement;
     }
@@ -77,11 +86,15 @@ public class GameProgress implements Serializable {
      * move the goalpost
      */
     public void advanceCheckpoint() {
-        baseRequirement = baseRequirement.multiply(BigDecimal.valueOf(2));
+
+        checkpointLevel++;
+
+        baseRequirement = calculateRequirement();
+
         currentTarget = currentTarget.multiply(
                 BigDecimal.ONE.add(baseRequirement)
         );
-        checkpointLevel++;
+
         checkpointWeek += weeksPerQuarter;
     }
 
