@@ -43,7 +43,7 @@ public class GameController {
     private final GameProgress progress;
     private boolean lost = false;
     private Runnable onGameOver;
-    private static final BigDecimal baseRequirement = new BigDecimal("0.01");
+    private static final BigDecimal baseRequirement = new BigDecimal("0.04");
 
 
     /**
