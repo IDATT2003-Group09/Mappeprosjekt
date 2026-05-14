@@ -87,6 +87,7 @@ public class Main extends Application {
         root.scaleYProperty().bind(root.scaleXProperty());
 
         primaryStage.setScene(scene);
+        primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 
