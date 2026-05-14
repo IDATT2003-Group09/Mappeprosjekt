@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -88,6 +89,9 @@ public class Main extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
+        primaryStage.getIcons().add(new Image(
+            getClass().getResourceAsStream("/images/boss/boss-frames/pixil-frame-0.png")
+        ));
         primaryStage.show();
     }
 
