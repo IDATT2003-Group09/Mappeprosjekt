@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveGameService;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.StockCsvReader;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.EnhanceCSV;
 import edu.ntnu.iir.bidata.idatt2003.group09.io.TagsFactory;
@@ -46,6 +47,7 @@ public class Main extends Application {
     private StackPane root;
     private BorderPane contentRoot;
     private TutorialOverlay tutorialOverlay;
+    private final SaveGameService saveGameService = new SaveGameService();
 
     /**
      * Starts the JavaFX application. Initializes the exchange, player, and trade screen, and sets up the main stage.
@@ -110,7 +112,7 @@ public class Main extends Application {
             public void onSettings() {
                 showSettingsScreen();
             }
-        });
+        }, saveGameService.countSaveFiles());
 
         tutorialOverlay.stopTutorial();
         contentRoot.setCenter(startScreen);
@@ -157,7 +159,7 @@ public class Main extends Application {
 
     private void showLoadGameScreen() {
         LoadGameScreen loadGameScreen = new LoadGameScreen(
-                SaveManager.listSaveFiles(),
+                saveGameService.listSaveGames(),
                 new LoadGameScreen.LoadGameHandler() {
                     @Override
                     public void onLoadSelected(String fileName) {
@@ -166,6 +168,12 @@ public class Main extends Application {
                         } else {
                             showLoadGameScreen();
                         }
+                    }
+
+                    @Override
+                    public void onDeleteSelected(String fileName) {
+                        saveGameService.deleteSaveFile(fileName);
+                        showLoadGameScreen();
                     }
 
                     @Override
