@@ -41,7 +41,12 @@ public class SettingsScreen extends VBox {
 		getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
 		getStylesheets().add(getClass().getResource("/styling/settingsscreen.css").toExternalForm());
 		getStyleClass().add("settings-screen");
-
+		String imageUrl = getClass().getResource("/images/Millions_background.png").toExternalForm();
+		setStyle("""
+			-fx-background-image: url('%s');
+			-fx-background-size: cover;
+			-fx-background-position: center;
+		""".formatted(imageUrl));
 		setSpacing(0);
 		setAlignment(Pos.CENTER);
 		setPadding(new Insets(40));

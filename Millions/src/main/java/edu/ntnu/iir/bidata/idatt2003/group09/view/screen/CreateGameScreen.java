@@ -46,11 +46,12 @@ public class CreateGameScreen extends StackPane {
 	public CreateGameScreen(CreateGameHandler handler, String bossMessage) {
 		getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
 
+		String imageUrl = getClass().getResource("/images/office.png").toExternalForm();
 		setStyle("""
-		-fx-background-image: url('/images/office.png');
-		-fx-background-size: cover;
-		-fx-background-position: center;
-		""");
+			-fx-background-image: url('%s');
+			-fx-background-size: cover;
+			-fx-background-position: center;
+		""".formatted(imageUrl));
 
 		String fontFamily = loadFontFamily();
 

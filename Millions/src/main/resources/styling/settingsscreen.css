@@ -4,9 +4,6 @@
 }
 
 .settings-screen {
-	-fx-background-image: url('/images/Millions_background.png');
-	-fx-background-size: cover;
-	-fx-background-position: center;
 	-fx-font-family: "ThaleahFat";
 }
 
