@@ -366,25 +366,13 @@ public class TutorialOverlay {
       spotlight(BUY_BUTTON_X, BUY_BUTTON_Y, BUY_BUTTON_W, BUY_BUTTON_H);
       boss.updateTalkingBubble("Now click the buy button.");
 
-    // --- shifted steps (previously 8 → now STEP_BUY_SUCCESS / 11) ---
-    } else if (tutorialStep == STEP_BUY_SUCCESS) {
+    } else if (tutorialStep == STEP_TRANSACTION_HISTORY) {
       tutorialStep = STEP_HISTORY_TAB;
       spotlight(PORTFOLIO_TAB_X, TAB_Y, PORTFOLIO_TAB_W, TAB_H);
-      boss.updateTalkingBubble("Or look at your portfolio to see what you own.");
-
-    } else if (tutorialStep == STEP_TRANSACTION_HISTORY) {
-      tutorialStep = STEP_PORTFOLIO_TAB;
-      spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
-      boss.updateTalkingBubble("Check your portfolio to see what you own.");
+      boss.updateTalkingBubble("You could also look at your portfolio for an overview of what you own, but we dont have time for that.");
       boss.getChatBubble().addContinueButton(this::onContinuePressed);
 
-    } else if (tutorialStep == STEP_PORTFOLIO_TAB) {
-      tutorialStep = STEP_PORTFOLIO_VIEW;
-      spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
-      boss.updateTalkingBubble("Check your portfolio to see what you own.");
-      boss.getChatBubble().addContinueButton(this::onContinuePressed);
-
-    } else if (tutorialStep == STEP_PORTFOLIO_VIEW) {
+    } else if (tutorialStep == STEP_HISTORY_TAB) {
       tutorialStep = STEP_TRADE_TAB_2;
       spotlight(TRADE_TAB_X, TAB_Y, TRADE_TAB_W, TAB_H);
       boss.updateTalkingBubble("Now go back to the trade screen.");
