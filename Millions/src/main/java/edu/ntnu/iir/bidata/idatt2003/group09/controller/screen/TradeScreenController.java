@@ -4,6 +4,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.SaleCalculator;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.TradeScreenModel;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -21,14 +22,17 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
  */
 public class TradeScreenController {
 	private final GameController controller;
+	private final TradeScreenModel model;
 
 	/**
 	 * Constructs a TradeScreenController with the given GameController.
 	 *
 	 * @param controller the main game controller
 	 */
-	public TradeScreenController(GameController controller) {
+	public TradeScreenController(GameController controller, TradeScreenModel model) {
 		this.controller = controller;
+		this.model = model;
+		this.model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
 	}
 
 	/**
@@ -54,10 +58,9 @@ public class TradeScreenController {
 	 * @param quantityField the TextField for user input quantity
 	 * @param statusLabel  the Label for status messages
 	 * @param showOverlay  the overlay to show transaction confirmation
-	 * @param onSuccess    callback to run on successful buy
-	 * @param refreshInfo  callback to refresh UI info
+	* @param onSuccess    callback to run on successful buy
 	 */
-	public void handleBuy(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay, Runnable onSuccess, Runnable refreshInfo) {
+    public void handleBuy(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay, Runnable onSuccess) {
 		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
 		if (selectedStock == null) {
 			statusLabel.setText("Please select a stock first.");
@@ -80,7 +83,7 @@ public class TradeScreenController {
 					statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
 					onSuccess.run();
 					stockList.refresh();
-					refreshInfo.run();
+					model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
 				} catch (Exception e) {
 					statusLabel.setText("Buy failed: " + e.getMessage());
 				}
@@ -97,10 +100,9 @@ public class TradeScreenController {
 	 * @param quantityField the TextField for user input quantity
 	 * @param statusLabel  the Label for status messages
 	 * @param showOverlay  the overlay to show transaction confirmation
-	 * @param onSuccess    callback to run on successful sell
-	 * @param refreshInfo  callback to refresh UI info
+	* @param onSuccess    callback to run on successful sell
 	 */
-	public void handleSell(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay, Runnable onSuccess, Runnable refreshInfo) {
+    public void handleSell(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay, Runnable onSuccess) {
 		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
 		if (selectedStock == null) {
 			statusLabel.setText("Please select a stock first.");
@@ -130,7 +132,7 @@ public class TradeScreenController {
 						+ " of " + selectedStock.getSymbol());
 					onSuccess.run();
 					stockList.refresh();
-					refreshInfo.run();
+					model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
 				} catch (Exception e) {
 					statusLabel.setText("Sell failed: " + e.getMessage());
 				}
@@ -157,5 +159,14 @@ public class TradeScreenController {
 		} catch (NumberFormatException e) {
 			throw new IllegalArgumentException("Invalid number");
 		}
+		
 	}
+	/**
+	 * Refreshes the model from the current controller/game state.
+	 * Use when external game state changes (e.g., week advance) occur.
+	 */
+	public void refreshModel() {
+		model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
+	}
+
 }

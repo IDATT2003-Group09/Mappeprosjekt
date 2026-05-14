@@ -4,10 +4,22 @@ package edu.ntnu.iir.bidata.idatt2003.group09.model.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.game.GameProgress;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  * Model for the Trade Screen (MVC).
@@ -17,9 +29,23 @@ public class TradeScreenModel {
 	private List<Stock> allStocks;
 	private Set<String> selectedSectors;
 
+	// Observable UI-backed state
+	private final ObjectProperty<BigDecimal> cash = new SimpleObjectProperty<>(BigDecimal.ZERO);
+	private final ObjectProperty<BigDecimal> netWorth = new SimpleObjectProperty<>(BigDecimal.ZERO);
+	private final IntegerProperty week = new SimpleIntegerProperty(0);
+	private final IntegerProperty holdings = new SimpleIntegerProperty(0);
+	private final StringProperty quarterLabel = new SimpleStringProperty("");
+	private final StringProperty requirementOverlayLabel = new SimpleStringProperty("");
+	private final StringProperty netWorthOverlayLabel = new SimpleStringProperty("");
+	private final DoubleProperty progress = new SimpleDoubleProperty(0);
+	private final StringProperty deadlineLabel = new SimpleStringProperty("");
+
+	private final ObservableList<Stock> filteredStocks = FXCollections.observableArrayList();
+
 	public TradeScreenModel(List<Stock> stocks) {
 		this.allStocks = new ArrayList<>(stocks);
 		this.selectedSectors = new HashSet<>();
+		this.filteredStocks.setAll(this.allStocks);
 	}
 
 	public void setStocks(List<Stock> stocks) {
@@ -29,6 +55,10 @@ public class TradeScreenModel {
 	public List<Stock> getAllStocks() {
 		return allStocks;
 	}
+
+    public ObservableList<Stock> getFilteredStocks() {
+        return filteredStocks;
+    }
 
 	public Set<String> getAllSectors() {
 		return allStocks.stream()
@@ -92,6 +122,14 @@ public class TradeScreenModel {
 	}
 
 	/**
+	 *  Apply all filters and update the observable filteredStocks list.
+	 */
+	public void applyFilters(String searchText, boolean ownedOnly, Set<String> ownedSymbols, boolean winnersOnly, boolean losersOnly) {
+		List<Stock> result = filterStocksAdvanced(searchText, ownedOnly, ownedSymbols, winnersOnly, losersOnly);
+		filteredStocks.setAll(result);
+	}
+
+	/**
 	 * Calculates the maximum quantity of a stock that can be bought with the given cash, price, and commission rate.
 	 */
 	public String calculateMaxBuyQuantity(Stock selectedStock, BigDecimal cash, BigDecimal commissionRate) {
@@ -137,7 +175,7 @@ public class TradeScreenModel {
 	}
 
 	/**
-	 * Applies all trade-screen filters in one place.
+	 * Applies all trade-screen filters in one place and returns the list (without mutating filtered list).
 	 */
 	public List<Stock> filterStocksAdvanced(
 		String searchText,
@@ -171,5 +209,43 @@ public class TradeScreenModel {
 
 		return stocks;
 	}
+
+	/**
+	 * Update observable UI state from game state values.
+	 */
+	public void updateFromGameState(Player player, GameProgress progressObj, BigDecimal cashValue, int weekVal) {
+		this.cash.set(cashValue == null ? BigDecimal.ZERO : cashValue);
+		this.netWorth.set(player == null ? BigDecimal.ZERO : player.getNetWorth());
+		this.week.set(weekVal);
+		this.holdings.set(player == null ? 0 : player.getPortfolio().getShares().size());
+
+		int currentQuarter = progressObj == null ? 0 : progressObj.getCheckpointLevel();
+		this.quarterLabel.set("Q" + currentQuarter);
+
+		BigDecimal requirement = progressObj == null ? BigDecimal.ZERO : progressObj.getCurrentTarget();
+		this.requirementOverlayLabel.set(requirement == null ? "" : requirement.toPlainString());
+
+		BigDecimal netWorthVal = player == null ? BigDecimal.ZERO : player.getNetWorth();
+		this.netWorthOverlayLabel.set(netWorthVal == null ? "" : netWorthVal.toPlainString());
+
+		double progressValue = 0;
+		if (requirement != null && requirement.compareTo(BigDecimal.ZERO) > 0) {
+			progressValue = netWorthVal.divide(requirement, 4, RoundingMode.HALF_UP).doubleValue();
+		}
+		this.progress.set(Math.max(0, Math.min(progressValue, 1.0)));
+
+		this.deadlineLabel.set("Deadline in: " + (progressObj == null ? 0 : progressObj.getWeeksUntilDeadline()) + " weeks");
+	}
+
+	// Property accessors
+	public ObjectProperty<BigDecimal> cashProperty() { return cash; }
+	public ObjectProperty<BigDecimal> netWorthProperty() { return netWorth; }
+	public IntegerProperty weekProperty() { return week; }
+	public IntegerProperty holdingsProperty() { return holdings; }
+	public StringProperty quarterLabelProperty() { return quarterLabel; }
+	public StringProperty requirementOverlayLabelProperty() { return requirementOverlayLabel; }
+	public StringProperty netWorthOverlayLabelProperty() { return netWorthOverlayLabel; }
+	public DoubleProperty progressProperty() { return progress; }
+	public StringProperty deadlineLabelProperty() { return deadlineLabel; }
 
 }
