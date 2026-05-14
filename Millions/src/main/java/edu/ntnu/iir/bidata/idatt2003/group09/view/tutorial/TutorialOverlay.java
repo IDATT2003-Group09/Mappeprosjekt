@@ -16,52 +16,52 @@ public class TutorialOverlay {
   private static final double TITLE_FONT_SIZE = 32;
   private static final double BOSS_SIZE = 430;
 
-  private static final double NEWSPAPER_TAB_X = 200;
-  private static final double NEWSPAPER_TAB_W = 150;
-  private static final double TRADE_TAB_X = 14;
-  private static final double TRADE_TAB_W = 90;
-  private static final double PORTFOLIO_TAB_X = 90;
+  private static final double NEWSPAPER_TAB_X = 210;
+  private static final double NEWSPAPER_TAB_W = 130;
+  private static final double TRADE_TAB_X = 4;
+  private static final double TRADE_TAB_W = 85;
+  private static final double PORTFOLIO_TAB_X = 93;
   private static final double PORTFOLIO_TAB_W = 125;
-  private static final double HISTORY_TAB_X = 350;
-  private static final double HISTORY_TAB_W = 220;
+  private static final double HISTORY_TAB_X = 330;
+  private static final double HISTORY_TAB_W = 217;
   private static final double TAB_Y = 0;
   private static final double TAB_H = 46;
 
-  private static final double STOCK_LIST_X = 16;
-  private static final double STOCK_LIST_Y = 250;
-  private static final double STOCK_LIST_W = 524;
-  private static final double STOCK_LIST_H = 448;
+  private static final double STOCK_LIST_X = 0;
+  private static final double STOCK_LIST_Y = 210;
+  private static final double STOCK_LIST_W = 544;
+  private static final double STOCK_LIST_H = 478;
 
   // Search bar (sits in the filter bar row above the stock list)
   private static final double SEARCH_BAR_X = 16;
-  private static final double SEARCH_BAR_Y = 196;
-  private static final double SEARCH_BAR_W = 350;
+  private static final double SEARCH_BAR_Y = 130;
+  private static final double SEARCH_BAR_W = 700;
   private static final double SEARCH_BAR_H = 36;
 
   // Sector button container (row below the filter bar)
-  private static final double SECTOR_BUTTONS_X = 16;
-  private static final double SECTOR_BUTTONS_Y = 204;
-  private static final double SECTOR_BUTTONS_W = 900;
-  private static final double SECTOR_BUTTONS_H = 40;
+  private static final double SECTOR_BUTTONS_X = 0;
+  private static final double SECTOR_BUTTONS_Y = 170;
+  private static final double SECTOR_BUTTONS_W = 1100;
+  private static final double SECTOR_BUTTONS_H = 35;
 
   // Max Buy button
-  private static final double MAX_BUY_BUTTON_X = 786;
+  private static final double MAX_BUY_BUTTON_X = 746;
   private static final double MAX_BUY_BUTTON_Y = 650;
   private static final double MAX_BUY_BUTTON_W = 90;
   private static final double MAX_BUY_BUTTON_H = 36;
 
-  private static final double BUY_BUTTON_X = 840;
+  private static final double BUY_BUTTON_X = 835;
   private static final double BUY_BUTTON_Y = 650;
   private static final double BUY_BUTTON_W = 70;
   private static final double BUY_BUTTON_H = 36;
 
-  private static final double SELL_BUTTON_X = 890;
+  private static final double SELL_BUTTON_X = 899;
   private static final double SELL_BUTTON_Y = 650;
-  private static final double SELL_BUTTON_W = 90;
+  private static final double SELL_BUTTON_W = 82;
   private static final double SELL_BUTTON_H = 46;
 
-  private static final double NEXT_WEEK_BUTTON_X = 980;
-  private static final double NEXT_WEEK_BUTTON_Y = 55;
+  private static final double NEXT_WEEK_BUTTON_X = 970;
+  private static final double NEXT_WEEK_BUTTON_Y = 45;
   private static final double NEXT_WEEK_BUTTON_W = 132;
   private static final double NEXT_WEEK_BUTTON_H = 46;
 
@@ -281,7 +281,6 @@ public class TutorialOverlay {
     tutorialStep = STEP_HISTORY_TAB;
     spotlight(HISTORY_TAB_X, TAB_Y, HISTORY_TAB_W, TAB_H);
     boss.updateTalkingBubble("If you want more information about your stocks, go to the transaction history.");
-    boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void onTransactionHistoryViewed() {
