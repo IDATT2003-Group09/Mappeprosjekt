@@ -549,21 +549,13 @@ public class TradeScreenView extends StackPane {
         tradeScreenModel.quarterLabelProperty().addListener((obs, oldVal, newVal) -> {
             quarterLabel.setText(newVal == null ? "" : newVal);
         });
-        tradeScreenModel.requirementOverlayLabelProperty().addListener((obs, oldVal, newVal) -> {
-            try {
-                BigDecimal val = newVal == null || newVal.isBlank() ? BigDecimal.ZERO : new BigDecimal(newVal);
-                requirementOverlayLabel.setText("Requirement: " + currencyFormat.format(val));
-            } catch (Exception e) {
-                requirementOverlayLabel.setText("Requirement: " + newVal);
-            }
+        tradeScreenModel.requirementOverlayValueProperty().addListener((obs, oldVal, newVal) -> {
+            BigDecimal val = newVal == null ? BigDecimal.ZERO : newVal;
+            requirementOverlayLabel.setText("Requirement: " + currencyFormat.format(val));
         });
-        tradeScreenModel.netWorthOverlayLabelProperty().addListener((obs, oldVal, newVal) -> {
-            try {
-                BigDecimal val = newVal == null || newVal.isBlank() ? BigDecimal.ZERO : new BigDecimal(newVal);
-                netWorthOverlayLabel.setText(currencyFormat.format(val));
-            } catch (Exception e) {
-                netWorthOverlayLabel.setText(newVal == null ? "" : newVal);
-            }
+        tradeScreenModel.netWorthOverlayValueProperty().addListener((obs, oldVal, newVal) -> {
+            BigDecimal val = newVal == null ? BigDecimal.ZERO : newVal;
+            netWorthOverlayLabel.setText(currencyFormat.format(val));
         });
         tradeScreenModel.deadlineLabelProperty().addListener((obs, oldVal, newVal) -> {
             deadlineLabel.setText(newVal == null ? "" : newVal);
@@ -582,21 +574,11 @@ public class TradeScreenView extends StackPane {
         String q = tradeScreenModel.quarterLabelProperty().get();
         quarterLabel.setText(q == null ? "" : q);
 
-        String req = tradeScreenModel.requirementOverlayLabelProperty().get();
-        try {
-            BigDecimal val = req == null || req.isBlank() ? BigDecimal.ZERO : new BigDecimal(req);
-            requirementOverlayLabel.setText("Requirement: " + currencyFormat.format(val));
-        } catch (Exception e) {
-            requirementOverlayLabel.setText(req == null ? "" : req);
-        }
+        BigDecimal req = tradeScreenModel.requirementOverlayValueProperty().get();
+        requirementOverlayLabel.setText("Requirement: " + currencyFormat.format(req == null ? BigDecimal.ZERO : req));
 
-        String nw = tradeScreenModel.netWorthOverlayLabelProperty().get();
-        try {
-            BigDecimal val2 = nw == null || nw.isBlank() ? BigDecimal.ZERO : new BigDecimal(nw);
-            netWorthOverlayLabel.setText(currencyFormat.format(val2));
-        } catch (Exception e) {
-            netWorthOverlayLabel.setText(nw == null ? "" : nw);
-        }
+        BigDecimal nw = tradeScreenModel.netWorthOverlayValueProperty().get();
+        netWorthOverlayLabel.setText(currencyFormat.format(nw == null ? BigDecimal.ZERO : nw));
 
         deadlineLabel.setText(tradeScreenModel.deadlineLabelProperty().get());
     }

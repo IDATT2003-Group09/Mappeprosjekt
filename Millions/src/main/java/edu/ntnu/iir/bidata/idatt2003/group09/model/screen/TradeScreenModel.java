@@ -35,8 +35,8 @@ public class TradeScreenModel {
 	private final IntegerProperty week = new SimpleIntegerProperty(0);
 	private final IntegerProperty holdings = new SimpleIntegerProperty(0);
 	private final StringProperty quarterLabel = new SimpleStringProperty("");
-	private final StringProperty requirementOverlayLabel = new SimpleStringProperty("");
-	private final StringProperty netWorthOverlayLabel = new SimpleStringProperty("");
+	private final ObjectProperty<BigDecimal> requirementOverlayValue = new SimpleObjectProperty<>(BigDecimal.ZERO);
+	private final ObjectProperty<BigDecimal> netWorthOverlayValue = new SimpleObjectProperty<>(BigDecimal.ZERO);
 	private final DoubleProperty progress = new SimpleDoubleProperty(0);
 	private final StringProperty deadlineLabel = new SimpleStringProperty("");
 
@@ -223,10 +223,10 @@ public class TradeScreenModel {
 		this.quarterLabel.set("Q" + currentQuarter);
 
 		BigDecimal requirement = progressObj == null ? BigDecimal.ZERO : progressObj.getCurrentTarget();
-		this.requirementOverlayLabel.set(requirement == null ? "" : requirement.toPlainString());
+		this.requirementOverlayValue.set(requirement == null ? BigDecimal.ZERO : requirement);
 
 		BigDecimal netWorthVal = player == null ? BigDecimal.ZERO : player.getNetWorth();
-		this.netWorthOverlayLabel.set(netWorthVal == null ? "" : netWorthVal.toPlainString());
+		this.netWorthOverlayValue.set(netWorthVal == null ? BigDecimal.ZERO : netWorthVal);
 
 		double progressValue = 0;
 		if (requirement != null && requirement.compareTo(BigDecimal.ZERO) > 0) {
@@ -243,8 +243,8 @@ public class TradeScreenModel {
 	public IntegerProperty weekProperty() { return week; }
 	public IntegerProperty holdingsProperty() { return holdings; }
 	public StringProperty quarterLabelProperty() { return quarterLabel; }
-	public StringProperty requirementOverlayLabelProperty() { return requirementOverlayLabel; }
-	public StringProperty netWorthOverlayLabelProperty() { return netWorthOverlayLabel; }
+	public ObjectProperty<BigDecimal> requirementOverlayValueProperty() { return requirementOverlayValue; }
+	public ObjectProperty<BigDecimal> netWorthOverlayValueProperty() { return netWorthOverlayValue; }
 	public DoubleProperty progressProperty() { return progress; }
 	public StringProperty deadlineLabelProperty() { return deadlineLabel; }
 
