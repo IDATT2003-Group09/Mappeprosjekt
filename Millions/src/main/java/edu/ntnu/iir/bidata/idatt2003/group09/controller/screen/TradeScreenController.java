@@ -208,4 +208,39 @@ public class TradeScreenController {
 			.collect(Collectors.toSet());
 	}
 
+	/**
+	 * Select a sector in the model's selected sectors set.
+	 */
+	public void selectSector(String sector) {
+		model.selectSector(sector);
+	}
+
+	/**
+	 * Deselect a sector in the model's selected sectors set.
+	 */
+	public void deselectSector(String sector) {
+		model.deselectSector(sector);
+	}
+
+	/**
+	 * Select all available sectors in the model.
+	 */
+	public void selectAllSectors() {
+		model.selectAllSectors();
+	}
+
+	/**
+	 * Clear all selected sectors in the model.
+	 */
+	public void clearSelectedSectors() {
+		model.clearSelectedSectors();
+	}
+
+	/**
+	 * Returns the currently selected sectors.
+	 */
+	public Set<String> getSelectedSectors() {
+		return model.getSelectedSectors();
+	}
+
 }

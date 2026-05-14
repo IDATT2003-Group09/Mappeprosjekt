@@ -68,6 +68,30 @@
 	margin-left: 8px;
 	margin-right: 8px;
 }
+.trade-screen .trade-all-toggle {
+	-fx-background-color: #12284a;
+	-fx-text-fill: #dbe8ff;
+	-fx-font-size: 14px;
+	-fx-font-family: "ThaleahFat";
+	-fx-padding: 8 18 8 18;
+	-fx-background-radius: 0;
+	-fx-border-radius: 0;
+	-fx-border-color: #1b4b81;
+	-fx-border-width: 2;
+	-fx-cursor: hand;
+	-fx-font-weight: bold;
+	-fx-effect: dropshadow(gaussian, #00e4ff22, 2, 0.1, 0, 1);
+	-fx-transition: background-color 0.2s, color 0.2s;
+	margin-left: 8px;
+	margin-right: 8px;
+	min-height: 40px;
+	max-height: 40px;
+}
+.trade-screen .trade-all-toggle:selected, .trade-screen .trade-all-toggle:pressed {
+	-fx-background-color: #05d8ff;
+	-fx-text-fill: #12284a;
+	-fx-border-color: #00e4ff;
+}
 .trade-winners-toggle {
 	min-height: 40px;
 	max-height: 40px;
