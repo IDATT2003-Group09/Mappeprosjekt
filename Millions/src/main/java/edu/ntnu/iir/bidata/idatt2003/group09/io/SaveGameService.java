@@ -18,6 +18,10 @@ public class SaveGameService {
         return SaveManager.numberOfSaveFiles();
     }
 
+    public boolean doesSaveFileExist(String fileName) {
+        return SaveManager.doesSaveFileExist(fileName);
+    }
+
     public void deleteSaveFile(String fileName) {
         SaveManager.deleteSaveFile(fileName);
     }

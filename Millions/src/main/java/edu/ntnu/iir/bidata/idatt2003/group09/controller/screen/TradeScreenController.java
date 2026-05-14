@@ -11,9 +11,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
-import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 
 /**
  * This class manages the logic for buying and selling stocks, including validation,
@@ -58,7 +58,6 @@ public class TradeScreenController {
 	 * @param quantityField the TextField for user input quantity
 	 * @param statusLabel  the Label for status messages
 	 * @param showOverlay  the overlay to show transaction confirmation
-	* @param onSuccess    callback to run on successful buy
 	 */
 	public void handleBuy(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay) {
 		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
@@ -100,7 +99,6 @@ public class TradeScreenController {
 	 * @param quantityField the TextField for user input quantity
 	 * @param statusLabel  the Label for status messages
 	 * @param showOverlay  the overlay to show transaction confirmation
-	* @param onSuccess    callback to run on successful sell
 	 */
 	public void handleSell(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay) {
 		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
@@ -167,6 +165,47 @@ public class TradeScreenController {
 	 */
 	public void refreshModel() {
 		model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
+	}
+
+	/**
+	 * Advances one week and synchronizes model state if the game continues.
+	 *
+	 * @return the week advancement result from the game controller
+	 */
+	public GameController.WeekAdvanceResult advanceWeek() {
+		GameController.WeekAdvanceResult result = controller.nextWeek();
+		if (!result.gameOver()) {
+			refreshModel();
+		}
+		return result;
+	}
+
+	/**
+	 * Calculates max buy quantity using current game state.
+	 */
+	public String calculateMaxBuyQuantity(Stock selectedStock) {
+		return model.calculateMaxBuyQuantity(
+			selectedStock,
+			controller.getMoney(),
+			controller.getExchange().getCommissionRate()
+		);
+	}
+
+	/**
+	 * Calculates max sell quantity for the selected symbol from current portfolio.
+	 */
+	public String calculateMaxSellQuantity(String symbol) {
+		List<Share> shares = controller.getPortfolio().getShares(symbol);
+		return model.calculateMaxSellQuantity(shares);
+	}
+
+	/**
+	 * Returns symbols currently owned by the player.
+	 */
+	public Set<String> getOwnedSymbols() {
+		return controller.getPortfolio().getShares().stream()
+			.map(share -> share.getStock().getSymbol())
+			.collect(Collectors.toSet());
 	}
 
 }

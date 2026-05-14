@@ -148,6 +148,11 @@ public class Main extends Application {
             }
 
             @Override
+            public boolean doesSaveFileExist(String playerName) {
+                return saveGameService.doesSaveFileExist(playerName);
+            }
+
+            @Override
             public void onBack() {
                 showStartScreen();
             }

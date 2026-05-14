@@ -3,7 +3,6 @@ package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 import java.io.IOException;
 import java.io.InputStream;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.Boss;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
 import javafx.geometry.Insets;
@@ -36,6 +35,7 @@ public class CreateGameScreen extends StackPane {
 
 	public interface CreateGameHandler {
 		void onCreateGame(String playerName, String experienceLevel, String exchangeChoice, String startingMoney);
+		boolean doesSaveFileExist(String playerName);
 		void onBack();
 	}
 
@@ -156,7 +156,7 @@ public class CreateGameScreen extends StackPane {
 				fileNameField.requestFocus();
 				return;
 			}
-			if (SaveManager.doesSaveFileExist(playerName)) {
+			if (handler.doesSaveFileExist(playerName)) {
 				boss.updateTalkingBubble("I have already met someone with that name! Choose another one.");
 				fileNameField.requestFocus();
 				return;

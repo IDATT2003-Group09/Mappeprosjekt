@@ -199,9 +199,7 @@ public class TradeScreenView extends StackPane {
         maxBuyButton.setOnAction(e -> {
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             if (selectedStock != null) {
-                BigDecimal cash = controller.getMoney();
-                BigDecimal commissionRate = controller.getExchange().getCommissionRate();
-                String maxQty = tradeScreenModel.calculateMaxBuyQuantity(selectedStock, cash, commissionRate);
+                String maxQty = tradeScreenController.calculateMaxBuyQuantity(selectedStock);
                 quantityField.setText(maxQty);
             }
         });
@@ -211,8 +209,7 @@ public class TradeScreenView extends StackPane {
         maxSellButton.setOnAction(e -> {
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             if (selectedStock != null) {
-                List<Share> shares = controller.getPortfolio().getShares(selectedStock.getSymbol());
-                String maxQty = tradeScreenModel.calculateMaxSellQuantity(shares);
+                String maxQty = tradeScreenController.calculateMaxSellQuantity(selectedStock.getSymbol());
                 quantityField.setText(maxQty);
             }
         });
@@ -254,12 +251,11 @@ public class TradeScreenView extends StackPane {
         });
 
         nextWeekButton.setOnAction(e -> {
-            GameController.WeekAdvanceResult result = controller.nextWeek();
+            GameController.WeekAdvanceResult result = tradeScreenController.advanceWeek();
             if (result.gameOver()) {
                 return;
             }
             stockList.refresh();
-            tradeScreenController.refreshModel();
             updateSelectedStockGraph();
             onTutorialNextWeek();
             if (result.quarterAdvanced()) {
@@ -404,10 +400,6 @@ public class TradeScreenView extends StackPane {
         }
     }
 
-    private void refreshInfo() {
-        tradeScreenController.refreshModel();
-    }
-
     private void onTutorialStockSelected() {
         if (!tutorialMode || tutorialOverlay == null) {
             return;
@@ -444,9 +436,7 @@ public class TradeScreenView extends StackPane {
 
 
     private void filterStockList(String searchText) {
-        Set<String> ownedSymbols = controller.getPortfolio().getShares().stream()
-            .map(share -> share.getStock().getSymbol())
-            .collect(Collectors.toSet());
+        Set<String> ownedSymbols = tradeScreenController.getOwnedSymbols();
 
         tradeScreenModel.applyFilters(
             searchText,
@@ -518,9 +508,7 @@ public class TradeScreenView extends StackPane {
 
     private void filterBySectorsAndOwned() {
         String searchText = searchField != null ? searchField.getText() : "";
-        Set<String> ownedSymbols = controller.getPortfolio().getShares().stream()
-            .map(share -> share.getStock().getSymbol())
-            .collect(Collectors.toSet());
+        Set<String> ownedSymbols = tradeScreenController.getOwnedSymbols();
 
         tradeScreenModel.applyFilters(
             searchText,
