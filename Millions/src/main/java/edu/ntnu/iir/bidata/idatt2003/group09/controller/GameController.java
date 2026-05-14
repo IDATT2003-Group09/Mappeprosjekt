@@ -295,4 +295,25 @@ public class GameController {
         }
         saveGame();
     }
+
+    /**
+     * Sells all shares for the provided stock symbol and credits their value to cash.
+     * Also saves the game state after selling.
+     *
+     * @param symbol the stock symbol to liquidate
+     */
+    public void sellAllShares(String symbol) {
+        if (symbol == null || symbol.isBlank()) {
+            return;
+        }
+
+        Portfolio portfolio = getPortfolio();
+        List<Share> sharesToSell = new ArrayList<>(portfolio.getShares(symbol));
+        for (Share share : sharesToSell) {
+            BigDecimal value = share.getStock().getSalesPrice().multiply(share.getQuantity());
+            player.addMoney(value);
+            portfolio.removeShare(share);
+        }
+        saveGame();
+    }
 }
