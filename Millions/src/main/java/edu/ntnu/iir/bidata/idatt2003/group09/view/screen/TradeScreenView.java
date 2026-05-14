@@ -19,6 +19,8 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -437,7 +439,7 @@ public class TradeScreenView extends StackPane {
     private void filterStockList(String searchText) {
         Set<String> ownedSymbols = controller.getPortfolio().getShares().stream()
             .map(share -> share.getStock().getSymbol())
-            .collect(java.util.stream.Collectors.toSet());
+            .collect(Collectors.toSet());
 
         tradeScreenModel.applyFilters(
             searchText,
@@ -511,7 +513,7 @@ public class TradeScreenView extends StackPane {
         String searchText = searchField != null ? searchField.getText() : "";
         Set<String> ownedSymbols = controller.getPortfolio().getShares().stream()
             .map(share -> share.getStock().getSymbol())
-            .collect(java.util.stream.Collectors.toSet());
+            .collect(Collectors.toSet());
 
         tradeScreenModel.applyFilters(
             searchText,
@@ -525,12 +527,12 @@ public class TradeScreenView extends StackPane {
     private void bindModelToView() {
         // Cash
         tradeScreenModel.cashProperty().addListener((obs, oldVal, newVal) -> {
-            cashLabel.setText("Cash: " + currencyFormat.format(newVal == null ? java.math.BigDecimal.ZERO : newVal));
+            cashLabel.setText("Cash: " + currencyFormat.format(newVal == null ? BigDecimal.ZERO : newVal));
         });
 
         // Net worth
         tradeScreenModel.netWorthProperty().addListener((obs, oldVal, newVal) -> {
-            netWorthLabel.setText("Net Worth: " + currencyFormat.format(newVal == null ? java.math.BigDecimal.ZERO : newVal));
+            netWorthLabel.setText("Net Worth: " + currencyFormat.format(newVal == null ? BigDecimal.ZERO : newVal));
         });
 
         // Holdings
@@ -549,7 +551,7 @@ public class TradeScreenView extends StackPane {
         });
         tradeScreenModel.requirementOverlayLabelProperty().addListener((obs, oldVal, newVal) -> {
             try {
-                java.math.BigDecimal val = newVal == null || newVal.isBlank() ? java.math.BigDecimal.ZERO : new java.math.BigDecimal(newVal);
+                BigDecimal val = newVal == null || newVal.isBlank() ? BigDecimal.ZERO : new BigDecimal(newVal);
                 requirementOverlayLabel.setText("Requirement: " + currencyFormat.format(val));
             } catch (Exception e) {
                 requirementOverlayLabel.setText("Requirement: " + newVal);
@@ -557,7 +559,7 @@ public class TradeScreenView extends StackPane {
         });
         tradeScreenModel.netWorthOverlayLabelProperty().addListener((obs, oldVal, newVal) -> {
             try {
-                java.math.BigDecimal val = newVal == null || newVal.isBlank() ? java.math.BigDecimal.ZERO : new java.math.BigDecimal(newVal);
+                BigDecimal val = newVal == null || newVal.isBlank() ? BigDecimal.ZERO : new BigDecimal(newVal);
                 netWorthOverlayLabel.setText(currencyFormat.format(val));
             } catch (Exception e) {
                 netWorthOverlayLabel.setText(newVal == null ? "" : newVal);
@@ -568,5 +570,34 @@ public class TradeScreenView extends StackPane {
         });
 
         progressBar.progressProperty().bind(tradeScreenModel.progressProperty());
+        BigDecimal initCash = tradeScreenModel.cashProperty().get();
+        cashLabel.setText("Cash: " + currencyFormat.format(initCash == null ? BigDecimal.ZERO : initCash));
+
+        BigDecimal initNet = tradeScreenModel.netWorthProperty().get();
+        netWorthLabel.setText("Net Worth: " + currencyFormat.format(initNet == null ? BigDecimal.ZERO : initNet));
+
+        holdingsLabel.setText("Positions: " + tradeScreenModel.holdingsProperty().get());
+        weekLabel.setText("Week: " + tradeScreenModel.weekProperty().get());
+
+        String q = tradeScreenModel.quarterLabelProperty().get();
+        quarterLabel.setText(q == null ? "" : q);
+
+        String req = tradeScreenModel.requirementOverlayLabelProperty().get();
+        try {
+            BigDecimal val = req == null || req.isBlank() ? BigDecimal.ZERO : new BigDecimal(req);
+            requirementOverlayLabel.setText("Requirement: " + currencyFormat.format(val));
+        } catch (Exception e) {
+            requirementOverlayLabel.setText(req == null ? "" : req);
+        }
+
+        String nw = tradeScreenModel.netWorthOverlayLabelProperty().get();
+        try {
+            BigDecimal val2 = nw == null || nw.isBlank() ? BigDecimal.ZERO : new BigDecimal(nw);
+            netWorthOverlayLabel.setText(currencyFormat.format(val2));
+        } catch (Exception e) {
+            netWorthOverlayLabel.setText(nw == null ? "" : nw);
+        }
+
+        deadlineLabel.setText(tradeScreenModel.deadlineLabelProperty().get());
     }
 }
