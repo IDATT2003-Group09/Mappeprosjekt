@@ -71,17 +71,16 @@ public class TutorialOverlay {
   private static final double TAB_CONTENT_W = 1100;
   private static final double TAB_CONTENT_H = 684;
 
-  // Step numbers — keeping them as named constants makes future changes easier
   private static final int STEP_START               = 1;
   private static final int STEP_NEWSPAPER_TAB       = 2;
   private static final int STEP_NEWSPAPER_VIEW      = 3;
   private static final int STEP_TRADE_TAB           = 4;
   private static final int STEP_STOCK_LIST          = 5;
-  // --- new steps ---
+
   private static final int STEP_SEARCH_BAR          = 6;
   private static final int STEP_SECTOR_BUTTONS      = 7;
   private static final int STEP_MAX_BUY             = 8;
-  // --- shifted steps ---
+  
   private static final int STEP_BUY_BUTTON          = 9;
   private static final int STEP_BUY_CONFIRM         = 10;
   private static final int STEP_BUY_SUCCESS         = 11;
@@ -219,8 +218,6 @@ public class TutorialOverlay {
       return;
     }
 
-    // Advance to search bar introduction — user does not need to interact with it,
-    // just show the spotlight and let them continue.
     tutorialStep = STEP_SEARCH_BAR;
     spotlight(SEARCH_BAR_X, SEARCH_BAR_Y, SEARCH_BAR_W, SEARCH_BAR_H);
     boss.updateTalkingBubble("You can search for stocks by name or ticker symbol up here.");
@@ -378,7 +375,6 @@ public class TutorialOverlay {
       boss.updateTalkingBubble("Now go back to the trade screen.");
 
     } else if (tutorialStep == STEP_SELL_BUTTON - 1) {
-      // boss rant step (was step 14 originally)
       tutorialStep = STEP_SELL_BUTTON;
       boss.visibleBoss(false);
       spotlight(SELL_BUTTON_X, SELL_BUTTON_Y, SELL_BUTTON_W, SELL_BUTTON_H);
