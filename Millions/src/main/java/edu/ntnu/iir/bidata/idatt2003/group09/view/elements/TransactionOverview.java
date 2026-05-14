@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import javafx.geometry.Pos;
 
 public abstract class TransactionOverview extends StackPane {
-	public TransactionOverview(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm, Runnable onCancel) {
+	public TransactionOverview(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm, Runnable onCancel, boolean cancelEnabled) {
 		getStyleClass().addAll("trade-screen", "transaction-overview-root");
 		Rectangle background = new Rectangle();
 		background.setFill(Color.rgb(0, 0, 0, 0.6));
@@ -41,6 +41,11 @@ public abstract class TransactionOverview extends StackPane {
 		confirmButton.setDefaultButton(true);
 
 		Button closeButton = new Button("Cancel");
+
+		closeButton.setDisable(!cancelEnabled);
+		closeButton.setVisible(cancelEnabled);
+		closeButton.setManaged(cancelEnabled);
+
 		closeButton.getStyleClass().add("transaction-overview-cancel");
 		closeButton.setOnAction(e -> {
 			if (onCancel != null) {

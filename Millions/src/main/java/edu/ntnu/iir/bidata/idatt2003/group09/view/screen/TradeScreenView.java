@@ -345,6 +345,10 @@ public class TradeScreenView extends StackPane {
     }
 
     private void showTransactionOverlay(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm) {
+        boolean cancelEnabled =
+            !tutorialMode
+            || tutorialOverlay == null
+            || !tutorialOverlay.isAtConfirmationStep();
         if (transactionOverviewOverlay != null) overlayPane.getChildren().remove(transactionOverviewOverlay);
         Runnable onCancel = () -> {
             overlayPane.getChildren().remove(transactionOverviewOverlay);
@@ -357,14 +361,16 @@ public class TradeScreenView extends StackPane {
                 transactionOverviewOverlay = null;
                 updateOverlayInterception();
                 onConfirm.run();
-            }, onCancel);
+            }, onCancel
+            , cancelEnabled
+            );
         } else if (action.equalsIgnoreCase("sell")) {
             transactionOverviewOverlay = new SellOverview(stockSymbol, quantity, price, commission, tax, total, () -> {
                 overlayPane.getChildren().remove(transactionOverviewOverlay);
                 transactionOverviewOverlay = null;
                 updateOverlayInterception();
                 onConfirm.run();
-            }, onCancel);
+            }, onCancel, cancelEnabled);
         } else {
             throw new IllegalArgumentException("Unknown transaction action: " + action);
         }

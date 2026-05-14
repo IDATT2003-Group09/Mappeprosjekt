@@ -8,8 +8,8 @@ import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 
 public class SellOverview extends TransactionOverview {
-    public SellOverview(String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm, Runnable onCancel) {
-        super("Sell", stockSymbol, quantity, price, commission, tax, total, onConfirm, onCancel);
+    public SellOverview(String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm, Runnable onCancel, boolean cancelEnabled) {
+        super("Sell", stockSymbol, quantity, price, commission, tax, total, onConfirm, onCancel, cancelEnabled);
     }
 
     @Override
