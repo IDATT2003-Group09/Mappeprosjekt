@@ -113,7 +113,8 @@ public class SaveManager {
             return new File(SAVE_DIR, DEFAULT_FILE).getAbsolutePath();
         }
 
-        String normalized = fileName.trim();
+        String normalized = new File(fileName).getName().trim();
+
         normalized = normalized.replaceAll("[^a-zA-Z0-9._-]", "_");
 
         if (!normalized.startsWith(SAVE_FILE_PREFIX)) {
@@ -121,7 +122,7 @@ public class SaveManager {
         }
 
         if (!normalized.endsWith(SAVE_FILE_SUFFIX)) {
-            normalized = normalized + SAVE_FILE_SUFFIX;
+            normalized += SAVE_FILE_SUFFIX;
         }
 
         return new File(SAVE_DIR, normalized).getAbsolutePath();
