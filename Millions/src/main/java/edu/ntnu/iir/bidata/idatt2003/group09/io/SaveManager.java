@@ -12,6 +12,13 @@ public class SaveManager {
     private static final String DEFAULT_FILE = "savegame.dat";
     private static final String SAVE_FILE_PREFIX = "savegame";
     private static final String SAVE_FILE_SUFFIX = ".dat";
+    private static final File SAVE_DIR;
+        static {
+            String appData = System.getenv("APPDATA");
+            if (appData == null) appData = System.getProperty("user.home");
+            SAVE_DIR = new File(appData, "Millions");
+            SAVE_DIR.mkdirs(); 
+        }
 
     /**
      * Saves the given GameState to the default save file.
@@ -74,8 +81,7 @@ public class SaveManager {
      * @return a sorted list of save file names
      */
     public static List<String> listSaveFiles() {
-        File currentDirectory = new File(".");
-        String[] fileNames = currentDirectory.list((dir, name) ->
+        String[] fileNames = SAVE_DIR.list((dir, name) ->
                 name.startsWith(SAVE_FILE_PREFIX) && name.endsWith(SAVE_FILE_SUFFIX));
 
         if (fileNames == null || fileNames.length == 0) {
@@ -93,7 +99,7 @@ public class SaveManager {
      * @return true if the default save file exists, false otherwise
      */
     public static boolean saveExists() {
-        return new File(DEFAULT_FILE).exists();
+        return new File(SAVE_DIR, DEFAULT_FILE).exists();
     }
 
     /**
@@ -104,7 +110,7 @@ public class SaveManager {
      */
     public static String normalizeSaveFileName(String fileName) {
         if (fileName == null || fileName.isBlank()) {
-            return DEFAULT_FILE;
+            return new File(SAVE_DIR, DEFAULT_FILE).getAbsolutePath();
         }
 
         String normalized = fileName.trim();
@@ -118,7 +124,7 @@ public class SaveManager {
             normalized = normalized + SAVE_FILE_SUFFIX;
         }
 
-        return normalized;
+        return new File(SAVE_DIR, normalized).getAbsolutePath();
     }
 
     /**
