@@ -148,4 +148,11 @@ public class PortfolioRow {
      * @return the current price
      */
     public BigDecimal getCurrentPrice() { return currentPrice; }
+
+    /**
+     * Gets the stock sector.
+     *
+     * @return the sector
+     */
+    public String getSector() { return stock.getSector(); }
 }

@@ -131,8 +131,8 @@ public class TradeScreenModel {
 	/**
 	 *  Apply all filters and update the observable filteredStocks list.
 	 */
-	public void applyFilters(String searchText, boolean ownedOnly, Set<String> ownedSymbols, boolean winnersOnly, boolean losersOnly) {
-		List<Stock> result = filterStocksAdvanced(searchText, ownedOnly, ownedSymbols, winnersOnly, losersOnly);
+	public void applyFilters(String searchText, boolean allSectorsToggle, boolean ownedOnly, Set<String> ownedSymbols, boolean winnersOnly, boolean losersOnly) {
+		List<Stock> result = filterStocksAdvanced(searchText, allSectorsToggle, ownedOnly, ownedSymbols, winnersOnly, losersOnly);
 		filteredStocks.setAll(result);
 	}
 
@@ -186,6 +186,7 @@ public class TradeScreenModel {
 	 */
 	public List<Stock> filterStocksAdvanced(
 		String searchText,
+		boolean allSectorsToggle,
 		boolean ownedOnly,
 		Set<String> ownedSymbols,
 		boolean winnersOnly,

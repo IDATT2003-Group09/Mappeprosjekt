@@ -16,34 +16,49 @@ public class TutorialOverlay {
   private static final double TITLE_FONT_SIZE = 32;
   private static final double BOSS_SIZE = 430;
 
-  private static final double NEWSPAPER_TAB_X = 200;
-  private static final double NEWSPAPER_TAB_W = 150;
-  private static final double TRADE_TAB_X = 14;
-  private static final double TRADE_TAB_W = 90;
-  private static final double PORTFOLIO_TAB_X = 90;
+  private static final double NEWSPAPER_TAB_X = 210;
+  private static final double NEWSPAPER_TAB_W = 130;
+  private static final double TRADE_TAB_X = 4;
+  private static final double TRADE_TAB_W = 85;
+  private static final double PORTFOLIO_TAB_X = 93;
   private static final double PORTFOLIO_TAB_W = 125;
-  private static final double HISTORY_TAB_X = 350;
-  private static final double HISTORY_TAB_W = 220;
+  private static final double HISTORY_TAB_X = 330;
+  private static final double HISTORY_TAB_W = 217;
   private static final double TAB_Y = 0;
   private static final double TAB_H = 46;
 
-  private static final double STOCK_LIST_X = 16;
-  private static final double STOCK_LIST_Y = 250;
-  private static final double STOCK_LIST_W = 524;
-  private static final double STOCK_LIST_H = 448;
+  private static final double STOCK_LIST_X = 0;
+  private static final double STOCK_LIST_Y = 210;
+  private static final double STOCK_LIST_W = 544;
+  private static final double STOCK_LIST_H = 478;
 
-  private static final double BUY_BUTTON_X = 840;
+  private static final double SEARCH_BAR_X = 16;
+  private static final double SEARCH_BAR_Y = 130;
+  private static final double SEARCH_BAR_W = 700;
+  private static final double SEARCH_BAR_H = 36;
+
+  private static final double SECTOR_BUTTONS_X = 0;
+  private static final double SECTOR_BUTTONS_Y = 170;
+  private static final double SECTOR_BUTTONS_W = 1100;
+  private static final double SECTOR_BUTTONS_H = 35;
+
+  private static final double MAX_BUY_BUTTON_X = 746;
+  private static final double MAX_BUY_BUTTON_Y = 650;
+  private static final double MAX_BUY_BUTTON_W = 90;
+  private static final double MAX_BUY_BUTTON_H = 36;
+
+  private static final double BUY_BUTTON_X = 835;
   private static final double BUY_BUTTON_Y = 650;
   private static final double BUY_BUTTON_W = 70;
   private static final double BUY_BUTTON_H = 36;
 
-  private static final double SELL_BUTTON_X = 890;
+  private static final double SELL_BUTTON_X = 899;
   private static final double SELL_BUTTON_Y = 650;
-  private static final double SELL_BUTTON_W = 90;
+  private static final double SELL_BUTTON_W = 82;
   private static final double SELL_BUTTON_H = 46;
 
-  private static final double NEXT_WEEK_BUTTON_X = 980;
-  private static final double NEXT_WEEK_BUTTON_Y = 55;
+  private static final double NEXT_WEEK_BUTTON_X = 970;
+  private static final double NEXT_WEEK_BUTTON_Y = 45;
   private static final double NEXT_WEEK_BUTTON_W = 132;
   private static final double NEXT_WEEK_BUTTON_H = 46;
 
@@ -55,6 +70,31 @@ public class TutorialOverlay {
   private static final double TAB_CONTENT_Y = 40;
   private static final double TAB_CONTENT_W = 1100;
   private static final double TAB_CONTENT_H = 684;
+
+  private static final int STEP_START               = 1;
+  private static final int STEP_NEWSPAPER_TAB       = 2;
+  private static final int STEP_NEWSPAPER_VIEW      = 3;
+  private static final int STEP_TRADE_TAB           = 4;
+  private static final int STEP_STOCK_LIST          = 5;
+
+  private static final int STEP_SEARCH_BAR          = 6;
+  private static final int STEP_SECTOR_BUTTONS      = 7;
+  private static final int STEP_MAX_BUY             = 8;
+  
+  private static final int STEP_BUY_BUTTON          = 9;
+  private static final int STEP_BUY_CONFIRM         = 10;
+  private static final int STEP_BUY_SUCCESS         = 11;
+  private static final int STEP_HISTORY_TAB         = 12;
+  private static final int STEP_TRANSACTION_HISTORY = 13;
+  private static final int STEP_PORTFOLIO_TAB       = 14;
+  private static final int STEP_PORTFOLIO_VIEW      = 15;
+  private static final int STEP_TRADE_TAB_2         = 16;
+  private static final int STEP_TRADE_TAB_2_VIEWED  = 17;
+  private static final int STEP_SELL_BUTTON         = 18;
+  private static final int STEP_SELL_CONFIRM        = 19;
+  private static final int STEP_SELL_SUCCESS_VIEW   = 20;
+  private static final int STEP_SELL_SUCCESS        = 21;
+  private static final int STEP_END                 = 22;
 
   private final AnchorPane layer;
   private final Pane dimLayer;
@@ -122,7 +162,7 @@ public class TutorialOverlay {
   public void startTutorial() {
     tutorialStep = 0;
     layer.setVisible(true);
-    tutorialStep = 1;
+    tutorialStep = STEP_START;
     clearSpotlight();
     boss.updateTalkingBubble("Congratulations rookie, you get to work for me. Start earning me money.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
@@ -134,11 +174,11 @@ public class TutorialOverlay {
   }
 
   public int getCurrentStep() {
-      return tutorialStep;
+    return tutorialStep;
   }
 
   public boolean isAtConfirmationStep() {
-      return tutorialStep == 7 || tutorialStep == 16;
+    return tutorialStep == STEP_BUY_CONFIRM || tutorialStep == STEP_SELL_CONFIRM;
   }
 
   public boolean isActive() {
@@ -146,129 +186,129 @@ public class TutorialOverlay {
   }
 
   public void onNewspaperViewed() {
-    if (!isActive() || tutorialStep != 2) {
+    if (!isActive() || tutorialStep != STEP_NEWSPAPER_TAB) {
       return;
     }
 
-    tutorialStep = 3;
+    tutorialStep = STEP_NEWSPAPER_VIEW;
     spotlight(NEWSPAPER_VIEW_X, NEWSPAPER_VIEW_Y, NEWSPAPER_VIEW_W, NEWSPAPER_VIEW_H);
     boss.updateTalkingBubble("Take your time reading the news, it might give you some hints on what to buy.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void onTradeScreenViewed() {
-    if (!isActive() || tutorialStep != 4 && tutorialStep != 12) {
+    if (!isActive() || tutorialStep != STEP_TRADE_TAB && tutorialStep != STEP_TRADE_TAB_2) {
       return;
     }
 
-    if (tutorialStep == 4) {
-      tutorialStep = 5;
+    if (tutorialStep == STEP_TRADE_TAB) {
+      tutorialStep = STEP_STOCK_LIST;
       spotlight(STOCK_LIST_X, STOCK_LIST_Y, STOCK_LIST_W, STOCK_LIST_H);
       boss.updateTalkingBubble("Now select a stock that you think will make me money.");
     } else {
-      tutorialStep = 13;
+      // STEP_TRADE_TAB_2 — returning to trade screen before sell
+      tutorialStep = STEP_TRADE_TAB_2_VIEWED;
       spotlight(NEXT_WEEK_BUTTON_X, NEXT_WEEK_BUTTON_Y, NEXT_WEEK_BUTTON_W, NEXT_WEEK_BUTTON_H);
       boss.updateTalkingBubble("Great! Now advance to the next week.");
     }
   }
 
   public void onStockSelected() {
-    if (!isActive() || tutorialStep != 5) {
+    if (!isActive() || tutorialStep != STEP_STOCK_LIST) {
       return;
     }
 
-    boss.visibleBoss(false);
-
-    tutorialStep = 6;
-    spotlight(BUY_BUTTON_X, BUY_BUTTON_Y, BUY_BUTTON_W, BUY_BUTTON_H);
-    boss.updateTalkingBubble("Now click the buy button.");
+    tutorialStep = STEP_SEARCH_BAR;
+    spotlight(SEARCH_BAR_X, SEARCH_BAR_Y, SEARCH_BAR_W, SEARCH_BAR_H);
+    boss.updateTalkingBubble("You can search for stocks by name or ticker symbol up here.");
+    boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void onBuyButtonClicked() {
-    if (!isActive() || tutorialStep != 6) {
+    if (!isActive() || tutorialStep != STEP_BUY_BUTTON) {
       return;
     }
 
     boss.visibleBoss(true);
-    tutorialStep = 7; 
+    tutorialStep = STEP_BUY_CONFIRM;
     clearSpotlight();
     boss.updateTalkingBubble("Review your purchase in the overview and click confirm to complete the transaction.");
     boss.getChatBubble().addContinueButton(() -> onConfirmOverviewSeen(false));
   }
-  
+
   public void onSellButtonClicked() {
-    if (!isActive() || tutorialStep != 15) {
+    if (!isActive() || tutorialStep != STEP_SELL_BUTTON) {
       return;
     }
-    
-    tutorialStep = 16; 
+
+    tutorialStep = STEP_SELL_CONFIRM;
     clearSpotlight();
     boss.visibleBoss(true);
     boss.updateTalkingBubble("Review your sale in the overview and click confirm to complete the transaction.");
     boss.getChatBubble().addContinueButton(() -> onConfirmOverviewSeen(true));
   }
-  
+
   private void onConfirmOverviewSeen(boolean isSellStep) {
     if (!isActive()) {
       return;
     }
-    
-    if (isSellStep && tutorialStep == 16) {
-      tutorialStep = 17;
+
+    if (isSellStep && tutorialStep == STEP_SELL_CONFIRM) {
+      tutorialStep = STEP_SELL_SUCCESS_VIEW;
       spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
       boss.visibleChatBubble(false);
-    } else if (!isSellStep && tutorialStep == 7) {
-      tutorialStep = 8;
+    } else if (!isSellStep && tutorialStep == STEP_BUY_CONFIRM) {
+      tutorialStep = STEP_BUY_SUCCESS;
       spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
       boss.visibleChatBubble(false);
     }
   }
 
   public void onBuySuccess() {
-    if (!isActive() || tutorialStep != 8) {
+    if (!isActive() || tutorialStep != STEP_BUY_SUCCESS) {
       return;
     }
 
     boss.visibleBoss(true);
     boss.visibleChatBubble(spotlightActive);
 
-    tutorialStep = 9;
+    tutorialStep = STEP_HISTORY_TAB;
     spotlight(HISTORY_TAB_X, TAB_Y, HISTORY_TAB_W, TAB_H);
     boss.updateTalkingBubble("If you want more information about your stocks, go to the transaction history.");
   }
 
   public void onTransactionHistoryViewed() {
-    if (!isActive() || tutorialStep != 9) {
+    if (!isActive() || tutorialStep != STEP_HISTORY_TAB) {
       return;
     }
 
-    tutorialStep = 10;
+    tutorialStep = STEP_TRANSACTION_HISTORY;
     spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
     boss.updateTalkingBubble("Look through your transaction history.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void onNextWeek() {
-    if (!isActive() || tutorialStep != 13) {
+    if (!isActive() || tutorialStep != STEP_TRADE_TAB_2_VIEWED) {
       return;
     }
 
-    tutorialStep = 14;
+    tutorialStep = STEP_SELL_BUTTON - 1; // step 17 — boss rants, then continue leads to sell
     clearSpotlight();
     boss.updateTalkingBubble("What!? You didn't earn nearly enough money for me.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
   public void onSellSuccess() {
-    if (!isActive() || tutorialStep != 17) {
+    if (!isActive() || tutorialStep != STEP_SELL_SUCCESS_VIEW) {
       return;
     }
 
     boss.visibleBoss(true);
     boss.visibleChatBubble(true);
-    tutorialStep = 18;
+    tutorialStep = STEP_SELL_SUCCESS;
     clearSpotlight();
-    boss.updateTalkingBubble("You better start earning more money before the next Q or you are out of here!");
+    boss.updateTalkingBubble("At the end of the quarter we will have a performance review. Earn enough money to not get fired!");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
@@ -294,33 +334,53 @@ public class TutorialOverlay {
       return;
     }
 
-    if (tutorialStep == 1) {
-      tutorialStep = 2;
+    if (tutorialStep == STEP_START) {
+      tutorialStep = STEP_NEWSPAPER_TAB;
       spotlight(NEWSPAPER_TAB_X, TAB_Y, NEWSPAPER_TAB_W, TAB_H);
       boss.updateTalkingBubble("You can start by reading the newspaper.");
-    } else if (tutorialStep == 3) {
-      tutorialStep = 4;
+
+    } else if (tutorialStep == STEP_NEWSPAPER_VIEW) {
+      tutorialStep = STEP_TRADE_TAB;
       spotlight(TRADE_TAB_X, TAB_Y, TRADE_TAB_W, TAB_H);
       boss.updateTalkingBubble("With all that news you should have an idea of what to buy. Go to the trade screen and buy something.");
-    } else if (tutorialStep == 8) {
-      tutorialStep = 9;
-      spotlight(PORTFOLIO_TAB_X, TAB_Y, PORTFOLIO_TAB_W, TAB_H);
-      boss.updateTalkingBubble("Or look at your portfolio to see what you own.");
-    } else if (tutorialStep == 10) {
-      tutorialStep = 11;
-      spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
-      boss.updateTalkingBubble("Check your portfolio to see what you own.");
+
+    // --- new steps ---
+    } else if (tutorialStep == STEP_SEARCH_BAR) {
+      tutorialStep = STEP_SECTOR_BUTTONS;
+      spotlight(SECTOR_BUTTONS_X, SECTOR_BUTTONS_Y, SECTOR_BUTTONS_W, SECTOR_BUTTONS_H);
+      boss.updateTalkingBubble("These buttons filter stocks by industry sector.");
       boss.getChatBubble().addContinueButton(this::onContinuePressed);
-    } else if (tutorialStep == 11) {
-      tutorialStep = 12;
+
+    } else if (tutorialStep == STEP_SECTOR_BUTTONS) {
+      tutorialStep = STEP_MAX_BUY;
+      spotlight(MAX_BUY_BUTTON_X, MAX_BUY_BUTTON_Y, MAX_BUY_BUTTON_W, MAX_BUY_BUTTON_H);
+      boss.updateTalkingBubble("Hit Max Buy to automatically fill in the most shares you can afford. Don't waste my money.");
+      boss.getChatBubble().addContinueButton(this::onContinuePressed);
+
+    } else if (tutorialStep == STEP_MAX_BUY) {
+      tutorialStep = STEP_BUY_BUTTON;
+      boss.visibleBoss(false);
+      spotlight(BUY_BUTTON_X, BUY_BUTTON_Y, BUY_BUTTON_W, BUY_BUTTON_H);
+      boss.updateTalkingBubble("Now click the buy button.");
+
+    } else if (tutorialStep == STEP_TRANSACTION_HISTORY) {
+      tutorialStep = STEP_HISTORY_TAB;
+      spotlight(PORTFOLIO_TAB_X, TAB_Y, PORTFOLIO_TAB_W, TAB_H);
+      boss.updateTalkingBubble("You could also look at your portfolio for an overview of what you own, but we dont have time for that.");
+      boss.getChatBubble().addContinueButton(this::onContinuePressed);
+
+    } else if (tutorialStep == STEP_HISTORY_TAB) {
+      tutorialStep = STEP_TRADE_TAB_2;
       spotlight(TRADE_TAB_X, TAB_Y, TRADE_TAB_W, TAB_H);
       boss.updateTalkingBubble("Now go back to the trade screen.");
-    } else if (tutorialStep == 14) {
-      tutorialStep = 15;
+
+    } else if (tutorialStep == STEP_SELL_BUTTON - 1) {
+      tutorialStep = STEP_SELL_BUTTON;
       boss.visibleBoss(false);
       spotlight(SELL_BUTTON_X, SELL_BUTTON_Y, SELL_BUTTON_W, SELL_BUTTON_H);
       boss.updateTalkingBubble("Click the sell button.");
-    } else if (tutorialStep == 18) {
+
+    } else if (tutorialStep == STEP_SELL_SUCCESS) {
       stopTutorial();
     }
   }

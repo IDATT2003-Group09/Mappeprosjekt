@@ -16,14 +16,24 @@ import javafx.collections.FXCollections;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javafx.scene.Node;
+
 import java.util.function.Consumer;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -42,6 +52,7 @@ public class TradeScreenView extends StackPane {
     private final GameController controller;
     private final TradeScreenController tradeScreenController;
     private final Runnable onSaveAndQuit;
+    private final Runnable onGameOver;
     private final boolean tutorialMode;
     private final TutorialOverlay tutorialOverlay;
 
@@ -66,16 +77,17 @@ public class TradeScreenView extends StackPane {
 
     private TextField searchField;
     private final HBox sectorButtonContainer;
+    private Map<String, Button> sectorButtons = new HashMap<>();
     private final TradeScreenModel tradeScreenModel;
     private final Consumer<TradeScreenModel.TradeEvent> tradeEventListener;
 
 
     public TradeScreenView(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
-        this(controller, stocks, onSaveAndQuit, false, null);
+        this(controller, stocks, onSaveAndQuit, null, false, null);
     }
 
     public TradeScreenView(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit, boolean tutorialMode) {
-        this(controller, stocks, onSaveAndQuit, tutorialMode, null);
+        this(controller, stocks, onSaveAndQuit, null, tutorialMode, null);
     }
 
     private final StackPane overlayPane = new StackPane();
@@ -84,10 +96,12 @@ public class TradeScreenView extends StackPane {
     private VBox headerBox;
     private GridPane contentGrid;
 
+    private ToggleButton allSectorsToggle;
     public TradeScreenView(
         GameController controller,
         List<Stock> stocks,
         Runnable onSaveAndQuit,
+        Runnable onGameOver,
         boolean tutorialMode,
         TutorialOverlay tutorialOverlay
     ) {
@@ -95,6 +109,7 @@ public class TradeScreenView extends StackPane {
         this.tradeScreenModel = new TradeScreenModel(stocks);
         this.tradeScreenController = new TradeScreenController(controller, tradeScreenModel);
         this.onSaveAndQuit = onSaveAndQuit;
+        this.onGameOver = onGameOver;
         this.tutorialMode = tutorialMode;
         this.tutorialOverlay = tutorialOverlay;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
@@ -253,6 +268,9 @@ public class TradeScreenView extends StackPane {
         nextWeekButton.setOnAction(e -> {
             GameController.WeekAdvanceResult result = tradeScreenController.advanceWeek();
             if (result.gameOver()) {
+                if (onGameOver != null) {
+                    onGameOver.run();
+                }
                 return;
             }
             stockList.refresh();
@@ -273,7 +291,7 @@ public class TradeScreenView extends StackPane {
         HBox.setHgrow(searchField, Priority.ALWAYS);
         setupSearchFilter();
 
-        HBox filterBar = new HBox(10, searchField, ownedToggleButton, winnersToggleButton, losersToggleButton);
+        HBox filterBar = new HBox(10, searchField, allSectorsToggle, ownedToggleButton, winnersToggleButton, losersToggleButton);
         filterBar.setAlignment(Pos.CENTER_LEFT);
         filterBar.setPadding(new Insets(0, 0, 0, 0));
         filterBar.getStyleClass().add("trade-filter-bar");
@@ -333,6 +351,10 @@ public class TradeScreenView extends StackPane {
     }
 
     private void showTransactionOverlay(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm) {
+        boolean cancelEnabled =
+            !tutorialMode
+            || tutorialOverlay == null
+            || !tutorialOverlay.isAtConfirmationStep();
         if (transactionOverviewOverlay != null) overlayPane.getChildren().remove(transactionOverviewOverlay);
         Runnable onCancel = () -> {
             overlayPane.getChildren().remove(transactionOverviewOverlay);
@@ -345,14 +367,16 @@ public class TradeScreenView extends StackPane {
                 transactionOverviewOverlay = null;
                 updateOverlayInterception();
                 onConfirm.run();
-            }, onCancel);
+            }, onCancel
+            , cancelEnabled
+            );
         } else if (action.equalsIgnoreCase("sell")) {
             transactionOverviewOverlay = new SellOverview(stockSymbol, quantity, price, commission, tax, total, () -> {
                 overlayPane.getChildren().remove(transactionOverviewOverlay);
                 transactionOverviewOverlay = null;
                 updateOverlayInterception();
                 onConfirm.run();
-            }, onCancel);
+            }, onCancel, cancelEnabled);
         } else {
             throw new IllegalArgumentException("Unknown transaction action: " + action);
         }
@@ -440,6 +464,7 @@ public class TradeScreenView extends StackPane {
 
         tradeScreenModel.applyFilters(
             searchText,
+            allSectorsToggle != null && allSectorsToggle.isSelected(),
             filterOwned,
             ownedSymbols,
             winnersToggleButton != null && winnersToggleButton.isSelected(),
@@ -464,7 +489,29 @@ public class TradeScreenView extends StackPane {
             filterOwned = ownedToggleButton.isSelected();
             filterBySectorsAndOwned();
         });
-        sectorButtonContainer.getChildren().add(ownedToggleButton);
+        // owned toggle is placed in the filter bar, not in the sector container
+
+        // All toggle: selects/deselects all sector filters (use controller to adhere to MVC)
+        allSectorsToggle = new ToggleButton("All");
+        allSectorsToggle.getStyleClass().add("trade-all-toggle");
+        allSectorsToggle.setOnAction(e -> {
+            boolean on = allSectorsToggle.isSelected();
+            if (on) {
+                tradeScreenController.selectAllSectors();
+                // mark all sector buttons active
+                for (Button b : sectorButtons.values()) {
+                    if (!b.getStyleClass().contains("trade-sector-active")) {
+                        b.getStyleClass().add("trade-sector-active");
+                    }
+                }
+            } else {
+                tradeScreenController.clearSelectedSectors();
+                for (Button b : sectorButtons.values()) {
+                    b.getStyleClass().remove("trade-sector-active");
+                }
+            }
+            filterBySectorsAndOwned();
+        });
 
         winnersToggleButton = new ToggleButton("Winners");
         winnersToggleButton.getStyleClass().add("trade-winners-toggle");
@@ -474,7 +521,7 @@ public class TradeScreenView extends StackPane {
             }
             filterBySectorsAndOwned();
         });
-        sectorButtonContainer.getChildren().add(winnersToggleButton);
+        // winners toggle is placed in the filter bar
 
         losersToggleButton = new ToggleButton("Losers");
         losersToggleButton.getStyleClass().add("trade-losers-toggle");
@@ -484,19 +531,33 @@ public class TradeScreenView extends StackPane {
             }
             filterBySectorsAndOwned();
         });
-        sectorButtonContainer.getChildren().add(losersToggleButton);
+        // losers toggle is placed in the filter bar
 
         for (String sector : sectors) {
             Button sectorButton = new Button(sector);
             sectorButton.getStyleClass().add("trade-sector-button");
+            sectorButtons.put(sector, sectorButton);
             sectorButton.setOnAction(e -> {
-                if (tradeScreenModel.getSelectedSectors().contains(sector)) {
-                    tradeScreenModel.deselectSector(sector);
+                if (tradeScreenController.getSelectedSectors().contains(sector)) {
+                    tradeScreenController.deselectSector(sector);
                     sectorButton.getStyleClass().remove("trade-sector-active");
                 } else {
-                    tradeScreenModel.selectSector(sector);
+                    tradeScreenController.selectSector(sector);
                     sectorButton.getStyleClass().add("trade-sector-active");
                 }
+                // update All toggle state: if all sectors are selected, mark All as selected
+                ToggleButton allToggle = null;
+                for (Node n : sectorButtonContainer.getChildren()) {
+                    if (n instanceof ToggleButton tb && "All".equals(tb.getText())) {
+                        allToggle = tb;
+                        break;
+                    }
+                }
+                if (allToggle != null) {
+                    boolean allSelected = tradeScreenController.getSelectedSectors().containsAll(sectors) && !sectors.isEmpty();
+                    allToggle.setSelected(allSelected);
+                }
+
                 filterBySectorsAndOwned();
             });
             sectorButtonContainer.getChildren().add(sectorButton);
@@ -512,6 +573,7 @@ public class TradeScreenView extends StackPane {
 
         tradeScreenModel.applyFilters(
             searchText,
+            allSectorsToggle != null && allSectorsToggle.isSelected(), // was: filterOwned
             filterOwned,
             ownedSymbols,
             winnersToggleButton != null && winnersToggleButton.isSelected(),

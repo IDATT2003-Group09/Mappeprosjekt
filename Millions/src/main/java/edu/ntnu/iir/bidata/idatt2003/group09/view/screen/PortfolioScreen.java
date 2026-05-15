@@ -116,6 +116,10 @@ public class PortfolioScreen extends BorderPane {
         symbolCol.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getSymbol()));
 
+        TableColumn<PortfolioRow, String> sectorCol = new TableColumn<>("Sector");
+        sectorCol.setCellValueFactory(data ->
+            new SimpleStringProperty(data.getValue().getSector()));
+
         TableColumn<PortfolioRow, String> quantityCol = new TableColumn<>("Quantity");
         quantityCol.setCellValueFactory(data ->
                 new SimpleStringProperty(data.getValue().getQuantity().stripTrailingZeros().toPlainString()));
@@ -144,14 +148,36 @@ public class PortfolioScreen extends BorderPane {
                 new SimpleStringProperty(formatPercent(data.getValue().getWeeklyPercentChange())));
         pricePercentCol.setCellFactory(col -> coloredCell());
 
+        TableColumn<PortfolioRow, Void> sellAllCol = new TableColumn<>("Sell All");
+        sellAllCol.setCellFactory(col -> new TableCell<>() {
+            private final Button sellButton = new Button("Sell All");
+
+            {
+                sellButton.getStyleClass().add("portfolio-sell-all-button");
+                sellButton.setOnAction(e -> {
+                    PortfolioRow row = getTableView().getItems().get(getIndex());
+                    controller.sellAllShares(row.getSymbol());
+                    refresh();
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                setGraphic(empty ? null : sellButton);
+            }
+        });
+
         table.getColumns().addAll(
                 symbolCol,
+                sectorCol,
                 quantityCol,
                 valueCol,
                 gainCol,
                 percentCol,
                 priceChangeCol,
-                pricePercentCol
+                pricePercentCol,
+                sellAllCol
         );
 
         table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
