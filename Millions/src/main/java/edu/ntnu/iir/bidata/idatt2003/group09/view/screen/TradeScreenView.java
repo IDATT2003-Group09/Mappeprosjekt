@@ -52,6 +52,7 @@ public class TradeScreenView extends StackPane {
     private final GameController controller;
     private final TradeScreenController tradeScreenController;
     private final Runnable onSaveAndQuit;
+    private final Runnable onGameOver;
     private final boolean tutorialMode;
     private final TutorialOverlay tutorialOverlay;
 
@@ -82,11 +83,11 @@ public class TradeScreenView extends StackPane {
 
 
     public TradeScreenView(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
-        this(controller, stocks, onSaveAndQuit, false, null);
+        this(controller, stocks, onSaveAndQuit, null, false, null);
     }
 
     public TradeScreenView(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit, boolean tutorialMode) {
-        this(controller, stocks, onSaveAndQuit, tutorialMode, null);
+        this(controller, stocks, onSaveAndQuit, null, tutorialMode, null);
     }
 
     private final StackPane overlayPane = new StackPane();
@@ -100,6 +101,7 @@ public class TradeScreenView extends StackPane {
         GameController controller,
         List<Stock> stocks,
         Runnable onSaveAndQuit,
+        Runnable onGameOver,
         boolean tutorialMode,
         TutorialOverlay tutorialOverlay
     ) {
@@ -107,6 +109,7 @@ public class TradeScreenView extends StackPane {
         this.tradeScreenModel = new TradeScreenModel(stocks);
         this.tradeScreenController = new TradeScreenController(controller, tradeScreenModel);
         this.onSaveAndQuit = onSaveAndQuit;
+        this.onGameOver = onGameOver;
         this.tutorialMode = tutorialMode;
         this.tutorialOverlay = tutorialOverlay;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
@@ -265,6 +268,9 @@ public class TradeScreenView extends StackPane {
         nextWeekButton.setOnAction(e -> {
             GameController.WeekAdvanceResult result = tradeScreenController.advanceWeek();
             if (result.gameOver()) {
+                if (onGameOver != null) {
+                    onGameOver.run();
+                }
                 return;
             }
             stockList.refresh();

@@ -352,12 +352,13 @@ public class Main extends Application {
 
     private void setupGameUI(GameController controller, List<Stock> stocks, boolean tutorialMode) {
 
+        Runnable onGameOver = () -> contentRoot.setCenter(new GameOverScreen(controller, this::showStartScreen));
+
         if (!tutorialMode) {
             tutorialOverlay.stopTutorial();
-            controller.setOnGameOver(() -> {
-                contentRoot.setCenter(new GameOverScreen(controller, this::showStartScreen));
-            });
         }
+        controller.setOnGameOver(onGameOver);
+
         TabPane tabPane = new TabPane();
         tabPane.getStylesheets().add(getClass().getResource("/styling/tabs.css").toExternalForm());
         tabPane.getStyleClass().add("game-tabs");
@@ -366,8 +367,7 @@ public class Main extends Application {
         Tab newspaperTab = new Tab("Newspaper", newspaperContainer);
         newspaperTab.setClosable(false);
 
-        // TradeScreenModel and TradeScreenController are now used internally by TradeScreenView
-        TradeScreenView tradeScreen = new TradeScreenView(controller, stocks, this::showStartScreen, tutorialMode, tutorialOverlay);
+        TradeScreenView tradeScreen = new TradeScreenView(controller, stocks, this::showStartScreen, onGameOver, tutorialMode, tutorialOverlay);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
 
