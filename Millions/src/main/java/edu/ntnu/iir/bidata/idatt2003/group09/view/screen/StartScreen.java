@@ -1,7 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
-import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -25,7 +24,7 @@ public class StartScreen extends StackPane {
         void onSettings();
     }
 
-    public StartScreen(StartHandler handler) {
+    public StartScreen(StartHandler handler, int saveFileCount) {
         getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
         String imageUrl = getClass().getResource("/images/Millions_background.png").toExternalForm();
         setStyle("""
@@ -42,8 +41,6 @@ public class StartScreen extends StackPane {
         Button loadGameBtn = new Button("Load Game");
         Button settingsBtn = new Button("Settings");
         Button exitBtn = new Button("Exit");
-
-        int saveFileCount = SaveManager.listSaveFiles().size();
 
         if (saveFileCount == 0){
             boss = new Boss("What?! All our employess quit?", 500);

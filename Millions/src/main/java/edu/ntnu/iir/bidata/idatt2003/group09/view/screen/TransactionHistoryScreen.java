@@ -1,8 +1,8 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Sale;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.TransactionHistoryScreenModel;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Transaction;
-import javafx.collections.FXCollections;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -16,11 +16,13 @@ import java.util.Locale;
 public class TransactionHistoryScreen extends BorderPane {
 
     private final GameController controller;
+        private final TransactionHistoryScreenModel model;
     private final TableView<Transaction> table;
     private final NumberFormat currencyFormat;
 
     public TransactionHistoryScreen(GameController controller) {
         this.controller = controller;
+                this.model = new TransactionHistoryScreenModel();
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
                 getStylesheets().add(getClass().getResource("/styling/transactionHistory.css").toExternalForm());
@@ -28,6 +30,7 @@ public class TransactionHistoryScreen extends BorderPane {
 
         table = new TableView<>();
                 table.getStyleClass().add("transaction-history-table");
+        table.setItems(model.transactionsProperty());
 
         buildTable();
         refresh();
@@ -133,8 +136,6 @@ public class TransactionHistoryScreen extends BorderPane {
     }
 
     public void refresh() {
-        table.setItems(FXCollections.observableArrayList(
-                controller.getPlayer().getTransactionArchive().getAllTransactions().reversed()
-        ));
+                model.updateFromGameState(controller);
     }
 }

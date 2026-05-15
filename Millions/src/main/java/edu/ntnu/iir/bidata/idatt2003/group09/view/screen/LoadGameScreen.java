@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.List;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
+import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveGameInfo;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,10 +27,11 @@ public class LoadGameScreen extends VBox {
 
   public interface LoadGameHandler {
     void onLoadSelected(String fileName);
+    void onDeleteSelected(String fileName);
     void onBack();
   }
 
-  public LoadGameScreen(List<String> saveFiles, LoadGameHandler handler) {
+  public LoadGameScreen(List<SaveGameInfo> saveGames, LoadGameHandler handler) {
     getStylesheets().add(getClass().getResource("/styling/startscreen.css").toExternalForm());
 
     setSpacing(18);
@@ -49,14 +50,14 @@ public class LoadGameScreen extends VBox {
     saveSlotsContainer.setAlignment(Pos.CENTER);
     saveSlotsContainer.setPadding(new Insets(20));
 
-    if (saveFiles == null || saveFiles.isEmpty()) {
+    if (saveGames == null || saveGames.isEmpty()) {
       Label emptyLabel = new Label("No saved games found.");
       emptyLabel.setStyle("-fx-text-fill: white;");
       emptyLabel.setFont(Font.font(fontFamily, 22));
       saveSlotsContainer.getChildren().add(emptyLabel);
     } else {
-      for (String fileName : saveFiles) {
-          Node slotContainer = createSaveFileButton(fileName, handler);
+      for (SaveGameInfo saveGame : saveGames) {
+          Node slotContainer = createSaveFileButton(saveGame, handler);
           saveSlotsContainer.getChildren().add(slotContainer);
       }
     }
@@ -90,43 +91,13 @@ public class LoadGameScreen extends VBox {
     return Font.getDefault().getFamily();
   }
 
-  public static String cleanName(String filename) {
-      if (filename == null || filename.isEmpty()) {
-          return "";
-      }
-
-      // Find the last dot for extension
-      int lastDotIndex = filename.lastIndexOf('.');
-      String nameWithoutExtension = (lastDotIndex != -1) ? 
-          filename.substring(0, lastDotIndex) : filename;
-
-      // Find the first dash after "savegame"
-      int dashIndex = nameWithoutExtension.indexOf('-');
-      if (dashIndex != -1) {
-          return nameWithoutExtension.substring(dashIndex + 1);
-      }
-
-      return "";
-  }
-
-  private Node createSaveFileButton(String fileName, LoadGameHandler handler) {
-      String displayName = cleanName(fileName);
-      String netWorth = "";
-      String weekInfo = "";
-      String difficulty = "";
-      boolean isLost = false;
-
-      try {
-          var state = SaveManager.load(fileName);
-          if (state != null) {
-              netWorth = String.format("$%.2f", state.getNetWorth());
-              weekInfo = String.format("Week: %d", state.getWeek());
-              difficulty = state.getDifficulty();
-              isLost = state.isLost();
-          }
-      } catch (Exception e) {
-          weekInfo = "Could not read save";
-      }
+    private Node createSaveFileButton(SaveGameInfo saveGame, LoadGameHandler handler) {
+      String fileName = saveGame.fileName();
+      String displayName = saveGame.displayName();
+      String netWorth = saveGame.netWorthText();
+      String weekInfo = saveGame.weekText();
+      String difficulty = saveGame.difficultyText();
+      boolean isLost = saveGame.lost();
 
       Button loadButton = new Button();
       loadButton.setMinWidth(500); 
@@ -182,8 +153,7 @@ public class LoadGameScreen extends VBox {
       deleteButton.setGraphic(trashIcon);
       deleteButton.setContentDisplay(ContentDisplay.TOP);
       deleteButton.setOnAction(e -> {
-          SaveManager.deleteSaveFile(fileName);
-          handler.onLoadSelected(null); 
+          handler.onDeleteSelected(fileName);
       });
       UiSoundEffects.installHoverSound(deleteButton);
       UiSoundEffects.installClickSound(deleteButton);

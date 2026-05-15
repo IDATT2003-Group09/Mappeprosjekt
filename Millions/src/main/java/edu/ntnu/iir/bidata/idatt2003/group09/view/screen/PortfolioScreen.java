@@ -2,9 +2,9 @@ package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.PortfolioRow;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.PortfolioScreenModel;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.PlayerStatus;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockGraph;
-import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
@@ -21,18 +21,16 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
-
-import java.util.Map;
-import java.util.HashMap;
+import javafx.collections.ListChangeListener;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.chart.XYChart.Data;
-import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 
 public class PortfolioScreen extends BorderPane {
 
     private final GameController controller;
+    private final PortfolioScreenModel model;
     private final TableView<PortfolioRow> table;
 
     private final Label totalValueLabel;
@@ -47,6 +45,7 @@ public class PortfolioScreen extends BorderPane {
 
     public PortfolioScreen(GameController controller) {
         this.controller = controller;
+        this.model = new PortfolioScreenModel();
 
         getStylesheets().add(getClass().getResource("/styling/portfolio.css").toExternalForm());
         getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
@@ -76,6 +75,7 @@ public class PortfolioScreen extends BorderPane {
 
         buildTable();
         buildLayout();
+        bindModelToView();
         refresh();
     }
 
@@ -100,6 +100,7 @@ public class PortfolioScreen extends BorderPane {
         topBox.setPadding(new Insets(10));
 
         table.getStyleClass().add("portfolio-table");
+        table.setItems(model.rowsProperty());
 
         VBox centerBox = new VBox(10, portfolioChart, table);
         centerBox.setPadding(new Insets(0, 0, 0, 0));
@@ -157,46 +158,45 @@ public class PortfolioScreen extends BorderPane {
     }
 
     public void refresh() {
-        // Merge shares by stock symbol
-        List<Share> shares = controller.getPortfolio().getShares();
-        Map<String, Share> mergedShares = new HashMap<>();
+        model.updateFromGameState(controller);
+    }
 
-        for (Share share : shares) {
-            String symbol = share.getStock().getSymbol();
-            if (mergedShares.containsKey(symbol)) {
-                Share existing = mergedShares.get(symbol);
-                BigDecimal totalQuantity = existing.getQuantity().add(share.getQuantity());
-                BigDecimal totalCost = existing.getPurchasePrice().multiply(existing.getQuantity())
-                        .add(share.getPurchasePrice().multiply(share.getQuantity()));
-                BigDecimal avgPurchasePrice = totalCost.divide(totalQuantity, RoundingMode.HALF_UP);
-                // Update existing share
-                existing.setQuantity(totalQuantity);
-                existing.setPurchasePrice(avgPurchasePrice);
-            } else {
-                // Clone the share to avoid mutating the original
-                mergedShares.put(symbol, new Share(
-                        share.getStock(), share.getQuantity(), share.getPurchasePrice()
-                ));
-            }
+    private void bindModelToView() {
+        model.currentNetWorthProperty().addListener((obs, oldVal, newVal) -> updateSummaryLabels());
+        model.previousNetWorthProperty().addListener((obs, oldVal, newVal) -> updateSummaryLabels());
+        model.cashProperty().addListener((obs, oldVal, newVal) -> {
+            cashLabel.setText("Cash: " + currencyFormat.format(newVal == null ? BigDecimal.ZERO : newVal));
+        });
+        model.statusProperty().addListener((obs, oldVal, newVal) -> {
+            statusLabel.setText("Status: " + (newVal != null ? newVal.name() : "-"));
+        });
+        model.chartValuesProperty().addListener((ListChangeListener<BigDecimal>) change -> updateChart());
+
+        updateSummaryLabels();
+        BigDecimal initCash = model.cashProperty().get();
+        cashLabel.setText("Cash: " + currencyFormat.format(initCash == null ? BigDecimal.ZERO : initCash));
+        PlayerStatus initStatus = model.statusProperty().get();
+        statusLabel.setText("Status: " + (initStatus != null ? initStatus.name() : "-"));
+        updateChart();
+    }
+
+    private void updateSummaryLabels() {
+        BigDecimal current = model.currentNetWorthProperty().get();
+        BigDecimal previous = model.previousNetWorthProperty().get();
+        if (current == null) {
+            current = BigDecimal.ZERO;
         }
-
-        List<PortfolioRow> rows = mergedShares.values().stream()
-                .map(PortfolioRow::new)
-                .sorted((a, b) -> b.getValue().compareTo(a.getValue()))
-                .toList();
-
-        table.setItems(FXCollections.observableArrayList(rows));
-
-        BigDecimal current = controller.getNetWorth();
-        BigDecimal previous = controller.getLastWeekNetWorth();
+        if (previous == null) {
+            previous = BigDecimal.ZERO;
+        }
 
         BigDecimal change = current.subtract(previous);
 
         BigDecimal percentChange = BigDecimal.ZERO;
         if (previous.compareTo(BigDecimal.ZERO) != 0) {
             percentChange = change
-                    .divide(previous, 4, RoundingMode.HALF_UP)
-                    .multiply(BigDecimal.valueOf(100));
+                .divide(previous, 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
         }
 
         if (change.signum() >= 0) {
@@ -212,15 +212,12 @@ public class PortfolioScreen extends BorderPane {
         }
 
         totalValueLabel.setText("Total: " + format(current));
-        changeLabel.setText(formatWithSign(change)
-                + " (" + formatPercent(percentChange) + ")");
-        cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
+        changeLabel.setText(formatWithSign(change) + " (" + formatPercent(percentChange) + ")");
+    }
 
-        PlayerStatus status = controller.getStatus();
-        statusLabel.setText("Status: " + (status != null ? status.name() : "-"));
-
-        List<BigDecimal> values = controller.getPortfolio().getValues();
+    private void updateChart() {
         Series<Number, Number> series = new Series<>();
+        List<BigDecimal> values = model.chartValuesProperty();
         for (int i = 0; i < values.size(); i++) {
             series.getData().add(new Data<>(i + 1, values.get(i)));
         }

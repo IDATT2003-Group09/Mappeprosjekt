@@ -3,7 +3,6 @@ package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
-import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.TradeScreenModel;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockGraph;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockListView;
@@ -19,10 +18,10 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.function.Consumer;
+
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -66,9 +65,9 @@ public class TradeScreenView extends StackPane {
     private final Label deadlineLabel;
 
     private TextField searchField;
-    private ObservableList<Stock> filteredStocks;
     private final HBox sectorButtonContainer;
     private final TradeScreenModel tradeScreenModel;
+    private final Consumer<TradeScreenModel.TradeEvent> tradeEventListener;
 
 
     public TradeScreenView(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit) {
@@ -93,12 +92,19 @@ public class TradeScreenView extends StackPane {
         TutorialOverlay tutorialOverlay
     ) {
         this.controller = controller;
-        this.tradeScreenController = new TradeScreenController(controller);
         this.tradeScreenModel = new TradeScreenModel(stocks);
+        this.tradeScreenController = new TradeScreenController(controller, tradeScreenModel);
         this.onSaveAndQuit = onSaveAndQuit;
         this.tutorialMode = tutorialMode;
         this.tutorialOverlay = tutorialOverlay;
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        this.tradeEventListener = event -> {
+            if (event == TradeScreenModel.TradeEvent.BUY_SUCCESS) {
+                onTutorialBuySuccess();
+            } else if (event == TradeScreenModel.TradeEvent.SELL_SUCCESS) {
+                onTutorialSellSuccess();
+            }
+        };
 
         getStylesheets().add(getClass().getResource("/styling/tradescreen.css").toExternalForm());
         getStyleClass().add("trade-screen");
@@ -108,8 +114,8 @@ public class TradeScreenView extends StackPane {
         sectorButtonContainer.getStyleClass().add("trade-sector-container");
         createSectorFilters();
 
-        this.filteredStocks = FXCollections.observableArrayList(tradeScreenModel.getAllStocks());
-        stockList.setItems(filteredStocks);
+        stockList.setItems(tradeScreenModel.getFilteredStocks());
+        tradeScreenModel.addTradeEventListener(tradeEventListener);
 
         graph = new StockGraph(stocks);
         graph.getStyleClass().add("trade-graph");
@@ -166,7 +172,7 @@ public class TradeScreenView extends StackPane {
         deadlineLabel = new Label();
 
         buildLayout();
-        refreshInfo();
+        bindModelToView();
 
         overlayPane.setPickOnBounds(false);
         overlayPane.setMouseTransparent(true);
@@ -188,31 +194,23 @@ public class TradeScreenView extends StackPane {
         Button nextWeekButton = new Button("Next Week");
         nextWeekButton.getStyleClass().addAll("trade-button", "trade-next-button");
 
-        // Max Buy Button
         Button maxBuyButton = new Button("Max Buy");
         maxBuyButton.getStyleClass().addAll("trade-button", "trade-max-button");
         maxBuyButton.setOnAction(e -> {
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             if (selectedStock != null) {
-                BigDecimal cash = controller.getMoney();
-                BigDecimal commissionRate = controller.getExchange().getCommissionRate();
-                String maxQty = tradeScreenModel.calculateMaxBuyQuantity(selectedStock, cash, commissionRate);
+                String maxQty = tradeScreenController.calculateMaxBuyQuantity(selectedStock);
                 quantityField.setText(maxQty);
             }
         });
 
-        // Max Sell Button
         Button maxSellButton = new Button("Max Sell");
         maxSellButton.getStyleClass().addAll("trade-button", "trade-max-button");
         maxSellButton.setOnAction(e -> {
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             if (selectedStock != null) {
-                // Sum the quantity of all shares owned for the selected stock
-                List<Share> shares = controller.getPortfolio().getShares(selectedStock.getSymbol());
-                BigDecimal total = shares.stream()
-                    .map(Share::getQuantity)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-                quantityField.setText(total.stripTrailingZeros().toPlainString());
+                String maxQty = tradeScreenController.calculateMaxSellQuantity(selectedStock.getSymbol());
+                quantityField.setText(maxQty);
             }
         });
 
@@ -236,9 +234,7 @@ public class TradeScreenView extends StackPane {
                 quantityField,
                 statusLabel,
                 (action, stockSymbol, quantity, price, commission, tax, total, onConfirm) ->
-                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm),
-                this::onTutorialBuySuccess,
-                this::refreshInfo
+                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm)
             );
         });
         sellButton.setOnAction(e -> {
@@ -250,19 +246,16 @@ public class TradeScreenView extends StackPane {
                 quantityField,
                 statusLabel,
                 (action, stockSymbol, quantity, price, commission, tax, total, onConfirm) ->
-                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm),
-                this::onTutorialSellSuccess,
-                this::refreshInfo
+                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm)
             );
         });
 
         nextWeekButton.setOnAction(e -> {
-            GameController.WeekAdvanceResult result = controller.nextWeek();
+            GameController.WeekAdvanceResult result = tradeScreenController.advanceWeek();
             if (result.gameOver()) {
                 return;
             }
             stockList.refresh();
-            refreshInfo();
             updateSelectedStockGraph();
             onTutorialNextWeek();
             if (result.quarterAdvanced()) {
@@ -407,35 +400,6 @@ public class TradeScreenView extends StackPane {
         }
     }
 
-    private void refreshInfo() {
-        cashLabel.setText("Cash: " + currencyFormat.format(controller.getMoney()));
-        netWorthLabel.setText("Net Worth: " + currencyFormat.format(controller.getNetWorth()));
-        holdingsLabel.setText("Positions: " + controller.getPortfolio().getShares().size());
-        int week = controller.getWeek();
-        weekLabel.setText("Week: " + week);
-
-        var progress = controller.getProgress();
-        var player = controller.getPlayer();
-
-        int currentQuarter = progress.getCheckpointLevel();
-        deadlineLabel.setText("Deadline in: " + progress.getWeeksUntilDeadline() + " weeks");
-
-        BigDecimal requirement = progress.getCurrentTarget();
-        BigDecimal netWorth = player.getNetWorth();
-
-        quarterLabel.setText("Q" + currentQuarter);
-        requirementOverlayLabel.setText("Requirement: " + currencyFormat.format(requirement));
-        netWorthOverlayLabel.setText(currencyFormat.format(netWorth));
-
-        double progressValue = 0;
-        if (requirement.compareTo(BigDecimal.ZERO) > 0) {
-            progressValue = netWorth
-                .divide(requirement, 4, RoundingMode.HALF_UP)
-                .doubleValue();
-        }
-        progressBar.setProgress(Math.max(0, Math.min(progressValue, 1.0)));
-    }
-
     private void onTutorialStockSelected() {
         if (!tutorialMode || tutorialOverlay == null) {
             return;
@@ -472,7 +436,15 @@ public class TradeScreenView extends StackPane {
 
 
     private void filterStockList(String searchText) {
-        filteredStocks.setAll(tradeScreenModel.filterStocks(searchText));
+        Set<String> ownedSymbols = tradeScreenController.getOwnedSymbols();
+
+        tradeScreenModel.applyFilters(
+            searchText,
+            filterOwned,
+            ownedSymbols,
+            winnersToggleButton != null && winnersToggleButton.isSelected(),
+            losersToggleButton != null && losersToggleButton.isSelected()
+        );
     }
 
     private void filterBySectors() {
@@ -494,7 +466,6 @@ public class TradeScreenView extends StackPane {
         });
         sectorButtonContainer.getChildren().add(ownedToggleButton);
 
-        // Winners toggle button
         winnersToggleButton = new ToggleButton("Winners");
         winnersToggleButton.getStyleClass().add("trade-winners-toggle");
         winnersToggleButton.setOnAction(e -> {
@@ -505,7 +476,6 @@ public class TradeScreenView extends StackPane {
         });
         sectorButtonContainer.getChildren().add(winnersToggleButton);
 
-        // Losers toggle button
         losersToggleButton = new ToggleButton("Losers");
         losersToggleButton.getStyleClass().add("trade-losers-toggle");
         losersToggleButton.setOnAction(e -> {
@@ -538,28 +508,73 @@ public class TradeScreenView extends StackPane {
 
     private void filterBySectorsAndOwned() {
         String searchText = searchField != null ? searchField.getText() : "";
-        List<Stock> stocks = tradeScreenModel.filterStocks(searchText);
-        if (filterOwned) {
-            // Only show stocks the player owns (has shares for)
-            Set<String> ownedSymbols = controller.getPortfolio().getShares().stream()
-                .map(share -> share.getStock().getSymbol())
-                .collect(Collectors.toSet());
-            stocks = stocks.stream()
-                .filter(stock -> ownedSymbols.contains(stock.getSymbol()))
-                .collect(Collectors.toList());
-        }
-        // Winners/Losers filter and sort
-        if (winnersToggleButton != null && winnersToggleButton.isSelected()) {
-            stocks = stocks.stream()
-                .filter(stock -> stock.getLatestPriceChangeAsPercentage().signum() > 0)
-                .sorted(Comparator.comparing(Stock::getLatestPriceChangeAsPercentage).reversed())
-                .collect(Collectors.toList());
-        } else if (losersToggleButton != null && losersToggleButton.isSelected()) {
-            stocks = stocks.stream()
-                .filter(stock -> stock.getLatestPriceChangeAsPercentage().signum() < 0)
-                .sorted(Comparator.comparing(Stock::getLatestPriceChangeAsPercentage))
-                .collect(Collectors.toList());
-        }
-        filteredStocks.setAll(stocks);
+        Set<String> ownedSymbols = tradeScreenController.getOwnedSymbols();
+
+        tradeScreenModel.applyFilters(
+            searchText,
+            filterOwned,
+            ownedSymbols,
+            winnersToggleButton != null && winnersToggleButton.isSelected(),
+            losersToggleButton != null && losersToggleButton.isSelected()
+        );
+    }
+
+    private void bindModelToView() {
+        // Cash
+        tradeScreenModel.cashProperty().addListener((obs, oldVal, newVal) -> {
+            cashLabel.setText("Cash: " + currencyFormat.format(newVal == null ? BigDecimal.ZERO : newVal));
+        });
+
+        // Net worth
+        tradeScreenModel.netWorthProperty().addListener((obs, oldVal, newVal) -> {
+            netWorthLabel.setText("Net Worth: " + currencyFormat.format(newVal == null ? BigDecimal.ZERO : newVal));
+        });
+
+        // Holdings
+        tradeScreenModel.holdingsProperty().addListener((obs, oldVal, newVal) -> {
+            holdingsLabel.setText("Positions: " + newVal);
+        });
+
+        // Week
+        tradeScreenModel.weekProperty().addListener((obs, oldVal, newVal) -> {
+            weekLabel.setText("Week: " + newVal);
+        });
+
+        // Progress and overlays
+        tradeScreenModel.quarterLabelProperty().addListener((obs, oldVal, newVal) -> {
+            quarterLabel.setText(newVal == null ? "" : newVal);
+        });
+        tradeScreenModel.requirementOverlayValueProperty().addListener((obs, oldVal, newVal) -> {
+            BigDecimal val = newVal == null ? BigDecimal.ZERO : newVal;
+            requirementOverlayLabel.setText("Requirement: " + currencyFormat.format(val));
+        });
+        tradeScreenModel.netWorthOverlayValueProperty().addListener((obs, oldVal, newVal) -> {
+            BigDecimal val = newVal == null ? BigDecimal.ZERO : newVal;
+            netWorthOverlayLabel.setText(currencyFormat.format(val));
+        });
+        tradeScreenModel.deadlineLabelProperty().addListener((obs, oldVal, newVal) -> {
+            deadlineLabel.setText(newVal == null ? "" : newVal);
+        });
+
+        progressBar.progressProperty().bind(tradeScreenModel.progressProperty());
+        BigDecimal initCash = tradeScreenModel.cashProperty().get();
+        cashLabel.setText("Cash: " + currencyFormat.format(initCash == null ? BigDecimal.ZERO : initCash));
+
+        BigDecimal initNet = tradeScreenModel.netWorthProperty().get();
+        netWorthLabel.setText("Net Worth: " + currencyFormat.format(initNet == null ? BigDecimal.ZERO : initNet));
+
+        holdingsLabel.setText("Positions: " + tradeScreenModel.holdingsProperty().get());
+        weekLabel.setText("Week: " + tradeScreenModel.weekProperty().get());
+
+        String q = tradeScreenModel.quarterLabelProperty().get();
+        quarterLabel.setText(q == null ? "" : q);
+
+        BigDecimal req = tradeScreenModel.requirementOverlayValueProperty().get();
+        requirementOverlayLabel.setText("Requirement: " + currencyFormat.format(req == null ? BigDecimal.ZERO : req));
+
+        BigDecimal nw = tradeScreenModel.netWorthOverlayValueProperty().get();
+        netWorthOverlayLabel.setText(currencyFormat.format(nw == null ? BigDecimal.ZERO : nw));
+
+        deadlineLabel.setText(tradeScreenModel.deadlineLabelProperty().get());
     }
 }
