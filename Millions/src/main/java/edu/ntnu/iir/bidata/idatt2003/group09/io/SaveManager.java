@@ -20,6 +20,16 @@ public class SaveManager {
             SAVE_DIR.mkdirs(); 
         }
 
+    static File getSaveDir() {
+        return SAVE_DIR;
+    }
+
+    static File overrideSaveDir;
+
+    private static File getEffectiveSaveDir() {
+        return overrideSaveDir != null ? overrideSaveDir : SAVE_DIR;
+    }
+
     /**
      * Saves the given GameState to the default save file.
      *
@@ -81,7 +91,7 @@ public class SaveManager {
      * @return a sorted list of save file names
      */
     public static List<String> listSaveFiles() {
-        String[] fileNames = SAVE_DIR.list((dir, name) ->
+        String[] fileNames = getEffectiveSaveDir().list((dir, name) ->
                 name.startsWith(SAVE_FILE_PREFIX) && name.endsWith(SAVE_FILE_SUFFIX));
 
         if (fileNames == null || fileNames.length == 0) {
@@ -99,7 +109,7 @@ public class SaveManager {
      * @return true if the default save file exists, false otherwise
      */
     public static boolean saveExists() {
-        return new File(SAVE_DIR, DEFAULT_FILE).exists();
+        return new File(getEffectiveSaveDir(), DEFAULT_FILE).exists();
     }
 
     /**
@@ -110,7 +120,7 @@ public class SaveManager {
      */
     public static String normalizeSaveFileName(String fileName) {
         if (fileName == null || fileName.isBlank()) {
-            return new File(SAVE_DIR, DEFAULT_FILE).getAbsolutePath();
+            return new File(getEffectiveSaveDir(), DEFAULT_FILE).getAbsolutePath();
         }
 
         String normalized = new File(fileName).getName().trim();
@@ -124,8 +134,7 @@ public class SaveManager {
         if (!normalized.endsWith(SAVE_FILE_SUFFIX)) {
             normalized += SAVE_FILE_SUFFIX;
         }
-
-        return new File(SAVE_DIR, normalized).getAbsolutePath();
+        return new File(getEffectiveSaveDir(), normalized).getAbsolutePath();
     }
 
     /**
@@ -136,6 +145,7 @@ public class SaveManager {
      */
     public static boolean doesSaveFileExist(String fileName) {
         String targetFile = normalizeSaveFileName(fileName);
+
         return new File(targetFile).exists();
     } 
 
