@@ -221,10 +221,11 @@ class TradeScreenModelTest {
     @Nested
     @DisplayName("filterStocksAdvanced")
     class FilterStocksAdvancedTests {
+
         @Test
         @DisplayName("Owned filter keeps only owned symbols")
         void filterStocksAdvanced_ownedOnly_filtersByOwnership() {
-            List<Stock> result = model.filterStocksAdvanced("", false, true, Set.of("AAPL"), false, false);
+            List<Stock> result = model.filterStocksAdvanced("", true, Set.of("AAPL"), false, false);
 
             assertEquals(1, result.size());
             assertEquals("AAPL", result.get(0).getSymbol());
@@ -237,7 +238,7 @@ class TradeScreenModelTest {
             financeStock.addNewSalesPrice(new BigDecimal("210.00"));
             healthStock.addNewSalesPrice(new BigDecimal("90.00"));
 
-            List<Stock> result = model.filterStocksAdvanced("", false, false, Set.of(), true, false);
+            List<Stock> result = model.filterStocksAdvanced("", false, Set.of(), true, false);
 
             assertEquals(2, result.size());
             assertEquals("AAPL", result.get(0).getSymbol());
@@ -251,20 +252,10 @@ class TradeScreenModelTest {
             financeStock.addNewSalesPrice(new BigDecimal("210.00"));
             healthStock.addNewSalesPrice(new BigDecimal("90.00"));
 
-            List<Stock> result = model.filterStocksAdvanced("", false, false, Set.of(), false, true);
+            List<Stock> result = model.filterStocksAdvanced("", false, Set.of(), false, true);
 
             assertEquals(1, result.size());
             assertEquals("JNJ", result.get(0).getSymbol());
         }
-
-
-        @Test
-        @DisplayName("allSectorsToggle false with no sectors selected still returns all stocks")
-        void filterStocksAdvanced_allSectorsToggleFalse_noSectors_returnsAll() {
-            List<Stock> result = model.filterStocksAdvanced("", false, false, Set.of(), false, false);
-
-            assertEquals(3, result.size());
-        }
-
     }
 }
