@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Files;
@@ -54,8 +55,8 @@ public class TagsFactoryTest {
 						+ "AAPL,Apple,123.45\n");
 
 		TagsFactory factory = new TagsFactory();
-		setField(factory, "inputFilePath", inputDir.toString() + java.io.File.separator);
-		setField(factory, "outputFilePath", outputDir.toString() + java.io.File.separator);
+		setField(factory, "inputFilePath", inputDir.toString() + File.separator);
+		setField(factory, "outputFilePath", outputDir.toString() + File.separator);
 
 		factory.enhanceCsv("stocks.csv", "enhanced.csv");
 
