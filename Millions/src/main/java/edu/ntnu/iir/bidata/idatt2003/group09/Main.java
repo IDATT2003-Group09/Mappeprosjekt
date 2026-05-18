@@ -1,6 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.controller.AppController;
+import edu.ntnu.iir.bidata.idatt2003.group09.controller.NavigationController;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.tutorial.TutorialOverlay;
 import javafx.application.Application;
@@ -22,7 +22,7 @@ public class Main extends Application {
     private StackPane root;
     private BorderPane contentRoot;
     private TutorialOverlay tutorialOverlay;
-    private AppController appController;
+    private NavigationController navigationController;
 
     /**
      * Starts the JavaFX application. Initializes the exchange, player, and trade screen, and sets up the main stage.
@@ -33,8 +33,8 @@ public class Main extends Application {
 
         UiSoundEffects.startBackgroundMusic();
         initializeRootLayout();
-        appController = new AppController(contentRoot, tutorialOverlay);
-        appController.showStartScreen();
+        navigationController = new NavigationController(contentRoot, tutorialOverlay);
+        navigationController.showStartScreen();
 
         Scene scene = createScaledScene();
         configureStage(primaryStage, scene);
