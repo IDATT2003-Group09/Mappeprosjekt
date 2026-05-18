@@ -2,12 +2,16 @@ package edu.ntnu.iir.bidata.idatt2003.group09.io;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * EnhanceCSV allows adding tags to CSV files to create enhanced versions.
  * Preserves comments and headers, and appends one text tag and one volatility score to each data line.
  */
 public class EnhanceCSV {
+
+  private static final Logger LOGGER = Logger.getLogger(EnhanceCSV.class.getName());
 
   private String filePath;
   private List<String> comments;
@@ -46,7 +50,7 @@ public class EnhanceCSV {
         }
       }
     } catch (IOException e) {
-      System.err.println("Error reading CSV file: " + e.getMessage());
+      LOGGER.log(Level.WARNING, "Error reading CSV file: " + filePath, e);
     }
   }
 
@@ -116,9 +120,9 @@ public class EnhanceCSV {
         writer.println(getRandomVolatility());
       }
 
-      System.out.println("Enhanced CSV written to: " + outputFilePath);
+      LOGGER.info("Enhanced CSV written to: " + outputFilePath);
     } catch (IOException e) {
-      System.err.println("Error writing enhanced CSV: " + e.getMessage());
+      LOGGER.log(Level.WARNING, "Error writing enhanced CSV: " + outputFilePath, e);
     }
   }
 

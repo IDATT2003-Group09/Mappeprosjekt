@@ -28,10 +28,20 @@ public class GameController {
         BigDecimal clearedTarget,
         BigDecimal nextTarget
     ) {
+        /**
+         * Lager et resultatobjekt som betyr at ingen milepæler endret seg denne uken.
+         *
+         * @return et standardresultat uten endringer
+         */
         public static WeekAdvanceResult noChange() {
             return new WeekAdvanceResult(false, false, 0, 0, null, null, null);
         }
 
+        /**
+         * Lager et resultatobjekt som markerer at spillet er tapt.
+         *
+         * @return et resultat med game over
+         */
         public static WeekAdvanceResult gameOverResult() {
             return new WeekAdvanceResult(true, false, 0, 0, null, null, null);
         }
@@ -49,8 +59,8 @@ public class GameController {
     /**
      * Constructs a GameController with the given exchange and player.
      *
-     * @param exchange 
-     * @param player 
+     * @param exchange børsen som styrer aksjedata og ukeprogresjon
+     * @param player spilleren som eier porteføljen
      */
     public GameController(Exchange exchange, Player player) {
         this(exchange, player, null);
@@ -58,11 +68,12 @@ public class GameController {
 
 
     /**
-     * Constructs a GameController with the given exchange, player, and save file name.
+     * Constructs a GameController with the given exchange, player and lagringsnavn.
      *
-     * @param exchange
-     * @param player 
-     * @param saveFileName
+     * @param exchange børsen som brukes i spillet
+     * @param player spilleren som kontrolleres
+     * @param saveFileName filnavn som brukes ved lagring
+     * @param progress eksisterende fremdrift, eller {@code null} for ny fremdrift
      */
     public GameController(Exchange exchange, Player player, String saveFileName, GameProgress progress) {
         this.exchange = exchange;
@@ -72,6 +83,14 @@ public class GameController {
             ? progress
             : new GameProgress(baseRequirement, player.getStartingMoney(), exchange.getWeek());
     }
+
+    /**
+     * Constructs a GameController with exchange, player and lagringsnavn.
+     *
+     * @param exchange børsen som brukes i spillet
+     * @param player spilleren som kontrolleres
+     * @param saveFileName filnavn som brukes ved lagring
+     */
     public GameController(Exchange exchange, Player player, String saveFileName) {
         this(exchange, player, saveFileName, null);
     }
@@ -148,8 +167,13 @@ public class GameController {
     public void saveGame() {
         SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty(),lost, progress), saveFileName);
     }
-    
-    public boolean isLost(){
+
+    /**
+     * Angir om spilleren allerede har tapt spillet.
+     *
+     * @return {@code true} hvis spillet er tapt, ellers {@code false}
+     */
+    public boolean isLost() {
         return lost;
     }
 

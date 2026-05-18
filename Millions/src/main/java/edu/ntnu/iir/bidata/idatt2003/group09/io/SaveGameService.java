@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.io;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -60,12 +61,16 @@ public class SaveGameService {
             return "";
         }
 
-        int lastDotIndex = filename.lastIndexOf('.');
-        String nameWithoutExtension = lastDotIndex != -1 ? filename.substring(0, lastDotIndex) : filename;
+        String fileOnly = new File(filename).getName();
 
-        int dashIndex = nameWithoutExtension.indexOf('-');
-        if (dashIndex != -1) {
-            return nameWithoutExtension.substring(dashIndex + 1);
+        int lastDotIndex = fileOnly.lastIndexOf('.');
+        String nameWithoutExtension =
+                lastDotIndex != -1
+                        ? fileOnly.substring(0, lastDotIndex)
+                        : fileOnly;
+
+        if (nameWithoutExtension.startsWith("savegame-")) {
+            return nameWithoutExtension.substring("savegame-".length());
         }
 
         return nameWithoutExtension;
