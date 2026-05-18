@@ -3,11 +3,15 @@ package edu.ntnu.iir.bidata.idatt2003.group09.io;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class for saving, loading, listing, and deleting game save files.
  */
 public class SaveManager {
+
+    private static final Logger LOGGER = Logger.getLogger(SaveManager.class.getName());
 
     private static final String DEFAULT_FILE = "savegame.dat";
     private static final String SAVE_FILE_PREFIX = "savegame";
@@ -52,7 +56,7 @@ public class SaveManager {
             out.writeObject(state);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed to save game to file: " + targetFile, e);
         }
     }
 
@@ -79,8 +83,7 @@ public class SaveManager {
             return (GameState) in.readObject();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Failed to load save: " + e.getMessage());
+            LOGGER.log(Level.WARNING, "Failed to load save from file: " + sourceFile, e);
             return null;
         }
     }

@@ -35,12 +35,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
  * Main entry point for the Millions stock trading game application.
  */
 public class Main extends Application {
+
+    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     private static final double DESIGN_WIDTH = 1100;
     private static final double DESIGN_HEIGHT = 700;
@@ -222,7 +226,7 @@ public class Main extends Application {
             tutorialOverlay.startTutorial();
             setupGameUI(controller, stocks, true);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not initialize tutorial game stock data", e);
 
             Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
             errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
@@ -261,7 +265,7 @@ public class Main extends Application {
             setupGameUI(controller, stocks, false);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Could not initialize new game stock data", e);
             // If the error is from a custom CSV, show the boss error and let user pick again
             if (exchangeChoice != null && exchangeChoice.startsWith("custom:")) {
                 showCreateGameScreen("That CSV was invalid! Please pick a valid file, or choose sp500 or random.");
@@ -337,7 +341,7 @@ public class Main extends Application {
         GameState state = SaveManager.load(fileName);
 
         if (state == null) {
-            System.out.println("No saved game found in file: " + fileName);
+            LOGGER.warning("No saved game found in file: " + fileName);
             showLoadGameScreen();
             return;
         }
