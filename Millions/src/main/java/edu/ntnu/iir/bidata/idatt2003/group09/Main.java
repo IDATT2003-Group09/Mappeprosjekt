@@ -18,6 +18,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.view.tutorial.TutorialOverlay;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
@@ -26,7 +27,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -34,7 +34,6 @@ import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -62,7 +61,14 @@ public class Main extends Application {
         primaryStage.setTitle("Millions - A Stock Trading Game");
 
         UiSoundEffects.startBackgroundMusic();
+        initializeRootLayout();
+        showStartScreen();
 
+        Scene scene = createScaledScene();
+        configureStage(primaryStage, scene);
+    }
+
+    private void initializeRootLayout() {
         contentRoot = new BorderPane();
         contentRoot.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         contentRoot.setMinSize(DESIGN_WIDTH, DESIGN_HEIGHT);
@@ -74,9 +80,9 @@ public class Main extends Application {
         root.setPrefSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         root.setMinSize(DESIGN_WIDTH, DESIGN_HEIGHT);
         root.setMaxSize(DESIGN_WIDTH, DESIGN_HEIGHT);
+    }
 
-        showStartScreen();
-
+    private Scene createScaledScene() {
         StackPane viewport = new StackPane(root);
         viewport.setStyle("-fx-background-color: #202020;");
 
@@ -90,7 +96,10 @@ public class Main extends Application {
             )
         );
         root.scaleYProperty().bind(root.scaleXProperty());
+        return scene;
+    }
 
+    private void configureStage(Stage primaryStage, Scene scene) {
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
         primaryStage.getIcons().add(new Image(
@@ -135,8 +144,7 @@ public class Main extends Application {
             }
         });
 
-        tutorialOverlay.stopTutorial();
-        contentRoot.setCenter(settingsScreen);
+        setCenterView(settingsScreen, true);
         contentRoot.applyCss();
         contentRoot.layout();
     }
@@ -167,8 +175,7 @@ public class Main extends Application {
             }
         }, bossMessage);
 
-        tutorialOverlay.stopTutorial();
-        contentRoot.setCenter(createGameScreen);
+        setCenterView(createGameScreen, true);
     }
 
     private void showLoadGameScreen() {
@@ -197,8 +204,14 @@ public class Main extends Application {
                 }
         );
 
-        tutorialOverlay.stopTutorial();
-        contentRoot.setCenter(loadGameScreen);
+        setCenterView(loadGameScreen, true);
+    }
+
+    private void setCenterView(Node centerView, boolean stopTutorial) {
+        if (stopTutorial) {
+            tutorialOverlay.stopTutorial();
+        }
+        contentRoot.setCenter(centerView);
     }
 
     private void startTutorialGame(String playerName, String startingMoney) {
@@ -212,13 +225,8 @@ public class Main extends Application {
 
             // Determine commission rate based on player status
 
-            PlayerStatus status = player.getStatus(0); // week 0 at game start
-            BigDecimal commissionRate = switch (status) {
-                case NOVICE -> new BigDecimal("0.005");
-                case INVESTOR -> new BigDecimal("0.003");
-                case SPECULATOR -> new BigDecimal("0.001");
-            };
-            exchange.setCommissionRate(commissionRate);
+            PlayerStatus status = player.getStatus(0);
+            exchange.setCommissionRate(getTutorialCommissionRate(status));
 
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
@@ -245,18 +253,7 @@ public class Main extends Application {
             Player player = new Player(playerName, startMoney, experienceLevel);
             Exchange exchange = new Exchange(getExchangeName(exchangeChoice), stocks);
 
-            // Set commission rate based on difficulty
-            BigDecimal commissionRate;
-            if ("Easy".equalsIgnoreCase(experienceLevel)) {
-                commissionRate = new BigDecimal("0.005");
-            } else if ("Medium".equalsIgnoreCase(experienceLevel)) {
-                commissionRate = new BigDecimal("0.01");
-            } else if ("Hard".equalsIgnoreCase(experienceLevel)) {
-                commissionRate = new BigDecimal("0.02");
-            } else {
-                commissionRate = new BigDecimal("0.005"); // fallback
-            }
-            exchange.setCommissionRate(commissionRate);
+            exchange.setCommissionRate(getDifficultyCommissionRate(experienceLevel));
 
             GameController controller = new GameController(exchange, player, normalizedSaveFileName);
             controller.saveGame();
@@ -281,8 +278,27 @@ public class Main extends Application {
         try {
             return new BigDecimal(money);
         } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Invalid starting money input: {0}. Using default.", money);
             return new BigDecimal("100000");
         }
+    }
+
+    private BigDecimal getTutorialCommissionRate(PlayerStatus status) {
+        return switch (status) {
+            case NOVICE -> new BigDecimal("0.005");
+            case INVESTOR -> new BigDecimal("0.003");
+            case SPECULATOR -> new BigDecimal("0.001");
+        };
+    }
+
+    private BigDecimal getDifficultyCommissionRate(String experienceLevel) {
+        if ("Medium".equalsIgnoreCase(experienceLevel)) {
+            return new BigDecimal("0.01");
+        }
+        if ("Hard".equalsIgnoreCase(experienceLevel)) {
+            return new BigDecimal("0.02");
+        }
+        return new BigDecimal("0.005");
     }
 
     private List<Stock> loadStocksForExchange(String exchangeChoice) throws IOException {
@@ -290,12 +306,12 @@ public class Main extends Application {
             return StockCsvReader.readDefaultResource();
         }
 
-        String trimmed = exchangeChoice.trim();
-        if (trimmed.toLowerCase().equals("random")) {
+        String trimmed = exchangeChoice.trim().toLowerCase();
+        if (trimmed.equals("random")) {
             return StockCsvReader.readFromResource("/csv/output/random.csv");
-        } else if (trimmed.toLowerCase().equals("sp500")) {
+        } else if (trimmed.equals("sp500")) {
             return StockCsvReader.readFromResource("/csv/output/sp500.csv");
-        } else if (trimmed.toLowerCase().startsWith("custom:")) {
+        } else if (trimmed.startsWith("custom:")) {
             String filePath = trimmed.substring("custom:".length());
             Path selectedCsvFile = Path.of(filePath);
             Path enhancedCsv = enhanceCustomCsv(selectedCsvFile);
@@ -313,20 +329,10 @@ public class Main extends Application {
         return switch (exchangeChoice.trim().toLowerCase()) {
             case "random" -> "Random Exchange";
             case "sp500" -> "S&P 500";
-            case "custom" -> "Custom Exchange";
-            default -> "Main Exchange";
+            default -> exchangeChoice.trim().toLowerCase().startsWith("custom:")
+                ? "Custom Exchange"
+                : "Main Exchange";
         };
-    }
-
-    private Path promptCustomCsvFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select CSV file");
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("CSV files", "*.csv")
-        );
-
-        File selectedFile = fileChooser.showOpenDialog(root.getScene().getWindow());
-        return selectedFile == null ? null : selectedFile.toPath();
     }
 
     private Path enhanceCustomCsv(Path selectedCsvFile) throws IOException {
@@ -363,76 +369,105 @@ public class Main extends Application {
         }
         controller.setOnGameOver(onGameOver);
 
-        TabPane tabPane = new TabPane();
-        tabPane.getStylesheets().add(getClass().getResource("/styling/tabs.css").toExternalForm());
-        tabPane.getStyleClass().add("game-tabs");
-        StackPane newspaperContainer = new StackPane();
-
-        Tab newspaperTab = new Tab("Newspaper", newspaperContainer);
-        newspaperTab.setClosable(false);
-
         TradeScreenView tradeScreen = new TradeScreenView(controller, stocks, this::showStartScreen, onGameOver, tutorialMode, tutorialOverlay);
         PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
         TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
 
-        Tab tradeTab = new Tab("Trade", tradeScreen);
-        Tab portfolioTab = new Tab("Portfolio", portfolioScreen);
-        Tab historyTab = new Tab("Transaction History", transactionHistoryScreen);
-        SettingsScreen inGameSettingsScreen = new SettingsScreen(() ->
-            tabPane.getSelectionModel().select(tradeTab));
-        Tab settingsTab = new Tab("Settings", inGameSettingsScreen);
+        StackPane newspaperContainer = new StackPane();
+        TabPane tabPane = createGameTabPane();
+        Tab newspaperTab = createNonClosableTab("Newspaper", newspaperContainer);
+        Tab tradeTab = createNonClosableTab("Trade", tradeScreen);
+        Tab portfolioTab = createNonClosableTab("Portfolio", portfolioScreen);
+        Tab historyTab = createNonClosableTab("Transaction History", transactionHistoryScreen);
+        Tab settingsTab = createInGameSettingsTab(tabPane, tradeTab);
+        Tab spacerTab = createSpacerTab();
+        Tab saveQuitTab = createNonClosableTab("Save & Quit", null);
 
-        tradeTab.setClosable(false);
-        portfolioTab.setClosable(false);
-        historyTab.setClosable(false);
-        settingsTab.setClosable(false);
-
-        Tab spacerTab = new Tab("");
-        spacerTab.setDisable(true);
-        spacerTab.setClosable(false);
-        spacerTab.getStyleClass().add("spacer-tab");
-
-        Tab saveQuitTab = new Tab("Save & Quit");
-        saveQuitTab.setClosable(false);
         tabPane.getTabs().addAll(tradeTab, portfolioTab, newspaperTab, historyTab, settingsTab, spacerTab, saveQuitTab);
-
-        tabPane.getSelectionModel().selectedItemProperty()
-                .addListener((obs, oldTab, newTab) -> {
-                    if (newTab == portfolioTab) {
-                        portfolioScreen.refresh();
-                        if (tutorialMode) {
-                        }
-                    }
-                    if (newTab == newspaperTab) {
-                        newspaperContainer.getChildren()
-                                .setAll(new NewsPaperView(controller.getWeek(), controller.getPendingNewsPaper()));
-                        if (tutorialMode) {
-                            tutorialOverlay.onNewspaperViewed();
-                        }
-                    }
-                    if (newTab == historyTab) {
-                        transactionHistoryScreen.refresh();
-                        if (tutorialMode) {
-                            tutorialOverlay.onTransactionHistoryViewed();
-                        }
-                    }
-                    if (newTab == tradeTab && tutorialMode) {
-                        if (tutorialOverlay.isActive()) {
-                            tutorialOverlay.onStockSelected();
-                            tutorialOverlay.onBuyButtonClicked();
-                            tutorialOverlay.onTradeScreenViewed();
-                        }
-                    }
-                    if (newTab == saveQuitTab) {
-                        controller.saveGame();
-                        showStartScreen();
-                    }
-                });
+        installTabSelectionBehavior(
+            tabPane,
+            tutorialMode,
+            controller,
+            portfolioScreen,
+            transactionHistoryScreen,
+            newspaperContainer,
+            tradeTab,
+            portfolioTab,
+            newspaperTab,
+            historyTab,
+            saveQuitTab
+        );
 
         Platform.runLater(() -> UiSoundEffects.installHoverSound(tabPane));
 
         contentRoot.setCenter(tabPane);
-    } 
+    }
+
+    private TabPane createGameTabPane() {
+        TabPane tabPane = new TabPane();
+        tabPane.getStylesheets().add(getClass().getResource("/styling/tabs.css").toExternalForm());
+        tabPane.getStyleClass().add("game-tabs");
+        return tabPane;
+    }
+
+    private Tab createNonClosableTab(String title, Node content) {
+        Tab tab = new Tab(title, content);
+        tab.setClosable(false);
+        return tab;
+    }
+
+    private Tab createInGameSettingsTab(TabPane tabPane, Tab tradeTab) {
+        SettingsScreen inGameSettingsScreen = new SettingsScreen(() -> tabPane.getSelectionModel().select(tradeTab));
+        return createNonClosableTab("Settings", inGameSettingsScreen);
+    }
+
+    private Tab createSpacerTab() {
+        Tab spacerTab = createNonClosableTab("", null);
+        spacerTab.setDisable(true);
+        spacerTab.getStyleClass().add("spacer-tab");
+        return spacerTab;
+    }
+
+    private void installTabSelectionBehavior(
+        TabPane tabPane,
+        boolean tutorialMode,
+        GameController controller,
+        PortfolioScreen portfolioScreen,
+        TransactionHistoryScreen transactionHistoryScreen,
+        StackPane newspaperContainer,
+        Tab tradeTab,
+        Tab portfolioTab,
+        Tab newspaperTab,
+        Tab historyTab,
+        Tab saveQuitTab
+    ) {
+        tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            if (newTab == portfolioTab) {
+                portfolioScreen.refresh();
+            }
+            if (newTab == newspaperTab) {
+                newspaperContainer.getChildren().setAll(new NewsPaperView(controller.getWeek(), controller.getPendingNewsPaper()));
+                if (tutorialMode) {
+                    tutorialOverlay.onNewspaperViewed();
+                }
+            }
+            if (newTab == historyTab) {
+                transactionHistoryScreen.refresh();
+                if (tutorialMode) {
+                    tutorialOverlay.onTransactionHistoryViewed();
+                }
+            }
+            if (newTab == tradeTab && tutorialMode && tutorialOverlay.isActive()) {
+                tutorialOverlay.onStockSelected();
+                tutorialOverlay.onBuyButtonClicked();
+                tutorialOverlay.onTradeScreenViewed();
+            }
+            if (newTab == saveQuitTab) {
+                controller.saveGame();
+                showStartScreen();
+            }
+        });
+    }
 
     /**
      * write mvn javafx:run to run this method that starts the application
