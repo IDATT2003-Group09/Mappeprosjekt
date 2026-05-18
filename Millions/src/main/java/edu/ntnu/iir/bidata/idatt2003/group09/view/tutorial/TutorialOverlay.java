@@ -10,6 +10,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+/**
+ * Viser et interaktivt tutorial-lag over spillskjermen.
+ *
+ * <p>Klassen styrer hvilke områder som fremheves, hvilken melding som vises,
+ * og hvordan brukeren går videre mellom stegene i opplæringen.</p>
+ */
 public class TutorialOverlay {
 
   private static final String FONT_PATH = "/ThaleahFat.ttf";
@@ -112,6 +118,9 @@ public class TutorialOverlay {
   private double spotlightWidth;
   private double spotlightHeight;
 
+  /**
+   * Oppretter et nytt tutorial-overlay med dimming og veiledningsfigur.
+   */
   public TutorialOverlay() {
     this.boss = new Boss("Welcome! Select a stock on the left to begin.", BOSS_SIZE);
     this.boss.setTalkingLoops(1);
@@ -155,10 +164,18 @@ public class TutorialOverlay {
     this.tutorialStep = 0;
   }
 
+  /**
+   * Henter overlay-laget som legges over hovedinnholdet.
+   *
+   * @return ankret panel med tutorial-UI
+   */
   public AnchorPane getLayer() {
     return layer;
   }
 
+  /**
+   * Starter tutorialen fra første steg.
+   */
   public void startTutorial() {
     tutorialStep = 0;
     layer.setVisible(true);
@@ -168,23 +185,44 @@ public class TutorialOverlay {
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
+  /**
+   * Stopper tutorialen og skjuler overlayet.
+   */
   public void stopTutorial() {
     tutorialStep = 0;
     layer.setVisible(false);
   }
 
+  /**
+   * Henter nåværende tutorialsteg.
+   *
+   * @return stegnummeret som er aktivt
+   */
   public int getCurrentStep() {
     return tutorialStep;
   }
 
+  /**
+   * Sjekker om tutorialen venter på bekreftelse av kjøp eller salg.
+   *
+   * @return {@code true} hvis bekreftelsessteg er aktivt
+   */
   public boolean isAtConfirmationStep() {
     return tutorialStep == STEP_BUY_CONFIRM || tutorialStep == STEP_SELL_CONFIRM;
   }
 
+  /**
+   * Sjekker om overlayet er synlig.
+   *
+   * @return {@code true} når tutorialen er aktiv
+   */
   public boolean isActive() {
     return layer.isVisible();
   }
 
+  /**
+   * Kalles når brukeren åpner avis-fanen i tutorialen.
+   */
   public void onNewspaperViewed() {
     if (!isActive() || tutorialStep != STEP_NEWSPAPER_TAB) {
       return;
@@ -196,6 +234,9 @@ public class TutorialOverlay {
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
+  /**
+   * Kalles når brukeren åpner trade-fanen i tutorialen.
+   */
   public void onTradeScreenViewed() {
     if (!isActive() || tutorialStep != STEP_TRADE_TAB && tutorialStep != STEP_TRADE_TAB_2) {
       return;
@@ -213,6 +254,9 @@ public class TutorialOverlay {
     }
   }
 
+  /**
+   * Kalles når brukeren velger en aksje i listen.
+   */
   public void onStockSelected() {
     if (!isActive() || tutorialStep != STEP_STOCK_LIST) {
       return;
@@ -224,6 +268,9 @@ public class TutorialOverlay {
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
+  /**
+   * Kalles når brukeren trykker på kjøpsknappen.
+   */
   public void onBuyButtonClicked() {
     if (!isActive() || tutorialStep != STEP_BUY_BUTTON) {
       return;
@@ -236,6 +283,9 @@ public class TutorialOverlay {
     boss.getChatBubble().addContinueButton(() -> onConfirmOverviewSeen(false));
   }
 
+  /**
+   * Kalles når brukeren trykker på salgsknappen.
+   */
   public void onSellButtonClicked() {
     if (!isActive() || tutorialStep != STEP_SELL_BUTTON) {
       return;
@@ -264,6 +314,9 @@ public class TutorialOverlay {
     }
   }
 
+  /**
+   * Kalles når kjøp er bekreftet og fullført.
+   */
   public void onBuySuccess() {
     if (!isActive() || tutorialStep != STEP_BUY_SUCCESS) {
       return;
@@ -277,6 +330,9 @@ public class TutorialOverlay {
     boss.updateTalkingBubble("If you want more information about your stocks, go to the transaction history.");
   }
 
+  /**
+   * Kalles når brukeren åpner transaksjonshistorikk i tutorialen.
+   */
   public void onTransactionHistoryViewed() {
     if (!isActive() || tutorialStep != STEP_HISTORY_TAB) {
       return;
@@ -288,6 +344,9 @@ public class TutorialOverlay {
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
+  /**
+   * Kalles når brukeren går til neste uke i tutorialflyten.
+   */
   public void onNextWeek() {
     if (!isActive() || tutorialStep != STEP_TRADE_TAB_2_VIEWED) {
       return;
@@ -299,6 +358,9 @@ public class TutorialOverlay {
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
+  /**
+   * Kalles når salg er bekreftet og fullført.
+   */
   public void onSellSuccess() {
     if (!isActive() || tutorialStep != STEP_SELL_SUCCESS_VIEW) {
       return;
