@@ -19,13 +19,31 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Tjenesteklasse som oppretter og laster spillsesjoner.
+ */
 public class GameSessionService {
 
     private static final Logger LOGGER = Logger.getLogger(GameSessionService.class.getName());
 
+    /**
+     * Holder det som trengs for å vise en aktiv spillsesjon i UI-et.
+     *
+     * @param controller spillkontrolleren for sesjonen
+     * @param stocks aksjelisten som brukes i visningene
+     * @param tutorialMode om sesjonen kjører i veiledningsmodus
+     */
     public record GameSession(GameController controller, List<Stock> stocks, boolean tutorialMode) {
     }
 
+    /**
+     * Oppretter en ny tutorialsesjon med standard data og lagrer den med en gang.
+     *
+     * @param playerName navn på spilleren
+     * @param startingMoney startkapital oppgitt av brukeren
+     * @return en ferdig konfigurert spillsesjon i tutorialmodus
+     * @throws IOException hvis aksjedata ikke kan leses
+     */
     public GameSession createTutorialSession(String playerName, String startingMoney) throws IOException {
         String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName + "-tutorial");
         List<Stock> stocks = StockCsvReader.readFromResource("/csv/output/sp500.csv");
@@ -43,6 +61,16 @@ public class GameSessionService {
         return new GameSession(controller, stocks, true);
     }
 
+    /**
+     * Oppretter en ny ordinær spillsesjon basert på valgene fra opprett-skjermen.
+     *
+     * @param playerName navn på spilleren
+     * @param experienceLevel valgt vanskelighetsgrad
+     * @param exchangeChoice valgt marked eller kilde for aksjedata
+     * @param startingMoney startkapital oppgitt av brukeren
+     * @return en ferdig konfigurert spillsesjon
+     * @throws IOException hvis aksjedata ikke kan leses eller behandles
+     */
     public GameSession createNewSession(String playerName, String experienceLevel, String exchangeChoice, String startingMoney)
         throws IOException {
         String normalizedSaveFileName = SaveManager.normalizeSaveFileName(playerName);
@@ -59,6 +87,12 @@ public class GameSessionService {
         return new GameSession(controller, stocks, false);
     }
 
+    /**
+     * Laster en tidligere lagret spillsesjon.
+     *
+     * @param fileName navn på lagringsfilen som skal leses
+     * @return en valgfri spillsesjon; tom hvis filen ikke inneholder gyldig spilltilstand
+     */
     public Optional<GameSession> loadSession(String fileName) {
         GameState state = SaveManager.load(fileName);
         if (state == null) {

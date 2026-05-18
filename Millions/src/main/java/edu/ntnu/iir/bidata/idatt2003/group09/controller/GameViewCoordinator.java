@@ -15,18 +15,33 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
+/**
+ * Koordinerer oppsett og oppførsel for hovedvisningen under selve spillet.
+ */
 public class GameViewCoordinator {
 
     private final BorderPane contentRoot;
     private final TutorialOverlay tutorialOverlay;
     private final Runnable onReturnToStart;
 
+    /**
+     * Oppretter en ny koordinator for spillvisningen.
+     *
+     * @param contentRoot rotcontaineren der spillinnholdet vises
+     * @param tutorialOverlay overlay som styrer tutorial-flyt
+     * @param onReturnToStart callback som kjøres når brukeren går tilbake til start
+     */
     public GameViewCoordinator(BorderPane contentRoot, TutorialOverlay tutorialOverlay, Runnable onReturnToStart) {
         this.contentRoot = contentRoot;
         this.tutorialOverlay = tutorialOverlay;
         this.onReturnToStart = onReturnToStart;
     }
 
+    /**
+     * Viser en aktiv spillsesjon i hovedområdet og kobler alle faner til riktig oppførsel.
+     *
+     * @param session spillsesjonen som skal presenteres
+     */
     public void showGame(GameSessionService.GameSession session) {
         GameController controller = session.controller();
         boolean tutorialMode = session.tutorialMode();

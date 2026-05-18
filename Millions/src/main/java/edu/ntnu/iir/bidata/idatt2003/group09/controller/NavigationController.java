@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Hovedkontroller for navigasjon mellom skjermene i applikasjonen.
+ */
 public class NavigationController {
 
     private static final Logger LOGGER = Logger.getLogger(NavigationController.class.getName());
@@ -25,6 +28,12 @@ public class NavigationController {
     private final GameSessionService gameSessionService;
     private final GameViewCoordinator gameViewCoordinator;
 
+    /**
+     * Oppretter en ny navigasjonskontroller for applikasjonen.
+     *
+     * @param contentRoot rotcontaineren der aktive skjermer rendres
+     * @param tutorialOverlay overlay som styrer tutorial-hint i UI
+     */
     public NavigationController(BorderPane contentRoot, TutorialOverlay tutorialOverlay) {
         this.contentRoot = contentRoot;
         this.tutorialOverlay = tutorialOverlay;
@@ -33,6 +42,9 @@ public class NavigationController {
         this.gameViewCoordinator = new GameViewCoordinator(contentRoot, tutorialOverlay, this::showStartScreen);
     }
 
+    /**
+     * Viser startskjermen og nullstiller eventuell aktiv tutorial.
+     */
     public void showStartScreen() {
         StartScreen startScreen = new StartScreen(new StartScreen.StartHandler() {
 
