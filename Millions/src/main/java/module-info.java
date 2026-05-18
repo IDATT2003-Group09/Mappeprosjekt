@@ -1,3 +1,6 @@
+/**
+ * deklarerer statiske imports 
+ */
 module edu.ntnu.iir.bidata.idatt2003.group09 {
     requires javafx.controls;
     requires javafx.media;

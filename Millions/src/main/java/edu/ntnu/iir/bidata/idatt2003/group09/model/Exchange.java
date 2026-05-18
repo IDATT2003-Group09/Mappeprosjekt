@@ -2,6 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,7 +78,7 @@ public class Exchange implements Serializable {
    * @param name
    */
   public void setName(String name) {
-    if (name.trim().isEmpty() || name == null) {
+    if (name == null || name.trim().isEmpty()) {
       throw new IllegalArgumentException("""
             arg cant be empty or null
           """);
@@ -91,6 +92,7 @@ public class Exchange implements Serializable {
    * @param stocks
    */
   public void setStockMap(List<Stock> stocks) {
+    Objects.requireNonNull(stocks, "stocks cannot be null");
     if (stocks.isEmpty()) {
       throw new IllegalArgumentException("arg cant be empty");
     } else {
