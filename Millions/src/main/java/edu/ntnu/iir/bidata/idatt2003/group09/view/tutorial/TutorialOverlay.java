@@ -27,10 +27,6 @@ public class TutorialOverlay {
   private static final double TAB_Y = 0;
   private static final double TAB_H = 46;
 
-  private static final double STOCK_LIST_X = 0;
-  private static final double STOCK_LIST_Y = 210;
-  private static final double STOCK_LIST_W = 544;
-  private static final double STOCK_LIST_H = 478;
 
   private static final double SEARCH_BAR_X = 16;
   private static final double SEARCH_BAR_Y = 130;
@@ -62,10 +58,10 @@ public class TutorialOverlay {
   private static final double NEXT_WEEK_BUTTON_W = 132;
   private static final double NEXT_WEEK_BUTTON_H = 46;
 
-  private static final double NEWSPAPER_VIEW_X = 18;
-  private static final double NEWSPAPER_VIEW_Y = 76;
-  private static final double NEWSPAPER_VIEW_W = 1055;
-  private static final double NEWSPAPER_VIEW_H = 604;
+  private static final double PAGE_VIEW_X = 18;
+  private static final double PAGE_VIEW_Y = 76;
+  private static final double PAGE_VIEW_W = 1055;
+  private static final double PAGE_VIEW_H = 604;
   private static final double TAB_CONTENT_X = 0;
   private static final double TAB_CONTENT_Y = 40;
   private static final double TAB_CONTENT_W = 1100;
@@ -191,7 +187,7 @@ public class TutorialOverlay {
     }
 
     tutorialStep = STEP_NEWSPAPER_VIEW;
-    spotlight(NEWSPAPER_VIEW_X, NEWSPAPER_VIEW_Y, NEWSPAPER_VIEW_W, NEWSPAPER_VIEW_H);
+    spotlight(PAGE_VIEW_X, PAGE_VIEW_Y, PAGE_VIEW_W, PAGE_VIEW_H);
     boss.updateTalkingBubble("Take your time reading the news, it might give you some hints on what to buy.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
@@ -353,7 +349,7 @@ public class TutorialOverlay {
 
     } else if (tutorialStep == STEP_SEARCH_BAR) {
       tutorialStep = STEP_STOCK_LIST;
-      spotlight(STOCK_LIST_X, STOCK_LIST_Y, STOCK_LIST_W, STOCK_LIST_H);
+      spotlight(PAGE_VIEW_X, PAGE_VIEW_Y, PAGE_VIEW_W, PAGE_VIEW_H);
       boss.updateTalkingBubble("Now pick a stock from the list that you think will make me money.");
 
     } else if (tutorialStep == STEP_MAX_BUY) {
