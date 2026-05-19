@@ -27,7 +27,6 @@ public class TutorialOverlay {
   private static final double TAB_Y = 0;
   private static final double TAB_H = 46;
 
-
   private static final double SEARCH_BAR_X = 16;
   private static final double SEARCH_BAR_Y = 130;
   private static final double SEARCH_BAR_W = 700;
@@ -58,10 +57,6 @@ public class TutorialOverlay {
   private static final double NEXT_WEEK_BUTTON_W = 132;
   private static final double NEXT_WEEK_BUTTON_H = 46;
 
-  private static final double PAGE_VIEW_X = 18;
-  private static final double PAGE_VIEW_Y = 76;
-  private static final double PAGE_VIEW_W = 1055;
-  private static final double PAGE_VIEW_H = 604;
   private static final double TAB_CONTENT_X = 0;
   private static final double TAB_CONTENT_Y = 40;
   private static final double TAB_CONTENT_W = 1100;
@@ -187,7 +182,7 @@ public class TutorialOverlay {
     }
 
     tutorialStep = STEP_NEWSPAPER_VIEW;
-    spotlight(PAGE_VIEW_X, PAGE_VIEW_Y, PAGE_VIEW_W, PAGE_VIEW_H);
+    spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
     boss.updateTalkingBubble("Take your time reading the news, it might give you some hints on what to buy.");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
@@ -217,7 +212,7 @@ public class TutorialOverlay {
 
     tutorialStep = STEP_MAX_BUY;
     spotlight(MAX_BUY_BUTTON_X, MAX_BUY_BUTTON_Y, MAX_BUY_BUTTON_W, MAX_BUY_BUTTON_H);
-    boss.updateTalkingBubble("Hit Max Buy to automatically fill in the most shares you can afford. Don't waste my money.");
+    boss.updateTalkingBubble("If you are confident this is a winner you can press the max buy button to set the quantity to the max amount you can afford");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
   }
 
@@ -349,8 +344,8 @@ public class TutorialOverlay {
 
     } else if (tutorialStep == STEP_SEARCH_BAR) {
       tutorialStep = STEP_STOCK_LIST;
-      spotlight(PAGE_VIEW_X, PAGE_VIEW_Y, PAGE_VIEW_W, PAGE_VIEW_H);
-      boss.updateTalkingBubble("Now pick a stock from the list that you think will make me money.");
+      spotlight(TAB_CONTENT_X, TAB_CONTENT_Y, TAB_CONTENT_W, TAB_CONTENT_H);
+      boss.updateTalkingBubble("Use these functions to make it easier to find the winning stock and select it");
 
     } else if (tutorialStep == STEP_MAX_BUY) {
       tutorialStep = STEP_BUY_BUTTON;
