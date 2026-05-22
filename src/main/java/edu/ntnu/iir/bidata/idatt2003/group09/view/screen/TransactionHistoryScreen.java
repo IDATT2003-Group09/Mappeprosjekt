@@ -13,6 +13,9 @@ import javafx.beans.property.SimpleStringProperty;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+/**
+ * Skjerm som viser transaksjonshistorikk i en tabell.
+ */
 public class TransactionHistoryScreen extends BorderPane {
 
     private final GameController controller;
@@ -20,7 +23,12 @@ public class TransactionHistoryScreen extends BorderPane {
     private final TableView<Transaction> table;
     private final NumberFormat currencyFormat;
 
-    public TransactionHistoryScreen(GameController controller) {
+        /**
+         * Oppretter en ny `TransactionHistoryScreen` og initialiserer visuelle komponenter.
+         *
+         * @param controller spillkontrolleren som brukes for å hente spilltilstand
+         */
+        public TransactionHistoryScreen(GameController controller) {
         this.controller = controller;
                 this.model = new TransactionHistoryScreenModel();
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
@@ -35,10 +43,15 @@ public class TransactionHistoryScreen extends BorderPane {
         buildTable();
         refresh();
 
-        setCenter(table);
-    }
+                setCenter(table);
+        }
 
-    private void buildTable() {
+        /**
+         * Bygger tabellens kolonner, cellefabrikker og formateringer.
+         * Metoden konfigurerer også kollektiv resize-policy for tabellen.
+         */
+
+        private void buildTable() {
 
         TableColumn<Transaction, Integer> weekCol = new TableColumn<>("Week");
         weekCol.setCellValueFactory(data ->
@@ -131,11 +144,16 @@ public class TransactionHistoryScreen extends BorderPane {
 
         table.getColumns().addAll(weekCol, typeCol, tickerCol, qtyCol, priceCol, feesCol, totalCol);
 
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+                table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
-    }
+        }
 
-    public void refresh() {
+        /**
+         * Oppdaterer modellens innhold fra gjeldende spilltilstand via `GameController`.
+         * Kalles når visningen trenger å reflektere endringer i spillet.
+         */
+
+        public void refresh() {
                 model.updateFromGameState(controller);
-    }
+        }
 }
