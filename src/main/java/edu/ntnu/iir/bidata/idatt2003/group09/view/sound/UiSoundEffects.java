@@ -15,6 +15,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 
+/**
+ * Felles hjelpeklasse for avspilling av UI-lyder og bakgrunnsmusikk.
+ */
 public final class UiSoundEffects {
 
   private static final String BACKGROUND_SOUND_PATH = "/sound/background.wav";
@@ -42,9 +45,17 @@ public final class UiSoundEffects {
   private static volatile Clip clickedClip;
   private static volatile boolean clickedSoundDisabled;
 
+  /**
+   * Privat konstruktør for utility-klasse.
+   */
   private UiSoundEffects() {
   }
 
+  /**
+   * Installerer hover-lyd på en node.
+   *
+   * @param node noden som skal få hover-lyd
+   */
   public static void installHoverSound(Node node) {
     if (node == null) {
       return;
@@ -58,6 +69,9 @@ public final class UiSoundEffects {
     });
   }
 
+  /**
+   * Starter bakgrunnsmusikk hvis lyd er tilgjengelig og aktivert.
+   */
   public static void startBackgroundMusic() {
     if (backgroundSoundDisabled || !backgroundMusicEnabled) {
       return;
@@ -80,6 +94,9 @@ public final class UiSoundEffects {
     }
   }
 
+  /**
+   * Stopper bakgrunnsmusikken hvis den kjører.
+   */
   public static void stopBackgroundMusic() {
     Clip clip = backgroundClip;
     if (clip == null) {
@@ -95,10 +112,20 @@ public final class UiSoundEffects {
     }
   }
 
+  /**
+   * Sjekker om bakgrunnsmusikk er aktivert i innstillingene.
+   *
+   * @return {@code true} hvis bakgrunnsmusikk er aktivert
+   */
   public static boolean isBackgroundMusicEnabled() {
     return backgroundMusicEnabled;
   }
 
+  /**
+   * Sjekker om lydeffekter er aktivert i innstillingene.
+   *
+   * @return {@code true} hvis lydeffekter er aktivert
+   */
   public static boolean isSoundEffectsEnabled() {
     return soundEffectsEnabled;
   }
@@ -145,6 +172,11 @@ public final class UiSoundEffects {
     return toVolumeDbOffset(masterVolume) + toVolumeDbOffset(soundEffectsVolume);
   }
 
+  /**
+   * Slår bakgrunnsmusikk av eller på.
+   *
+   * @param enabled {@code true} for å aktivere musikk
+   */
   public static void setBackgroundMusicEnabled(boolean enabled) {
     backgroundMusicEnabled = enabled;
     if (enabled) {
@@ -154,10 +186,20 @@ public final class UiSoundEffects {
     }
   }
 
+  /**
+   * Slår lydeffekter av eller på.
+   *
+   * @param enabled {@code true} for å aktivere effekter
+   */
   public static void setSoundEffectsEnabled(boolean enabled) {
     soundEffectsEnabled = enabled;
   }
 
+  /**
+   * Installerer hover-lyd på alle faner i en TabPane.
+   *
+   * @param tabPane fanepanelet som skal få hover-lyd
+   */
   public static void installHoverSound(TabPane tabPane) {
     if (tabPane == null) {
       return;
@@ -169,6 +211,11 @@ public final class UiSoundEffects {
     }
   }
 
+  /**
+   * Installerer klikk-lyd på museklikk og tastatur-aktivering.
+   *
+   * @param node noden som skal få klikk-lyd
+   */
   public static void installClickSound(Node node) {
     if (node == null) {
       return;
@@ -182,6 +229,9 @@ public final class UiSoundEffects {
     });
   }
 
+  /**
+   * Spiller av hover-lyden hvis lydeffekter er aktivert.
+   */
   public static void playSelectedHoverSound() {
     if (!soundEffectsEnabled || selectedHoverSoundDisabled) {
       return;
@@ -203,6 +253,9 @@ public final class UiSoundEffects {
     }
   }
 
+  /**
+   * Spiller av klikk-lyden hvis lydeffekter er aktivert.
+   */
   public static void playClickedSound() {
     if (!soundEffectsEnabled || clickedSoundDisabled) {
       return;

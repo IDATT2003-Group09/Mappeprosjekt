@@ -3,15 +3,36 @@ package edu.ntnu.iir.bidata.idatt2003.group09.io;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class for saving, loading, listing, and deleting game save files.
  */
 public class SaveManager {
 
+    private static final Logger LOGGER = Logger.getLogger(SaveManager.class.getName());
+
     private static final String DEFAULT_FILE = "savegame.dat";
     private static final String SAVE_FILE_PREFIX = "savegame";
     private static final String SAVE_FILE_SUFFIX = ".dat";
+    private static final File SAVE_DIR;
+        static {
+            String appData = System.getenv("APPDATA");
+            if (appData == null) appData = System.getProperty("user.home");
+            SAVE_DIR = new File(appData, "Millions");
+            SAVE_DIR.mkdirs(); 
+        }
+
+    static File getSaveDir() {
+        return SAVE_DIR;
+    }
+
+    static File overrideSaveDir;
+
+    private static File getEffectiveSaveDir() {
+        return overrideSaveDir != null ? overrideSaveDir : SAVE_DIR;
+    }
 
     /**
      * Saves the given GameState to the default save file.
@@ -35,7 +56,7 @@ public class SaveManager {
             out.writeObject(state);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed to save game to file: " + targetFile, e);
         }
     }
 
@@ -62,8 +83,7 @@ public class SaveManager {
             return (GameState) in.readObject();
 
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Failed to load save: " + e.getMessage());
+            LOGGER.log(Level.WARNING, "Failed to load save from file: " + sourceFile, e);
             return null;
         }
     }
@@ -74,8 +94,7 @@ public class SaveManager {
      * @return a sorted list of save file names
      */
     public static List<String> listSaveFiles() {
-        File currentDirectory = new File(".");
-        String[] fileNames = currentDirectory.list((dir, name) ->
+        String[] fileNames = getEffectiveSaveDir().list((dir, name) ->
                 name.startsWith(SAVE_FILE_PREFIX) && name.endsWith(SAVE_FILE_SUFFIX));
 
         if (fileNames == null || fileNames.length == 0) {
@@ -93,7 +112,7 @@ public class SaveManager {
      * @return true if the default save file exists, false otherwise
      */
     public static boolean saveExists() {
-        return new File(DEFAULT_FILE).exists();
+        return new File(getEffectiveSaveDir(), DEFAULT_FILE).exists();
     }
 
     /**
@@ -104,10 +123,11 @@ public class SaveManager {
      */
     public static String normalizeSaveFileName(String fileName) {
         if (fileName == null || fileName.isBlank()) {
-            return DEFAULT_FILE;
+            return new File(getEffectiveSaveDir(), DEFAULT_FILE).getAbsolutePath();
         }
 
-        String normalized = fileName.trim();
+        String normalized = new File(fileName).getName().trim();
+
         normalized = normalized.replaceAll("[^a-zA-Z0-9._-]", "_");
 
         if (!normalized.startsWith(SAVE_FILE_PREFIX)) {
@@ -115,10 +135,9 @@ public class SaveManager {
         }
 
         if (!normalized.endsWith(SAVE_FILE_SUFFIX)) {
-            normalized = normalized + SAVE_FILE_SUFFIX;
+            normalized += SAVE_FILE_SUFFIX;
         }
-
-        return normalized;
+        return new File(getEffectiveSaveDir(), normalized).getAbsolutePath();
     }
 
     /**
@@ -129,6 +148,7 @@ public class SaveManager {
      */
     public static boolean doesSaveFileExist(String fileName) {
         String targetFile = normalizeSaveFileName(fileName);
+
         return new File(targetFile).exists();
     } 
 

@@ -5,18 +5,11 @@ Millions is s open source stock trading game. It was developed at NTNU in accord
 
 <h3 align="center">How to install and start playing</h3>
 
-To start playing the game, simply clone the repository:
-```
-git clone
-```
-Also ensure you have java 25 and mvn 25 installed as specified in the pom.xml
-After this you can launch it from the termial using cd command to enter the directory where you cloned the game.
+To start playing the game, simply look for the release you would like under releases
+From here you can download en exe file.
+Running the exe file will download the game as an application on your computer.
 
-When you are ready to launch the game simply do:
-```
-mvn javafx:run
-```
-And the application will launch. Have fun :) !
+When you are ready to launch the game, simply find it on your computer. It can usually be found on your desktop.
 
 <h3 align="center">Testing</h3>
 The game also comes with junit tests to ensure the main structure of the game if users want to edit the source code.
@@ -25,3 +18,4 @@ To run the tests simply run:
 ```
 mvn test
 ```
+In the Millions/ Layer
