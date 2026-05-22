@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
 
 /**
@@ -23,6 +25,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator
 public class TradeScreenController {
 	private final GameController controller;
 	private final TradeScreenModel model;
+    private static final Logger LOGGER = Logger.getLogger(TradeScreenController.class.getName());
 
 	/**
 	 * Constructs a TradeScreenController with the given GameController.
@@ -83,12 +86,22 @@ public class TradeScreenController {
 					stockList.refresh();
 					model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
 					model.fireTradeEvent(TradeScreenModel.TradeEvent.BUY_SUCCESS);
+				} catch (IllegalArgumentException | IllegalStateException e) {
+					LOGGER.log(Level.WARNING, "Buy failed for " + selectedStock.getSymbol(), e);
+					statusLabel.setText("Buy failed: " + e.getMessage());
 				} catch (Exception e) {
+					LOGGER.log(Level.SEVERE, "Unexpected error during buy", e);
 					statusLabel.setText("Buy failed: " + e.getMessage());
 				}
 			});
 		} catch (Exception e) {
-			statusLabel.setText("Buy failed: " + e.getMessage());
+			if (e instanceof IllegalArgumentException) {
+				LOGGER.log(Level.WARNING, "Invalid buy input", e);
+				statusLabel.setText("Buy failed: " + e.getMessage());
+			} else {
+				LOGGER.log(Level.SEVERE, "Unexpected error preparing buy", e);
+				statusLabel.setText("Buy failed: " + e.getMessage());
+			}
 		}
 	}
 
@@ -131,12 +144,22 @@ public class TradeScreenController {
 					stockList.refresh();
 					model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
 					model.fireTradeEvent(TradeScreenModel.TradeEvent.SELL_SUCCESS);
+				} catch (IllegalArgumentException | IllegalStateException e) {
+					LOGGER.log(Level.WARNING, "Sell failed for " + selectedStock.getSymbol(), e);
+					statusLabel.setText("Sell failed: " + e.getMessage());
 				} catch (Exception e) {
+					LOGGER.log(Level.SEVERE, "Unexpected error during sell", e);
 					statusLabel.setText("Sell failed: " + e.getMessage());
 				}
 			});
 		} catch (Exception e) {
-			statusLabel.setText("Sell failed: " + e.getMessage());
+			if (e instanceof IllegalArgumentException) {
+				LOGGER.log(Level.WARNING, "Invalid sell input", e);
+				statusLabel.setText("Sell failed: " + e.getMessage());
+			} else {
+				LOGGER.log(Level.SEVERE, "Unexpected error preparing sell", e);
+				statusLabel.setText("Sell failed: " + e.getMessage());
+			}
 		}
 	}
 

@@ -82,7 +82,7 @@ public class SaveManager {
 
             return (GameState) in.readObject();
 
-        } catch (Exception e) {
+        } catch (IOException | ClassNotFoundException e) {
             LOGGER.log(Level.WARNING, "Failed to load save from file: " + sourceFile, e);
             return null;
         }
@@ -161,7 +161,10 @@ public class SaveManager {
         String targetFile = normalizeSaveFileName(fileName);
         File file = new File(targetFile);
         if (file.exists()) {
-            file.delete();
+            boolean deleted = file.delete();
+            if (!deleted) {
+                LOGGER.log(Level.WARNING, "Failed to delete save file: " + targetFile);
+            }
         }
     }
 

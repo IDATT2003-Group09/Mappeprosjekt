@@ -3,6 +3,8 @@ package edu.ntnu.iir.bidata.idatt2003.group09.view.sound;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -19,6 +21,8 @@ import javafx.scene.input.MouseEvent;
  * Felles hjelpeklasse for avspilling av UI-lyder og bakgrunnsmusikk.
  */
 public final class UiSoundEffects {
+
+  private static final Logger LOGGER = Logger.getLogger(UiSoundEffects.class.getName());
 
   private static final String BACKGROUND_SOUND_PATH = "/sound/background.wav";
   private static final String CLICKED_SOUND_PATH = "/sound/clicked.wav";
@@ -88,7 +92,8 @@ public final class UiSoundEffects {
           clip.setFramePosition(0);
           clip.loop(Clip.LOOP_CONTINUOUSLY);
         }
-      } catch (RuntimeException ignored) {
+      } catch (RuntimeException e) {
+        LOGGER.log(Level.WARNING, "Background music playback failed, disabling background sound", e);
         backgroundSoundDisabled = true;
       }
     }
@@ -106,7 +111,8 @@ public final class UiSoundEffects {
     synchronized (BACKGROUND_SOUND_LOCK) {
       try {
         clip.stop();
-      } catch (RuntimeException ignored) {
+      } catch (RuntimeException e) {
+        LOGGER.log(Level.WARNING, "Stopping background music failed, disabling background sound", e);
         backgroundSoundDisabled = true;
       }
     }
@@ -247,7 +253,8 @@ public final class UiSoundEffects {
         clip.stop();
         clip.setFramePosition(0);
         clip.start();
-      } catch (RuntimeException ignored) {
+      } catch (RuntimeException e) {
+        LOGGER.log(Level.WARNING, "Hover sound playback failed, disabling hover sounds", e);
         selectedHoverSoundDisabled = true;
       }
     }
@@ -271,7 +278,8 @@ public final class UiSoundEffects {
         clip.stop();
         clip.setFramePosition(0);
         clip.start();
-      } catch (RuntimeException ignored) {
+      } catch (RuntimeException e) {
+        LOGGER.log(Level.WARNING, "Click sound playback failed, disabling click sounds", e);
         clickedSoundDisabled = true;
       }
     }
@@ -348,7 +356,8 @@ public final class UiSoundEffects {
       clip.open(audioInputStream);
       applyGainForCategory(clip, resourcePath, gainDb);
       return clip;
-    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | IllegalArgumentException ignored) {
+    } catch (UnsupportedAudioFileException | IOException | LineUnavailableException | IllegalArgumentException e) {
+      LOGGER.log(Level.WARNING, "Failed to create audio clip: " + resourcePath, e);
       return null;
     }
   }
