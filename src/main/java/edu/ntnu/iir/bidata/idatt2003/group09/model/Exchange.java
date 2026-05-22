@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.model.news.EventFactory;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.news.GlobalEvent;
@@ -25,6 +26,7 @@ public class Exchange implements Serializable {
   private NewsPaper pendingNewsPaper;
   private final EventFactory eventFactory = new EventFactory();
   private final Random random = new Random();
+  private static final Logger LOGGER = Logger.getLogger(Exchange.class.getName());
   private BigDecimal commissionRate = new BigDecimal("0.005");
 
   /**
@@ -270,9 +272,9 @@ public class Exchange implements Serializable {
       generatePendingNews();
 
       if (pendingNews != null) {
-        System.out.println("Week " + week + " UPCOMING NEWS: " + pendingNews.getHeadline());
+        LOGGER.info("Week " + week + " UPCOMING NEWS: " + pendingNews.getHeadline());
         for (StockSpecificEvent event : pendingNewsPaper.getStockSpecificEvents()) {
-          System.out.println(" - " + event.getGeneratedHeadline());
+          LOGGER.info(" - " + event.getGeneratedHeadline());
         }
       }
 
