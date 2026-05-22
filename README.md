@@ -11,6 +11,14 @@ Running the exe file will download the game as an application on your computer.
 
 When you are ready to launch the game, simply find it on your computer. It can usually be found on your desktop.
 
+>[!Tip]
+>It is also possible to run the game through:
+>```
+>mvn javafx:run
+>```
+>To accomplish this simply clone the project to your desired location and run the command in the terminal.
+>For this to work you must have java 25 installed on your computer
+
 <h3 align="center">Testing</h3>
 The game also comes with junit tests to ensure the main structure of the game if users want to edit the source code.
 To run the tests simply run:
