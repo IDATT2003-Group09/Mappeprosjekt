@@ -1,6 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Sale;
-import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
+import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TransactionHistoryScreenController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.TransactionHistoryScreenModel;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Transaction;
 import javafx.scene.control.TableCell;
@@ -18,19 +18,19 @@ import java.util.Locale;
  */
 public class TransactionHistoryScreen extends BorderPane {
 
-    private final GameController controller;
+        private final TransactionHistoryScreenController controller;
         private final TransactionHistoryScreenModel model;
-    private final TableView<Transaction> table;
-    private final NumberFormat currencyFormat;
+        private final TableView<Transaction> table;
+        private final NumberFormat currencyFormat;
 
         /**
          * Oppretter en ny `TransactionHistoryScreen` og initialiserer visuelle komponenter.
          *
-         * @param controller spillkontrolleren som brukes for å hente spilltilstand
+         * @param controller kontrolleren som henter transaksjonsdata og oppdaterer modellen
          */
-        public TransactionHistoryScreen(GameController controller) {
+        public TransactionHistoryScreen(TransactionHistoryScreenController controller) {
         this.controller = controller;
-                this.model = new TransactionHistoryScreenModel();
+        this.model = controller.getModel();
         this.currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
                 getStylesheets().add(getClass().getResource("/styling/transactionHistory.css").toExternalForm());
@@ -154,6 +154,6 @@ public class TransactionHistoryScreen extends BorderPane {
          */
 
         public void refresh() {
-                model.updateFromGameState(controller);
+                controller.refresh();
         }
 }
