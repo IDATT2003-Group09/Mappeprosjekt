@@ -24,8 +24,8 @@ public class Exchange implements Serializable {
   private Map<String, Stock> stockMap;
   private MarketNews pendingNews;
   private NewsPaper pendingNewsPaper;
-  private final EventFactory eventFactory = new EventFactory();
-  private final Random random = new Random();
+  private final EventFactory eventFactory;
+  private final Random random;
   private static final Logger LOGGER = Logger.getLogger(Exchange.class.getName());
   private BigDecimal commissionRate = new BigDecimal("0.005");
 
@@ -35,8 +35,14 @@ public class Exchange implements Serializable {
    * @param stocks
    */
   public Exchange(String name, List<Stock> stocks) {
+    this(name, stocks, new EventFactory(), new Random());
+  }
+
+  public Exchange(String name, List<Stock> stocks, EventFactory eventFactory, Random random) {
     setName(name);
     stockMap = new HashMap<>();
+    this.eventFactory = Objects.requireNonNull(eventFactory, "eventFactory cannot be null");
+    this.random = Objects.requireNonNull(random, "random cannot be null");
     setStockMap(stocks);
     generatePendingNews();
   }
