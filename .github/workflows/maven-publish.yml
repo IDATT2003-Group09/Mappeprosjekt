@@ -9,9 +9,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: Millions
     
     steps:
     - name: Checkout code
@@ -34,10 +31,10 @@ jobs:
     
     - name: Run tests with Maven
       run: mvn clean test
-      
+
     - name: Upload test results (optional)
       if: always()  # Runs even if tests fail
       uses: actions/upload-artifact@v4
       with:
         name: test-results
-        path: Millions/target/surefire-reports/
+        path: target/surefire-reports/
