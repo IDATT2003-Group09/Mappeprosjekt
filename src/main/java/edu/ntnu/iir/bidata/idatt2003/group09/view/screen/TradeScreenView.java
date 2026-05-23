@@ -140,6 +140,8 @@ public class TradeScreenView extends StackPane {
                     if (newStock != null) {
                         graph.updateChart(newStock);
                         onTutorialStockSelected();
+                    } else {
+                        graph.showNoSelectionMessage();
                     }
                 }
         );
@@ -158,7 +160,6 @@ public class TradeScreenView extends StackPane {
         weekLabel = new Label();
 
         quarterLabel = new Label();
-                        graph.showNoSelectionMessage();
         requirementOverlayLabel = new Label();
         netWorthOverlayLabel = new Label();
         quarterLabel.getStyleClass().add("trade-progress-bar-label");
@@ -222,7 +223,6 @@ public class TradeScreenView extends StackPane {
         });
 
         Button maxSellButton = new Button("Max Sell");
-            graph.showNoSelectionMessage();
         maxSellButton.getStyleClass().addAll("trade-button", "trade-max-button");
         maxSellButton.setOnAction(e -> {
             Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
@@ -433,6 +433,8 @@ public class TradeScreenView extends StackPane {
         Stock selected = stockList.getSelectionModel().getSelectedItem();
         if (selected != null) {
             graph.updateChart(selected);
+        } else {
+            graph.showNoSelectionMessage();
         }
     }
 
