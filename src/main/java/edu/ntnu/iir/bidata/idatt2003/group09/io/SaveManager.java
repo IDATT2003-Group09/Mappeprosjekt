@@ -1,6 +1,9 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.io;
 
 import java.io.*;
+import java.nio.file.AtomicMoveNotSupportedException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -16,6 +19,7 @@ public class SaveManager {
     private static final String DEFAULT_FILE = "savegame.dat";
     private static final String SAVE_FILE_PREFIX = "savegame";
     private static final String SAVE_FILE_SUFFIX = ".dat";
+    private static final String ALLOWED_PACKAGE_PREFIX = "edu.ntnu.iir.bidata.idatt2003.group09.";
     private static final File SAVE_DIR;
         static {
             String appData = System.getenv("APPDATA");
@@ -50,13 +54,37 @@ public class SaveManager {
      * @param fileName the file name to save to
      */
     public static void save(GameState state, String fileName) {
-        String targetFile = normalizeSaveFileName(fileName);
-        try (ObjectOutputStream out =
-                new ObjectOutputStream(new FileOutputStream(targetFile))) {
-            out.writeObject(state);
+        File targetFile = new File(normalizeSaveFileName(fileName));
+        File saveDir = targetFile.getParentFile();
+        if (saveDir != null && !saveDir.exists() && !saveDir.mkdirs()) {
+            LOGGER.log(Level.SEVERE, "Failed to create save directory: " + saveDir.getAbsolutePath());
+            return;
+        }
+
+        File temporaryFile = null;
+        try {
+            temporaryFile = File.createTempFile("savegame-", ".tmp", saveDir);
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(temporaryFile))) {
+                out.writeObject(state);
+                out.flush();
+            }
+
+            try {
+                Files.move(
+                        temporaryFile.toPath(),
+                        targetFile.toPath(),
+                        StandardCopyOption.REPLACE_EXISTING,
+                        StandardCopyOption.ATOMIC_MOVE);
+            } catch (AtomicMoveNotSupportedException ignored) {
+                Files.move(temporaryFile.toPath(), targetFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
 
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Failed to save game to file: " + targetFile, e);
+            LOGGER.log(Level.SEVERE, "Failed to save game to file: " + targetFile.getAbsolutePath(), e);
+        } finally {
+            if (temporaryFile != null && temporaryFile.exists() && !temporaryFile.delete()) {
+                LOGGER.log(Level.FINE, "Could not delete temporary save file: " + temporaryFile.getAbsolutePath());
+            }
         }
     }
 
@@ -76,14 +104,26 @@ public class SaveManager {
      * @return the loaded GameState, or null if loading fails
      */
     public static GameState load(String fileName) {
-        String sourceFile = normalizeSaveFileName(fileName);
+        File sourceFile = new File(normalizeSaveFileName(fileName));
+        if (!sourceFile.exists()) {
+            return null;
+        }
+
         try (ObjectInputStream in =
                      new ObjectInputStream(new FileInputStream(sourceFile))) {
 
-            return (GameState) in.readObject();
+            in.setObjectInputFilter(SaveManager::deserializationFilter);
 
-        } catch (IOException | ClassNotFoundException e) {
-            LOGGER.log(Level.WARNING, "Failed to load save from file: " + sourceFile, e);
+            Object loadedObject = in.readObject();
+            if (loadedObject instanceof GameState gameState) {
+                return gameState;
+            }
+
+            LOGGER.log(Level.WARNING, "Invalid save content in file: " + sourceFile.getAbsolutePath());
+            return null;
+
+        } catch (IOException | ClassNotFoundException | ClassCastException e) {
+            LOGGER.log(Level.WARNING, "Failed to load save from file: " + sourceFile.getAbsolutePath(), e);
             return null;
         }
     }
@@ -94,7 +134,8 @@ public class SaveManager {
      * @return a sorted list of save file names
      */
     public static List<String> listSaveFiles() {
-        String[] fileNames = getEffectiveSaveDir().list((dir, name) ->
+        File saveDirectory = ensureSaveDirectoryExists();
+        String[] fileNames = saveDirectory.list((dir, name) ->
                 name.startsWith(SAVE_FILE_PREFIX) && name.endsWith(SAVE_FILE_SUFFIX));
 
         if (fileNames == null || fileNames.length == 0) {
@@ -112,7 +153,7 @@ public class SaveManager {
      * @return true if the default save file exists, false otherwise
      */
     public static boolean saveExists() {
-        return new File(getEffectiveSaveDir(), DEFAULT_FILE).exists();
+        return new File(ensureSaveDirectoryExists(), DEFAULT_FILE).exists();
     }
 
     /**
@@ -123,7 +164,7 @@ public class SaveManager {
      */
     public static String normalizeSaveFileName(String fileName) {
         if (fileName == null || fileName.isBlank()) {
-            return new File(getEffectiveSaveDir(), DEFAULT_FILE).getAbsolutePath();
+            return new File(ensureSaveDirectoryExists(), DEFAULT_FILE).getAbsolutePath();
         }
 
         String normalized = new File(fileName).getName().trim();
@@ -137,7 +178,7 @@ public class SaveManager {
         if (!normalized.endsWith(SAVE_FILE_SUFFIX)) {
             normalized += SAVE_FILE_SUFFIX;
         }
-        return new File(getEffectiveSaveDir(), normalized).getAbsolutePath();
+        return new File(ensureSaveDirectoryExists(), normalized).getAbsolutePath();
     }
 
     /**
@@ -175,5 +216,34 @@ public class SaveManager {
      */
     public static int numberOfSaveFiles() {
         return listSaveFiles().size();
+    }
+
+    private static File ensureSaveDirectoryExists() {
+        File saveDirectory = getEffectiveSaveDir();
+        if (!saveDirectory.exists() && !saveDirectory.mkdirs()) {
+            LOGGER.log(Level.WARNING, "Could not create save directory: " + saveDirectory.getAbsolutePath());
+        }
+        return saveDirectory;
+    }
+
+    private static ObjectInputFilter.Status deserializationFilter(ObjectInputFilter.FilterInfo filterInfo) {
+        Class<?> serialClass = filterInfo.serialClass();
+        if (serialClass == null) {
+            return ObjectInputFilter.Status.UNDECIDED;
+        }
+
+        if (serialClass.isPrimitive() || serialClass.isArray()) {
+            return ObjectInputFilter.Status.ALLOWED;
+        }
+
+        String className = serialClass.getName();
+        if (className.startsWith(ALLOWED_PACKAGE_PREFIX)
+                || className.startsWith("java.lang.")
+                || className.startsWith("java.math.")
+                || className.startsWith("java.util.")) {
+            return ObjectInputFilter.Status.ALLOWED;
+        }
+
+        return ObjectInputFilter.Status.REJECTED;
     }
 }

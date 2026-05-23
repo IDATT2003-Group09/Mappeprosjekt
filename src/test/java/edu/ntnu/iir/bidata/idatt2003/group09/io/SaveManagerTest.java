@@ -8,7 +8,9 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.game.GameProgress;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -71,6 +73,19 @@ public class SaveManagerTest {
     void loadShouldReturnNullWhenFileDoesNotExist() throws IOException {
         withTempSaveDir(() -> {
             GameState loaded = SaveManager.load("missing-save");
+            assertNull(loaded);
+        });
+    }
+
+    @Test
+    void loadShouldReturnNullWhenSerializedContentIsNotGameState() throws IOException {
+        withTempSaveDir(() -> {
+            String normalizedPath = SaveManager.normalizeSaveFileName("invalid-content");
+            try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(normalizedPath))) {
+                out.writeObject("not a game state");
+            }
+
+            GameState loaded = SaveManager.load("invalid-content");
             assertNull(loaded);
         });
     }
