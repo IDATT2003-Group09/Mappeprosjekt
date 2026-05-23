@@ -284,8 +284,7 @@ public class TradeScreenView extends StackPane {
                     }
                 },
                 () -> {
-                    stockList.refresh();
-                    updateSelectedStockGraph();
+                    refresh();
                     onTutorialNextWeek();
                 },
                 this::showQuarterLevelUpOverlay
