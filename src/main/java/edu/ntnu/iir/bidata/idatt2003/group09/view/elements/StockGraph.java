@@ -88,6 +88,8 @@ public class StockGraph extends BorderPane {
         lineChart.setTitle("");
         lineChart.setVisible(true);
         lineChart.setManaged(true);
+        lineChart.setOpacity(1.0);
+        lineChart.setMouseTransparent(false);
         placeholderLabel.setVisible(false);
         placeholderLabel.setManaged(false);
 
@@ -127,8 +129,10 @@ public class StockGraph extends BorderPane {
 
     public void showNoSelectionMessage() {
         lineChart.getData().clear();
-        lineChart.setVisible(false);
-        lineChart.setManaged(false);
+        lineChart.setVisible(true);
+        lineChart.setManaged(true);
+        lineChart.setOpacity(0.0);
+        lineChart.setMouseTransparent(true);
         placeholderLabel.setVisible(true);
         placeholderLabel.setManaged(true);
         lineChart.setTitle("");
