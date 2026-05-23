@@ -4,7 +4,7 @@
 	-fx-text-fill: #fff;
 	-fx-font-size: 12px;
 	-fx-font-family: "ThaleahFat";
-	-fx-padding: 0 24;
+	-fx-padding: 0 18;
 	-fx-background-radius: 0px;
 	-fx-border-radius: 0px;
 	-fx-border-color: #fff;
@@ -13,7 +13,7 @@
 	-fx-font-weight: bold;
 	-fx-margin-left: 16px;
 	-fx-margin-right: 8px;
-	-fx-min-width: 120px;
+	-fx-min-width: 108px;
 	-fx-min-height: 25px;
 	-fx-max-height: 25px;
 	-fx-alignment: center;
