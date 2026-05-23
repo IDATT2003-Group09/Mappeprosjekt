@@ -46,6 +46,7 @@ import javafx.geometry.Pos;
 import javafx.collections.ObservableList;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeScreenController;
+import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeFilterRequest;
 
 public class TradeScreenView extends StackPane {
 
@@ -568,13 +569,14 @@ public class TradeScreenView extends StackPane {
     }
 
     private void applyCurrentFilters(String searchText) {
-        tradeScreenController.applyFilters(
+        TradeFilterRequest request = new TradeFilterRequest(
             searchText,
             allSectorsToggle != null && allSectorsToggle.isSelected(),
             filterOwned,
             winnersToggleButton != null && winnersToggleButton.isSelected(),
             losersToggleButton != null && losersToggleButton.isSelected()
         );
+        tradeScreenController.applyFilters(request);
     }
 
     private void bindModelToView() {

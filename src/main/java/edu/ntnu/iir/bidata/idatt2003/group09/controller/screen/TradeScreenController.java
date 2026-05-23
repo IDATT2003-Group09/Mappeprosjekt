@@ -264,20 +264,15 @@ public class TradeScreenController {
 	/**
 	 * Applies trade-screen filters using current game state.
 	 */
-	public void applyFilters(
-		String searchText,
-		boolean allSectorsSelected,
-		boolean ownedOnly,
-		boolean winnersOnly,
-		boolean losersOnly
-	) {
+	public void applyFilters(TradeFilterRequest request) {
+		String searchText = request.searchText() == null ? "" : request.searchText();
 		model.applyFilters(
 			searchText,
-			allSectorsSelected,
-			ownedOnly,
+			request.allSectorsSelected(),
+			request.ownedOnly(),
 			getOwnedSymbols(),
-			winnersOnly,
-			losersOnly
+			request.winnersOnly(),
+			request.losersOnly()
 		);
 	}
 
