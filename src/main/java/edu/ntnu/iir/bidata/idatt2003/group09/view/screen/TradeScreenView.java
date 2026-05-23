@@ -435,6 +435,12 @@ public class TradeScreenView extends StackPane {
         }
     }
 
+    public void refresh() {
+        tradeScreenController.refreshModel();
+        applyCurrentFilters(searchField != null ? searchField.getText() : "");
+        updateSelectedStockGraph();
+    }
+
     private void onTutorialStockSelected() {
         if (!tutorialMode || tutorialOverlay == null) {
             return;

@@ -64,7 +64,7 @@ public class GameViewCoordinator {
             tutorialMode,
             tutorialOverlay
         );
-        PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
+        PortfolioScreen portfolioScreen = new PortfolioScreen(controller, tradeScreen::refresh);
         TransactionHistoryScreenController transactionHistoryController =
             new TransactionHistoryScreenController(controller);
         TransactionHistoryScreen transactionHistoryScreen =

@@ -31,6 +31,7 @@ public class PortfolioScreen extends BorderPane {
 
     private final GameController controller;
     private final PortfolioScreenModel model;
+    private final Runnable onPortfolioChanged;
     private final TableView<PortfolioRow> table;
 
     private final Label totalValueLabel;
@@ -44,7 +45,12 @@ public class PortfolioScreen extends BorderPane {
 
 
     public PortfolioScreen(GameController controller) {
+        this(controller, null);
+    }
+
+    public PortfolioScreen(GameController controller, Runnable onPortfolioChanged) {
         this.controller = controller;
+        this.onPortfolioChanged = onPortfolioChanged;
         this.model = new PortfolioScreenModel();
 
         getStylesheets().add(getClass().getResource("/styling/portfolio.css").toExternalForm());
@@ -90,6 +96,9 @@ public class PortfolioScreen extends BorderPane {
         sellAllButton.setOnAction(e -> {
             controller.sellAllShares();
             refresh();
+            if (onPortfolioChanged != null) {
+                onPortfolioChanged.run();
+            }
         });
 
         HBox topBox = new HBox(20, totalValueLabel, changeLabel, cashLabel, statusLabel, sellAllButton);
@@ -158,6 +167,9 @@ public class PortfolioScreen extends BorderPane {
                     PortfolioRow row = getTableView().getItems().get(getIndex());
                     controller.sellAllShares(row.getSymbol());
                     refresh();
+                    if (onPortfolioChanged != null) {
+                        onPortfolioChanged.run();
+                    }
                 });
             }
 
