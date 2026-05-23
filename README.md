@@ -8,6 +8,7 @@ Millions is s open source stock trading game. It was developed at NTNU in accord
 To start playing the game, simply look for the release you would like under releases
 From here you can download en exe file.
 Running the exe file will download the game as an application on your computer.
+This will only work on windows computers, if you are using another operating system, follow the tip below. 
 
 When you are ready to launch the game, simply find it on your computer. It can usually be found on your desktop.
 
