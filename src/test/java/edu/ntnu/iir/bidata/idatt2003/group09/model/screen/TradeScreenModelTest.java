@@ -14,7 +14,7 @@ import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TradeScreenModelTest {
+public class TradeScreenModelTest {
 
     private Stock techStock;
     private Stock financeStock;

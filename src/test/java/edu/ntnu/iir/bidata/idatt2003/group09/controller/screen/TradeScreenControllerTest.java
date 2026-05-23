@@ -21,7 +21,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-class TradeScreenControllerTest {
+public class TradeScreenControllerTest {
 
   private Stock aapl;
   private Stock jpm;
@@ -50,7 +50,7 @@ class TradeScreenControllerTest {
 
   @Nested
   @DisplayName("applyFilters")
-  class ApplyFiltersTests {
+  public class ApplyFiltersTests {
 
     @Test
     @DisplayName("Owned and winners returns only owned positive movers in order")
@@ -87,7 +87,7 @@ class TradeScreenControllerTest {
 
   @Nested
   @DisplayName("handleAdvanceWeek")
-  class HandleAdvanceWeekTests {
+  public class HandleAdvanceWeekTests {
 
     @Test
     @DisplayName("Runs only game-over callback when game ends")
