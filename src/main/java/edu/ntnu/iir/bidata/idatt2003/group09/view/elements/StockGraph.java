@@ -3,6 +3,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.view.elements;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 import java.math.BigDecimal;
 import java.util.List;
+import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -10,6 +11,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.text.TextAlignment;
 import javafx.util.StringConverter;
 
 public class StockGraph extends BorderPane {
@@ -51,10 +53,14 @@ public class StockGraph extends BorderPane {
         placeholderLabel = new Label("Please select a stock");
         placeholderLabel.setStyle("-fx-text-fill: #9cb6db; -fx-font-size: 24px; -fx-font-weight: bold;");
         placeholderLabel.setWrapText(true);
+        placeholderLabel.setAlignment(Pos.CENTER);
+        placeholderLabel.setTextAlignment(TextAlignment.CENTER);
+        placeholderLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
         placeholderLabel.setMaxWidth(Double.MAX_VALUE);
         placeholderLabel.setMaxHeight(Double.MAX_VALUE);
 
         StackPane chartContainer = new StackPane(lineChart, placeholderLabel);
+        StackPane.setAlignment(placeholderLabel, Pos.CENTER);
         setCenter(chartContainer);
         showNoSelectionMessage();
     }
