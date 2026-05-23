@@ -276,19 +276,19 @@ public class TradeScreenView extends StackPane {
         });
 
         nextWeekButton.setOnAction(e -> {
-            GameController.WeekAdvanceResult result = tradeScreenController.advanceWeek();
-            if (result.gameOver()) {
-                if (onGameOver != null) {
-                    onGameOver.run();
-                }
-                return;
-            }
-            stockList.refresh();
-            updateSelectedStockGraph();
-            onTutorialNextWeek();
-            if (result.quarterAdvanced()) {
-                showQuarterLevelUpOverlay(result);
-            }
+            tradeScreenController.handleAdvanceWeek(
+                () -> {
+                    if (onGameOver != null) {
+                        onGameOver.run();
+                    }
+                },
+                () -> {
+                    stockList.refresh();
+                    updateSelectedStockGraph();
+                    onTutorialNextWeek();
+                },
+                this::showQuarterLevelUpOverlay
+            );
         });
 
 
@@ -464,26 +464,12 @@ public class TradeScreenView extends StackPane {
 
     private void setupSearchFilter() {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterStockList(newValue);
+            applyCurrentFilters(newValue);
         });
     }
 
-
-    private void filterStockList(String searchText) {
-        Set<String> ownedSymbols = tradeScreenController.getOwnedSymbols();
-
-        tradeScreenModel.applyFilters(
-            searchText,
-            allSectorsToggle != null && allSectorsToggle.isSelected(),
-            filterOwned,
-            ownedSymbols,
-            winnersToggleButton != null && winnersToggleButton.isSelected(),
-            losersToggleButton != null && losersToggleButton.isSelected()
-        );
-    }
-
     private void filterBySectors() {
-        filterStockList(searchField.getText());
+        applyCurrentFilters(searchField.getText());
     }
 
     private ToggleButton winnersToggleButton;
@@ -564,7 +550,7 @@ public class TradeScreenView extends StackPane {
                     }
                 }
                 if (allToggle != null) {
-                    boolean allSelected = tradeScreenController.getSelectedSectors().containsAll(sectors) && !sectors.isEmpty();
+                    boolean allSelected = tradeScreenController.areAllSectorsSelected();
                     allToggle.setSelected(allSelected);
                 }
 
@@ -578,14 +564,14 @@ public class TradeScreenView extends StackPane {
     private ToggleButton ownedToggleButton;
 
     private void filterBySectorsAndOwned() {
-        String searchText = searchField != null ? searchField.getText() : "";
-        Set<String> ownedSymbols = tradeScreenController.getOwnedSymbols();
+        applyCurrentFilters(searchField != null ? searchField.getText() : "");
+    }
 
-        tradeScreenModel.applyFilters(
+    private void applyCurrentFilters(String searchText) {
+        tradeScreenController.applyFilters(
             searchText,
-            allSectorsToggle != null && allSectorsToggle.isSelected(), // was: filterOwned
+            allSectorsToggle != null && allSectorsToggle.isSelected(),
             filterOwned,
-            ownedSymbols,
             winnersToggleButton != null && winnersToggleButton.isSelected(),
             losersToggleButton != null && losersToggleButton.isSelected()
         );

@@ -214,6 +214,26 @@ public class TradeScreenController {
 	}
 
 	/**
+	 * Advances one week and invokes callbacks for game-over, normal update and quarter progression.
+	 */
+	public void handleAdvanceWeek(
+		Runnable onGameOver,
+		Runnable onWeekAdvanced,
+		Consumer<GameController.WeekAdvanceResult> onQuarterAdvanced
+	) {
+		GameController.WeekAdvanceResult result = advanceWeek();
+		if (result.gameOver()) {
+			onGameOver.run();
+			return;
+		}
+
+		onWeekAdvanced.run();
+		if (result.quarterAdvanced()) {
+			onQuarterAdvanced.accept(result);
+		}
+	}
+
+	/**
 	 * Calculates max buy quantity using current game state.
 	 */
 	public String calculateMaxBuyQuantity(Stock selectedStock) {
@@ -239,6 +259,34 @@ public class TradeScreenController {
 		return controller.getPortfolio().getShares().stream()
 			.map(share -> share.getStock().getSymbol())
 			.collect(Collectors.toSet());
+	}
+
+	/**
+	 * Applies trade-screen filters using current game state.
+	 */
+	public void applyFilters(
+		String searchText,
+		boolean allSectorsSelected,
+		boolean ownedOnly,
+		boolean winnersOnly,
+		boolean losersOnly
+	) {
+		model.applyFilters(
+			searchText,
+			allSectorsSelected,
+			ownedOnly,
+			getOwnedSymbols(),
+			winnersOnly,
+			losersOnly
+		);
+	}
+
+	/**
+	 * Returns true if all sectors are currently selected.
+	 */
+	public boolean areAllSectorsSelected() {
+		Set<String> allSectors = model.getAllSectors();
+		return !allSectors.isEmpty() && model.getSelectedSectors().containsAll(allSectors);
 	}
 
 	/**
