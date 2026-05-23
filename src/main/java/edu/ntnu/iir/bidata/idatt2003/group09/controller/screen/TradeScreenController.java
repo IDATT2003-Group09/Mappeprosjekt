@@ -93,19 +93,17 @@ public class TradeScreenController {
 				} catch (IllegalArgumentException | IllegalStateException e) {
 					LOGGER.log(Level.WARNING, "Buy failed for " + selectedStock.getSymbol(), e);
 					setStatus.accept("Buy failed: " + e.getMessage());
-				} catch (Exception e) {
+				} catch (RuntimeException e) {
 					LOGGER.log(Level.SEVERE, "Unexpected error during buy", e);
-					setStatus.accept("Buy failed: " + e.getMessage());
+					setStatus.accept("Buy failed: unexpected error");
 				}
 			});
-		} catch (Exception e) {
-			if (e instanceof IllegalArgumentException) {
-				LOGGER.log(Level.WARNING, "Invalid buy input", e);
-				setStatus.accept("Buy failed: " + e.getMessage());
-			} else {
-				LOGGER.log(Level.SEVERE, "Unexpected error preparing buy", e);
-				setStatus.accept("Buy failed: " + e.getMessage());
-			}
+		} catch (IllegalArgumentException e) {
+			LOGGER.log(Level.WARNING, "Invalid buy input", e);
+			setStatus.accept("Buy failed: " + e.getMessage());
+		} catch (RuntimeException e) {
+			LOGGER.log(Level.SEVERE, "Unexpected error preparing buy", e);
+			setStatus.accept("Buy failed: unexpected error");
 		}
 	}
 
@@ -157,19 +155,17 @@ public class TradeScreenController {
 				} catch (IllegalArgumentException | IllegalStateException e) {
 					LOGGER.log(Level.WARNING, "Sell failed for " + selectedStock.getSymbol(), e);
 					setStatus.accept("Sell failed: " + e.getMessage());
-				} catch (Exception e) {
+				} catch (RuntimeException e) {
 					LOGGER.log(Level.SEVERE, "Unexpected error during sell", e);
-					setStatus.accept("Sell failed: " + e.getMessage());
+					setStatus.accept("Sell failed: unexpected error");
 				}
 			});
-		} catch (Exception e) {
-			if (e instanceof IllegalArgumentException) {
-				LOGGER.log(Level.WARNING, "Invalid sell input", e);
-				setStatus.accept("Sell failed: " + e.getMessage());
-			} else {
-				LOGGER.log(Level.SEVERE, "Unexpected error preparing sell", e);
-				setStatus.accept("Sell failed: " + e.getMessage());
-			}
+		} catch (IllegalArgumentException e) {
+			LOGGER.log(Level.WARNING, "Invalid sell input", e);
+			setStatus.accept("Sell failed: " + e.getMessage());
+		} catch (RuntimeException e) {
+			LOGGER.log(Level.SEVERE, "Unexpected error preparing sell", e);
+			setStatus.accept("Sell failed: unexpected error");
 		}
 	}
 
@@ -268,7 +264,6 @@ public class TradeScreenController {
 		String searchText = request.searchText() == null ? "" : request.searchText();
 		model.applyFilters(
 			searchText,
-			request.allSectorsSelected(),
 			request.ownedOnly(),
 			getOwnedSymbols(),
 			request.winnersOnly(),

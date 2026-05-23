@@ -571,7 +571,6 @@ public class TradeScreenView extends StackPane {
     private void applyCurrentFilters(String searchText) {
         TradeFilterRequest request = new TradeFilterRequest(
             searchText,
-            allSectorsToggle != null && allSectorsToggle.isSelected(),
             filterOwned,
             winnersToggleButton != null && winnersToggleButton.isSelected(),
             losersToggleButton != null && losersToggleButton.isSelected()

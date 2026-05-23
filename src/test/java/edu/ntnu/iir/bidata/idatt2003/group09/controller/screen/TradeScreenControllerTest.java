@@ -58,7 +58,7 @@ class TradeScreenControllerTest {
       player.getPortfolio().addShare(new Share(aapl, new BigDecimal("2"), new BigDecimal("150.00")));
       player.getPortfolio().addShare(new Share(jnj, new BigDecimal("1"), new BigDecimal("100.00")));
 
-      controller.applyFilters(new TradeFilterRequest("", false, true, true, false));
+      controller.applyFilters(new TradeFilterRequest("", true, true, false));
 
       List<String> symbols = model.getFilteredStocks().stream().map(Stock::getSymbol).collect(Collectors.toList());
       assertEquals(List.of("AAPL", "JNJ"), symbols);
@@ -70,7 +70,7 @@ class TradeScreenControllerTest {
       player.getPortfolio().addShare(new Share(aapl, new BigDecimal("1"), new BigDecimal("150.00")));
       player.getPortfolio().addShare(new Share(jpm, new BigDecimal("1"), new BigDecimal("200.00")));
 
-      controller.applyFilters(new TradeFilterRequest("", false, true, false, true));
+      controller.applyFilters(new TradeFilterRequest("", true, false, true));
 
       List<String> symbols = model.getFilteredStocks().stream().map(Stock::getSymbol).collect(Collectors.toList());
       assertEquals(List.of("JPM"), symbols);
@@ -79,7 +79,7 @@ class TradeScreenControllerTest {
     @Test
     @DisplayName("Null search text is treated as empty")
     void applyFilters_nullSearchText_treatedAsEmpty() {
-      controller.applyFilters(new TradeFilterRequest(null, false, false, false, false));
+      controller.applyFilters(new TradeFilterRequest(null, false, false, false));
 
       assertEquals(3, model.getFilteredStocks().size());
     }
