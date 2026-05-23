@@ -244,24 +244,34 @@ public class TradeScreenView extends StackPane {
             if (tutorialMode && tutorialOverlay != null) {
                 tutorialOverlay.onBuyButtonClicked();
             }
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             tradeScreenController.handleBuy(
-                stockList,
-                quantityField,
-                statusLabel,
+                selectedStock,
+                quantityField.getText(),
                 (action, stockSymbol, quantity, price, commission, tax, total, onConfirm) ->
-                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm)
+                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm),
+                () -> {
+                    stockList.refresh();
+                    updateSelectedStockGraph();
+                },
+                statusLabel::setText
             );
         });
         sellButton.setOnAction(e -> {
             if (tutorialMode && tutorialOverlay != null) {
                 tutorialOverlay.onSellButtonClicked();
             }
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             tradeScreenController.handleSell(
-                stockList,
-                quantityField,
-                statusLabel,
+                selectedStock,
+                quantityField.getText(),
                 (action, stockSymbol, quantity, price, commission, tax, total, onConfirm) ->
-                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm)
+                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm),
+                () -> {
+                    stockList.refresh();
+                    updateSelectedStockGraph();
+                },
+                statusLabel::setText
             );
         });
 
