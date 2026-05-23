@@ -5,16 +5,14 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
-
 public class EventFactory implements Serializable {
 
   public EventFactory() {
 
   }
 
-    public List<Event> generateGlobalEvents(){
-        List<Event> events = new ArrayList<>();
+        public List<GlobalEvent> generateGlobalEvents(){
+                List<GlobalEvent> events = new ArrayList<>();
 
         GlobalEvent event1 = new GlobalEvent(
                 "Tech Boom",
@@ -614,8 +612,8 @@ public class EventFactory implements Serializable {
         return events;
     }
 
-  public List<Event> generateStockSpecificEvents(){
-    List<Event> events = new ArrayList<>();
+        public List<StockSpecificEvent> generateStockSpecificEvents(){
+                List<StockSpecificEvent> events = new ArrayList<>();
 
     StockSpecificEvent event1 = new StockSpecificEvent(
             "{stock} to the moon",
@@ -729,15 +727,5 @@ public class EventFactory implements Serializable {
       ));
 
     return events;
-  }
-
-  public StockSpecificEvent applyRandomStockToEvent(StockSpecificEvent event, List<Stock> stocks){
-    if (stocks.isEmpty()) {
-      throw new IllegalArgumentException("Stock list cannot be empty");
-    }
-    int randomIndex = (int) (Math.random() * stocks.size());
-    Stock randomStock = stocks.get(randomIndex);
-    event.addStock(randomStock);
-    return event;
   }
 }

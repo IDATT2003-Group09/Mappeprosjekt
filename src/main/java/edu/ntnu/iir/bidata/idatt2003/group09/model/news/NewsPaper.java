@@ -40,26 +40,26 @@ public class NewsPaper implements Serializable {
 			throw new IllegalArgumentException("Stocks cannot be null or empty");
 		}
 
-		List<Event> globalEvents = eventFactory.generateGlobalEvents();
+		List<GlobalEvent> globalEvents = eventFactory.generateGlobalEvents();
 		if (globalEvents.size() < GLOBAL_EVENT_COUNT) {
 			throw new IllegalStateException("EventFactory must provide at least 2 global events");
 		}
 
-		List<Event> stockTemplates = eventFactory.generateStockSpecificEvents();
+		List<StockSpecificEvent> stockTemplates = eventFactory.generateStockSpecificEvents();
 		if (stockTemplates.isEmpty()) {
 			throw new IllegalStateException("EventFactory must provide stock specific event templates");
 		}
 
-		List<Event> availableGlobalEvents = new ArrayList<>(globalEvents);
+		List<GlobalEvent> availableGlobalEvents = new ArrayList<>(globalEvents);
 		List<GlobalEvent> selectedGlobals = new ArrayList<>(GLOBAL_EVENT_COUNT);
 
 		for (int index = 0; index < GLOBAL_EVENT_COUNT; index++) {
 			int globalIndex = random.nextInt(availableGlobalEvents.size());
-			selectedGlobals.add((GlobalEvent) availableGlobalEvents.remove(globalIndex));
+			selectedGlobals.add(availableGlobalEvents.remove(globalIndex));
 		}
 
 		List<StockSpecificEvent> selectedSpecific = new ArrayList<>();
-		List<Event> availableTemplates = new ArrayList<>(stockTemplates);
+		List<StockSpecificEvent> availableTemplates = new ArrayList<>(stockTemplates);
 		int stockSpecificEventCount =
 				random.nextInt(MAX_STOCK_SPECIFIC_EVENT_COUNT - MIN_STOCK_SPECIFIC_EVENT_COUNT + 1)
 						+ MIN_STOCK_SPECIFIC_EVENT_COUNT;
@@ -70,7 +70,7 @@ public class NewsPaper implements Serializable {
 			}
 
 			int templateIndex = random.nextInt(availableTemplates.size());
-			StockSpecificEvent template = (StockSpecificEvent) availableTemplates.remove(templateIndex);
+			StockSpecificEvent template = availableTemplates.remove(templateIndex);
 			Stock stock = stocks.get(random.nextInt(stocks.size()));
 			selectedSpecific.add(template.createForStock(stock));
 		}
