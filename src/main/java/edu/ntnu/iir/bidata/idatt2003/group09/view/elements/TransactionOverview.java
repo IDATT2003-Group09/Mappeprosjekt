@@ -13,7 +13,25 @@ import javafx.scene.layout.GridPane;
 import java.math.BigDecimal;
 import javafx.geometry.Pos;
 
+/**
+ * Overlay component used to display a transaction confirmation breakdown (buy/sell).
+ * Subclasses provide the specific breakdown grid formatting.
+ */
 public abstract class TransactionOverview extends StackPane {
+	/**
+	 * Create a new transaction confirmation overlay.
+	 *
+	 * @param action "Buy" or "Sell"
+	 * @param stockSymbol symbol for the stock
+	 * @param quantity amount being transacted
+	 * @param price unit price
+	 * @param commission commission amount
+	 * @param tax tax amount
+	 * @param total computed total
+	 * @param onConfirm callback when user confirms
+	 * @param onCancel callback when user cancels (may be null)
+	 * @param cancelEnabled whether a cancel button is shown/enabled
+	 */
 	public TransactionOverview(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm, Runnable onCancel, boolean cancelEnabled) {
 		getStyleClass().addAll("trade-screen", "transaction-overview-root");
 		Rectangle background = new Rectangle();

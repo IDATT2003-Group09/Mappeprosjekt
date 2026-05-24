@@ -27,6 +27,11 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.chart.XYChart.Data;
 
+/**
+ * Screen that displays the player's portfolio with a table of positions,
+ * summary statistics and a small portfolio value chart. Provides a "Sell All"
+ * action for individual positions.
+ */
 public class PortfolioScreen extends BorderPane {
 
     private final GameController controller;

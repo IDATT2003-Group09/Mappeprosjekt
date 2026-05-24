@@ -9,9 +9,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 
+/**
+ * Simple chat bubble component used to show short messages and optional
+ * continue-button flows in the UI (used by `Boss`).
+ */
 public class ChatBubble extends VBox {
 
+	/** The visible text label inside the bubble. */
 	private final Label textLabel;
+	/** Container for either the text or the text+continue button layout. */
 	private final StackPane bubbleBody;
 
 	public ChatBubble(String text) {
@@ -42,6 +48,12 @@ public class ChatBubble extends VBox {
 		return textLabel.getText();
 	}
 
+	/**
+	 * Replaces the bubble content with the provided text and an inline
+	 * "Continue" button that invokes the given callback when clicked.
+	 *
+	 * @param onContinue callback to invoke when continue is pressed
+	 */
 	public void addContinueButton(Runnable onContinue) {
 		VBox content = new VBox(8);
 		content.setAlignment(Pos.TOP_LEFT);
