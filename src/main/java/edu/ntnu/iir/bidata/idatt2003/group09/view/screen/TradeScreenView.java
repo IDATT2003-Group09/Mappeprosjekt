@@ -48,6 +48,10 @@ import javafx.collections.ObservableList;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeScreenController;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeFilterRequest;
 
+/**
+ * Hovedvisning for trading-skjermen. Binder `TradeScreenModel` og `GameController`
+ * til visuelle komponenter som `StockListView`, `StockGraph` og transaksjons-oversikter.
+ */
 public class TradeScreenView extends StackPane {
 
     private final GameController controller;

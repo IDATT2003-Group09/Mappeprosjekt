@@ -17,6 +17,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
+/**
+ * Visuell komponent som rendererer avisoppslag for ukentlige markedshendelser.
+ * Viser globale hendelser og aksje-spesifikke artikler i en todelt avisoppsett.
+ */
 public class NewsPaperView extends BorderPane {
 
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("MMMM d, yyyy");

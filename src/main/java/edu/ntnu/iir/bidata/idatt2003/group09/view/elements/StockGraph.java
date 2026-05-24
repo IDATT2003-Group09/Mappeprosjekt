@@ -14,6 +14,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.TextAlignment;
 import javafx.util.StringConverter;
 
+/**
+ * En enkel linjegraf som visualiserer historiske priser for en `Stock`.
+ * Viser en hjelpetekst når ingen aksje er valgt.
+ */
 public class StockGraph extends BorderPane {
 
     private final LineChart<Number, Number> lineChart;

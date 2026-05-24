@@ -13,6 +13,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * Skjerm for applikasjonsinnstillinger. Gir kontroll over volum for musikk og
+ * lydeffekter og tilbyr tilbakeknapp via `SettingsHandler`.
+ */
 public class SettingsScreen extends VBox {
 
 	private static final double SLIDER_WIDTH = 300;
