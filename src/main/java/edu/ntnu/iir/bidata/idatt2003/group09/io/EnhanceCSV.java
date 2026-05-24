@@ -23,6 +23,7 @@ public class EnhanceCSV {
   private boolean shuffle = false;
   private boolean perturbPrices = false;
   private double maxPerturbFraction = 0.2; // up to +/-20%
+  private boolean inputHasTagVolatility = false;
 
   public EnhanceCSV(String filePath, List<String> availableTags) {
     this.filePath = filePath;
@@ -86,6 +87,24 @@ public class EnhanceCSV {
           }
         } else if (!line.trim().isEmpty()) {
           String[] parts = line.split(",");
+          // Detect an inline header like: Ticker,Name,Price,Tag,Volatility
+          if (header == null && parts.length > 0 && parts[0].equalsIgnoreCase("ticker")) {
+            header = String.join(",", parts);
+            continue;
+          }
+
+          // Detect if input already has Tag and Volatility columns
+          if (!inputHasTagVolatility && parts.length >= 5) {
+            // if last column looks numeric and within volatility range, assume tag/vol columns present
+            try {
+              int v = Integer.parseInt(parts[parts.length - 1]);
+              if (v >= 0 && v <= maxVolatility) {
+                inputHasTagVolatility = true;
+              }
+            } catch (NumberFormatException ignored) {
+            }
+          }
+
           dataLines.add(parts);
         }
       }
@@ -175,11 +194,33 @@ public class EnhanceCSV {
       }
 
       for (String[] dataLine : toWrite) {
-        writer.print(String.join(",", dataLine));
-        writer.print(",");
-        writer.print(getRandomTag());
-        writer.print(",");
-        writer.println(getRandomVolatility());
+        if (inputHasTagVolatility && dataLine.length >= 2) {
+          // overwrite the last two columns with new tag/volatility
+          String[] copy = Arrays.copyOf(dataLine, Math.max(dataLine.length, 2));
+          if (copy.length >= 2) {
+            // determine base length (exclude last two columns)
+            int baseLen = copy.length - 2;
+            if (baseLen < 0) baseLen = 0;
+            String[] base = Arrays.copyOf(copy, baseLen);
+            writer.print(String.join(",", base));
+            if (baseLen > 0) writer.print(",");
+            writer.print(getRandomTag());
+            writer.print(",");
+            writer.println(getRandomVolatility());
+          } else {
+            writer.print(String.join(",", copy));
+            writer.print(",");
+            writer.print(getRandomTag());
+            writer.print(",");
+            writer.println(getRandomVolatility());
+          }
+        } else {
+          writer.print(String.join(",", dataLine));
+          writer.print(",");
+          writer.print(getRandomTag());
+          writer.print(",");
+          writer.println(getRandomVolatility());
+        }
       }
 
       LOGGER.info("Enhanced CSV written to: " + outputFilePath);

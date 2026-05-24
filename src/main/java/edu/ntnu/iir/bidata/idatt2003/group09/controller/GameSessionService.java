@@ -16,8 +16,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Locale;
 
 /**
  * Tjenesteklasse som oppretter og laster spillsesjoner.
@@ -160,35 +163,38 @@ public class GameSessionService {
 
         String trimmed = exchangeChoice.trim().toLowerCase();
         if (trimmed.equals("random")) {
+            // Read the bundled random CSV as stocks, then shuffle and perturb in-memory
+            List<Stock> base = StockCsvReader.readFromResource("/csv/output/random.csv");
+            // Perturb prices and shuffle
+            Random r = new Random();
+            for (Stock s : base) {
                 try {
-                    // Copy resource to temporary file so we can enhance/randomize it per game
-                    Path original = Files.createTempFile("millions-random-source-", ".csv");
-                    try (var in = GameSessionService.class.getResourceAsStream("/csv/output/random.csv")) {
-                        if (in == null) {
-                            throw new IOException("Resource not found: /csv/output/random.csv");
-                        }
-                        Files.copy(in, original, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-                    }
-
-                    Path enhanced = Files.createTempFile("millions-random-enhanced-", ".csv");
-                    EnhanceCSV enhancer = new EnhanceCSV(original.toString(), new TagsFactory().getTags());
-                    enhancer.setShuffle(true);
-                    enhancer.setPerturbPrices(true);
-                    enhancer.writeEnhancedCsv(enhanced.toString());
-                    enhanced.toFile().deleteOnExit();
-                    original.toFile().deleteOnExit();
-
-                    return StockCsvReader.readFromFile(enhanced);
-                } catch (IOException e) {
-                    throw e;
+                    java.math.BigDecimal p = s.getSalesPrice();
+                    double price = p.doubleValue();
+                    double factor = 1.0 + ((r.nextDouble() * 2.0 - 1.0) * 0.2);
+                    double newPrice = Math.max(0.01, price * factor);
+                    java.math.BigDecimal newBd = new java.math.BigDecimal(String.format(Locale.ROOT, "%.2f", newPrice));
+                    s.addNewSalesPrice(newBd);
+                } catch (Exception ignored) {
                 }
+            }
+            Collections.shuffle(base, r);
+            return base;
         } else if (trimmed.equals("sp500")) {
             return StockCsvReader.readFromResource("/csv/output/sp500.csv");
         } else if (trimmed.startsWith("custom:")) {
             String filePath = trimmed.substring("custom:".length());
             Path selectedCsvFile = Path.of(filePath);
-                Path enhancedCsv = enhanceCustomCsv(selectedCsvFile);
-                return StockCsvReader.readFromFile(enhancedCsv);
+            // Store uploaded custom CSV in user app data for reuse
+            String appData = System.getenv("APPDATA");
+            if (appData == null) appData = System.getProperty("user.home");
+            java.io.File importDir = new java.io.File(appData, "Millions/imports");
+            if (!importDir.exists()) importDir.mkdirs();
+            String safeName = selectedCsvFile.getFileName().toString().replaceAll("[^a-zA-Z0-9._-]", "_");
+            Path stored = importDir.toPath().resolve(safeName);
+            Files.copy(selectedCsvFile, stored, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            Path enhancedCsv = enhanceCustomCsv(stored);
+            return StockCsvReader.readFromFile(enhancedCsv);
         } else {
             return StockCsvReader.readDefaultResource();
         }
