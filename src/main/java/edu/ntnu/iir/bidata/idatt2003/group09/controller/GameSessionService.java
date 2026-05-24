@@ -94,6 +94,13 @@ public class GameSessionService {
      * @return en valgfri spillsesjon; tom hvis filen ikke inneholder gyldig spilltilstand
      */
     public Optional<GameSession> loadSession(String fileName) {
+        /**
+         * Load a previously saved session using `SaveManager`. Returns an empty
+         * optional when the file contained invalid data or could not be read.
+         *
+         * @param fileName the filename to load
+         * @return optional game session
+         */
         GameState state = SaveManager.load(fileName);
         if (state == null) {
             return Optional.empty();
@@ -138,6 +145,15 @@ public class GameSessionService {
     }
 
     private List<Stock> loadStocksForExchange(String exchangeChoice) throws IOException {
+        /**
+         * Resolve an exchange choice to a list of `Stock` instances. Supports
+         * built-in resources (`sp500`, `random`) and `custom:<path>` which
+         * will be enhanced and read from a user-provided CSV file.
+         *
+         * @param exchangeChoice identifier or custom:path
+         * @return list of Stock
+         * @throws IOException when reading or enhancing custom CSV fails
+         */
         if (exchangeChoice == null) {
             return StockCsvReader.readDefaultResource();
         }

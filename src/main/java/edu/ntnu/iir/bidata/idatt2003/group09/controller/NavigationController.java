@@ -69,6 +69,10 @@ public class NavigationController {
     }
 
     private void showSettingsScreen() {
+        /**
+         * Show the settings screen. Stops any active tutorial and replaces the
+         * center view with the settings UI.
+         */
         SettingsScreen settingsScreen = new SettingsScreen(new SettingsScreen.SettingsHandler() {
             @Override
             public void onBack() {
@@ -86,6 +90,12 @@ public class NavigationController {
     }
 
     private void showCreateGameScreen(String bossMessage) {
+        /**
+         * Show the create-game screen. Optionally displays a boss message
+         * (used to show CSV errors for custom imports).
+         *
+         * @param bossMessage optional message to display in the UI
+         */
         CreateGameScreen createGameScreen = new CreateGameScreen(new CreateGameScreen.CreateGameHandler() {
             @Override
             public void onCreateGame(String playerName, String experienceLevel, String exchangeChoice, String startingMoney) {
@@ -111,6 +121,10 @@ public class NavigationController {
     }
 
     private void showLoadGameScreen() {
+        /**
+         * Show the load-game screen. The handler will delegate load/delete
+         * actions back to this controller.
+         */
         LoadGameScreen loadGameScreen = new LoadGameScreen(
             saveGameService.listSaveGames(),
             new LoadGameScreen.LoadGameHandler() {
@@ -140,6 +154,12 @@ public class NavigationController {
     }
 
     private void setCenterView(Node centerView, boolean stopTutorial) {
+        /**
+         * Helper to set the center view and optionally stop the tutorial.
+         *
+         * @param centerView the node to set in the center
+         * @param stopTutorial whether to stop the tutorial overlay
+         */
         if (stopTutorial) {
             tutorialOverlay.stopTutorial();
         }
@@ -147,6 +167,14 @@ public class NavigationController {
     }
 
     private void startTutorialGame(String playerName, String startingMoney) {
+        /**
+         * Start a tutorial game session for the given player and immediately
+         * transition to the in-game view. Logs and shows an error dialog if
+         * initialization fails.
+         *
+         * @param playerName player name
+         * @param startingMoney user-entered starting money value
+         */
         try {
             GameSessionService.GameSession session = gameSessionService.createTutorialSession(playerName, startingMoney);
             gameViewCoordinator.showGame(session);
@@ -157,6 +185,16 @@ public class NavigationController {
     }
 
     private void startNewGame(String playerName, String experienceLevel, String exchangeChoice, String startingMoney) {
+        /**
+         * Start a new non-tutorial game session with the chosen exchange and
+         * difficulty. If the exchangeChoice is a custom CSV and fails to
+         * parse, a user-facing message is shown.
+         *
+         * @param playerName player name
+         * @param experienceLevel difficulty string
+         * @param exchangeChoice exchange identifier or custom:path
+         * @param startingMoney starting money value
+         */
         try {
             GameSessionService.GameSession session = gameSessionService
                 .createNewSession(playerName, experienceLevel, exchangeChoice, startingMoney);
@@ -173,12 +211,23 @@ public class NavigationController {
     }
 
     private void showStockReadError(IOException e) {
+        /**
+         * Display a small user-visible error card when stock CSV reading fails.
+         *
+         * @param e the caught IOException
+         */
         Label errorLabel = new Label("Could not read stock data: " + e.getMessage());
         errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 14px; -fx-padding: 20;");
         contentRoot.setCenter(new VBox(errorLabel));
     }
 
     private void loadGame(String fileName) {
+        /**
+         * Load a saved game and switch to the game view if successful; otherwise
+         * redisplay the load screen.
+         *
+         * @param fileName the save file name to load
+         */
         var loadedSession = gameSessionService.loadSession(fileName);
         if (loadedSession.isEmpty()) {
             LOGGER.warning("No saved game found in file: " + fileName);

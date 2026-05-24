@@ -28,6 +28,12 @@ public class SaveManager {
             SAVE_DIR.mkdirs(); 
         }
 
+    /**
+     * Returns the configured save directory for the application.
+     * Useful for tests and tooling that need to inspect where saves are kept.
+     *
+     * @return the configured save directory `File`
+     */
     static File getSaveDir() {
         return SAVE_DIR;
     }
@@ -35,6 +41,10 @@ public class SaveManager {
     static File overrideSaveDir;
 
     private static File getEffectiveSaveDir() {
+        /**
+         * Internal helper returning the override directory when set (used in
+         * tests), otherwise the default `SAVE_DIR`.
+         */
         return overrideSaveDir != null ? overrideSaveDir : SAVE_DIR;
     }
 
@@ -227,6 +237,14 @@ public class SaveManager {
     }
 
     private static ObjectInputFilter.Status deserializationFilter(ObjectInputFilter.FilterInfo filterInfo) {
+        /**
+         * Narrow object input filter to only allow classes from known safe
+         * packages and commonly used Java types. This helps mitigate unsafe
+         * deserialization attacks when loading saved games.
+         *
+         * @param filterInfo information about the incoming class
+         * @return ALLOWED / REJECTED / UNDECIDED
+         */
         Class<?> serialClass = filterInfo.serialClass();
         if (serialClass == null) {
             return ObjectInputFilter.Status.UNDECIDED;
