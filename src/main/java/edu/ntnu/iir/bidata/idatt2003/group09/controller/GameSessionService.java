@@ -163,23 +163,35 @@ public class GameSessionService {
 
         String trimmed = exchangeChoice.trim().toLowerCase();
         if (trimmed.equals("random")) {
-            // Read the bundled random CSV as stocks, then shuffle and perturb in-memory
-            List<Stock> base = StockCsvReader.readFromResource("/csv/output/random.csv");
-            // Perturb prices and shuffle
-            Random r = new Random();
-            for (Stock s : base) {
-                try {
-                    java.math.BigDecimal p = s.getSalesPrice();
-                    double price = p.doubleValue();
-                    double factor = 1.0 + ((r.nextDouble() * 2.0 - 1.0) * 0.2);
-                    double newPrice = Math.max(0.01, price * factor);
-                    java.math.BigDecimal newBd = new java.math.BigDecimal(String.format(Locale.ROOT, "%.2f", newPrice));
-                    s.addNewSalesPrice(newBd);
-                } catch (Exception ignored) {
+            // Produce a per-game randomized CSV from the bundled resource and
+            // store the generated file under the user's AppData so it can be
+            // inspected.
+            Path original = Files.createTempFile("millions-random-source-", ".csv");
+            try (var in = GameSessionService.class.getResourceAsStream("/csv/output/random.csv")) {
+                if (in == null) {
+                    throw new IOException("Resource not found: /csv/output/random.csv");
                 }
+                Files.copy(in, original, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             }
-            Collections.shuffle(base, r);
-            return base;
+
+            String appData = System.getenv("APPDATA");
+            if (appData == null) appData = System.getProperty("user.home");
+            java.io.File genDir = new java.io.File(appData, "Millions/generated");
+            if (!genDir.exists()) genDir.mkdirs();
+            Path stored = genDir.toPath().resolve("random-source-" + System.currentTimeMillis() + ".csv");
+            Files.copy(original, stored, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+
+            Path enhanced = genDir.toPath().resolve("random-enhanced-" + System.currentTimeMillis() + ".csv");
+            EnhanceCSV enhancer = new EnhanceCSV(stored.toString(), new TagsFactory().getTags());
+            enhancer.setShuffle(true);
+            enhancer.setPerturbPrices(true);
+            enhancer.setRandomizeSector(true);
+            enhancer.writeEnhancedCsv(enhanced.toString());
+            LOGGER.info("Generated random CSV stored at: " + enhanced.toAbsolutePath());
+            enhanced.toFile().deleteOnExit();
+            stored.toFile().deleteOnExit();
+
+            return StockCsvReader.readFromFile(enhanced);
         } else if (trimmed.equals("sp500")) {
             return StockCsvReader.readFromResource("/csv/output/sp500.csv");
         } else if (trimmed.startsWith("custom:")) {
@@ -194,6 +206,7 @@ public class GameSessionService {
             Path stored = importDir.toPath().resolve(safeName);
             Files.copy(selectedCsvFile, stored, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
             Path enhancedCsv = enhanceCustomCsv(stored);
+            LOGGER.info("Stored custom CSV at: " + stored.toAbsolutePath() + " -> enhanced: " + enhancedCsv.toAbsolutePath());
             return StockCsvReader.readFromFile(enhancedCsv);
         } else {
             return StockCsvReader.readDefaultResource();

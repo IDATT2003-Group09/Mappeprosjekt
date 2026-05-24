@@ -24,6 +24,7 @@ public class EnhanceCSV {
   private boolean perturbPrices = false;
   private double maxPerturbFraction = 0.2; // up to +/-20%
   private boolean inputHasTagVolatility = false;
+  private boolean randomizeSector = false;
 
   public EnhanceCSV(String filePath, List<String> availableTags) {
     this.filePath = filePath;
@@ -59,6 +60,17 @@ public class EnhanceCSV {
    */
   public void setPerturbPrices(boolean perturbPrices) {
     this.perturbPrices = perturbPrices;
+  }
+
+  /**
+   * Enable random reassignment of the sector/Tag column for each row.
+   * This will pick a random value from the available tags and place it into
+   * the sector column (index 3) before writing.
+   *
+   * @param randomize true to randomize sector values
+   */
+  public void setRandomizeSector(boolean randomize) {
+    this.randomizeSector = randomize;
   }
 
   /**
@@ -194,6 +206,11 @@ public class EnhanceCSV {
       }
 
       for (String[] dataLine : toWrite) {
+        if (randomizeSector && dataLine.length >= 4) {
+          // overwrite sector column (index 3) with a random tag value
+          dataLine[3] = getRandomTag();
+        }
+
         if (inputHasTagVolatility && dataLine.length >= 2) {
           // overwrite the last two columns with new tag/volatility
           String[] copy = Arrays.copyOf(dataLine, Math.max(dataLine.length, 2));

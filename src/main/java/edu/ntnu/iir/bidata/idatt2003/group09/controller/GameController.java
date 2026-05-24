@@ -7,6 +7,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.game.GameProgress;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.news.NewsPaper;
 
 import java.math.BigDecimal;
+import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -174,7 +175,38 @@ public class GameController {
      * Saves the current game state to file.
      */
     public void saveGame() {
-        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty(),lost, progress), saveFileName);
+        // Create an initial CSV describing starting prices/sectors next to the save
+        String csvPath = null;
+        try {
+            String resolvedSave = SaveManager.normalizeSaveFileName(saveFileName);
+            java.io.File saveFile = new java.io.File(resolvedSave);
+            java.io.File saveDir = saveFile.getParentFile();
+            if (saveDir == null) saveDir = new java.io.File(System.getProperty("user.home"));
+            if (!saveDir.exists()) saveDir.mkdirs();
+
+            String base = saveFile.getName();
+            if (base.contains(".")) base = base.substring(0, base.lastIndexOf('.'));
+            java.io.File csvFile = new java.io.File(saveDir, base + "-initial.csv");
+            csvPath = csvFile.getAbsolutePath();
+
+            try (java.io.PrintWriter out = new java.io.PrintWriter(new java.io.FileWriter(csvFile))) {
+                out.println("Ticker,Name,Price,Tag,Volatility");
+                for (var s : exchange.getStocks()) {
+                    String ticker = s.getSymbol();
+                    String name = s.getCompany();
+                    String price = s.getSalesPrice().toPlainString();
+                    String tag = s.getSector();
+                    String vol = Integer.toString(s.getRisk());
+                    out.println(String.join(",", ticker, name.replaceAll(",", " "), price, tag.replaceAll(",", " "), vol));
+                }
+            }
+        } catch (Exception e) {
+            // best-effort: if writing CSV fails, continue with save but log
+            Logger.getLogger(GameController.class.getName()).warning("Failed to write initial CSV: " + e.getMessage());
+            csvPath = null;
+        }
+
+        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty(),lost, progress, csvPath), saveFileName);
     }
 
     /**
