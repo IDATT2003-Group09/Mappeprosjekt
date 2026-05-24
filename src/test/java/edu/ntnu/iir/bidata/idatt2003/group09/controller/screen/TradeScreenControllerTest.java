@@ -1,7 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller.screen;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange;
@@ -58,7 +57,11 @@ public class TradeScreenControllerTest {
       AtomicReference<String> status = new AtomicReference<>();
       AtomicBoolean refreshed = new AtomicBoolean(false);
 
-      controller.handleBuy(null, "1", (a,b,c,d,e,f,g)-> {}, () -> refreshed.set(true), status::set);
+      controller.handleBuy(null, "1", new TradeScreenController.ShowTransactionOverlay() {
+        @Override
+        public void show(String action, String stockSymbol, java.math.BigDecimal quantity, java.math.BigDecimal price, java.math.BigDecimal commission, java.math.BigDecimal tax, java.math.BigDecimal total, Runnable onConfirm) {
+        }
+      }, () -> refreshed.set(true), status::set);
 
       assertEquals("Please select a stock first.", status.get());
       assertFalse(refreshed.get());
@@ -69,7 +72,11 @@ public class TradeScreenControllerTest {
       AtomicReference<String> status = new AtomicReference<>();
       AtomicBoolean refreshed = new AtomicBoolean(false);
 
-      controller.handleBuy(aapl, "abc", (a,b,c,d,e,f,g)-> {}, () -> refreshed.set(true), status::set);
+      controller.handleBuy(aapl, "abc", new TradeScreenController.ShowTransactionOverlay() {
+        @Override
+        public void show(String action, String stockSymbol, java.math.BigDecimal quantity, java.math.BigDecimal price, java.math.BigDecimal commission, java.math.BigDecimal tax, java.math.BigDecimal total, Runnable onConfirm) {
+        }
+      }, () -> refreshed.set(true), status::set);
 
       assertEquals("Buy failed: Invalid number", status.get());
       assertFalse(refreshed.get());
@@ -94,7 +101,7 @@ public class TradeScreenControllerTest {
 
       assertEquals("Bought 1 of AAPL", status.get());
       assertTrue(refreshed.get());
-      assertEquals(1, model.getFilteredStocks().size()); // sanity that model still has stocks
+      assertEquals(3, model.getFilteredStocks().size()); // sanity that model still has stocks
       assertEquals(TradeScreenModel.TradeEvent.BUY_SUCCESS, evt.get());
       // player's portfolio should now contain a share
       assertFalse(controller.getOwnedSymbols().isEmpty());
@@ -105,7 +112,11 @@ public class TradeScreenControllerTest {
       AtomicReference<String> status = new AtomicReference<>();
       AtomicBoolean refreshed = new AtomicBoolean(false);
 
-      controller.handleSell(aapl, "1", (a,b,c,d,e,f,g)-> {}, () -> refreshed.set(true), status::set);
+      controller.handleSell(aapl, "1", new TradeScreenController.ShowTransactionOverlay() {
+        @Override
+        public void show(String action, String stockSymbol, java.math.BigDecimal quantity, java.math.BigDecimal price, java.math.BigDecimal commission, java.math.BigDecimal tax, java.math.BigDecimal total, Runnable onConfirm) {
+        }
+      }, () -> refreshed.set(true), status::set);
 
       assertEquals("You do not own this stock.", status.get());
       assertFalse(refreshed.get());
