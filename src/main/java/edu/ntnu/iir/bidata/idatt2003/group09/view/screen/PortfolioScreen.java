@@ -204,6 +204,14 @@ public class PortfolioScreen extends BorderPane {
         model.updateFromGameState(controller);
     }
 
+    /**
+     * Refresh the view model from the current `GameController` state.
+     * Use this when external actions (e.g. selling) may have modified the portfolio.
+     */
+    public void refreshView() {
+        refresh();
+    }
+
     private void bindModelToView() {
         model.currentNetWorthProperty().addListener((obs, oldVal, newVal) -> updateSummaryLabels());
         model.previousNetWorthProperty().addListener((obs, oldVal, newVal) -> updateSummaryLabels());
@@ -323,5 +331,14 @@ public class PortfolioScreen extends BorderPane {
         return new StockGraph(controller.getPortfolio().getShares().stream()
                 .map(share -> share.getStock())
                 .toList());
+    }
+
+    /**
+     * Convenience factory for creating a `StockGraph` for the current portfolio.
+     *
+     * @return a `StockGraph` representing owned positions' underlying stocks
+     */
+    public StockGraph buildStockGraph() {
+        return createStockGraph();
     }
 }

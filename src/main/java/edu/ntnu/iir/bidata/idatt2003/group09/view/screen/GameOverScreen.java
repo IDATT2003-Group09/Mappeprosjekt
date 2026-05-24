@@ -20,10 +20,21 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+/**
+ * Full-screen overlay shown when the player fails to meet a quarter deadline.
+ * Displays the player's net worth, the quarter target, and contextual messaging
+ * along with a prominent action to return to the main menu.
+ */
 public class GameOverScreen extends StackPane {
 
     private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
+    /**
+     * Create a new game-over screen.
+     *
+     * @param controller provides game state information for the summary metrics
+     * @param onBack callback invoked when the user requests to return to the menu
+     */
     public GameOverScreen(GameController controller, Runnable onBack) {
         GameProgress progress = controller.getProgress();
         BigDecimal netWorth = controller.getNetWorth();
