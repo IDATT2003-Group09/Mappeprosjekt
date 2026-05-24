@@ -100,7 +100,7 @@ public class NavigationControllerTest {
     GameSessionService stubSvc = new GameSessionService() {
       @Override
       public GameSession createTutorialSession(String playerName, String startingMoney) {
-        GameController ctrl = new GameController(new edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange("E", List.of()), new edu.ntnu.iir.bidata.idatt2003.group09.model.Player("P", new java.math.BigDecimal("1000"), "Easy"));
+        GameController ctrl = new GameController(new edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange("E", List.of(new edu.ntnu.iir.bidata.idatt2003.group09.model.Stock("TST","Test", new java.math.BigDecimal("10"), "Tech", 2))), new edu.ntnu.iir.bidata.idatt2003.group09.model.Player("P", new java.math.BigDecimal("1000"), "Easy"));
         return new GameSession(ctrl, List.of(), true);
       }
     };
@@ -144,7 +144,7 @@ public class NavigationControllerTest {
         if (exchangeChoice != null && exchangeChoice.startsWith("custom:")) {
           throw new java.io.IOException("bad csv");
         }
-        GameController ctrl = new GameController(new edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange("E", List.of()), new edu.ntnu.iir.bidata.idatt2003.group09.model.Player("P", new java.math.BigDecimal("1000"), "Easy"));
+        GameController ctrl = new GameController(new edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange("E", List.of(new edu.ntnu.iir.bidata.idatt2003.group09.model.Stock("TST","Test", new java.math.BigDecimal("10"), "Tech", 2))), new edu.ntnu.iir.bidata.idatt2003.group09.model.Player("P", new java.math.BigDecimal("1000"), "Easy"));
         return new GameSession(ctrl, List.of(), false);
       }
     };
