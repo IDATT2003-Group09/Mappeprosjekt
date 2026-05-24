@@ -163,51 +163,33 @@ public class GameSessionService {
 
         String trimmed = exchangeChoice.trim().toLowerCase();
         if (trimmed.equals("random")) {
-            // Produce a per-game randomized CSV from the bundled resource and
-            // store the generated file under the user's AppData so it can be
-            // inspected.
-            Path original = Files.createTempFile("millions-random-source-", ".csv");
+            // Produce a per-game randomized CSV from the bundled resource entirely in-memory.
             try (var in = GameSessionService.class.getResourceAsStream("/csv/output/random.csv")) {
                 if (in == null) {
                     throw new IOException("Resource not found: /csv/output/random.csv");
                 }
-                Files.copy(in, original, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                EnhanceCSV enhancer = new EnhanceCSV(new java.io.InputStreamReader(in), new TagsFactory().getTags());
+                enhancer.setShuffle(true);
+                enhancer.setPerturbPrices(true);
+                enhancer.setRandomizeSector(true);
+                String enhancedCsv = enhancer.getEnhancedCsvString();
+                LOGGER.info("Generated random CSV (in-memory) for new session");
+                return StockCsvReader.readFromString(enhancedCsv);
             }
-
-            String appData = System.getenv("APPDATA");
-            if (appData == null) appData = System.getProperty("user.home");
-            java.io.File genDir = new java.io.File(appData, "Millions/generated");
-            if (!genDir.exists()) genDir.mkdirs();
-            Path stored = genDir.toPath().resolve("random-source-" + System.currentTimeMillis() + ".csv");
-            Files.copy(original, stored, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-
-            Path enhanced = genDir.toPath().resolve("random-enhanced-" + System.currentTimeMillis() + ".csv");
-            EnhanceCSV enhancer = new EnhanceCSV(stored.toString(), new TagsFactory().getTags());
-            enhancer.setShuffle(true);
-            enhancer.setPerturbPrices(true);
-            enhancer.setRandomizeSector(true);
-            enhancer.writeEnhancedCsv(enhanced.toString());
-            LOGGER.info("Generated random CSV stored at: " + enhanced.toAbsolutePath());
-            enhanced.toFile().deleteOnExit();
-            stored.toFile().deleteOnExit();
-
-            return StockCsvReader.readFromFile(enhanced);
         } else if (trimmed.equals("sp500")) {
             return StockCsvReader.readFromResource("/csv/output/sp500.csv");
         } else if (trimmed.startsWith("custom:")) {
             String filePath = trimmed.substring("custom:".length());
             Path selectedCsvFile = Path.of(filePath);
-            // Store uploaded custom CSV in user app data for reuse
-            String appData = System.getenv("APPDATA");
-            if (appData == null) appData = System.getProperty("user.home");
-            java.io.File importDir = new java.io.File(appData, "Millions/imports");
-            if (!importDir.exists()) importDir.mkdirs();
-            String safeName = selectedCsvFile.getFileName().toString().replaceAll("[^a-zA-Z0-9._-]", "_");
-            Path stored = importDir.toPath().resolve(safeName);
-            Files.copy(selectedCsvFile, stored, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-            Path enhancedCsv = enhanceCustomCsv(stored);
-            LOGGER.info("Stored custom CSV at: " + stored.toAbsolutePath() + " -> enhanced: " + enhancedCsv.toAbsolutePath());
-            return StockCsvReader.readFromFile(enhancedCsv);
+            // Enhance uploaded custom CSV per-game in-memory to avoid persisting copies.
+            try (var reader = Files.newBufferedReader(selectedCsvFile)) {
+                EnhanceCSV enhancer = new EnhanceCSV(reader, new TagsFactory().getTags());
+                enhancer.setShuffle(true);
+                enhancer.setPerturbPrices(true);
+                String enhancedCsv = enhancer.getEnhancedCsvString();
+                LOGGER.info("Enhanced custom CSV in-memory for session: " + selectedCsvFile.getFileName());
+                return StockCsvReader.readFromString(enhancedCsv);
+            }
         } else {
             return StockCsvReader.readDefaultResource();
         }

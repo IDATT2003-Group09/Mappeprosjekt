@@ -21,7 +21,7 @@ public class GameState implements Serializable {
     private final String difficulty;
     private final boolean lost;
     private final GameProgress gameProgress;
-    private final String initialCsvPath;
+    private final String initialCsv;
 
     /**
      * Constructs a GameState with the given parameters.
@@ -39,10 +39,10 @@ public class GameState implements Serializable {
     }
 
     /**
-     * Constructs a GameState with an optional path to the initial generated CSV
-     * that defines the exchange's starting prices/sectors.
+     * Constructs a GameState with optional embedded CSV content that defines
+     * the exchange's starting prices/sectors. The CSV content may be null.
      */
-    public GameState(Player player, Exchange exchange, BigDecimal netWorth, int week, String difficulty, boolean lost, GameProgress gameProgress, String initialCsvPath) {
+    public GameState(Player player, Exchange exchange, BigDecimal netWorth, int week, String difficulty, boolean lost, GameProgress gameProgress, String initialCsv) {
         this.player = player;
         this.exchange = exchange;
         this.netWorth = netWorth;
@@ -50,7 +50,7 @@ public class GameState implements Serializable {
         this.difficulty = difficulty;
         this.lost = lost;
         this.gameProgress = gameProgress;
-        this.initialCsvPath = initialCsvPath;
+        this.initialCsv = initialCsv;
     }
 
     /**
@@ -117,11 +117,11 @@ public class GameState implements Serializable {
     }
 
     /**
-     * Path to the CSV that was generated when this save was created, if any.
+     * Embedded CSV content that was generated when this save was created, if any.
      *
-     * @return absolute path or null
+     * @return CSV text or null
      */
-    public String getInitialCsvPath() {
-        return initialCsvPath;
+    public String getInitialCsv() {
+        return initialCsv;
     }
 }

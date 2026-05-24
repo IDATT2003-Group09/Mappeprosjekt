@@ -76,6 +76,20 @@ public final class StockCsvReader {
     }
   }
 
+  /**
+   * Reads stocks from a CSV string.
+   *
+   * @param csv CSV content
+   * @return parsed list of stocks
+   * @throws IOException when parsing fails
+   */
+  public static List<Stock> readFromString(String csv) throws IOException {
+    Objects.requireNonNull(csv, "csv cannot be null");
+    try (BufferedReader reader = new BufferedReader(new java.io.StringReader(csv))) {
+      return parse(reader);
+    }
+  }
+
 
   /**
    * Parses stock data from a CSV-formatted BufferedReader.

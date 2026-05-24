@@ -175,38 +175,26 @@ public class GameController {
      * Saves the current game state to file.
      */
     public void saveGame() {
-        // Create an initial CSV describing starting prices/sectors next to the save
-        String csvPath = null;
+        // Embed an initial CSV describing starting prices/sectors into the save (in-memory)
+        String csvContent = null;
         try {
-            String resolvedSave = SaveManager.normalizeSaveFileName(saveFileName);
-            java.io.File saveFile = new java.io.File(resolvedSave);
-            java.io.File saveDir = saveFile.getParentFile();
-            if (saveDir == null) saveDir = new java.io.File(System.getProperty("user.home"));
-            if (!saveDir.exists()) saveDir.mkdirs();
-
-            String base = saveFile.getName();
-            if (base.contains(".")) base = base.substring(0, base.lastIndexOf('.'));
-            java.io.File csvFile = new java.io.File(saveDir, base + "-initial.csv");
-            csvPath = csvFile.getAbsolutePath();
-
-            try (java.io.PrintWriter out = new java.io.PrintWriter(new java.io.FileWriter(csvFile))) {
-                out.println("Ticker,Name,Price,Tag,Volatility");
-                for (var s : exchange.getStocks()) {
-                    String ticker = s.getSymbol();
-                    String name = s.getCompany();
-                    String price = s.getSalesPrice().toPlainString();
-                    String tag = s.getSector();
-                    String vol = Integer.toString(s.getRisk());
-                    out.println(String.join(",", ticker, name.replaceAll(",", " "), price, tag.replaceAll(",", " "), vol));
-                }
+            StringBuilder sb = new StringBuilder();
+            sb.append("Ticker,Name,Price,Tag,Volatility").append(System.lineSeparator());
+            for (var s : exchange.getStocks()) {
+                String ticker = s.getSymbol();
+                String name = s.getCompany();
+                String price = s.getSalesPrice().toPlainString();
+                String tag = s.getSector();
+                String vol = Integer.toString(s.getRisk());
+                sb.append(String.join(",", ticker, name.replaceAll(",", " "), price, tag.replaceAll(",", " "), vol)).append(System.lineSeparator());
             }
+            csvContent = sb.toString();
         } catch (Exception e) {
-            // best-effort: if writing CSV fails, continue with save but log
-            Logger.getLogger(GameController.class.getName()).warning("Failed to write initial CSV: " + e.getMessage());
-            csvPath = null;
+            Logger.getLogger(GameController.class.getName()).warning("Failed to build initial CSV content: " + e.getMessage());
+            csvContent = null;
         }
 
-        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty(),lost, progress, csvPath), saveFileName);
+        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty(), lost, progress, csvContent), saveFileName);
     }
 
     /**
