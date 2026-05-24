@@ -51,6 +51,11 @@ import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeFilterReques
 /**
  * Hovedvisning for trading-skjermen. Binder `TradeScreenModel` og `GameController`
  * til visuelle komponenter som `StockListView`, `StockGraph` og transaksjons-oversikter.
+ *
+ * <p>Responsibility:
+ * - Present filtered stock lists and a chart
+ * - Expose buy/sell interactions via `TradeScreenController`
+ * - Display overlays for transaction confirmation and quarter-level rewards</p>
  */
 public class TradeScreenView extends StackPane {
 
@@ -94,6 +99,14 @@ public class TradeScreenView extends StackPane {
     public TradeScreenView(GameController controller, List<Stock> stocks, Runnable onSaveAndQuit, boolean tutorialMode) {
         this(controller, stocks, onSaveAndQuit, null, tutorialMode, null);
     }
+
+    /**
+     * Create a TradeScreenView for interactive trading.
+     *
+     * @param controller main game controller providing model and actions
+     * @param stocks initial list of stocks to display
+     * @param onSaveAndQuit callback invoked when the user chooses to save and exit
+     */
 
     private final StackPane overlayPane = new StackPane();
     private TransactionOverview transactionOverviewOverlay = null;
@@ -149,6 +162,12 @@ public class TradeScreenView extends StackPane {
                     }
                 }
         );
+
+        /**
+         * Refreshes the view to reflect the current model state. This re-applies
+         * active filters, updates the selected stock chart and refreshes data-bound
+         * labels. Call this after external changes to the `GameController`.
+         */
 
         quantityField = new TextField("1");
         quantityField.setPrefWidth(100);
