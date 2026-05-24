@@ -160,14 +160,35 @@ public class GameSessionService {
 
         String trimmed = exchangeChoice.trim().toLowerCase();
         if (trimmed.equals("random")) {
-            return StockCsvReader.readFromResource("/csv/output/random.csv");
+                try {
+                    // Copy resource to temporary file so we can enhance/randomize it per game
+                    Path original = Files.createTempFile("millions-random-source-", ".csv");
+                    try (var in = GameSessionService.class.getResourceAsStream("/csv/output/random.csv")) {
+                        if (in == null) {
+                            throw new IOException("Resource not found: /csv/output/random.csv");
+                        }
+                        Files.copy(in, original, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    }
+
+                    Path enhanced = Files.createTempFile("millions-random-enhanced-", ".csv");
+                    EnhanceCSV enhancer = new EnhanceCSV(original.toString(), new TagsFactory().getTags());
+                    enhancer.setShuffle(true);
+                    enhancer.setPerturbPrices(true);
+                    enhancer.writeEnhancedCsv(enhanced.toString());
+                    enhanced.toFile().deleteOnExit();
+                    original.toFile().deleteOnExit();
+
+                    return StockCsvReader.readFromFile(enhanced);
+                } catch (IOException e) {
+                    throw e;
+                }
         } else if (trimmed.equals("sp500")) {
             return StockCsvReader.readFromResource("/csv/output/sp500.csv");
         } else if (trimmed.startsWith("custom:")) {
             String filePath = trimmed.substring("custom:".length());
             Path selectedCsvFile = Path.of(filePath);
-            Path enhancedCsv = enhanceCustomCsv(selectedCsvFile);
-            return StockCsvReader.readFromFile(enhancedCsv);
+                Path enhancedCsv = enhanceCustomCsv(selectedCsvFile);
+                return StockCsvReader.readFromFile(enhancedCsv);
         } else {
             return StockCsvReader.readDefaultResource();
         }
@@ -190,6 +211,9 @@ public class GameSessionService {
     private Path enhanceCustomCsv(Path selectedCsvFile) throws IOException {
         Path enhancedFile = Files.createTempFile("millions-custom-enhanced-", ".csv");
         EnhanceCSV enhancer = new EnhanceCSV(selectedCsvFile.toString(), new TagsFactory().getTags());
+        // Randomize custom uploads per-game: shuffle rows and perturb prices
+        enhancer.setShuffle(true);
+        enhancer.setPerturbPrices(true);
         enhancer.writeEnhancedCsv(enhancedFile.toString());
         enhancedFile.toFile().deleteOnExit();
         return enhancedFile;

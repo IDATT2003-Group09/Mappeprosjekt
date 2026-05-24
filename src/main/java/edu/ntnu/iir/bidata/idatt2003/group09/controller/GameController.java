@@ -162,6 +162,15 @@ public class GameController {
     }
 
     /**
+     * Convenience: get the current checkpoint level (completed quarters).
+     *
+     * @return completed quarter level
+     */
+    public int getCheckpointLevel() {
+        return progress.getCheckpointLevel();
+    }
+
+    /**
      * Saves the current game state to file.
      */
     public void saveGame() {
