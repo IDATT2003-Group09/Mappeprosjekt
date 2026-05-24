@@ -34,10 +34,7 @@ public class GameViewCoordinatorTest {
     }
   }
 
-  @AfterEach
-  public void cleanup() {
-    SaveManager.overrideSaveDir = null;
-  }
+  
 
   @Test
   void showGame_tutorialMode_startsTutorial_and_newspaperSelectionTriggersTutorial() throws Exception {
@@ -98,9 +95,6 @@ public class GameViewCoordinatorTest {
 
   @Test
   void selectingSaveQuit_callsSave_and_runsReturnCallback() throws Exception {
-    // set override save dir to temp
-    File tmp = Files.createTempDirectory("millions-test-save").toFile();
-    SaveManager.overrideSaveDir = tmp;
 
     BorderPane root = new BorderPane();
     TutorialOverlay overlay = new TutorialOverlay() {
@@ -119,7 +113,13 @@ public class GameViewCoordinatorTest {
     Stock s = new Stock("TST", "Test", new BigDecimal("10"), "Tech", 2);
     Exchange ex = new Exchange("E", List.of(s));
     Player p = new Player("P", new BigDecimal("1000"), "Easy");
-    GameController controller = new GameController(ex, p, "my-player-save");
+    AtomicBoolean saved = new AtomicBoolean(false);
+    GameController controller = new GameController(ex, p, "my-player-save") {
+      @Override
+      public void saveGame() {
+        saved.set(true);
+      }
+    };
     GameSessionService.GameSession session = new GameSessionService.GameSession(controller, List.of(s), false);
 
     GameViewCoordinator coordinator = new GameViewCoordinator(root, overlay, () -> returned.set(true));
@@ -137,11 +137,9 @@ public class GameViewCoordinatorTest {
     Platform.runLater(() -> { tp.getSelectionModel().select(saveTab); latch2.countDown(); });
     assertTrue(latch2.await(2, TimeUnit.SECONDS));
 
-    // wait for save to happen and callback
+    // wait for save listener to run and callback
     Thread.sleep(200);
     assertTrue(returned.get(), "onReturnToStart should have been called");
-
-    // check save file was created in override dir
-    assertTrue(tmp.listFiles((d,n)->n.startsWith("savegame")).length > 0);
+    assertTrue(saved.get(), "controller.saveGame() should have been called");
   }
 }
