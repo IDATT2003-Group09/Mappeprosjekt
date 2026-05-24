@@ -68,4 +68,26 @@ public class GameSessionServiceTest {
     var loaded = svc.loadSession("no-such-file-xyz");
     assertTrue(loaded.isEmpty());
   }
+
+  @Test
+  void createNewSession_customInvalid_throwsIOException() throws Exception {
+    GameSessionService svc = new GameSessionService();
+    String nonexistent = "C:/this/path/does/not/exist.csv";
+
+    assertThrows(java.io.IOException.class, () -> {
+      svc.createNewSession("p", "Easy", "custom:" + nonexistent, "1000");
+    });
+  }
+
+  @Test
+  void createNewSession_invalidStartingMoney_usesDefault() throws Exception {
+    tmpDir = Files.createTempDirectory("millions-session-test").toFile();
+    setOverrideSaveDir(tmpDir);
+
+    GameSessionService svc = new GameSessionService();
+    var session = svc.createNewSession("Tester", "Easy", "sp500", "not-a-number");
+    assertNotNull(session);
+    GameController ctrl = session.controller();
+    assertEquals(0, ctrl.getPlayer().getStartingMoney().compareTo(new BigDecimal("100000")));
+  }
 }
