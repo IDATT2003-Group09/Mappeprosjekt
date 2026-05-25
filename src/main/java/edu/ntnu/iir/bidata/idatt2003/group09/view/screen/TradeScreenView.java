@@ -492,10 +492,6 @@ public class TradeScreenView extends StackPane {
         });
     }
 
-    private void filterBySectors() {
-        applyCurrentFilters(searchField.getText());
-    }
-
     private ToggleButton winnersToggleButton;
     private ToggleButton losersToggleButton;
 
