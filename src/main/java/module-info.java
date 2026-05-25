@@ -7,6 +7,6 @@ module edu.ntnu.iir.bidata.idatt2003.group09 {
     requires java.desktop;
     requires java.logging;
     requires java.xml;
-    requires javafx.graphics;
+    requires transitive javafx.graphics;
     exports edu.ntnu.iir.bidata.idatt2003.group09;
 }
