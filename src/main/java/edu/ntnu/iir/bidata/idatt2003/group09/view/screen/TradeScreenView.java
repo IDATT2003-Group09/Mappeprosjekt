@@ -140,6 +140,8 @@ public class TradeScreenView extends StackPane {
                     if (newStock != null) {
                         graph.updateChart(newStock);
                         onTutorialStockSelected();
+                    } else {
+                        graph.showNoSelectionMessage();
                     }
                 }
         );
@@ -431,6 +433,8 @@ public class TradeScreenView extends StackPane {
         Stock selected = stockList.getSelectionModel().getSelectedItem();
         if (selected != null) {
             graph.updateChart(selected);
+        } else {
+            graph.showNoSelectionMessage();
         }
     }
 
