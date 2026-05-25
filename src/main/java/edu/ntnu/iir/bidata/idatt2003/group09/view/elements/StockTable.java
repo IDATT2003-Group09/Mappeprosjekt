@@ -15,9 +15,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
 /**
- * Factory for building `TableView<Stock>` instances used in various trade
+ * Factory for building {@code TableView<Stock>} instances used in various trade
  * and portfolio screens. Columns include symbol, company, price and owned
- * quantity (when a `Player` is provided).
+ * quantity (when a {@code Player} is provided).
  */
 public class StockTable {
 
@@ -28,19 +28,21 @@ public class StockTable {
 
     }
 
-  /**
-   * creates the stock table and returns it as a tableview that can be displayed
-   * @return a TableView of Stock with columns for symbol, company, price and owned quantity
-   */
+    /**
+     * Creates a stock table without ownership context.
+     *
+     * @return a {@code TableView<Stock>} with symbol, company, price and owned columns
+     */
   public TableView<Stock> createStockTable() {
 		return createStockTable(null);
 	}
 
-  /**
-   * create the tableview
-   * @param player
-   * @return returns a visual
-   */
+	/**
+	 * Creates a stock table with optional player context for the owned column.
+	 *
+	 * @param player current player, or {@code null} to display a placeholder in the owned column
+	 * @return configured stock table view
+	 */
 	public TableView<Stock> createStockTable(Player player) {
 		NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 

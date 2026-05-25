@@ -37,18 +37,21 @@ public class TradeScreenController {
 	}
 
 	/**
-	 * Shows the transaction overlay with the provided details.
-	 *
-	 * @param action      the action type ("Buy" or "Sell")
-	 * @param stockSymbol the stock symbol
-	 * @param quantity    the quantity to buy or sell
-	 * @param price       the price per stock
-	 * @param commission  the commission amount
-	 * @param tax         the tax amount
-	 * @param total       the total transaction amount
-	 * @param onConfirm   callback to run if the user confirms
+	 * Callback abstraction used by the controller to request a buy/sell confirmation overlay.
 	 */
 	public interface ShowTransactionOverlay {
+		/**
+		 * Presents a transaction summary and executes {@code onConfirm} when the user confirms.
+		 *
+		 * @param action the action type ("Buy" or "Sell")
+		 * @param stockSymbol the stock symbol
+		 * @param quantity the quantity to buy or sell
+		 * @param price the unit price
+		 * @param commission calculated commission amount
+		 * @param tax calculated tax amount
+		 * @param total total amount for the transaction
+		 * @param onConfirm callback to run if the user confirms
+		 */
 		void show(String action, String stockSymbol, BigDecimal quantity, BigDecimal price, BigDecimal commission, BigDecimal tax, BigDecimal total, Runnable onConfirm);
 	}
 
