@@ -1,7 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller.screen;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange;
@@ -16,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -46,6 +46,120 @@ public class TradeScreenControllerTest {
     aapl.addNewSalesPrice(new BigDecimal("180.00"));
     jpm.addNewSalesPrice(new BigDecimal("180.00"));
     jnj.addNewSalesPrice(new BigDecimal("105.00"));
+  }
+
+  @Nested
+  @DisplayName("Buy/Sell Actions")
+  public class BuySellActions {
+
+    @Test
+    void handleBuy_nullSelected_setsStatus() {
+      AtomicReference<String> status = new AtomicReference<>();
+      AtomicBoolean refreshed = new AtomicBoolean(false);
+
+      controller.handleBuy(null, "1", new TradeScreenController.ShowTransactionOverlay() {
+        @Override
+        public void show(String action, String stockSymbol, java.math.BigDecimal quantity, java.math.BigDecimal price, java.math.BigDecimal commission, java.math.BigDecimal tax, java.math.BigDecimal total, Runnable onConfirm) {
+        }
+      }, () -> refreshed.set(true), status::set);
+
+      assertEquals("Please select a stock first.", status.get());
+      assertFalse(refreshed.get());
+    }
+
+    @Test
+    void handleBuy_invalidQuantity_setsErrorStatus() {
+      AtomicReference<String> status = new AtomicReference<>();
+      AtomicBoolean refreshed = new AtomicBoolean(false);
+
+      controller.handleBuy(aapl, "abc", new TradeScreenController.ShowTransactionOverlay() {
+        @Override
+        public void show(String action, String stockSymbol, java.math.BigDecimal quantity, java.math.BigDecimal price, java.math.BigDecimal commission, java.math.BigDecimal tax, java.math.BigDecimal total, Runnable onConfirm) {
+        }
+      }, () -> refreshed.set(true), status::set);
+
+      assertEquals("Buy failed: Invalid number", status.get());
+      assertFalse(refreshed.get());
+    }
+
+    @Test
+    void handleBuy_confirmExecutesBuy_updatesModelAndFiresEvent() {
+      AtomicReference<String> status = new AtomicReference<>();
+      AtomicBoolean refreshed = new AtomicBoolean(false);
+      AtomicReference<TradeScreenModel.TradeEvent> evt = new AtomicReference<>();
+      model.addTradeEventListener(evt::set);
+
+      TradeScreenController.ShowTransactionOverlay overlay = new TradeScreenController.ShowTransactionOverlay() {
+        @Override
+        public void show(String action, String stockSymbol, java.math.BigDecimal quantity, java.math.BigDecimal price, java.math.BigDecimal commission, java.math.BigDecimal tax, java.math.BigDecimal total, Runnable onConfirm) {
+          onConfirm.run();
+        }
+      };
+
+      // perform buy of 1 AAPL
+      controller.handleBuy(aapl, "1", overlay, () -> refreshed.set(true), status::set);
+
+      assertEquals("Bought 1 of AAPL", status.get());
+      assertTrue(refreshed.get());
+      assertEquals(3, model.getFilteredStocks().size()); // sanity that model still has stocks
+      assertEquals(TradeScreenModel.TradeEvent.BUY_SUCCESS, evt.get());
+      // player's portfolio should now contain a share
+      assertFalse(controller.getOwnedSymbols().isEmpty());
+    }
+
+    @Test
+    void handleSell_noShares_setsStatus() {
+      AtomicReference<String> status = new AtomicReference<>();
+      AtomicBoolean refreshed = new AtomicBoolean(false);
+
+      controller.handleSell(aapl, "1", new TradeScreenController.ShowTransactionOverlay() {
+        @Override
+        public void show(String action, String stockSymbol, java.math.BigDecimal quantity, java.math.BigDecimal price, java.math.BigDecimal commission, java.math.BigDecimal tax, java.math.BigDecimal total, Runnable onConfirm) {
+        }
+      }, () -> refreshed.set(true), status::set);
+
+      assertEquals("You do not own this stock.", status.get());
+      assertFalse(refreshed.get());
+    }
+
+    @Test
+    void handleSell_confirmExecutesSell_updatesModelAndFiresEvent() {
+      AtomicReference<String> status = new AtomicReference<>();
+      AtomicBoolean refreshed = new AtomicBoolean(false);
+      AtomicReference<TradeScreenModel.TradeEvent> evt = new AtomicReference<>();
+      model.addTradeEventListener(evt::set);
+
+      // add a share to player's portfolio
+      player.getPortfolio().addShare(new Share(aapl, new BigDecimal("2"), new BigDecimal("150.00")));
+
+      TradeScreenController.ShowTransactionOverlay overlay = new TradeScreenController.ShowTransactionOverlay() {
+        @Override
+        public void show(String action, String stockSymbol, java.math.BigDecimal quantity, java.math.BigDecimal price, java.math.BigDecimal commission, java.math.BigDecimal tax, java.math.BigDecimal total, Runnable onConfirm) {
+          onConfirm.run();
+        }
+      };
+
+      controller.handleSell(aapl, "1", overlay, () -> refreshed.set(true), status::set);
+
+      assertTrue(status.get().startsWith("Sold"));
+      assertTrue(refreshed.get());
+      assertEquals(TradeScreenModel.TradeEvent.SELL_SUCCESS, evt.get());
+    }
+
+    @Test
+    void calculateMaxBuyAndSell_edgeCases() {
+      // zero cash -> zero buy
+      Player poor = new Player("P", new BigDecimal("1"), "Easy");
+      Exchange ex = new Exchange("E", List.of(aapl, jpm, jnj));
+      GameController gc = new GameController(ex, poor);
+      TradeScreenModel mod = new TradeScreenModel(List.of(aapl, jpm, jnj));
+      TradeScreenController local = new TradeScreenController(gc, mod);
+
+      assertEquals("0", local.calculateMaxBuyQuantity(aapl));
+
+      // calculate max sell quantity when no shares
+      assertEquals("0", local.calculateMaxSellQuantity("AAPL"));
+    }
   }
 
   @Nested

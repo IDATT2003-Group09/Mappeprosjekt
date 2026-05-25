@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
-import edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Sale;
 
 import java.math.BigDecimal;
 

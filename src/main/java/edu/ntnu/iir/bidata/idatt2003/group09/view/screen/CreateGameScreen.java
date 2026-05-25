@@ -18,9 +18,12 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ * Skjerm for opprettelse av nytt spill. Håndterer inntasting av spilleravn, startkapital
+ * og valg av exchange (sp500, random eller en egendefinert CSV-fil).
+ */
 public class CreateGameScreen extends StackPane {
 	private Boss boss;
 

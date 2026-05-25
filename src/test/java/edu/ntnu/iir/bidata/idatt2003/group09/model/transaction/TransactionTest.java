@@ -8,7 +8,6 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.TransactionCalculator;
-import edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Transaction;
 
 import java.math.BigDecimal;
 

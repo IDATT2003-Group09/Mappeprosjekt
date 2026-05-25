@@ -2,6 +2,7 @@ package edu.ntnu.iir.bidata.idatt2003.group09.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -112,7 +113,7 @@ public class Portfolio implements Serializable {
     if (totalQty.compareTo(BigDecimal.ZERO) == 0) {
         return BigDecimal.ZERO;
     }
-    return totalCost.divide(totalQty, BigDecimal.ROUND_HALF_UP);
+    return totalCost.divide(totalQty, 2, RoundingMode.HALF_UP);
   }
   
 

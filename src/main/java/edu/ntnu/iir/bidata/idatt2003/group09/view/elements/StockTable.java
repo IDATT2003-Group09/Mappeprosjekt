@@ -14,14 +14,19 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+/**
+ * Factory for building `TableView<Stock>` instances used in various trade
+ * and portfolio screens. Columns include symbol, company, price and owned
+ * quantity (when a `Player` is provided).
+ */
 public class StockTable {
 
-  /**
-   * empty constructor
-   */
-  public StockTable() {
+    /**
+     * Empty constructor; the class acts as a factory for table instances.
+     */
+    public StockTable() {
 
-  }
+    }
 
   /**
    * creates the stock table and returns it as a tableview that can be displayed

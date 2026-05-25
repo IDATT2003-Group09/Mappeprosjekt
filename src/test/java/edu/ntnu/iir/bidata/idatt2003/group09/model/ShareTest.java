@@ -3,9 +3,6 @@ package edu.ntnu.iir.bidata.idatt2003.group09.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
-import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
-
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;

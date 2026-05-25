@@ -18,6 +18,10 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 
+/**
+ * Fabrikk for å lage en `ListView<Stock>` med egendefinert celle-rendering som viser
+ * symbol, selskap, sektor, pris og endring, samt antall eide aksjer for en gitt spiller.
+ */
 public class StockListView {
 
     public ListView<Stock> createStockList(Player player) {

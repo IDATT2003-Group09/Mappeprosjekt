@@ -11,10 +11,12 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 import javafx.scene.layout.StackPane;
-import javafx.scene.Node;
-import javafx.scene.control.Tooltip;
 
 
+/**
+ * Startskjerm for applikasjonen med hovedmenyknapper (New, Load, Settings, Exit).
+ * Viser en dekorativ bakgrunn og en `Boss`-tegnfigur som gir meldinger til brukeren.
+ */
 public class StartScreen extends StackPane {
 
     private Boss boss;

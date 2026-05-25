@@ -94,6 +94,13 @@ public class GameSessionService {
      * @return en valgfri spillsesjon; tom hvis filen ikke inneholder gyldig spilltilstand
      */
     public Optional<GameSession> loadSession(String fileName) {
+        /**
+         * Load a previously saved session using `SaveManager`. Returns an empty
+         * optional when the file contained invalid data or could not be read.
+         *
+         * @param fileName the filename to load
+         * @return optional game session
+         */
         GameState state = SaveManager.load(fileName);
         if (state == null) {
             return Optional.empty();
@@ -138,20 +145,48 @@ public class GameSessionService {
     }
 
     private List<Stock> loadStocksForExchange(String exchangeChoice) throws IOException {
+        /**
+         * Resolve an exchange choice to a list of `Stock` instances. Supports
+         * built-in resources (`sp500`, `random`) and `custom:<path>` which
+         * will be enhanced and read from a user-provided CSV file.
+         *
+         * @param exchangeChoice identifier or custom:path
+         * @return list of Stock
+         * @throws IOException when reading or enhancing custom CSV fails
+         */
         if (exchangeChoice == null) {
             return StockCsvReader.readDefaultResource();
         }
 
         String trimmed = exchangeChoice.trim().toLowerCase();
         if (trimmed.equals("random")) {
-            return StockCsvReader.readFromResource("/csv/output/random.csv");
+            // Produce a per-game randomized CSV from the bundled resource entirely in-memory.
+            try (var in = GameSessionService.class.getResourceAsStream("/csv/output/random.csv")) {
+                if (in == null) {
+                    throw new IOException("Resource not found: /csv/output/random.csv");
+                }
+                EnhanceCSV enhancer = new EnhanceCSV(new java.io.InputStreamReader(in), new TagsFactory().getTags());
+                enhancer.setShuffle(true);
+                enhancer.setPerturbPrices(true);
+                enhancer.setRandomizeSector(true);
+                String enhancedCsv = enhancer.getEnhancedCsvString();
+                LOGGER.info("Generated random CSV (in-memory) for new session");
+                return StockCsvReader.readFromString(enhancedCsv);
+            }
         } else if (trimmed.equals("sp500")) {
             return StockCsvReader.readFromResource("/csv/output/sp500.csv");
         } else if (trimmed.startsWith("custom:")) {
             String filePath = trimmed.substring("custom:".length());
             Path selectedCsvFile = Path.of(filePath);
-            Path enhancedCsv = enhanceCustomCsv(selectedCsvFile);
-            return StockCsvReader.readFromFile(enhancedCsv);
+            // Enhance uploaded custom CSV per-game in-memory to avoid persisting copies.
+            try (var reader = Files.newBufferedReader(selectedCsvFile)) {
+                EnhanceCSV enhancer = new EnhanceCSV(reader, new TagsFactory().getTags());
+                enhancer.setShuffle(true);
+                enhancer.setPerturbPrices(true);
+                String enhancedCsv = enhancer.getEnhancedCsvString();
+                LOGGER.info("Enhanced custom CSV in-memory for session: " + selectedCsvFile.getFileName());
+                return StockCsvReader.readFromString(enhancedCsv);
+            }
         } else {
             return StockCsvReader.readDefaultResource();
         }
@@ -171,11 +206,4 @@ public class GameSessionService {
         };
     }
 
-    private Path enhanceCustomCsv(Path selectedCsvFile) throws IOException {
-        Path enhancedFile = Files.createTempFile("millions-custom-enhanced-", ".csv");
-        EnhanceCSV enhancer = new EnhanceCSV(selectedCsvFile.toString(), new TagsFactory().getTags());
-        enhancer.writeEnhancedCsv(enhancedFile.toString());
-        enhancedFile.toFile().deleteOnExit();
-        return enhancedFile;
-    }
 }

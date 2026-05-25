@@ -122,11 +122,11 @@ public class SaveManagerTest {
             List<String> saves = SaveManager.listSaveFiles();
 
             assertEquals(baselineCount + 2, SaveManager.numberOfSaveFiles());
-			String nameFirst = new File(normalizedFirst).getName();
-			String nameSecond = new File(normalizedSecond).getName();
-			assertTrue(saves.contains(nameFirst));
-			assertTrue(saves.contains(nameSecond));
-			assertFalse(saves.contains("notes.txt"));
+		String nameFirst = new File(normalizedFirst).getName();
+		String nameSecond = new File(normalizedSecond).getName();
+		assertTrue(saves.contains(nameFirst));
+		assertTrue(saves.contains(nameSecond));
+		assertFalse(saves.contains("notes.txt"));
         });
     }
 

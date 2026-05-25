@@ -14,11 +14,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Skjerm som viser tilgjengelige lagrede spill og lar brukeren laste eller slette disse.
+ * Hvert lagret spill vises med metadata som nettoverdi, uke og vanskelighetsgrad.
+ */
 public class LoadGameScreen extends VBox {
 
   private static final String FONT_PATH = "/ThaleahFat.ttf";

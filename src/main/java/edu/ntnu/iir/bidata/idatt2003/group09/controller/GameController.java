@@ -7,6 +7,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.game.GameProgress;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.news.NewsPaper;
 
 import java.math.BigDecimal;
+import java.util.logging.Logger;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -162,10 +163,38 @@ public class GameController {
     }
 
     /**
+     * Convenience: get the current checkpoint level (completed quarters).
+     *
+     * @return completed quarter level
+     */
+    public int getCheckpointLevel() {
+        return progress.getCheckpointLevel();
+    }
+
+    /**
      * Saves the current game state to file.
      */
     public void saveGame() {
-        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty(),lost, progress), saveFileName);
+        // Embed an initial CSV describing starting prices/sectors into the save (in-memory)
+        String csvContent = null;
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Ticker,Name,Price,Tag,Volatility").append(System.lineSeparator());
+            for (var s : exchange.getStocks()) {
+                String ticker = s.getSymbol();
+                String name = s.getCompany();
+                String price = s.getSalesPrice().toPlainString();
+                String tag = s.getSector();
+                String vol = Integer.toString(s.getRisk());
+                sb.append(String.join(",", ticker, name.replaceAll(",", " "), price, tag.replaceAll(",", " "), vol)).append(System.lineSeparator());
+            }
+            csvContent = sb.toString();
+        } catch (Exception e) {
+            Logger.getLogger(GameController.class.getName()).warning("Failed to build initial CSV content: " + e.getMessage());
+            csvContent = null;
+        }
+
+        SaveManager.save(new GameState(player, exchange, player.getNetWorth(), exchange.getWeek(), player.getDifficulty(), lost, progress, csvContent), saveFileName);
     }
 
     /**

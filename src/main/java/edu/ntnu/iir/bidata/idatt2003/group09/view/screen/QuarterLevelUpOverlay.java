@@ -24,6 +24,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+/**
+ * Small celebratory overlay shown when the player clears a quarter.
+ * Presents cleared metrics, the next quarter goal and a call-to-action to
+ * continue trading. The overlay includes entrance animations to draw
+ * attention to rewards.
+ */
 public class QuarterLevelUpOverlay extends StackPane {
 
     private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);

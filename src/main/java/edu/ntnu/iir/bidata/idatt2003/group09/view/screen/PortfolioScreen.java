@@ -27,6 +27,11 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.chart.XYChart.Data;
 
+/**
+ * Screen that displays the player's portfolio with a table of positions,
+ * summary statistics and a small portfolio value chart. Provides a "Sell All"
+ * action for individual positions.
+ */
 public class PortfolioScreen extends BorderPane {
 
     private final GameController controller;
@@ -180,23 +185,29 @@ public class PortfolioScreen extends BorderPane {
             }
         });
 
-        table.getColumns().addAll(
-                symbolCol,
-                sectorCol,
-                quantityCol,
-                valueCol,
-                gainCol,
-                percentCol,
-                priceChangeCol,
-                pricePercentCol,
-                sellAllCol
-        );
+        table.getColumns().add(symbolCol);
+        table.getColumns().add(sectorCol);
+        table.getColumns().add(quantityCol);
+        table.getColumns().add(valueCol);
+        table.getColumns().add(gainCol);
+        table.getColumns().add(percentCol);
+        table.getColumns().add(priceChangeCol);
+        table.getColumns().add(pricePercentCol);
+        table.getColumns().add(sellAllCol);
 
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
     }
 
     public void refresh() {
         model.updateFromGameState(controller);
+    }
+
+    /**
+     * Refresh the view model from the current `GameController` state.
+     * Use this when external actions (e.g. selling) may have modified the portfolio.
+     */
+    public void refreshView() {
+        refresh();
     }
 
     private void bindModelToView() {
@@ -318,5 +329,14 @@ public class PortfolioScreen extends BorderPane {
         return new StockGraph(controller.getPortfolio().getShares().stream()
                 .map(share -> share.getStock())
                 .toList());
+    }
+
+    /**
+     * Convenience factory for creating a `StockGraph` for the current portfolio.
+     *
+     * @return a `StockGraph` representing owned positions' underlying stocks
+     */
+    public StockGraph buildStockGraph() {
+        return createStockGraph();
     }
 }

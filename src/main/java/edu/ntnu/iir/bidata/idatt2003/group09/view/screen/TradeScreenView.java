@@ -1,7 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
-import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.TradeScreenModel;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockGraph;
@@ -11,17 +10,14 @@ import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.BuyOverview;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.SellOverview;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.tutorial.TutorialOverlay;
-import javafx.collections.FXCollections;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javafx.scene.Node;
 
@@ -43,16 +39,22 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
-import javafx.collections.ObservableList;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeScreenController;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeFilterRequest;
 
+/**
+ * Hovedvisning for trading-skjermen. Binder `TradeScreenModel` og `GameController`
+ * til visuelle komponenter som `StockListView`, `StockGraph` og transaksjons-oversikter.
+ *
+ * <p>Responsibility:
+ * - Present filtered stock lists and a chart
+ * - Expose buy/sell interactions via `TradeScreenController`
+ * - Display overlays for transaction confirmation and quarter-level rewards</p>
+ */
 public class TradeScreenView extends StackPane {
 
-    private final GameController controller;
     private final TradeScreenController tradeScreenController;
-    private final Runnable onSaveAndQuit;
     private final Runnable onGameOver;
     private final boolean tutorialMode;
     private final TutorialOverlay tutorialOverlay;
@@ -91,6 +93,14 @@ public class TradeScreenView extends StackPane {
         this(controller, stocks, onSaveAndQuit, null, tutorialMode, null);
     }
 
+    /**
+     * Create a TradeScreenView for interactive trading.
+     *
+     * @param controller main game controller providing model and actions
+     * @param stocks initial list of stocks to display
+     * @param onSaveAndQuit callback invoked when the user chooses to save and exit
+     */
+
     private final StackPane overlayPane = new StackPane();
     private TransactionOverview transactionOverviewOverlay = null;
     private QuarterLevelUpOverlay quarterLevelUpOverlay = null;
@@ -106,10 +116,8 @@ public class TradeScreenView extends StackPane {
         boolean tutorialMode,
         TutorialOverlay tutorialOverlay
     ) {
-        this.controller = controller;
         this.tradeScreenModel = new TradeScreenModel(stocks);
         this.tradeScreenController = new TradeScreenController(controller, tradeScreenModel);
-        this.onSaveAndQuit = onSaveAndQuit;
         this.onGameOver = onGameOver;
         this.tutorialMode = tutorialMode;
         this.tutorialOverlay = tutorialOverlay;
@@ -145,6 +153,12 @@ public class TradeScreenView extends StackPane {
                     }
                 }
         );
+
+        /**
+         * Refreshes the view to reflect the current model state. This re-applies
+         * active filters, updates the selected stock chart and refreshes data-bound
+         * labels. Call this after external changes to the `GameController`.
+         */
 
         quantityField = new TextField("1");
         quantityField.setPrefWidth(100);
@@ -476,10 +490,6 @@ public class TradeScreenView extends StackPane {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
             applyCurrentFilters(newValue);
         });
-    }
-
-    private void filterBySectors() {
-        applyCurrentFilters(searchField.getText());
     }
 
     private ToggleButton winnersToggleButton;
