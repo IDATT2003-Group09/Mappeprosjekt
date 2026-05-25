@@ -19,6 +19,14 @@ public class GameController {
     /**
      * Record representing the result of advancing a week in the game.
      * Indicates if the game is over, if a quarter advanced, and checkpoint/target info.
+     *
+     * @param gameOver whether the game ended this week
+     * @param quarterAdvanced whether a checkpoint quarter was completed this week
+     * @param completedQuarter the quarter that was just completed, or 0 if none
+     * @param unlockedQuarter the next unlocked quarter level, or 0 if unchanged
+     * @param clearedNetWorth net worth at checkpoint completion, or {@code null} if unchanged
+     * @param clearedTarget target that was cleared, or {@code null} if unchanged
+     * @param nextTarget next target after quarter advancement, or {@code null} if unchanged
      */
     public record WeekAdvanceResult(
         boolean gameOver,

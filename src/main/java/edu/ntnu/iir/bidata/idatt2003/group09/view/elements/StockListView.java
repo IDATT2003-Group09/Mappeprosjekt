@@ -19,11 +19,17 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 
 /**
- * Fabrikk for å lage en `ListView<Stock>` med egendefinert celle-rendering som viser
+ * Fabrikk for å lage en {@code ListView<Stock>} med egendefinert celle-rendering som viser
  * symbol, selskap, sektor, pris og endring, samt antall eide aksjer for en gitt spiller.
  */
 public class StockListView {
 
+    /**
+     * Creates a stock list view with custom rows showing key stock metadata and ownership.
+     *
+     * @param player current player used to show owned share count, or {@code null}
+     * @return a configured stock {@code ListView}
+     */
     public ListView<Stock> createStockList(Player player) {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.US);
 
