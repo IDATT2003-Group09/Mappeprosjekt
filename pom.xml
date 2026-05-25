@@ -91,6 +91,8 @@
                     <show>private</show>
                     <doclint>none</doclint>
                     <failOnError>false</failOnError>
+                    <legacyMode>true</legacyMode>
+                    <disableSourcepathUsage>true</disableSourcepathUsage>
                     <additionalJOptions>
                         <additionalJOption>--show-module-contents=all</additionalJOption>
                     </additionalJOptions>
