@@ -1,7 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
-import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.TradeScreenModel;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.StockGraph;
@@ -11,17 +10,14 @@ import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.BuyOverview;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.SellOverview;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.tutorial.TutorialOverlay;
-import javafx.collections.FXCollections;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import javafx.scene.Node;
 
@@ -43,7 +39,6 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
-import javafx.collections.ObservableList;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeScreenController;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeFilterRequest;
@@ -59,9 +54,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeFilterReques
  */
 public class TradeScreenView extends StackPane {
 
-    private final GameController controller;
     private final TradeScreenController tradeScreenController;
-    private final Runnable onSaveAndQuit;
     private final Runnable onGameOver;
     private final boolean tutorialMode;
     private final TutorialOverlay tutorialOverlay;
@@ -123,10 +116,8 @@ public class TradeScreenView extends StackPane {
         boolean tutorialMode,
         TutorialOverlay tutorialOverlay
     ) {
-        this.controller = controller;
         this.tradeScreenModel = new TradeScreenModel(stocks);
         this.tradeScreenController = new TradeScreenController(controller, tradeScreenModel);
-        this.onSaveAndQuit = onSaveAndQuit;
         this.onGameOver = onGameOver;
         this.tutorialMode = tutorialMode;
         this.tutorialOverlay = tutorialOverlay;

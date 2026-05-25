@@ -1,7 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.io;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
-import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameSessionService;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.*;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.game.GameProgress;
 import org.junit.jupiter.api.AfterEach;

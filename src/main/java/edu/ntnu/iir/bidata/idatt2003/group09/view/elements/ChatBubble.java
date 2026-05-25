@@ -1,13 +1,11 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.view.elements;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 /**
  * Simple chat bubble component used to show short messages and optional
@@ -62,9 +60,6 @@ public class ChatBubble extends VBox {
 		content.getChildren().add(textLabel);
 
 		Button continueButton = new Button("Continue →");
-		String buttonFontFamily = textLabel.getFont() != null
-			? textLabel.getFont().getFamily()
-			: "System";
 		continueButton.getStyleClass().add("chat-bubble-continue-button");
 		continueButton.setOnAction(e -> onContinue.run());
 		continueButton.setMouseTransparent(false);

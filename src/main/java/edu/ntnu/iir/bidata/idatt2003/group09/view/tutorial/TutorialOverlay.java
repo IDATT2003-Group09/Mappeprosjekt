@@ -1,14 +1,10 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.view.tutorial;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.Boss;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 
 /**
  * Viser et interaktivt tutorial-lag over spillskjermen.
@@ -18,8 +14,6 @@ import javafx.scene.text.Font;
  */
 public class TutorialOverlay {
 
-  private static final String FONT_PATH = "/ThaleahFat.ttf";
-  private static final double TITLE_FONT_SIZE = 32;
   private static final double BOSS_SIZE = 430;
 
   private static final double NEWSPAPER_TAB_X = 210;
@@ -83,15 +77,12 @@ public class TutorialOverlay {
   private static final int STEP_BUY_SUCCESS         = 11;
   private static final int STEP_HISTORY_TAB         = 12;
   private static final int STEP_TRANSACTION_HISTORY = 13;
-  private static final int STEP_PORTFOLIO_TAB       = 14;
-  private static final int STEP_PORTFOLIO_VIEW      = 15;
   private static final int STEP_TRADE_TAB_2         = 16;
   private static final int STEP_TRADE_TAB_2_VIEWED  = 17;
   private static final int STEP_SELL_BUTTON         = 18;
   private static final int STEP_SELL_CONFIRM        = 19;
   private static final int STEP_SELL_SUCCESS_VIEW   = 20;
   private static final int STEP_SELL_SUCCESS        = 21;
-  private static final int STEP_END                 = 22;
 
   private final AnchorPane layer;
   private final Pane dimLayer;
@@ -363,23 +354,6 @@ public class TutorialOverlay {
     clearSpotlight();
     boss.updateTalkingBubble("At the end of the quarter we will have a performance review. Earn enough money to not get fired!");
     boss.getChatBubble().addContinueButton(this::onContinuePressed);
-  }
-
-  private String loadFontFamily() {
-    try (InputStream fontStream = getClass().getResourceAsStream(FONT_PATH)) {
-      if (fontStream == null) {
-        return Font.getDefault().getFamily();
-      }
-
-      Font loadedFont = Font.loadFont(fontStream, TITLE_FONT_SIZE);
-      if (loadedFont != null) {
-        return loadedFont.getFamily();
-      }
-    } catch (IOException e) {
-      return Font.getDefault().getFamily();
-    }
-
-    return Font.getDefault().getFamily();
   }
 
   private void onContinuePressed() {

@@ -1,6 +1,5 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
@@ -8,13 +7,10 @@ import edu.ntnu.iir.bidata.idatt2003.group09.view.tutorial.TutorialOverlay;
 import javafx.application.Platform;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.TabPane;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.math.BigDecimal;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CountDownLatch;

@@ -11,8 +11,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
 import javafx.scene.layout.StackPane;
-import javafx.scene.Node;
-import javafx.scene.control.Tooltip;
 
 
 /**

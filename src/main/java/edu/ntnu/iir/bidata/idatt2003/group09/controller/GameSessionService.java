@@ -16,11 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.Locale;
 
 /**
  * Tjenesteklasse som oppretter og laster spillsesjoner.
@@ -209,14 +206,4 @@ public class GameSessionService {
         };
     }
 
-    private Path enhanceCustomCsv(Path selectedCsvFile) throws IOException {
-        Path enhancedFile = Files.createTempFile("millions-custom-enhanced-", ".csv");
-        EnhanceCSV enhancer = new EnhanceCSV(selectedCsvFile.toString(), new TagsFactory().getTags());
-        // Randomize custom uploads per-game: shuffle rows and perturb prices
-        enhancer.setShuffle(true);
-        enhancer.setPerturbPrices(true);
-        enhancer.writeEnhancedCsv(enhancedFile.toString());
-        enhancedFile.toFile().deleteOnExit();
-        return enhancedFile;
-    }
 }

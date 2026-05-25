@@ -3,7 +3,6 @@ package edu.ntnu.iir.bidata.idatt2003.group09.view.screen;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.game.GameProgress;
-import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.Locale;

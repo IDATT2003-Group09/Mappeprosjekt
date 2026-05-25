@@ -1,7 +1,5 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.io;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.io.GameState;
-import edu.ntnu.iir.bidata.idatt2003.group09.io.SaveManager;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Exchange;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Player;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
