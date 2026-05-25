@@ -8,25 +8,31 @@
     <artifactId>Millions</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!-- Grunnleggende prosjektinnstillinger -->
     <properties>
+        <!-- Bygge mot Java 25 og bruke UTF-8 i kildefiler -->
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <!-- Avhengigheter for JavaFX, testing og mocking -->
     <dependencies>
+        <!-- UI-komponenter -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>25.0.1</version>
         </dependency>
 
+        <!-- Medieavspilling, for eksempel lyd -->
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
             <version>25.0.1</version>
         </dependency>
 
+        <!-- Teststubbing og verifisering -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -34,6 +40,7 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- JUnit 5 for enhetstester -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -42,8 +49,10 @@
         </dependency>
     </dependencies>
 
+    <!-- Bygge- og kjøreplugins -->
     <build>
         <plugins>
+            <!-- Kompilerer prosjektet med angitt Java-versjon -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -54,6 +63,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Kjører testene, med JPMS av for JUnit/Surefire-kompatibilitet -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -63,6 +73,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Startpunkt for JavaFX-applikasjonen -->
             <plugin>
                 <groupId>org.openjfx</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
@@ -71,6 +82,7 @@
                     <mainClass>edu.ntnu.iir.bidata.idatt2003.group09.Main</mainClass>
                 </configuration>
             </plugin>
+            <!-- Genererer Javadoc ved behov -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
