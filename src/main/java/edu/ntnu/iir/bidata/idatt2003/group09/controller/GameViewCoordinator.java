@@ -1,5 +1,6 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.controller;
 
+import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TransactionHistoryScreenController;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.elements.NewsPaperView;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.screen.GameOverScreen;
 import edu.ntnu.iir.bidata.idatt2003.group09.view.screen.PortfolioScreen;
@@ -63,8 +64,11 @@ public class GameViewCoordinator {
             tutorialMode,
             tutorialOverlay
         );
-        PortfolioScreen portfolioScreen = new PortfolioScreen(controller);
-        TransactionHistoryScreen transactionHistoryScreen = new TransactionHistoryScreen(controller);
+        PortfolioScreen portfolioScreen = new PortfolioScreen(controller, tradeScreen::refresh);
+        TransactionHistoryScreenController transactionHistoryController =
+            new TransactionHistoryScreenController(controller);
+        TransactionHistoryScreen transactionHistoryScreen =
+            new TransactionHistoryScreen(transactionHistoryController);
 
         StackPane newspaperContainer = new StackPane();
         TabPane tabPane = createGameTabPane();

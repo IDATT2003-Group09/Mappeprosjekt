@@ -239,7 +239,6 @@ public class TutorialOverlay {
       boss.updateTalkingBubble("These buttons filter stocks by industry sector.");
       boss.getChatBubble().addContinueButton(this::onContinuePressed);
     } else {
-      // STEP_TRADE_TAB_2 — returning to trade screen before sell
       tutorialStep = STEP_TRADE_TAB_2_VIEWED;
       spotlight(NEXT_WEEK_BUTTON_X, NEXT_WEEK_BUTTON_Y, NEXT_WEEK_BUTTON_W, NEXT_WEEK_BUTTON_H);
       boss.updateTalkingBubble("Great! Now advance to the next week.");

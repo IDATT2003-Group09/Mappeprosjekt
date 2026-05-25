@@ -6,13 +6,13 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.Share;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.screen.TradeScreenModel;
 
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator;
 
 /**
@@ -23,6 +23,7 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.calculator.PurchaseCalculator
 public class TradeScreenController {
 	private final GameController controller;
 	private final TradeScreenModel model;
+    private static final Logger LOGGER = Logger.getLogger(TradeScreenController.class.getName());
 
 	/**
 	 * Constructs a TradeScreenController with the given GameController.
@@ -54,19 +55,25 @@ public class TradeScreenController {
 	/**
 	 * Handles buying a stock. Validates selection and quantity, calculates costs, and shows a confirmation overlay before executing the buy action.
 	 *
-	 * @param stockList    the ListView of available stocks
-	 * @param quantityField the TextField for user input quantity
-	 * @param statusLabel  the Label for status messages
+	 * @param selectedStock the selected stock
+	 * @param quantityText quantity input from the user
 	 * @param showOverlay  the overlay to show transaction confirmation
+	 * @param onUiRefresh callback that runs after a successful trade (e.g., refresh list/graph)
+	 * @param setStatus callback for status messages
 	 */
-	public void handleBuy(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay) {
-		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
+	public void handleBuy(
+		Stock selectedStock,
+		String quantityText,
+		ShowTransactionOverlay showOverlay,
+		Runnable onUiRefresh,
+		Consumer<String> setStatus
+	) {
 		if (selectedStock == null) {
-			statusLabel.setText("Please select a stock first.");
+			setStatus.accept("Please select a stock first.");
 			return;
 		}
 		try {
-			BigDecimal quantity = parseQuantity(quantityField);
+			BigDecimal quantity = parseQuantity(quantityText);
 			BigDecimal price = selectedStock.getSalesPrice();
 			BigDecimal commissionRate = controller.getExchange().getCommissionRate();
 			Share tempShare = new Share(selectedStock, quantity, price);
@@ -79,40 +86,54 @@ public class TradeScreenController {
 			showOverlay.show("Buy", selectedStock.getSymbol(), quantity, price, commission, tax, total, () -> {
 				try {
 					controller.getExchange().buy(selectedStock.getSymbol(), controller.getPlayer(), quantity);
-					statusLabel.setText("Bought " + quantity + " of " + selectedStock.getSymbol());
-					stockList.refresh();
+					setStatus.accept("Bought " + quantity + " of " + selectedStock.getSymbol());
+					onUiRefresh.run();
 					model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
 					model.fireTradeEvent(TradeScreenModel.TradeEvent.BUY_SUCCESS);
-				} catch (Exception e) {
-					statusLabel.setText("Buy failed: " + e.getMessage());
+				} catch (IllegalArgumentException | IllegalStateException e) {
+					LOGGER.log(Level.WARNING, "Buy failed for " + selectedStock.getSymbol(), e);
+					setStatus.accept("Buy failed: " + e.getMessage());
+				} catch (RuntimeException e) {
+					LOGGER.log(Level.SEVERE, "Unexpected error during buy", e);
+					setStatus.accept("Buy failed: unexpected error");
 				}
 			});
-		} catch (Exception e) {
-			statusLabel.setText("Buy failed: " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			LOGGER.log(Level.WARNING, "Invalid buy input", e);
+			setStatus.accept("Buy failed: " + e.getMessage());
+		} catch (RuntimeException e) {
+			LOGGER.log(Level.SEVERE, "Unexpected error preparing buy", e);
+			setStatus.accept("Buy failed: unexpected error");
 		}
 	}
 
 	/**
 	 * Handles selling a stock. Validates selection and quantity, calculates costs, and shows a confirmation overlay before executing the sell action.
 	 *
-	 * @param stockList    the ListView of available stocks
-	 * @param quantityField the TextField for user input quantity
-	 * @param statusLabel  the Label for status messages
+	 * @param selectedStock the selected stock
+	 * @param quantityText quantity input from the user
 	 * @param showOverlay  the overlay to show transaction confirmation
+	 * @param onUiRefresh callback that runs after a successful trade (e.g., refresh list/graph)
+	 * @param setStatus callback for status messages
 	 */
-	public void handleSell(ListView<Stock> stockList, TextField quantityField, Label statusLabel, ShowTransactionOverlay showOverlay) {
-		Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
+	public void handleSell(
+		Stock selectedStock,
+		String quantityText,
+		ShowTransactionOverlay showOverlay,
+		Runnable onUiRefresh,
+		Consumer<String> setStatus
+	) {
 		if (selectedStock == null) {
-			statusLabel.setText("Please select a stock first.");
+			setStatus.accept("Please select a stock first.");
 			return;
 		}
 		List<Share> shares = controller.getPortfolio().getShares(selectedStock.getSymbol());
 		if (shares.isEmpty()) {
-			statusLabel.setText("You do not own this stock.");
+			setStatus.accept("You do not own this stock.");
 			return;
 		}
 		try {
-			BigDecimal quantity = parseQuantity(quantityField);
+			BigDecimal quantity = parseQuantity(quantityText);
 			BigDecimal price = selectedStock.getSalesPrice();
 			BigDecimal commissionRate = controller.getExchange().getCommissionRate();
 			BigDecimal avgPurchasePrice = controller.getPortfolio()
@@ -126,30 +147,38 @@ public class TradeScreenController {
 			showOverlay.show("Sell", selectedStock.getSymbol(), quantity, price, commission, tax, total, () -> {
 				try {
 					controller.getExchange().sell(selectedStock.getSymbol(), controller.getPlayer(), quantity);
-					statusLabel.setText("Sold " + quantity.stripTrailingZeros().toPlainString()
+					setStatus.accept("Sold " + quantity.stripTrailingZeros().toPlainString()
 						+ " of " + selectedStock.getSymbol());
-					stockList.refresh();
+					onUiRefresh.run();
 					model.updateFromGameState(controller.getPlayer(), controller.getProgress(), controller.getMoney(), controller.getWeek());
 					model.fireTradeEvent(TradeScreenModel.TradeEvent.SELL_SUCCESS);
-				} catch (Exception e) {
-					statusLabel.setText("Sell failed: " + e.getMessage());
+				} catch (IllegalArgumentException | IllegalStateException e) {
+					LOGGER.log(Level.WARNING, "Sell failed for " + selectedStock.getSymbol(), e);
+					setStatus.accept("Sell failed: " + e.getMessage());
+				} catch (RuntimeException e) {
+					LOGGER.log(Level.SEVERE, "Unexpected error during sell", e);
+					setStatus.accept("Sell failed: unexpected error");
 				}
 			});
-		} catch (Exception e) {
-			statusLabel.setText("Sell failed: " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			LOGGER.log(Level.WARNING, "Invalid sell input", e);
+			setStatus.accept("Sell failed: " + e.getMessage());
+		} catch (RuntimeException e) {
+			LOGGER.log(Level.SEVERE, "Unexpected error preparing sell", e);
+			setStatus.accept("Sell failed: unexpected error");
 		}
 	}
 
 	/**
-	 * Parses the quantity from the text field.
+	 * Parses the quantity from user input text.
 	 *
-	 * @param quantityField the TextField containing the quantity input
+	 * @param quantityText the user input text
 	 * @return the parsed quantity as BigDecimal
 	 * @throws IllegalArgumentException if the input is invalid (non-numeric, negative, or zero)
 	 */
-	private BigDecimal parseQuantity(TextField quantityField) {
+	private BigDecimal parseQuantity(String quantityText) {
 		try {
-			BigDecimal quantity = new BigDecimal(quantityField.getText().trim());
+			BigDecimal quantity = new BigDecimal(quantityText.trim());
 			if (quantity.compareTo(BigDecimal.ZERO) <= 0) {
 				throw new IllegalArgumentException("Quantity must be > 0");
 			}
@@ -181,6 +210,26 @@ public class TradeScreenController {
 	}
 
 	/**
+	 * Advances one week and invokes callbacks for game-over, normal update and quarter progression.
+	 */
+	public void handleAdvanceWeek(
+		Runnable onGameOver,
+		Runnable onWeekAdvanced,
+		Consumer<GameController.WeekAdvanceResult> onQuarterAdvanced
+	) {
+		GameController.WeekAdvanceResult result = advanceWeek();
+		if (result.gameOver()) {
+			onGameOver.run();
+			return;
+		}
+
+		onWeekAdvanced.run();
+		if (result.quarterAdvanced()) {
+			onQuarterAdvanced.accept(result);
+		}
+	}
+
+	/**
 	 * Calculates max buy quantity using current game state.
 	 */
 	public String calculateMaxBuyQuantity(Stock selectedStock) {
@@ -206,6 +255,28 @@ public class TradeScreenController {
 		return controller.getPortfolio().getShares().stream()
 			.map(share -> share.getStock().getSymbol())
 			.collect(Collectors.toSet());
+	}
+
+	/**
+	 * Applies trade-screen filters using current game state.
+	 */
+	public void applyFilters(TradeFilterRequest request) {
+		String searchText = request.searchText() == null ? "" : request.searchText();
+		model.applyFilters(
+			searchText,
+			request.ownedOnly(),
+			getOwnedSymbols(),
+			request.winnersOnly(),
+			request.losersOnly()
+		);
+	}
+
+	/**
+	 * Returns true if all sectors are currently selected.
+	 */
+	public boolean areAllSectorsSelected() {
+		Set<String> allSectors = model.getAllSectors();
+		return !allSectors.isEmpty() && model.getSelectedSectors().containsAll(allSectors);
 	}
 
 	/**

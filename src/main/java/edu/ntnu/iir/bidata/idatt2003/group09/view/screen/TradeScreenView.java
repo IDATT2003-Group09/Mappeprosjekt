@@ -46,6 +46,7 @@ import javafx.geometry.Pos;
 import javafx.collections.ObservableList;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeScreenController;
+import edu.ntnu.iir.bidata.idatt2003.group09.controller.screen.TradeFilterRequest;
 
 public class TradeScreenView extends StackPane {
 
@@ -244,41 +245,50 @@ public class TradeScreenView extends StackPane {
             if (tutorialMode && tutorialOverlay != null) {
                 tutorialOverlay.onBuyButtonClicked();
             }
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             tradeScreenController.handleBuy(
-                stockList,
-                quantityField,
-                statusLabel,
+                selectedStock,
+                quantityField.getText(),
                 (action, stockSymbol, quantity, price, commission, tax, total, onConfirm) ->
-                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm)
+                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm),
+                () -> {
+                    stockList.refresh();
+                    updateSelectedStockGraph();
+                },
+                statusLabel::setText
             );
         });
         sellButton.setOnAction(e -> {
             if (tutorialMode && tutorialOverlay != null) {
                 tutorialOverlay.onSellButtonClicked();
             }
+            Stock selectedStock = stockList.getSelectionModel().getSelectedItem();
             tradeScreenController.handleSell(
-                stockList,
-                quantityField,
-                statusLabel,
+                selectedStock,
+                quantityField.getText(),
                 (action, stockSymbol, quantity, price, commission, tax, total, onConfirm) ->
-                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm)
+                    showTransactionOverlay(action, stockSymbol, quantity, price, commission, tax, total, onConfirm),
+                () -> {
+                    stockList.refresh();
+                    updateSelectedStockGraph();
+                },
+                statusLabel::setText
             );
         });
 
         nextWeekButton.setOnAction(e -> {
-            GameController.WeekAdvanceResult result = tradeScreenController.advanceWeek();
-            if (result.gameOver()) {
-                if (onGameOver != null) {
-                    onGameOver.run();
-                }
-                return;
-            }
-            stockList.refresh();
-            updateSelectedStockGraph();
-            onTutorialNextWeek();
-            if (result.quarterAdvanced()) {
-                showQuarterLevelUpOverlay(result);
-            }
+            tradeScreenController.handleAdvanceWeek(
+                () -> {
+                    if (onGameOver != null) {
+                        onGameOver.run();
+                    }
+                },
+                () -> {
+                    refresh();
+                    onTutorialNextWeek();
+                },
+                this::showQuarterLevelUpOverlay
+            );
         });
 
 
@@ -424,6 +434,12 @@ public class TradeScreenView extends StackPane {
         }
     }
 
+    public void refresh() {
+        tradeScreenController.refreshModel();
+        applyCurrentFilters(searchField != null ? searchField.getText() : "");
+        updateSelectedStockGraph();
+    }
+
     private void onTutorialStockSelected() {
         if (!tutorialMode || tutorialOverlay == null) {
             return;
@@ -454,26 +470,12 @@ public class TradeScreenView extends StackPane {
 
     private void setupSearchFilter() {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            filterStockList(newValue);
+            applyCurrentFilters(newValue);
         });
     }
 
-
-    private void filterStockList(String searchText) {
-        Set<String> ownedSymbols = tradeScreenController.getOwnedSymbols();
-
-        tradeScreenModel.applyFilters(
-            searchText,
-            allSectorsToggle != null && allSectorsToggle.isSelected(),
-            filterOwned,
-            ownedSymbols,
-            winnersToggleButton != null && winnersToggleButton.isSelected(),
-            losersToggleButton != null && losersToggleButton.isSelected()
-        );
-    }
-
     private void filterBySectors() {
-        filterStockList(searchField.getText());
+        applyCurrentFilters(searchField.getText());
     }
 
     private ToggleButton winnersToggleButton;
@@ -554,7 +556,7 @@ public class TradeScreenView extends StackPane {
                     }
                 }
                 if (allToggle != null) {
-                    boolean allSelected = tradeScreenController.getSelectedSectors().containsAll(sectors) && !sectors.isEmpty();
+                    boolean allSelected = tradeScreenController.areAllSectorsSelected();
                     allToggle.setSelected(allSelected);
                 }
 
@@ -568,17 +570,17 @@ public class TradeScreenView extends StackPane {
     private ToggleButton ownedToggleButton;
 
     private void filterBySectorsAndOwned() {
-        String searchText = searchField != null ? searchField.getText() : "";
-        Set<String> ownedSymbols = tradeScreenController.getOwnedSymbols();
+        applyCurrentFilters(searchField != null ? searchField.getText() : "");
+    }
 
-        tradeScreenModel.applyFilters(
+    private void applyCurrentFilters(String searchText) {
+        TradeFilterRequest request = new TradeFilterRequest(
             searchText,
-            allSectorsToggle != null && allSectorsToggle.isSelected(), // was: filterOwned
             filterOwned,
-            ownedSymbols,
             winnersToggleButton != null && winnersToggleButton.isSelected(),
             losersToggleButton != null && losersToggleButton.isSelected()
         );
+        tradeScreenController.applyFilters(request);
     }
 
     private void bindModelToView() {

@@ -10,11 +10,13 @@ import edu.ntnu.iir.bidata.idatt2003.group09.model.Stock;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.news.GlobalEvent;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.news.NewsPaper;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.news.StockSpecificEvent;
+import edu.ntnu.iir.bidata.idatt2003.group09.model.news.EventFactory;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -44,6 +46,23 @@ public class ExchangeTest {
   @Test
   void constructorShouldInitializeWeekToZero() {
     assertEquals(0, exchange.getWeek());
+  }
+
+  @Test
+  void constructorShouldAllowInjectedDependencies() {
+    assertDoesNotThrow(() -> new Exchange("OsloBors", List.of(apple, microsoft), new EventFactory(), new Random(1)));
+  }
+
+  @Test
+  void constructorShouldThrowWhenEventFactoryIsNull() {
+    assertThrows(NullPointerException.class,
+        () -> new Exchange("OsloBors", List.of(apple, microsoft), null, new Random(1)));
+  }
+
+  @Test
+  void constructorShouldThrowWhenRandomIsNull() {
+    assertThrows(NullPointerException.class,
+        () -> new Exchange("OsloBors", List.of(apple, microsoft), new EventFactory(), null));
   }
 
   @Test

@@ -310,13 +310,7 @@ public class GameController {
      * Also saves the game state after selling.
      */
     public void sellAllShares() {
-        Portfolio portfolio = getPortfolio();
-        List<Share> sharesToSell = new ArrayList<>(portfolio.getShares());
-        for (Share share : sharesToSell) {
-            BigDecimal value = share.getStock().getSalesPrice().multiply(share.getQuantity());
-            player.addMoney(value);
-            portfolio.removeShare(share);
-        }
+        sellAllShares(new ArrayList<>(getPortfolio().getShares()));
         saveGame();
     }
 
@@ -331,13 +325,13 @@ public class GameController {
             return;
         }
 
-        Portfolio portfolio = getPortfolio();
-        List<Share> sharesToSell = new ArrayList<>(portfolio.getShares(symbol));
-        for (Share share : sharesToSell) {
-            BigDecimal value = share.getStock().getSalesPrice().multiply(share.getQuantity());
-            player.addMoney(value);
-            portfolio.removeShare(share);
-        }
+        sellAllShares(new ArrayList<>(getPortfolio().getShares(symbol)));
         saveGame();
+    }
+
+    private void sellAllShares(List<Share> sharesToSell) {
+        for (Share share : sharesToSell) {
+            exchange.sell(share, player);
+        }
     }
 }

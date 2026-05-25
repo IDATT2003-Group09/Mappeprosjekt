@@ -1,6 +1,5 @@
 package edu.ntnu.iir.bidata.idatt2003.group09.model.screen;
 
-import edu.ntnu.iir.bidata.idatt2003.group09.controller.GameController;
 import edu.ntnu.iir.bidata.idatt2003.group09.model.transaction.Transaction;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,12 +19,10 @@ public class TransactionHistoryScreenModel {
     }
 
     /**
-     * Pulls transaction history from game state and updates observable rows.
+     * Updates observable rows from transaction history.
      */
-    public void updateFromGameState(GameController controller) {
-        List<Transaction> reversed = new ArrayList<>(
-            controller.getPlayer().getTransactionArchive().getAllTransactions()
-        );
+    public void setTransactions(List<Transaction> transactionHistory) {
+        List<Transaction> reversed = new ArrayList<>(transactionHistory);
         Collections.reverse(reversed);
         transactions.setAll(reversed);
     }

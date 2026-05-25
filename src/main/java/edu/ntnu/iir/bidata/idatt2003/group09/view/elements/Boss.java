@@ -26,6 +26,10 @@ import org.w3c.dom.NodeList;
 
 import edu.ntnu.iir.bidata.idatt2003.group09.view.sound.UiSoundEffects;
 
+/**
+ * Representerer sjefsfiguren som vises i brukergrensesnittet.
+ * Hånderer snakkeboblen hans også.
+ */
 public class Boss extends StackPane {
 
   private static final String IDLE_PATH = "/images/boss/blinking.gif";
@@ -47,6 +51,12 @@ public class Boss extends StackPane {
   private boolean talkingSoundEnabled;
   private int talkingLoops;
 
+  /**
+   * Lager og initialiserer en ny `Boss`-komponent.
+   *
+   * @param initialText tekst som vises i pratboblen ved opprettelse
+   * @param imageSize ønsket størrelse (bredde/ høyde) for boss-bildet
+   */
   public Boss(String initialText, double imageSize) {
     this.idleImage = loadImage(IDLE_PATH, imageSize);
     this.talkingImage = loadImage(TALKING_PATH, imageSize);
@@ -75,7 +85,13 @@ public class Boss extends StackPane {
     StackPane.setAlignment(imageView, Pos.BOTTOM_LEFT);
     StackPane.setAlignment(chatBubble, Pos.BOTTOM_LEFT);
   }
-
+  /**
+   * Laster et bilde fra ressurser og skalerer det til angitt størrelse.
+   *
+   * @param path ressursbanen til bildet
+   * @param imageSize målstørrelse i piksler
+   * @return `Image` eller `null` hvis ressursen ikke finnes
+   */
   private Image loadImage(String path, double imageSize) {
     InputStream imageStream = getClass().getResourceAsStream(path);
     if (imageStream == null) {
@@ -84,6 +100,13 @@ public class Boss extends StackPane {
     return new Image(imageStream, imageSize, imageSize, true, false);
   }
 
+  /**
+   * Leser total varighet (syklus) for en GIF ved å summere rammeforsinkelser.
+   * Hvis GIF ikke kan leses, returneres en fallback-varighet.
+   *
+   * @param gifPath ressursbanen til GIF-filen
+   * @return varigheten av GIF-syklusen som en `Duration`
+   */
   private Duration loadGifCycleDuration(String gifPath) {
     try (InputStream inputStream = getClass().getResourceAsStream(gifPath)) {
       if (inputStream == null) {
@@ -119,6 +142,12 @@ public class Boss extends StackPane {
     return TALKING_FALLBACK_DURATION;
   }
 
+  /**
+   * Forsøker å opprette og konfigurere en `Clip` for tale-lyd.
+   * Returnerer `null` hvis lydressursen ikke er tilgjengelig eller opprettelse feiler.
+   *
+   * @return ferdig konfigurert `Clip` eller `null`
+   */
   private Clip createTalkingSoundClip() {
     URL soundResource = getClass().getResource(TALKING_SOUND_PATH);
     if (soundResource == null) {
@@ -135,6 +164,12 @@ public class Boss extends StackPane {
     }
   }
 
+  /**
+   * Justerer gain (volum) på en `Clip` dersom kontrollen er støttet.
+   *
+   * @param clip lydklippet å justere
+   * @param gainDb ønsket gain i desibel
+   */
   private void applyGain(Clip clip, float gainDb) {
     if (clip == null || !clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
       return;
@@ -145,6 +180,12 @@ public class Boss extends StackPane {
     gainControl.setValue(clamped);
   }
 
+  /**
+   * Leser delay-tiden (i millisekunder) fra GIF-metadata for en ramme.
+   *
+   * @param root rot-nodeen fra billedmetadata
+   * @return delay i millisekunder, eller 0 hvis ikke tilgjengelig
+   */
   private long readFrameDelayMs(Node root) {
     if (root == null) {
       return 0;
@@ -178,20 +219,33 @@ public class Boss extends StackPane {
     return 0;
   }
 
+  /**
+   * Setter bossen til idle-tilstand (stopp lyd og vis idle-bilde).
+   */
   public void setIdle() {
     stopTalkingSound();
     setImage(idleImage);
   }
 
+  /**
+   * Setter bossens bilde til talking-animasjonen (eller idle hvis ikke tilgjengelig).
+   */
   public void setTalking() {
     setImage(talkingImage != null ? talkingImage : idleImage);
   }
 
+  /**
+   * Veksler til hair-animasjonen og stopper eventuell tale-lyd.
+   */
   public void setHair() {
     stopTalkingSound();
     setImage(hairImage != null ? hairImage : idleImage);
   }
 
+  /**
+   * Starter tale-lyd dersom lydeffekter er aktivert og klippet er tilgjengelig.
+   * Deaktiverer tale-lyd ved runtime-feil.
+   */
   private void playTalkingSound() {
     if (!UiSoundEffects.isSoundEffectsEnabled() || !talkingSoundEnabled || talkingSoundClip == null) {
       return;
@@ -207,6 +261,10 @@ public class Boss extends StackPane {
     }
   }
 
+  /**
+   * Stopper tale-lyd og tilbakestiller avspillingsposisjon.
+   * Deaktiverer tale-lyd ved runtime-feil.
+   */
   private void stopTalkingSound() {
     if (!talkingSoundEnabled || talkingSoundClip == null) {
       return;
@@ -220,16 +278,33 @@ public class Boss extends StackPane {
     }
   }
 
+  /**
+   * Setter det viste bildet til `image` hvis det ikke er `null`.
+   *
+   * @param image bildet som skal vises
+   */
   private void setImage(Image image) {
     if (image != null) {
       imageView.setImage(image);
     }
   }
 
+  /**
+   * Oppdaterer pratboblen med ny tekst og starter talking-animasjon i standardantall løkker.
+   *
+   * @param text teksten som skal vises
+   */
   public void updateTalkingBubble(String text) {
     updateTalkingBubble(text, talkingLoops);
   }
 
+  /**
+   * Oppdaterer pratboblen med ny tekst og angir hvor mange ganger talking-animasjonen skal loopes.
+   * Starter tale-lyd og sørger for at animasjonen går tilbake til idle etterpå.
+   *
+   * @param text teksten som skal vises
+   * @param loops antall ganger animasjonen skal loopes (minst 1)
+   */
   public void updateTalkingBubble(String text, int loops) {
     setTalking();
     playTalkingSound();
@@ -240,35 +315,66 @@ public class Boss extends StackPane {
     talkingToIdleTransition.playFromStart();
   }
 
+  /**
+   * Setter hvor mange ganger talking-animasjonen skal loope når pratboblen oppdateres.
+   *
+   * @param loops antall løkker (minst 1)
+   */
   public void setTalkingLoops(int loops) {
     this.talkingLoops = Math.max(1, loops);
   }
 
+  /**
+   * Henter antall konfigurerte talking-løkker.
+   *
+   * @return antall løkker
+   */
   public int getTalkingLoops() {
     return talkingLoops;
   }
 
+  /**
+   * Henter referansen til pratboblen som viser tekster fra bossen.
+   *
+   * @return `ChatBubble`-instansen
+   */
   public ChatBubble getChatBubble() {
     return chatBubble;
   }
 
+  /**
+   * Returnerer `ImageView`-komponenten som viser boss-bildet.
+   *
+   * @return `ImageView` for bossen
+   */
   public ImageView getImageView() {
     return imageView;
   }
 
+  /**
+   * Viser eller skjuler pratboblen.
+   *
+   * @param value `true` for å vise, `false` for å skjule
+   */
   public void visibleChatBubble(boolean value) {
     chatBubble.setVisible(value);
   }
 
+  /**
+   * Vis/skjul selve boss-figuren (bilde og eventuelle tilleggselementer).
+   *
+   * @param value `true` for synlig, `false` for skjult
+   */
   public void visibleBoss(boolean value) {
     imageView.setVisible(value);
     getChildren().stream()
       .filter(n -> n != chatBubble && n != imageView)
       .forEach(n -> n.setVisible(value));
   }
+
   /**
-   * Plays the hair.gif animation, then returns to idle after the animation duration.
-   * If the duration cannot be determined, defaults to 2 seconds.
+   * Spiller `hair.gif`-animasjonen, og returnerer til idle når animasjonen er ferdig.
+   * Hvis varigheten ikke kan bestemmes, brukes en 2-sekunders fallback.
    */
   public void playHairAnimation() {
     Image freshHairImage = loadImage(HAIR_PATH, imageView.getFitWidth() > 0 ? imageView.getFitWidth() : 500);
