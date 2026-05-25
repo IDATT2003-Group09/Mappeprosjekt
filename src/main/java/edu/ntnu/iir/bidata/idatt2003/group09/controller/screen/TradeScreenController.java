@@ -135,7 +135,6 @@ public class TradeScreenController {
 		try {
 			BigDecimal quantity = parseQuantity(quantityText);
 			BigDecimal price = selectedStock.getSalesPrice();
-			BigDecimal commissionRate = controller.getExchange().getCommissionRate();
 			BigDecimal avgPurchasePrice = controller.getPortfolio()
 				.getAveragePurchasePrice(selectedStock.getSymbol());
 			Share tempShare = new Share(selectedStock, quantity, avgPurchasePrice);
