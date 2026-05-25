@@ -185,19 +185,17 @@ public class PortfolioScreen extends BorderPane {
             }
         });
 
-        table.getColumns().addAll(
-                symbolCol,
-                sectorCol,
-                quantityCol,
-                valueCol,
-                gainCol,
-                percentCol,
-                priceChangeCol,
-                pricePercentCol,
-                sellAllCol
-        );
+        table.getColumns().add(symbolCol);
+        table.getColumns().add(sectorCol);
+        table.getColumns().add(quantityCol);
+        table.getColumns().add(valueCol);
+        table.getColumns().add(gainCol);
+        table.getColumns().add(percentCol);
+        table.getColumns().add(priceChangeCol);
+        table.getColumns().add(pricePercentCol);
+        table.getColumns().add(sellAllCol);
 
-        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
     }
 
     public void refresh() {

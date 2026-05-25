@@ -142,9 +142,15 @@ public class TransactionHistoryScreen extends BorderPane {
                 )
         );
 
-        table.getColumns().addAll(weekCol, typeCol, tickerCol, qtyCol, priceCol, feesCol, totalCol);
+        table.getColumns().add(weekCol);
+        table.getColumns().add(typeCol);
+        table.getColumns().add(tickerCol);
+        table.getColumns().add(qtyCol);
+        table.getColumns().add(priceCol);
+        table.getColumns().add(feesCol);
+        table.getColumns().add(totalCol);
 
-                table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 
         }
 
